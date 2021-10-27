@@ -5,6 +5,7 @@
   Ensure you have the following prerequisites before trying to run the project locally: 
   - Node.js and npm (https://nodejs.org/en/download/). Alternatively, check if you have this by using command ```node -v```
   - Once you have Node.js and npm, run command ```npm install -g expo-cli```
+  - You will need an iOS simulator. If you have a Macbook, its recommended you install XCode from the app store as it has a built in iOS simulator. If you have a Windows machine, unfortunately you will have to install a virtual machine to run the iOS simulator. This tutorial 
  
 2. Clone this repository using ```git clone https://github.com/uoftblueprint/the-period-purse.git```
 3. cd into folder /tpp-app
