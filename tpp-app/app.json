@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "tpp-app",
+    "slug": "tpp-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "tpp-app"
+}
