@@ -10,7 +10,7 @@
 3. cd into folder /tpp-app
 4. Run the project using ```npm run ios```
 
-Known Errors:
+# Known Errors:
 1. When trying to run project using ```npm run ios```, I see "Error: EMFILE: too many open files" 
  - Ensure you have ```brew``` installed and run ```brew install watchmen```
  - Source: https://stackoverflow.com/questions/58675179/error-emfile-too-many-open-files-react-native-cli
