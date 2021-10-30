@@ -1,4 +1,8 @@
-# Setup Local Environment 
+# The Period Purse
+
+The Period Purse strives to achieve menstrual equity by providing people who menstruate with access to free menstrual products, and to reduce the stigma surrounding periods through public education and advocacy. [Website](https://www.theperiodpurse.com/)
+
+## Setup Local Environment 
 
 0. Prerequisites:
 
