@@ -1,6 +1,10 @@
 # The Period Purse
 
-The Period Purse strives to achieve menstrual equity by providing people who menstruate with access to free menstrual products, and to reduce the stigma surrounding periods through public education and advocacy. [Website](https://www.theperiodpurse.com/)
+The Period Purse strives to achieve menstrual equity by providing people who menstruate with access to free menstrual products, and to reduce the stigma surrounding periods through public education and advocacy. [website](https://www.theperiodpurse.com/)
+
+## For Developers
+
+The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of relevant information related to branching, PRs, etc that you should review!
 
 ## Setup Local Environment (Mac) 
 
