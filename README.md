@@ -36,7 +36,10 @@ TODO
  - Ensure you have ```brew``` installed and run ```brew install watchmen```
  - Source: https://stackoverflow.com/questions/58675179/error-emfile-too-many-open-files-react-native-cli
 2. Trying to run project using ```npm run ios```, I see 'error: unable to find utility "simctl", not a developer tool or in PATH'
-- Go into ```Xcode > Preferences > Locations``` and assign the Command Line Tools
+- Go into ```Xcode > Preferences > Locations``` and assign the Command Line Tools (See below)
+
+ ![image](https://user-images.githubusercontent.com/22108651/140590837-566276e4-9e8a-442b-ab8d-667911f6dad9.png)
+
 - Source: https://stackoverflow.com/questions/29108172/how-do-i-fix-the-xcrun-unable-to-find-simctl-error
 3. Trying to run project using ```npm run ios```, I see 'error: Failed to build iOS project. We ran "xcodebuild" command but it exited with error code 65'
 -  Verify you have ```cocoapods``` installed. If you don't, run ```sudo gem install cocoapods```.
@@ -46,11 +49,18 @@ TODO
   - run ```cd .. ```
   - delete _build_ folder if it exists
   - run ```npm run ios```
+
 - Source: https://stackoverflow.com/questions/55235825/error-failed-to-build-ios-project-we-ran-xcodebuild-command-but-it-exited-wit
 
 ## VM Errors
 1. Trying to run project using ```npm run ios```, Simulator doesn't boot with error "Unable to boot device due to insufficient system memory. Simulated devices are not supported on systems with less than 4GB of physical memory"
+
+![image](https://user-images.githubusercontent.com/22108651/140590847-3b75326c-29f7-48b9-9738-34ede501ae03.png)
+
 - Increase RAM provided to your VM so that it's at least 4GB. You can also downgrade the phone model for the simulator to decrease RAM requirements.
+
+
+
 2. [KVM Only / Linux Specific] The VM pauses after a short period of running, without any error in console.
 - You're running out of space on your actual computer
 - Source: https://www.howtoforge.com/community/threads/solved-kvm-qemu-ubuntu-16-04-vm-going-to-pause-state.76179/
