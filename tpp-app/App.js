@@ -22,7 +22,18 @@ const CustomTabBarButton = ({ children, onPress }) => (
         width: 70,
         height: 70,
         borderRadius: 70,
-        backgroundColor: '#D32729'
+        borderWidth: 3,
+        borderColor: '#FFFFFF',
+        boxSizing: 'border-box',
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation: 5,
+        backgroundColor: '#D32729',
       }}>
 
       </View>
@@ -69,4 +80,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
