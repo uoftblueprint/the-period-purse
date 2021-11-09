@@ -40,6 +40,10 @@ const CustomTabBarButton = ({ children, onPress }) => (
         justifyContent: 'center'
       }}>
         <Image
+          style={{
+            width: 24.67,
+            height: 30.83
+          }}
           source={BloodDrop}
         />
       </View>
