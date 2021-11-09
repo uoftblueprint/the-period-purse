@@ -81,6 +81,11 @@ import App from './App';
 AppRegistry.registerComponent('main', () => App); 
 ```
 
+7. When I try to run the app, I see "error Failed to launch the app on simulator, An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405): Unable to lookup in current state: Shutdown."
+- Make sure the simulator is closed, then run ```npm run ios``` again
+- If that doesn't work, run ```npx react-native run-ios --simulator="iPhone 8"```, or any other model besides the one you just tried to simulate
+- Source: https://stackoverflow.com/questions/69312343/build-error-domain-com-apple-coresimulator-simerror-code-405
+
 ## VM Specific Error
 1. You run ```npm run ios```, and the simulator doesn't launch. See error below
 
