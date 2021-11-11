@@ -6,8 +6,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Calendar from './src/home/Calendar';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
-import Svg, {SvgUri} from 'react-native-svg';
-import {ReactComponent as InfoIcon} from './ios/tppapp/Images.xcassets/info_black_24dp.svg'
 
 const Tab = createBottomTabNavigator();
 const CustomTabBarButton = ({ children, onPress }) => (
@@ -47,10 +45,7 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator>
           <Tab.Screen name="Info" component={Info} options={{
-            headerShown: false,
-            tabBarIcon: ({tintColor}) => (
-                  <InfoIcon width={20} height={20} />
-                )
+            headerShown: false
           }}/>
           <Tab.Screen name="MiddleButton" component={Calendar} options={{
             headerShown: false,
