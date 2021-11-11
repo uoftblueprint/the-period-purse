@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Calendar from './src/home/Calendar';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
+import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
 
 const Tab = createBottomTabNavigator();
 const CustomTabBarButton = ({ children, onPress }) => (
@@ -22,9 +23,29 @@ const CustomTabBarButton = ({ children, onPress }) => (
         width: 70,
         height: 70,
         borderRadius: 70,
-        backgroundColor: '#D32729'
+        borderWidth: 2,
+        borderColor: '#FFFFFF',
+        boxSizing: 'border-box',
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation: 5,
+        backgroundColor: '#D32729',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
-
+        <Image
+          style={{
+            width: 24.67,
+            height: 30.83
+          }}
+          source={BloodDrop}
+        />
       </View>
     </TouchableOpacity>
 );
@@ -69,4 +90,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
