@@ -64,7 +64,9 @@ const DropDown = () => {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
-            />    
+            showArrowIcon={false}
+            showTickIcon={false}
+            />      
         )
 }
 
@@ -80,6 +82,6 @@ export default () => {
 const styles = StyleSheet.create({
     dropdown: {
         position: 'absolute',
-        marginTop: 400,
+        marginTop: 100,
     }
 });
