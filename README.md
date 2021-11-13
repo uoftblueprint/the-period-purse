@@ -6,15 +6,15 @@ The Period Purse strives to achieve menstrual equity by providing people who men
 
 The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of relevant information related to branching, PRs, etc that you should review!
 
-## Setup Local Environment (Mac) 
+## Setup Local Environment (Mac)
 
 0. Prerequisites:
 
-  Ensure you have the following prerequisites before trying to run the project locally: 
+  Ensure you have the following prerequisites before trying to run the project locally:
   - Node.js and npm (https://nodejs.org/en/download/). Alternatively, check if you have this by using command ```node -v```
   - Once you have Node.js and npm, run command ```npm install -g expo-cli```
-  - You will need an iOS simulator. If you have a Macbook, its recommended you install XCode from the app store as it has a built in iOS simulator. If you have a Windows machine, unfortunately you will have to install a virtual machine to run the iOS simulator.  
- 
+  - You will need an iOS simulator. If you have a Macbook, its recommended you install XCode from the app store as it has a built in iOS simulator. If you have a Windows machine, unfortunately you will have to install a virtual machine to run the iOS simulator.
+
 2. Clone this repository using ```git clone https://github.com/uoftblueprint/the-period-purse.git```
 3. cd into folder tpp-app ```cd ./tpp-app```
 4. run ```npm install```
@@ -30,13 +30,13 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 ## Setup Local Environment (Windows/Linux)
 
 ### Windows
-Coming soon 
+Coming soon
 
 ### Linux
 Follow this [tutorial](https://www.youtube.com/watch?v=c30RLycIpVY)
 
 # Known Errors:
-1. When trying to run project using ```npm run ios```, I see "Error: EMFILE: too many open files" 
+1. When trying to run project using ```npm run ios```, I see "Error: EMFILE: too many open files"
  - Ensure you have ```brew``` installed and run ```brew install watchmen```
  - Source: https://stackoverflow.com/questions/58675179/error-emfile-too-many-open-files-react-native-cli
 
@@ -50,7 +50,7 @@ Follow this [tutorial](https://www.youtube.com/watch?v=c30RLycIpVY)
   2. run ```pod install```
   3. run ```cd ..```
   4. delete _build_ folder
-  5. run ```npm run ios``` 
+  5. run ```npm run ios```
 - Source: https://stackoverflow.com/questions/55235825/error-failed-to-build-ios-project-we-ran-xcodebuild-command-but-it-exited-wit
 
 4. When I try to open the app on the simulator I see "Invariant Violation: requireNativeComponent: "RNCSafeAreaProvider" was not found in the UIManager"
@@ -59,7 +59,22 @@ Follow this [tutorial](https://www.youtube.com/watch?v=c30RLycIpVY)
 - Restart app with ```npm run ios```
 - Source: https://stackoverflow.com/questions/61967017/invariant-violation-requirenativecomponent-rncsafeareaprovider-was-not-found
 
-5. When I try to open the app on the simulator I see: “Invariant Violation: “main” has not been registered”
+  <details>
+  <summary>Manually link <code>RNCSafeAreaProvider</code></summary>
+  <ul>
+  <li>If it&#39;s still not working, double check the output from <code>npx pod-install ios</code>. Specifically look for this line: &quot;Auto-linking React Native modules for target `tppapp`: RNGestureHandler, RNReanimated, and RNScreens&quot;.</li>
+  <li>If RNCSafeAreaProvider is not included in that list, it means that we will have to manually link it. In your Podfile in <code>/ios</code>, add the following line to Line 12, under <code>use_react_native!</code>:<pre><code class="lang-ruby">pod <span class="hljs-string">'react-native-safe-area-context'</span>, :<span class="hljs-function"><span class="hljs-params">path</span> =&gt;</span> <span class="hljs-string">'../node_modules/react-native-safe-area-context'</span>
+  </code></pre>
+  </li>
+  <li>Reinstall your pods with <code>npx pod-install ios</code> from the <code>tpp-app</code> directory.</li>
+  <li>Restart the app with <code>npm run ios</code>. The error should be gone.</li>
+  <li>Source: <a href="https://github.com/th3rdwave/react-native-safe-area-context#linking-in-react-native--060-1">https://github.com/th3rdwave/react-native-safe-area-context#linking-in-react-native--060-1</a></li>
+  </ul>
+  </details>
+
+<br>
+
+1. When I try to open the app on the simulator I see: “Invariant Violation: “main” has not been registered”
 - Delete "react-native-gesture-handler" from package.json
 - Go into node_modules folder and delete the react-native-gesture-handler folder manually
 - Run command ```npm install react-native gesture-handler``` and then ```expo install react-native-safe-area-context```
@@ -70,7 +85,7 @@ Follow this [tutorial](https://www.youtube.com/watch?v=c30RLycIpVY)
 6. I see error "CocoaPodsError: Command `pod install` failed. Cause: pod exited with non-zero code: 1"
 - reinstall package managers in Rosetta 2
 - Run command ```npm audit fix```
-- replace contents of index.json with 
+- replace contents of index.json with
 ```
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
@@ -78,7 +93,7 @@ import { AppRegistry } from 'react-native';
 
 import App from './App';
 
-AppRegistry.registerComponent('main', () => App); 
+AppRegistry.registerComponent('main', () => App);
 ```
 
 7. When I try to run the app, I see "error Failed to launch the app on simulator, An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405): Unable to lookup in current state: Shutdown."
@@ -91,4 +106,3 @@ AppRegistry.registerComponent('main', () => App);
 
 ![image](https://user-images.githubusercontent.com/22108651/140632364-a3bdaf36-33d2-4d5c-9dce-4d2fd1ec1656.png)
 - Increase RAM allocated to the VM, or change which model you are simulating to on that requires less RAM
-
