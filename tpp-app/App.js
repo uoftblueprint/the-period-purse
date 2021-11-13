@@ -32,6 +32,15 @@ const CustomTabBarButton = ({ children, onPress }) => (
 );
 
 
+const InfoIconStyled = ({tintColor}) => (
+    <View style={{top: 3}}>
+                      <Image
+                        source={InfoIcon}
+                        style={{width: 20, height: 20, tintColor: tintColor}}
+                      />
+                </View>
+);
+
 function MyTabs() {
   return (
       <Tab.Navigator>
@@ -49,13 +58,8 @@ export default function App() {
           <Tab.Screen name="Info" component={Info} options={{
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
-            <View style={{top: 3}}>
-                  <Image
-                    source={InfoIcon}
-                    style={{width: 20, height: 20, tintColor: tintColor}}
-                  />
-            </View>
-                ),
+                <InfoIconStyled {...tintColor} />
+                )
 
           }}/>
           <Tab.Screen name="MiddleButton" component={Calendar} options={{
