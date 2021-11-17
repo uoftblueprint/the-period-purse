@@ -1,0 +1,19 @@
+{
+  "name": "the-period-purse",
+  "version": "1.0.0",
+  "description": "TPP Mobile Application Backend",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/uoftblueprint/the-period-purse",
+    "type": "git"
+  },
+  "author": "Blueprint (UofT)",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.13",
+    "nodemon": "^2.0.15"
+  }
+}
