@@ -7,7 +7,6 @@ import Calendar from './src/home/Calendar';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 
-import { Image } from 'react-native';
 import InfoIcon from './ios/tppapp/Images.xcassets/info-icon-3x.png'
 import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
 
