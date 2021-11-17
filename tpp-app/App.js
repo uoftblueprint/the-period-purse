@@ -7,9 +7,9 @@ import Calendar from './src/home/Calendar';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 
-import { Image } from 'react-native';
 import InfoIcon from './ios/tppapp/Images.xcassets/info-icon-3x.png'
 import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
+import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.png';
 
 const Tab = createBottomTabNavigator();
 const CustomTabBarButton = ({ children, onPress }) => (
@@ -63,6 +63,15 @@ const InfoIconStyled = ({tintColor}) => (
                 </View>
 );
 
+const SettingsIconStyled = ({tintColor}) => (
+  <View style={{top: 3}}>
+      <Image
+        source={SettingsIcon}
+        style={{width: 20, height: 20, tintColor: tintColor}}
+      />
+  </View>
+);
+
 function MyTabs() {
   return (
       <Tab.Navigator>
@@ -91,7 +100,10 @@ export default function App() {
             )
           }}/>
           <Tab.Screen name="Settings" component={Settings} options={{
-            headerShown: false
+            headerShown: false,
+            tabBarIcon: (props) => (
+              <SettingsIconStyled {...props} />
+          )
           }}/>
         </Tab.Navigator>
       </NavigationContainer>
