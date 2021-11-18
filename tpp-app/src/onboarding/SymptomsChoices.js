@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { CustomNextButton, CustomSkipButton, CustomBackButton } from './PeriodStart';
+import { STACK_SCREENS } from './Welcome';
 
 export default function SymptomsChoices ({ navigation }) {
   return (
@@ -12,11 +13,11 @@ export default function SymptomsChoices ({ navigation }) {
       <Text style={styles.text}>
         You can change these later in {'\n'} your settings
       </Text>
-      <CustomSkipButton title="Skip" onPress={() => navigation.navigate("Main Page")}/>
+      <CustomSkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Main Page"])}/>
 
       <View style={styles.twoButtonContainer}>
-        <CustomBackButton title="Back" onPress={() => navigation.navigate("Period Start")}/>
-        <CustomNextButton title="Next" onPress={() => navigation.navigate("Main Page")}/>
+        <CustomBackButton title="Back" onPress={() => navigation.navigate(STACK_SCREENS["Period Start"])}/>
+        <CustomNextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Main Page"])}/>
       </View> 
     </ImageBackground>
   );

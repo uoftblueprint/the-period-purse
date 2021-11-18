@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
+import { STACK_SCREENS } from './Welcome';
 
 export const CustomNextButton = ({ onPress, title }) => (
   <TouchableOpacity onPress={onPress} style={styles.nextButtonContainer}>
@@ -29,11 +30,11 @@ export default function PeriodStart ({ navigation }) {
         <Text style={styles.text}>
             Record your last period or {'\n'} skip if you don’t know
         </Text>
-        <CustomSkipButton title="Skip" onPress={() => navigation.navigate("Symptoms Choices")}/>
+        <CustomSkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
 
         <View style={styles.twoButtonContainer}>
-            <CustomBackButton title="Back" onPress={() => navigation.navigate("Period Length")}/>
-            <CustomNextButton title="Next" onPress={() => navigation.navigate("Symptoms Choices")}/>
+            <CustomBackButton title="Back" onPress={() => navigation.navigate(STACK_SCREENS["Period Length"])}/>
+            <CustomNextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
         </View> 
     </ImageBackground>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { CustomNextButton, CustomSkipButton, CustomBackButton } from './PeriodStart';
+import { STACK_SCREENS } from './Welcome';
 
 export default function PeriodLength ({ navigation }) {
   return (
@@ -12,11 +13,11 @@ export default function PeriodLength ({ navigation }) {
       <Text style={styles.text}>
         Type an rough date and we’ll {'\n'} calculate the rest! 
       </Text>
-      <CustomSkipButton title="Skip" onPress={() => navigation.navigate("Period Start")}/>
+      <CustomSkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Period Start"])}/>
 
       <View style={styles.twoButtonContainer}>
-        <CustomBackButton title="Back" onPress={() => navigation.navigate("Get Started")}/>
-        <CustomNextButton title="Next" onPress={() => navigation.navigate("Period Start")}/>
+        <CustomBackButton title="Back" onPress={() => navigation.navigate(STACK_SCREENS["Get Started"])}/>
+        <CustomNextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Period Start"])}/>
       </View> 
     </ImageBackground>
   );

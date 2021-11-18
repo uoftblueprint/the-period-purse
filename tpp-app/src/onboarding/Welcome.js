@@ -7,7 +7,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PeriodStart from './PeriodStart';
 import PeriodLength from './PeriodLength';
 import SymptomsChoices from './SymptomsChoices';
-import { MyTabs } from '../../App';
+import { MyTabs as MainPage } from '../../App';
+
+export const STACK_SCREENS = {
+  "Get Started" : "Get Started",
+  "Period Length" : "Period Length", 
+  "Period Start":  "Period Start",
+  "Symptoms Choices" : "Symptoms Choices",
+  "Main Page": "Main Page"
+};
 
 const CustomStartButton = ({ onPress, title }) => (
   <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>
@@ -20,7 +28,7 @@ const GetStarted = ({ navigation }) => (
   <ImageBackground source={OnboardingBackground} style={styles.container}>
     <Image style={styles.appIcon} source={MNationIcon}/>
     <Text style={styles.titleText}>Welcome!</Text>
-    <CustomStartButton title="Get Started" onPress={() => navigation.navigate("Period Length")}/>
+    <CustomStartButton title="Get Started" onPress={() => navigation.navigate(STACK_SCREENS["Period Length"])}/>
   </ImageBackground>
 );
 
@@ -35,24 +43,24 @@ export default function Welcome() {
         }}
       >
       <Stack.Screen
-        name="Get Started"
+        name={STACK_SCREENS["Get Started"]}
         component={GetStarted}
       />
       <Stack.Screen
-        name="Period Length"
+        name={STACK_SCREENS["Period Length"]}
         component={PeriodLength}
       />
       <Stack.Screen
-        name="Period Start"
+        name={STACK_SCREENS["Period Start"]}
         component={PeriodStart}
       />
       <Stack.Screen
-        name="Symptoms Choices"
+        name={STACK_SCREENS["Symptoms Choices"]}
         component={SymptomsChoices}
       />
       <Stack.Screen 
-        name="Main Page"
-        component={MyTabs}
+        name={STACK_SCREENS["Main Page"]}
+        component={MainPage}
       />
       </Stack.Navigator>
     </NavigationContainer>
