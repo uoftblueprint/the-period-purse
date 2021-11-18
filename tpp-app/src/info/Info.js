@@ -1,73 +1,70 @@
 import React from 'react';
-import { StyleSheet, Text, View, Linking, ScrollView, Dimensions } from 'react-native';
-import { Card, Button } from 'react-native-elements'
-
-
-const cardGap = 16;
-const cardWidth = (Dimensions.get('window').width - cardGap * 3) / 2;
+import { StyleSheet, Text, View, Linking, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+// import InfoIcon from './ios/tppapp/Images.xcassets/info-icon-3x.png';
 
 const LearnMoreCard = () => {
     return(
-        <Card>
-            <Card.Title>Learn more about The Period Purse</Card.Title>
-            <Card.Divider/>
-            <Text style={{ marginBottom: 10}}>
+        <View style={styles.learnMoreCard}>
+            <Text style={styles.productText}>Learn more about The Period Purse</Text>
+            
+            <Text style={styles.learnMoreText}>
             The Period Purse strives to achieve menstrual equity by providing people 
             who menstruate with access to free menstrual products, and to reduce the 
             stigma surrounding periods through public education and advocacy.
             </Text>
-            <Button
-                buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                title='Visit the website'
+            <TouchableOpacity
+                style={styles.visitButton}
                 onPress={() => Linking.openURL('https://www.theperiodpurse.com')}
-            />
-        </Card>  
+            >
+                <Text style={{...styles.productText, margin: 10}}>Visit the website</Text>
+            </TouchableOpacity>
+        </View>  
     )
 }
 
 const PadsCard = () =>{
     return(
-        <Card containerStyle={styles.card}>
-            <View >
-            
-                <Text>Pads</Text>
+        <View style={styles.productCard}>
 
-            </View>
-        </Card>
+            
+            <Text style={styles.productText}> Pads</Text>
+
+
+        </View>
     )
 }
 
 const TamponsCard = () =>{
     return(
-        <Card containerStyle={styles.card}>
-            
-        </Card>
+        <View style={styles.productCard}>
+            <Text style={styles.productText}>Tampons</Text>
+        </View>
     )
 
 }
 
 const PeriodUnderwearsCard = () =>{
     return(
-        <Card>
-            
-        </Card>
+        <View style={styles.productCard}>
+            <Text style={styles.productText}>Period {'\n'} Underwears</Text>
+        </View>
     )
 
 }
 
 const MenstrualCupsCard = () =>{
     return(
-        <Card>
-            
-        </Card>
+        <View style={styles.productCard}>
+            <Text style={styles.productText}>Menstrual Cups</Text>
+        </View>
     )
 }
 
 const ClothPadsCard = () =>{
     return(
-        <Card>
-            
-        </Card>
+        <View style={styles.productCard}> 
+            <Text style={styles.productText}>Cloth Pads</Text>
+        </View>
     )
 }
 
@@ -76,13 +73,25 @@ const ClothPadsCard = () =>{
 export default function Info () {
     return (
         <ScrollView>
-            <View style={{ flex: 1, paddingHorizontal: 10, paddingTop: 80 }}>
-                <Text>Learn more about period products</Text>
-                <PadsCard/>
+            <View style={styles.cardContainer}>
+                <Text style={{...styles.productText, textAlign: 'left',
+        color: "#6D6E71",
+        margin: 15}}>Learn more about period products</Text>
+
+                <View style={styles.containerRow}>
+                    <PeriodUnderwearsCard/>
+                    <MenstrualCupsCard/>
+                </View>
+
+                <View style={styles.containerRow}>
+                    <PadsCard/>
+                    <ClothPadsCard/>
+                </View>
+                
                 <TamponsCard/>
-                <PeriodUnderwearsCard/>
-                <MenstrualCupsCard/>
-                <ClothPadsCard/>
+
+                
+                
                 <LearnMoreCard/>
             </View>
         </ScrollView>
@@ -90,11 +99,62 @@ export default function Info () {
 }
 
 const styles = StyleSheet.create({
-    card: {
+    productCard: {
       flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-      width: cardWidth,
+      backgroundColor: '#FFA3A4',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 160,
+      height: 170,
+      borderRadius: 12,
+      borderWidth: 0,
+      borderColor: "#000",
+      margin: 15,
+      shadowColor: '#000',
+      shadowOffset: { width: 4, height: 10 },
+      shadowOpacity: 0.25,
+      shadowRadius: 12,  
+    },
+    learnMoreCard: {
+        flex: 1,
+        backgroundColor: '#FFF',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: "92%",
+        height: 235,
+        borderRadius: 12,
+        borderWidth: 0,
+        borderColor: "#000",
+        margin: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 10 },
+        shadowOpacity: 0.25,
+        shadowRadius: 12,  
+    },
+    cardContainer: {
+        flex:1,
+        paddingHorizontal: 10, 
+        paddingTop: 80, 
+    },
+    containerRow: {
+        flex:1,
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    productText: {
+        fontFamily: "Avenir",
+        fontWeight: "800",
+        fontSize: 15,
+        textAlign: 'center',
+    },
+    learnMoreText: {
+        fontFamily: "Avenir",
+        fontWeight: "400",
+        fontSize: 14,
+        margin: 20,
+    },
+    visitButton: {
+        backgroundColor: "#73C7B7",
+        borderRadius: 8,
     },
 });
