@@ -8,7 +8,7 @@ Important: BodyParser was deprecated, so it is not used for the backend.
 
 ## A word of warning
 
-For development / sandbox purposes, the Mongo database is currently hosted on MongoDB Atlas, and only has 512MB of space allocated to it. 
+For development / sandbox purposes, the Mongo database is currently hosted on MongoDB Atlas, and only has 512MB of space allocated to it. It is hosted on Chloe's personal account for now, and she does not want to pay money if we use up all of our storage space and she has to pay for extra ;-;...
 
 **DO NOT INSERT A LOT OF DATA INTO IT.**
 
