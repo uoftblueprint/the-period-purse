@@ -59,6 +59,10 @@ On the right hand side, you can select how you prefer to install applications (e
 
 Once you have installed MongoDB Compass, ask Chloe for the login credentials to the database. She will give you a link to connect to the database!
 
+Lastly, we will be using `Postman` to test out our backend API routes. Please install Postman on your computer (we will not be using the browser version).
+
+[Download Postman](https://www.postman.com/downloads)
+
 ## Environment Set-up (MacOS)
 
 Ensure that you have `node` and `npm` installed. To check if you have it on your system by running this in your command line:
@@ -76,6 +80,10 @@ On the right hand side, select the only MacOS option and download it.
 [Download MongoDB Compass](https://www.mongodb.com/try/download/compass)
 
 Once you have installed MongoDB Compass, ask Chloe for the login credentials to the database. She will give you a link to connect to the database!
+
+Lastly, we will be using `Postman` to test out our backend API routes. Please install Postman on your computer (we will not be using the browser version).
+
+[Download Postman](https://www.postman.com/downloads)
 
 ## Envrionment Set-up (Linux)
 
