@@ -1,6 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, Linking, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
-// import InfoIcon from './ios/tppapp/Images.xcassets/info-icon-3x.png';
+import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity } from 'react-native';
+import padIcon from '../../ios/tppapp/Images.xcassets/icons/pad_icon.png';
+import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png';
+import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon.png';
+import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
+import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png';
 
 const LearnMoreCard = () => {
     return(
@@ -25,11 +29,8 @@ const LearnMoreCard = () => {
 const PadsCard = () =>{
     return(
         <View style={styles.productCard}>
-
-            
+            <Image style={styles.productIcon} source={padIcon}/>
             <Text style={styles.productText}> Pads</Text>
-
-
         </View>
     )
 }
@@ -37,6 +38,7 @@ const PadsCard = () =>{
 const TamponsCard = () =>{
     return(
         <View style={styles.productCard}>
+            <Image style={styles.productIcon} source={tamponsIcon}/>
             <Text style={styles.productText}>Tampons</Text>
         </View>
     )
@@ -46,6 +48,7 @@ const TamponsCard = () =>{
 const PeriodUnderwearsCard = () =>{
     return(
         <View style={styles.productCard}>
+            <Image style={styles.productIcon} source={underwearIcon}/>
             <Text style={styles.productText}>Period {'\n'} Underwears</Text>
         </View>
     )
@@ -55,6 +58,7 @@ const PeriodUnderwearsCard = () =>{
 const MenstrualCupsCard = () =>{
     return(
         <View style={styles.productCard}>
+            <Image style={styles.productIcon} source={cupIcon}/>
             <Text style={styles.productText}>Menstrual Cups</Text>
         </View>
     )
@@ -63,6 +67,7 @@ const MenstrualCupsCard = () =>{
 const ClothPadsCard = () =>{
     return(
         <View style={styles.productCard}> 
+            <Image style={styles.productIcon} source={clothPadIcon}/>
             <Text style={styles.productText}>Cloth Pads</Text>
         </View>
     )
@@ -156,5 +161,8 @@ const styles = StyleSheet.create({
     visitButton: {
         backgroundColor: "#73C7B7",
         borderRadius: 8,
+    },
+    productIcon: {
+        marginBottom: 10
     },
 });
