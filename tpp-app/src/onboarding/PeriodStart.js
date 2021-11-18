@@ -29,11 +29,11 @@ export default function PeriodStart ({ navigation }) {
         <Text style={styles.text}>
             Record your last period or {'\n'} skip if you don’t know
         </Text>
-        <CustomSkipButton title="Skip" onPress={() => navigation.navigate("Period Length")}/>
+        <CustomSkipButton title="Skip" onPress={() => navigation.navigate("Symptoms Choices")}/>
 
         <View style={styles.twoButtonContainer}>
-            <CustomBackButton title="Back" onPress={() => navigation.navigate("Get Started")}/>
-            <CustomNextButton title="Next" onPress={() => navigation.navigate("Period Length")}/>
+            <CustomBackButton title="Back" onPress={() => navigation.navigate("Period Length")}/>
+            <CustomNextButton title="Next" onPress={() => navigation.navigate("Symptoms Choices")}/>
         </View> 
     </ImageBackground>
   );

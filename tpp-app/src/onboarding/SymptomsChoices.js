@@ -15,7 +15,7 @@ export default function SymptomsChoices ({ navigation }) {
       <CustomSkipButton title="Skip" onPress={() => navigation.navigate("Main Page")}/>
 
       <View style={styles.twoButtonContainer}>
-        <CustomBackButton title="Back" onPress={() => navigation.navigate("Period Length")}/>
+        <CustomBackButton title="Back" onPress={() => navigation.navigate("Period Start")}/>
         <CustomNextButton title="Next" onPress={() => navigation.navigate("Main Page")}/>
       </View> 
     </ImageBackground>

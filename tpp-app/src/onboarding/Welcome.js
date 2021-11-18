@@ -20,7 +20,7 @@ const GetStarted = ({ navigation }) => (
   <ImageBackground source={OnboardingBackground} style={styles.container}>
     <Image style={styles.appIcon} source={MNationIcon}/>
     <Text style={styles.titleText}>Welcome!</Text>
-    <CustomStartButton title="Get Started" onPress={() => navigation.navigate("Period Start")}/>
+    <CustomStartButton title="Get Started" onPress={() => navigation.navigate("Period Length")}/>
   </ImageBackground>
 );
 
@@ -39,12 +39,12 @@ export default function Welcome() {
         component={GetStarted}
       />
       <Stack.Screen
-        name="Period Start"
-        component={PeriodStart}
-      />
-      <Stack.Screen
         name="Period Length"
         component={PeriodLength}
+      />
+      <Stack.Screen
+        name="Period Start"
+        component={PeriodStart}
       />
       <Stack.Screen
         name="Symptoms Choices"

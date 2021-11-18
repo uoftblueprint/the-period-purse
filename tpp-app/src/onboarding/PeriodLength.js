@@ -12,11 +12,11 @@ export default function PeriodLength ({ navigation }) {
       <Text style={styles.text}>
         Type an rough date and we’ll {'\n'} calculate the rest! 
       </Text>
-      <CustomSkipButton title="Skip" onPress={() => navigation.navigate("Symptoms Choices")}/>
+      <CustomSkipButton title="Skip" onPress={() => navigation.navigate("Period Start")}/>
 
       <View style={styles.twoButtonContainer}>
-        <CustomBackButton title="Back" onPress={() => navigation.navigate("Period Start")}/>
-        <CustomNextButton title="Next" onPress={() => navigation.navigate("Symptoms Choices")}/>
+        <CustomBackButton title="Back" onPress={() => navigation.navigate("Get Started")}/>
+        <CustomNextButton title="Next" onPress={() => navigation.navigate("Period Start")}/>
       </View> 
     </ImageBackground>
   );
