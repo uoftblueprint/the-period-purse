@@ -1,17 +1,23 @@
 import React from 'react';
-import {StyleSheet, Text, View, ImageBackground, Button, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 
-const CustomNextButton = ({ onPress, title }) => (
+export const CustomNextButton = ({ onPress, title }) => (
   <TouchableOpacity onPress={onPress} style={styles.nextButtonContainer}>
     <Text style={styles.nextButtonText}>{title}</Text>
   </TouchableOpacity>
 );
 
-const CustomSkipButton = ({ onPress, title }) => (
-    <TouchableOpacity onPress={onPress} style={{marginTop: 112}}>
+export const CustomSkipButton = ({ onPress, title }) => (
+    <TouchableOpacity onPress={onPress} style={{ marginTop: 112 }}>
         <Text style={styles.skipButtonText}>{title}</Text>
     </TouchableOpacity>
+)
+
+export const CustomBackButton = ({ onPress, title }) => (
+  <TouchableOpacity onPress={onPress} style={styles.backButtonContainer}>
+      <Text style={styles.backButtonText}>{title}</Text>
+  </TouchableOpacity>
 )
 
 export default function PeriodStart ({ navigation }) {
@@ -26,8 +32,7 @@ export default function PeriodStart ({ navigation }) {
         <CustomSkipButton title="Skip" onPress={() => navigation.navigate("Period Length")}/>
 
         <View style={styles.twoButtonContainer}>
-            <Button title="Back" color="#5A9F93" onPress={() => navigation.navigate("Welcome")} style={styles.backButton}/>
-            <View style={{width: 87.5}}/>
+            <CustomBackButton title="Back" onPress={() => navigation.navigate("Get Started")}/>
             <CustomNextButton title="Next" onPress={() => navigation.navigate("Period Length")}/>
         </View> 
     </ImageBackground>
@@ -40,17 +45,12 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center'
   }, 
-  appIcon: {
-    width: 182, 
-    height: 182,
-    alignSelf: 'center'
-  },
   titleText: {
     textAlign: 'center',
     fontFamily: 'Avenir',
     fontSize: 26, 
     fontWeight: '800', 
-    marginTop: 50
+    marginTop: 200
   },
   text: {
     textAlign: 'center',
@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir'
   }, 
   nextButtonContainer: {
+    alignItems: 'stretch', 
+    justifyContent: 'center',
     backgroundColor: "#5A9F93",
     borderRadius: 10,
     width: 149,
@@ -76,24 +78,29 @@ const styles = StyleSheet.create({
     bottom: 10
   },
   nextButtonText: {
-    color: "#fff",
+    color: "#FFFFFF",
     textAlign: 'center',
     fontFamily: 'Avenir',
     fontSize: 15, 
-    fontWeight: '800', 
-    marginTop: 17
+    fontWeight: '800'
   }, 
-  backButton: {
-    position: 'absolute',
-    marginRight: 87.5
+  backButtonContainer: {
+    alignItems: 'stretch', 
+    justifyContent: 'center',
+    borderRadius: 10,
+    width: 149,
+    height: 54,
+    bottom: 10
+  },
+  backButtonText: {
+    color: "#5A9F93", 
+    fontSize: 15 
   }, 
   twoButtonContainer: {
-    alignItems: 'stretch',
-    justifyContent: 'center', 
-    flex: 1,
     flexDirection: 'row',
-    marginHorizontal: 100,
+    alignSelf: 'center', 
     position: 'absolute',
     bottom: 70,
+    right: 40
   }
 });
