@@ -4,7 +4,7 @@
 
 The backend setup followed [this guide](https://medium.com/swlh/how-to-create-your-first-mern-mongodb-express-js-react-js-and-node-js-stack-7e8b20463e66). You may consult this link to see what was followed.
 
-Important: BodyParser was deprecated since the writing of this guide. It is not used for the backend.
+Important: BodyParser was deprecated, so it is not used for the backend.
 
 ## A word of warning
 
