@@ -16,9 +16,8 @@
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",
     "react-native-elements": "^3.4.2",
-    "react-native-gesture-handler": "~1.10.2",
-    "react-native-calendars": "^1.1268.0",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-calendars": "^1.1268.0",
     "react-native-reanimated": "~2.2.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
@@ -29,5 +28,11 @@
     "@babel/core": "^7.9.0",
     "@react-navigation/native": "^6.0.6"
   },
-  "private": true
+  "private": true,
+  "name": "tpp-app",
+  "version": "1.0.0",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
