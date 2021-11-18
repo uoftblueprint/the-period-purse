@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-
 const db = require('./db')
+
 const userRouter = require('./routes/user-router')
 
 const app = express()
