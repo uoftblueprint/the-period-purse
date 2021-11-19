@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
-import DropDownPicker from 'react-native-dropdown-picker'
 
 
 const Calendar = () => {
@@ -41,47 +40,14 @@ const Calendar = () => {
     )
 }
 
-const DropDown = () => {
-
-    const [open, setOpen] = useState(false);
-    // Set the dropdown to period by default
-    const [value, setValue] = useState('period');
-    // Drop down picker items with corresponding values
-    const [items, setItems] = useState([
-        {label: 'Period', value: 'period'},
-        {label: 'Mood', value: 'mood'},
-        {label: 'Sleep', value: 'sleep'},
-        {label: 'Cramps', value: 'cramps'},
-        {label: 'Exercise', value: 'exercise'}
-      ]);
-
-    return (
-        <DropDownPicker
-            containerStyle={styles.dropdown}
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            showArrowIcon={false}
-            showTickIcon={false}
-            />      
-        )
-}
 
 export default () => {
     return (
         <View>
-            <DropDown></DropDown>
             <Calendar></Calendar>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    dropdown: {
-        position: 'absolute',
-        marginTop: 100,
-    }
 });
