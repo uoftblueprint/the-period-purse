@@ -47,8 +47,6 @@ const Notifications = (props) => {
 }
 
 const PreferenceButton = (props) => {
-    //idk if we want the text to count as part of the button
-    //meaning it fades too when it gets pressed
     return (
     <View style = {styles.horizontalCenteredColumn}>
         <TouchableOpacity style={[styles.dropShadow, styles.preferenceButton]}>
