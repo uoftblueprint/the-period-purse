@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Welcome';
+import styled from 'styled-components/native'; 
 
 export const CustomNextButton = ({ onPress, title }) => (
   <TouchableOpacity onPress={onPress} style={styles.nextButtonContainer}>
@@ -24,21 +25,46 @@ export const CustomBackButton = ({ onPress, title }) => (
 export default function PeriodStart ({ navigation }) {
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
-        <Text style={styles.titleText}>
+        <TitleText>
             When did your {'\n'} period last start?
-        </Text>
-        <Text style={styles.text}>
+        </TitleText>
+        <BodyText>
             Record your last period or {'\n'} skip if you don’t know
-        </Text>
+        </BodyText>
         <CustomSkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
 
-        <View style={styles.twoButtonContainer}>
+        <TwoButtonContainer>
             <CustomBackButton title="Back" onPress={() => navigation.navigate(STACK_SCREENS["Period Length"])}/>
             <CustomNextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
-        </View> 
+        </TwoButtonContainer>
     </ImageBackground>
   );
 }
+
+export const TwoButtonContainer = styled.View`
+  flexDirection: row;
+  alignSelf: center;
+  position: absolute;
+  bottom: 70px;
+  right: 40px
+`;
+
+export const TitleText = styled.Text`
+  textAlign: center;
+  fontFamily: Avenir;
+  fontSize: 26px; 
+  fontWeight: 800;
+  marginTop: 200px
+`;
+
+export const BodyText = styled.Text`
+  textAlign: center;
+  fontFamily: Avenir;
+  fontSize: 16px; 
+  fontWeight: 400;
+  marginTop: 19px;
+  color: #5F5F5F
+`;
 
 const styles = StyleSheet.create({
   container: {
@@ -46,21 +72,6 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center'
   }, 
-  titleText: {
-    textAlign: 'center',
-    fontFamily: 'Avenir',
-    fontSize: 26, 
-    fontWeight: '800', 
-    marginTop: 200
-  },
-  text: {
-    textAlign: 'center',
-    fontFamily: 'Avenir',
-    fontSize: 16, 
-    fontWeight: '400', 
-    marginTop: 19,
-    color: '#5F5F5F'
-  },
   skipButtonText: {
     color: '#6D6E71', 
     textAlign: 'center', 
@@ -96,12 +107,5 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: "#5A9F93", 
     fontSize: 15 
-  }, 
-  twoButtonContainer: {
-    flexDirection: 'row',
-    alignSelf: 'center', 
-    position: 'absolute',
-    bottom: 70,
-    right: 40
   }
 });
