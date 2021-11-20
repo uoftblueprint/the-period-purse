@@ -104,7 +104,8 @@ export default function Settings () {
 const styles = StyleSheet.create({
     rowContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     preferences: {
         flexDirection: 'row',
