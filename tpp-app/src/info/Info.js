@@ -52,8 +52,6 @@ export default function Info () {
                     <MenstrualProductCard name="Tampons" image={tamponsIcon}/>
                 </View>
                 
-                
-
                 <LearnMoreCard/>
             </View>
         </ScrollView>
