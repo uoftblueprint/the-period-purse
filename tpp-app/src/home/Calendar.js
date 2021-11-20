@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
 const Calendar = () => {
@@ -40,14 +42,67 @@ const Calendar = () => {
     )
 }
 
-
-export default () => {
+const YearButton = () => {
     return (
-        <View>
+        <View style={styles.yearButtonContainer}>
+            <Button
+                icon={
+                    backIcon
+                }
+                titleStyle={styles.yearButtonText}
+                title='Year'
+                type="clear"
+            />
+        </View>
+    )
+}
+
+const backIcon = () => {
+    return (
+        <Icon
+        name="arrow-back-ios"
+        size={24}
+        color="#5A9F93"
+    />
+    )
+}
+
+export default function CalendarView ({ navigation }) {
+    return (
+        <View style={styles.container}>
+            <View style={styles.navbarContainer}>
+                <YearButton></YearButton>
+            </View>
             <Calendar></Calendar>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'flex-start',  
+    },
+    navbarContainer: {
+        marginTop: 98,
+        position: 'relative',
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+    },
+    yearButtonContainer: {
+        alignItems: 'stretch',
+        justifyContent: 'center',
+        borderRadius: 10,
+        width: 120,
+        height: 54,
+        bottom: 10
+    },
+    yearButtonText: {
+        fontStyle: 'normal',
+        fontWeight: "600",
+        color: '#000',
+        alignItems: 'center',
+        lineHeight: 20,
+    }
 });
