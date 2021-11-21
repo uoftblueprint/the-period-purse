@@ -7,6 +7,7 @@ import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
 import CalendarScreen from './src/home/pages/CalendarScreen';
+import CalendarNavigator from './src/home/CalendarNavigator';
 
 const Tab = createBottomTabNavigator();
 const CustomTabBarButton = ({ children, onPress }) => (
@@ -68,7 +69,7 @@ export default function App() {
           <Tab.Screen name="Info" component={Info} options={{
             headerShown: false
           }}/>
-          <Tab.Screen name="MiddleButton" component={CalendarScreen} options={{
+          <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
             headerShown: false,
             tabBarButton: (props) => (
                 <CustomTabBarButton {...props} />

@@ -2,6 +2,9 @@ import React, {useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 
 const Calendar = () => {
     return (
@@ -39,11 +42,16 @@ const Calendar = () => {
     )
 }
 
-export default function CalendarScreen () {
+export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                <BackButton onPress={() => {console.log('Button pressed')}}title='Year'></BackButton>
+                <BackButton 
+                    onPress={() => {
+                        navigation.navigate('Year')
+                    }}
+                    title='Year'
+                />
             </View>
             <Calendar></Calendar>
         </View>
