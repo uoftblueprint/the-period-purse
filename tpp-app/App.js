@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Image, TabBarIOSItem} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Calendar from './src/home/Calendar';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
+import CalendarScreen from './src/home/pages/CalendarScreen';
 
 const Tab = createBottomTabNavigator();
 const CustomTabBarButton = ({ children, onPress }) => (
@@ -68,7 +68,7 @@ export default function App() {
           <Tab.Screen name="Info" component={Info} options={{
             headerShown: false
           }}/>
-          <Tab.Screen name="MiddleButton" component={Calendar} options={{
+          <Tab.Screen name="MiddleButton" component={CalendarScreen} options={{
             headerShown: false,
             tabBarButton: (props) => (
                 <CustomTabBarButton {...props} />

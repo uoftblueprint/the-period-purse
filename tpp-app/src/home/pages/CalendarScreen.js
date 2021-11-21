@@ -1,12 +1,9 @@
 import React, {useState} from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
-import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import { BackButton } from '../components/BackButtonComponent';
 
 const Calendar = () => {
-    
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -42,36 +39,11 @@ const Calendar = () => {
     )
 }
 
-const YearButton = () => {
-    return (
-        <View style={styles.yearButtonContainer}>
-            <Button
-                icon={
-                    backIcon
-                }
-                titleStyle={styles.yearButtonText}
-                title='Year'
-                type="clear"
-            />
-        </View>
-    )
-}
-
-const backIcon = () => {
-    return (
-        <Icon
-        name="arrow-back-ios"
-        size={24}
-        color="#5A9F93"
-    />
-    )
-}
-
-export default function CalendarView ({ navigation }) {
+export default function CalendarScreen () {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                <YearButton></YearButton>
+                <BackButton onPress={() => {console.log('Button pressed')}}title='Year'></BackButton>
             </View>
             <Calendar></Calendar>
         </View>
@@ -90,19 +62,4 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'flex-start',
     },
-    yearButtonContainer: {
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        borderRadius: 10,
-        width: 120,
-        height: 54,
-        bottom: 10
-    },
-    yearButtonText: {
-        fontStyle: 'normal',
-        fontWeight: "600",
-        color: '#000',
-        alignItems: 'center',
-        lineHeight: 20,
-    }
-});
+})
