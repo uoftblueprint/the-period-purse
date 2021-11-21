@@ -9,21 +9,9 @@ import YearScreen from './pages/YearScreen'
 const Stack = createNativeStackNavigator();
 export default function CalendarNavigator() {
     return (
-        <Stack.Navigator>
-            <Stack.Screen
-                name={"Calendar"}
-                component={CalendarScreen}
-                options={{
-                    headerShown: false
-                }}
-            />
-            <Stack.Screen
-                name={"Year"}
-                component={YearScreen}
-                options={{
-                    headerShown: false
-                }}
-            />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name={"Calendar"} component={CalendarScreen} />
+            <Stack.Screen name={"Year"} component={YearScreen} />
         </Stack.Navigator>
     )
 }
