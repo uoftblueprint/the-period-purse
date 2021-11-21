@@ -42,6 +42,7 @@ const Calendar = () => {
     )
 }
 
+// Calendar Screen component that can be accessed by other functions
 export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
