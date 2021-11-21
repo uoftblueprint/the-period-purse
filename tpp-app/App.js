@@ -1,12 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Image, TabBarIOSItem} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
-import CalendarScreen from './src/home/pages/CalendarScreen';
 import CalendarNavigator from './src/home/CalendarNavigator';
 
 const Tab = createBottomTabNavigator();
