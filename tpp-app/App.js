@@ -79,11 +79,11 @@ const SettingsIconStyled = ({tintColor}) => (
   </View>
 );
 
-function MyTabs() {
+export function MyTabs() {
   return (
       <Tab.Navigator>
-        <Tab.Screen name="Info" component={InfoScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Info" component={Info} />
+        <Tab.Screen name="Settings" component={Settings} />
       </Tab.Navigator>
   );
 }
