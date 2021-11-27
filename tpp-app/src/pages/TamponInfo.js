@@ -8,9 +8,9 @@ export default function TamponInfo() {
             <Image
                 />
         </View>
-        <Text>Tampons</Text>
+        <Text style={styles.titleText}>Tampons</Text>
         
-        <Text>
+        <Text style={styles.bodyText}>
         Heyyyy! Iz me, your period. 
 
         Can you imagine that Ancient Egyptians made tampons out of softened papyrus? Ancient 
@@ -27,3 +27,31 @@ export default function TamponInfo() {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    titleText: {
+        position: 'absolute',
+        textAlign: 'center',
+        fontFamily: 'Avenir',
+        left: '6.37%',
+        right: '6.37%',
+        top: '15.15%',
+        bottom: '15.15%',
+        fontWeight: "800",
+        fontSize: 34,
+        lineHeight: 46,
+        letterSpacing: -0.02
+    },
+    bodyText: {
+           position: 'absolute',
+           textAlign: 'center',
+           fontFamily: 'Avenir',
+           fontSize: 14,
+           lineHeight: 19,
+           letterSpacing: -0.3,
+           left: '14.13%',
+           right: '14.13%',
+           top: '45.94%',
+           bottom: '-12.44%'},
+    
+});

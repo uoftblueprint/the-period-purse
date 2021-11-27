@@ -8,9 +8,9 @@ export default function PeriodUnderwearInfo() {
             <Image
                 />
         </View>
-        <Text>Period Underwear</Text>
+        <Text style={styles.titleText}>Period Underwear</Text>
         
-        <Text>
+        <Text style={styles.bodyText}>
         Quick, your period is “OMW”- period underwear has you covered. Wow, the first period 
         underwear product arrived on the market in the late 1980s!?
 
@@ -26,3 +26,30 @@ export default function PeriodUnderwearInfo() {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    titleText: {
+        position: 'absolute',
+        textAlign: 'center',
+        fontFamily: 'Avenir',
+        left: '3.62%',
+        right: '0%',
+        top: '11.36%',
+        bottom: '11.36%',
+        fontWeight: "800",
+        fontSize: 34,
+        lineHeight: 34
+    },
+    bodyText: {
+           position: 'absolute',
+           textAlign: 'center',
+           fontFamily: 'Avenir',
+           fontSize: 14,
+           lineHeight: 19,
+           letterSpacing: -0.3,
+           left: '14.13%',
+           right: '14.13%',
+           top: '45.94%',
+           bottom: '10.59%'},
+    
+});

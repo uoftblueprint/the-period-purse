@@ -8,9 +8,9 @@ export default function ClothPadInfo() {
             <Image
                 />
         </View>
-        <Text>Cloth Pads</Text>
+        <Text style={styles.titleText}>Cloth Pads</Text>
         
-        <Text>
+        <Text style={styles.bodyText}>
         Storytime: here comes your period - reusable cloth pads are a great period product option!
 
         Cloth pads originated as cloth rags dating back to the 10th century in Ancient Greece. Now they
@@ -26,3 +26,31 @@ export default function ClothPadInfo() {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    titleText: {
+        position: 'absolute',
+        textAlign: 'center',
+        fontFamily: 'Avenir',
+        left: '15.47%',
+        right: '13.6%',
+        top: '35.74%',
+        bottom: '58.5%',
+        fontWeight: "800",
+        fontSize: 34,
+        lineHeight: 46,
+        letterSpacing: -0.02
+    },
+    bodyText: {
+           position: 'absolute',
+           textAlign: 'center',
+           fontFamily: 'Avenir',
+           fontSize: 14,
+           lineHeight: 19,
+           letterSpacing: -0.3,
+           left: '14.13%',
+           right: '14.13%',
+           top: '45.94%',
+           bottom: '10.59%'},
+    
+});
