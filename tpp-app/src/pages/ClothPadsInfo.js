@@ -1,13 +1,14 @@
 import React from 'react';
-import {Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
+import ClothImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/cloth-pads-2x.png';
 
 export default function ClothPadInfo() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View>
-            <Image
+            <Image 
+            source= {ClothImage}
+            style={styles.image}
                 />
-        </View>
         <Text style={styles.titleText}>Cloth Pads</Text>
         
         <Text style={styles.bodyText}>
@@ -28,6 +29,14 @@ export default function ClothPadInfo() {
 }
 
 const styles = StyleSheet.create({
+    image: {
+        position: 'absolute', 
+        width: 310, 
+        height: 206, 
+        left: 60, 
+        top: 101, 
+        bottom: 505
+    },
     titleText: {
         position: 'absolute',
         textAlign: 'center',
@@ -36,7 +45,7 @@ const styles = StyleSheet.create({
         right: '13.6%',
         top: '35.74%',
         bottom: '58.5%',
-        fontWeight: "800",
+        fontWeight: '800',
         fontSize: 34,
         lineHeight: 46,
         letterSpacing: -0.02

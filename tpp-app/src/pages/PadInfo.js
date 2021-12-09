@@ -1,16 +1,14 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
-import PadImage from "tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad- 2x.png";
+import PadImage from "tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-2x.png";
 
 export default function PadInfo() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View>
             <Image
-                source= {(PadImage)}
-                style={{position: 'absolute', width: 80, height: 164, left: 146, top: 80}}
+                source= {PadImage}
+                style={styles.image}
                 />
-        </View>
         <Text style={styles.titleText}>Pads</Text>
         
         <Text style={styles.bodyText}>
@@ -36,13 +34,21 @@ export default function PadInfo() {
 }
 
 const styles = StyleSheet.create({
+    image: {
+        position: 'absolute', 
+        width: 80, 
+        height: 164, 
+        left: 165, 
+        top: 88, 
+        bottom: 560
+    },
     titleText: {
         position: 'absolute',
         textAlign: 'center',
         fontFamily: 'Avenir',
         left: '10.64%',
         right: '10.64%',
-        top: '15.15%',
+        top: '37%',
         bottom: '15.15%',
         fontWeight: "800",
         fontSize: 34,

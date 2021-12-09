@@ -1,13 +1,14 @@
 import React from 'react';
-import {Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
+import CupImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/Cup-2x.png';
 
 export default function MenstrualCupInfo() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View>
             <Image
+            source= {CupImage}
+            style={styles.image}
                 />
-        </View>
         <Text style={styles.titleText}>Menstrual Cup</Text>
         
         <Text style={styles.bodyText}>
@@ -28,6 +29,14 @@ export default function MenstrualCupInfo() {
 }
 
 const styles = StyleSheet.create({
+    image: {
+        position: 'absolute', 
+        width: 81, 
+        height: 130, 
+        left: 160, 
+        top: 139, 
+        bottom: 560
+    },
     titleText: {
         position: 'absolute',
         textAlign: 'center',
@@ -36,7 +45,7 @@ const styles = StyleSheet.create({
         right: '13.6%',
         top: '35.84%',
         bottom: '58.5%',
-        fontWeight: "800",
+        fontWeight: '800',
         fontSize: 34,
         lineHeight: 46,
         letterSpacing: -0.02

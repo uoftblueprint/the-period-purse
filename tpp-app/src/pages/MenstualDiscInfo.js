@@ -1,13 +1,11 @@
 import React from 'react';
-import {Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 
 export default function MenstrualDiscInfo() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View>
             <Image
                 />
-        </View>
         <Text>Menstural Disc</Text>
         
         <Text>
@@ -29,6 +27,14 @@ export default function MenstrualDiscInfo() {
 
 const styles = StyleSheet.create({
     titleText: {
+        image: {
+            position: 'absolute', 
+            width: 81, 
+            height: 130, 
+            left: 160, 
+            top: 139, 
+            bottom: 560
+        },
         position: 'absolute',
         textAlign: 'center',
         fontFamily: 'Avenir',

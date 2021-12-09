@@ -1,13 +1,14 @@
 import React from 'react';
-import {Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
+import TamponImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/tampons-2x.png';
 
 export default function TamponInfo() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View>
             <Image
+             source= {TamponImage}
+             style={styles.image}
                 />
-        </View>
         <Text style={styles.titleText}>Tampons</Text>
         
         <Text style={styles.bodyText}>
@@ -29,15 +30,23 @@ export default function TamponInfo() {
 }
 
 const styles = StyleSheet.create({
+    image: {
+        position: 'absolute', 
+        width: 212, 
+        height: 117, 
+        left: 97, 
+        top: 135, 
+        bottom: 560
+    },
     titleText: {
         position: 'absolute',
         textAlign: 'center',
         fontFamily: 'Avenir',
         left: '6.37%',
         right: '6.37%',
-        top: '15.15%',
+        top: '37%',
         bottom: '15.15%',
-        fontWeight: "800",
+        fontWeight: '800',
         fontSize: 34,
         lineHeight: 46,
         letterSpacing: -0.02

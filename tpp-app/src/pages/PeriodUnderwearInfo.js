@@ -1,13 +1,14 @@
 import React from 'react';
-import {Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
+import UnderwearImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/underwear-clear-2x.png';
 
 export default function PeriodUnderwearInfo() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View>
             <Image
+            source= {UnderwearImage}
+            style={styles.image}
                 />
-        </View>
         <Text style={styles.titleText}>Period Underwear</Text>
         
         <Text style={styles.bodyText}>
@@ -28,6 +29,14 @@ export default function PeriodUnderwearInfo() {
 }
 
 const styles = StyleSheet.create({
+    image: {
+            position: 'absolute', 
+            width: 81, 
+            height: 130, 
+            left: 160, 
+            top: 139, 
+            bottom: 560
+    },
     titleText: {
         position: 'absolute',
         textAlign: 'center',
@@ -36,7 +45,7 @@ const styles = StyleSheet.create({
         right: '0%',
         top: '11.36%',
         bottom: '11.36%',
-        fontWeight: "800",
+        fontWeight: '800',
         fontSize: 34,
         lineHeight: 34
     },
