@@ -3,10 +3,9 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Calendar from './src/home/Calendar';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
-
+import CalendarNavigator from './src/home/CalendarNavigator';
 import InfoIcon from './ios/tppapp/Images.xcassets/info-icon-3x.png'
 import BloodDropIcon from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
 import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar-icon.png'
@@ -100,7 +99,7 @@ export default function App() {
                 )
 
           }}/>
-          <Tab.Screen name="MiddleButton" component={Calendar} options={{
+          <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
             headerShown: false,
             tabBarButton: (props) => (
                 <CustomTabBarButton {...props} />
