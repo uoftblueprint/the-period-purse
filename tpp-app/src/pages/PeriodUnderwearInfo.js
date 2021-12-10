@@ -1,10 +1,13 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import UnderwearImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/underwear-clear-2x.png';
+import { BackButton } from '../home/components/BackButtonComponent';
 
 export default function PeriodUnderwearInfo() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={styles.arrowPosition}><BackButton  /></View>
+            
             <Image
             source= {UnderwearImage}
             style={styles.image}
@@ -60,5 +63,12 @@ const styles = StyleSheet.create({
            right: '14.13%',
            top: '45.94%',
            bottom: '10.59%'},
+    arrowPosition: {
+            position: 'absolute',
+            left: 17.05,
+            right: 348.5,
+            top: 54.51,
+            bottom: 741.52
+        }
     
 });

@@ -1,10 +1,12 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import TamponImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/tampons-2x.png';
+import { BackButton } from '../home/components/BackButtonComponent';
 
 export default function TamponInfo() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+         <View style={styles.arrowPosition}><BackButton  /></View>
             <Image
              source= {TamponImage}
              style={styles.image}
@@ -62,5 +64,12 @@ const styles = StyleSheet.create({
            right: '14.13%',
            top: '45.94%',
            bottom: '-12.44%'},
+    arrowPosition: {
+            position: 'absolute',
+            left: 17.05,
+            right: 348.5,
+            top: 54.51,
+            bottom: 741.52
+        }
     
 });

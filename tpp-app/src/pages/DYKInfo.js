@@ -1,10 +1,13 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
+import { BackButton } from '../home/components/BackButtonComponent';
+
 
 export default function DidYouKnow() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+         <View style={styles.arrowPosition}><BackButton  /></View>
             <Image
             source= {PadImageHappy}
             style={styles.image}
@@ -59,5 +62,11 @@ const styles = StyleSheet.create({
         left: 105,
         top: 406,
         bottom: 297},
-    
+    arrowPosition: {
+            position: 'absolute',
+            left: 17.05,
+            right: 348.5,
+            top: 54.51,
+            bottom: 741.52
+        }
 });

@@ -1,10 +1,13 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
+import { BackButton } from '../home/components/BackButtonComponent';
+
 
 export default function MenstrualDiscInfo() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Image
+          <View style={styles.arrowPosition}><BackButton  /></View>
+            <Image 
                 />
         <Text>Menstural Disc</Text>
         
@@ -26,15 +29,15 @@ export default function MenstrualDiscInfo() {
 }
 
 const styles = StyleSheet.create({
+    image: {
+        position: 'absolute', 
+        width: 81, 
+        height: 130, 
+        left: 160, 
+        top: 139, 
+        bottom: 560
+    },
     titleText: {
-        image: {
-            position: 'absolute', 
-            width: 81, 
-            height: 130, 
-            left: 160, 
-            top: 139, 
-            bottom: 560
-        },
         position: 'absolute',
         textAlign: 'center',
         fontFamily: 'Avenir',
@@ -58,5 +61,11 @@ const styles = StyleSheet.create({
            right: '14.13%',
            top: '45.94%',
            bottom: '4.68%'},
-    
+    arrowPosition: {
+            position: 'absolute',
+            left: 17.05,
+            right: 348.5,
+            top: 54.51,
+            bottom: 741.52
+        }
 });
