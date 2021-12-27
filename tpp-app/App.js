@@ -1,7 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
-import { NavigationContainer, useIsFocused } from '@react-navigation/native';
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
@@ -17,6 +16,8 @@ const CustomTabBarButton = ({ onPress }) => {
   const calendarShowing = useIsFocused();
   let icon = calendarShowing ? BloodDropIcon : CalendarIcon;
   let bgColor = calendarShowing ? '#D32729' : '#5A9F93';
+  const navigation = useNavigation();
+
   return (
     <TouchableOpacity
         style={{
@@ -25,7 +26,13 @@ const CustomTabBarButton = ({ onPress }) => {
           alignItems: 'center',
           ...styles.shadow
         }}
-        onPress={onPress}
+        onPress={() => {
+          if (calendarShowing) {
+            navigation.navigate('MiddleButton', { screen: 'LogSymptoms' });
+          } else {
+            navigation.navigate('MiddleButton', { screen: 'Calendar' });
+          }
+        }}
     >
       <View style={{
         width: 70,
