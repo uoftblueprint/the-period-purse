@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 const CustomTabBarButton = ({ onPress }) => {
   const calendarShowing = useIsFocused();
   
-  let icon = calendarShowing ? <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/blood_drop.svg')} /> : <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/calendar_icon.svg')} />;
+  let icon = calendarShowing ? './ios/tppapp/Images.xcassets/icons/blood_drop.svg' : './ios/tppapp/Images.xcassets/icons/calendar_icon.svg';
   let bgColor = calendarShowing ? '#D32729' : '#5A9F93';
   return (
     <TouchableOpacity
