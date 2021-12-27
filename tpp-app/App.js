@@ -47,7 +47,7 @@ const CustomTabBarButton = ({ onPress }) => {
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-        {icon}
+        <VectorImage source={require(icon)} />
       </View>
     </TouchableOpacity>
   );
