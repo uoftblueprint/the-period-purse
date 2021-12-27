@@ -13,11 +13,11 @@ export default function SymptomsChoices ({ navigation }) {
       <BodyText>
         You can change these later in {'\n'} your settings
       </BodyText>
-      <CustomSkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Main Page"])}/>
+      <CustomSkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
 
       <TwoButtonContainer>
         <CustomBackButton title="Back" onPress={() => navigation.navigate(STACK_SCREENS["Period Start"])}/>
-        <CustomNextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Main Page"])}/>
+        <CustomNextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
       </TwoButtonContainer>
     </ImageBackground>
   );
