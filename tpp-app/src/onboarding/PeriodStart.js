@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Welcome';
 import styled from 'styled-components/native'; 
+import { BackButton } from '../home/components/BackButtonComponent';
 
 export const CustomNextButton = ({ onPress, title }) => (
   <TouchableOpacity onPress={onPress} style={styles.nextButtonContainer}>
@@ -25,18 +26,20 @@ export const CustomBackButton = ({ onPress, title }) => (
 export default function PeriodStart ({ navigation }) {
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
-        <TitleText>
-            When did your {'\n'} period last start?
-        </TitleText>
-        <BodyText>
-            Record your last period or {'\n'} skip if you don’t know
-        </BodyText>
-        <CustomSkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
+      <BackButtonContainer>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Length"])}}/>
+      </BackButtonContainer>
+      <TitleText>
+        When did your {'\n'} period last start?
+      </TitleText>
+      <BodyText>
+        Record your last period or {'\n'} skip if you don’t know
+      </BodyText>
 
-        <TwoButtonContainer>
-            <CustomBackButton title="Back" onPress={() => navigation.navigate(STACK_SCREENS["Period Length"])}/>
-            <CustomNextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
-        </TwoButtonContainer>
+      <TwoButtonContainer>
+        <CustomBackButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
+        <CustomNextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
+      </TwoButtonContainer>
     </ImageBackground>
   );
 }
@@ -54,16 +57,25 @@ export const TitleText = styled.Text`
   fontFamily: Avenir;
   fontSize: 26px; 
   fontWeight: 800;
-  marginTop: 200px
 `;
 
 export const BodyText = styled.Text`
   textAlign: center;
-  fontFamily: Avenir;
+  fontFamily: System;
   fontSize: 16px; 
   fontWeight: 400;
-  marginTop: 19px;
-  color: #5F5F5F
+  color: #000000;
+  padding: 10px
+`;
+
+export const BackButtonContainer = styled.View`
+  alignItems: stretch;
+  justifyContent: center;
+  borderRadius: 10px;
+  width: 120px;
+  height: 54px;
+  position: absolute; 
+  top: 30px
 `;
 
 const styles = StyleSheet.create({
