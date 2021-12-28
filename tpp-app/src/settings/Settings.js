@@ -6,6 +6,7 @@ import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
 import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import MoodIcon from '../../ios/tppapp/Images.xcassets/icons/mood.png';
 import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 const Stats = (props) => {
 
@@ -78,12 +79,22 @@ const Preferences = (props) => {
 
 }
 
-
 export default function Settings () {
     const [cycleLength, setCycleLength] = useState(35);
     const [periodLength, setPeriodLength] = useState(5);
     const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(true);
-    const togglePeriodSwitch = () => setRemindPeriodEnabled(!remindPeriodEnabled);
+    const togglePeriodSwitch = () => {
+        console.log('test')
+        PushNotificationIOS.addNotificationRequest({
+            id: 'test',
+            title: 'title',
+            subtitle: 'subtitle',
+            body: 'body',
+            badge: 1,
+            date: new Date(Date.now() + (5 * 1000))
+        });
+        setRemindPeriodEnabled(!remindPeriodEnabled);
+    }
     const [remindSymptomsEnabled, setRemindSymptomsEnabled] = useState(true);
     const toggleSymptomsSwitch = () => setRemindSymptomsEnabled(!remindSymptomsEnabled);
 

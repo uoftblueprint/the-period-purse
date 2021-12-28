@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -9,6 +10,7 @@ import InfoIcon from './ios/tppapp/Images.xcassets/info-icon-3x.png'
 import BloodDropIcon from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
 import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar-icon.png'
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.png';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 const Tab = createBottomTabNavigator();
 
@@ -96,6 +98,51 @@ export function MyTabs() {
 
 
 export default function App() {
+
+  useEffect(() => {
+    PushNotificationIOS.addEventListener('localNotification', onLocalNotification);
+
+    PushNotificationIOS.requestPermissions({
+      alert: true,
+      badge: true,
+      sound: true,
+      critical: true,
+    }).then(
+      (data) => {
+        console.log('PushNotificationsIOS.requestPermissions', data);
+      },
+      (data) => {
+        console.log('PushNotificationsIOS.requestPermissions failed', data);
+      }
+    )
+    return () => {
+      PushNotificationIOS.removeEventListener('localNotification')
+    }
+  }, [])
+
+  const onLocalNotification = (notification) => {
+    const isClicked = notification.getData().userInteraction === 1;
+
+    Alert.alert(
+      'Local Notification Received',
+      `Alert title:  ${notification.getTitle()},
+      Alert subtitle:  ${notification.getSubtitle()},
+      Alert message:  ${notification.getMessage()},
+      Badge: ${notification.getBadgeCount()},
+      Sound: ${notification.getSound()},
+      Thread Id:  ${notification.getThreadID()},
+      Action Id:  ${notification.getActionIdentifier()},
+      User Text:  ${notification.getUserText()},
+      Notification is clicked: ${String(isClicked)}.`,
+      [
+        {
+          text: 'Dismiss',
+          onPress: null,
+        },
+      ],
+    );
+  };
+
   return (
       <NavigationContainer>
         <Tab.Navigator>
