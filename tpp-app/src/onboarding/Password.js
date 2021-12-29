@@ -5,7 +5,7 @@ import { STACK_SCREENS, CustomStartButton } from './Welcome';
 import { BackButtonContainer } from './PeriodStart';
 import { BackButton } from '../home/components/BackButtonComponent';
 
-export default function Registration ({ navigation }) {
+export default function Password ({ navigation }) {
   return (
     <KeyboardAvoidingView
       style={{flexGrow : 1}} 
@@ -13,20 +13,20 @@ export default function Registration ({ navigation }) {
     <ImageBackground source={OnboardingBackground} style={styles.container}>
 
     <BackButtonContainer>
-        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS["Backup"])}}/>
+        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS["Registration"])}}/>
         <View style={{width: 320, height: 40}}>
           <Text style={styles.pageTitle}>Registration</Text>
         </View>
       </BackButtonContainer>
 
       <View style={styles.labelBorder}>
-        <Text style={styles.labelText}>EMAIL ADDRESS</Text>
-        <TextInput style={styles.input} placeholder="me@email.com" keyboardType="email-address" autoCapitalize="none"/>
+        <Text style={styles.labelText}>PASSWORD</Text>
+        <TextInput style={styles.input} placeholder="At least 6 characters" autoCapitalize="none" secureTextEntry={true}/>
       </View>
       
       <KeyboardAvoidingView enabled behavior={ Platform.OS === 'ios'? 'padding': null}>
       {/* <View style={{top: "35%"}}> */}
-          <CustomStartButton title="Continue" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Password"])}/>
+          <CustomStartButton title="Continue" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Success"])}/>
       {/* </View> */}
       </KeyboardAvoidingView>
 

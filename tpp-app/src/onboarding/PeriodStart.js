@@ -70,12 +70,13 @@ export const BodyText = styled.Text`
 
 export const BackButtonContainer = styled.View`
   alignItems: stretch;
-  justifyContent: center;
   borderRadius: 10px;
-  width: 120px;
+  left: 10px;
+  width: 90%;
   height: 54px;
   position: absolute; 
-  top: 30px
+  top: 30px;
+  flexDirection: row
 `;
 
 const styles = StyleSheet.create({

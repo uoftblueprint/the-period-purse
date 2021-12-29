@@ -9,7 +9,9 @@ import PeriodLength from './PeriodLength';
 import SymptomsChoices from './SymptomsChoices';
 import Backup from './Backup';
 import Registration from './Registration'
+import Password from './Password';
 import { MainPage as MainPage } from '../../App';
+import Success from './Success';
 
 export const STACK_SCREENS = {
   "Get Started" : "Get Started",
@@ -18,7 +20,9 @@ export const STACK_SCREENS = {
   "Symptoms Choices" : "Symptoms Choices",
   "Backup" : "Backup", 
   "Main Page": "Main Page", 
-  "Registration": "Registration"
+  "Registration": "Registration",
+  "Password": "Password", 
+  "Success": "Success"
 };
 
 export const CustomStartButton = ({ onPress, title, color }) => (
@@ -40,6 +44,7 @@ const GetStarted = ({ navigation }) => (
   <ImageBackground source={OnboardingBackground} style={styles.container}>
     <Image style={styles.appIcon} source={MNationIcon}/>
     <Text style={styles.titleText}>Welcome!</Text>
+    <View style={{height: 80}}></View>
     <CustomStartButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Period Length"])}/>
     <CustomStartButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
   </ImageBackground>
@@ -82,6 +87,14 @@ export default function Welcome() {
       <Stack.Screen 
         name={STACK_SCREENS["Registration"]}
         component={Registration}
+      />
+      <Stack.Screen 
+        name={STACK_SCREENS["Password"]}
+        component={Password}
+      />
+      <Stack.Screen 
+        name={STACK_SCREENS["Success"]}
+        component={Success}
       />
       </Stack.Navigator>
     </NavigationContainer>
