@@ -99,6 +99,8 @@ export function MyTabs() {
 
 export default function App() {
 
+  // Requests for notification permissions and also creates a local notification listener
+  // Does not handle remote notifications from a server.
   useEffect(() => {
     PushNotificationIOS.addEventListener('localNotification', onLocalNotification);
 

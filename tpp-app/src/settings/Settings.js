@@ -35,13 +35,17 @@ const Notifications = (props) => {
                         value={props.remindPeriodEnabled}
                     />
             </Card>
-            <Card wrapperStyle={styles.rowContainer} containerStyle={[styles.dropShadow, styles.card]}>
-
-                <Text> Remind me to log symptoms</Text>
-                <Switch
-                    onValueChange={props.toggleSymptomsSwitch}
-                    value={props.remindSymptomsEnabled}
-                />
+            <Card containerStyle={[styles.dropShadow, styles.card]}>
+                <View style={styles.rowContainer}>
+                    <Text>Remind me to log symptoms</Text>
+                    <Switch
+                        onValueChange={props.toggleSymptomsSwitch}
+                        value={props.remindSymptomsEnabled}
+                    />
+                </View>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.subheading}>Every day at 9:00 am</Text>
+                </View>
             </Card>
         </View>
     )
@@ -83,20 +87,40 @@ export default function Settings () {
     const [cycleLength, setCycleLength] = useState(35);
     const [periodLength, setPeriodLength] = useState(5);
     const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(true);
-    const togglePeriodSwitch = () => {
-        console.log('test')
-        PushNotificationIOS.addNotificationRequest({
-            id: 'test',
-            title: 'title',
-            subtitle: 'subtitle',
-            body: 'body',
-            badge: 1,
-            date: new Date(Date.now() + (5 * 1000))
-        });
-        setRemindPeriodEnabled(!remindPeriodEnabled);
+    const [remindSymptomsEnabled, setRemindSymptomsEnabled] = useState(false);
+
+    const togglePeriodSwitch = () => setRemindPeriodEnabled(!remindPeriodEnabled);
+    const toggleSymptomsSwitch = () => {
+
+        setRemindSymptomsEnabled(!remindSymptomsEnabled);    
+        
+        if (remindPeriodEnabled) {
+            // Schedule a reoccuring notification 
+            PushNotificationIOS.addNotificationRequest({
+                id: 'remindsymptoms',
+                title: 'Daily Log Reminder',
+                body: 'Daily reminder to log your symptoms!',
+                badge: 1,
+                fireDate: getCorrectDate(),
+                repeats: true,
+                repeatsComponent: {
+                    hour: true,
+                    minute: true,
+                },
+            });
+        } else {
+            PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms'])
+        }
     }
-    const [remindSymptomsEnabled, setRemindSymptomsEnabled] = useState(true);
-    const toggleSymptomsSwitch = () => setRemindSymptomsEnabled(!remindSymptomsEnabled);
+
+    const getCorrectDate = () => {
+        const date = new Date();
+        date.setDate(date.getDate() + 1);
+        date.setHours(9);
+        date.setMinutes(0);
+        return date;
+    };
+    
 
     return (
         <View style={styles.container}>
@@ -142,6 +166,7 @@ const styles = StyleSheet.create({
         marginTop: 85,
         marginBottom: 75
     },
+  
     dropShadow: {
         shadowOffset: {width:0, height:1},
         shadowRadius: 10,
@@ -161,12 +186,17 @@ const styles = StyleSheet.create({
         marginTop: 32,
         lineHeight: 20
     },
+
+    subheading: {
+        fontSize: 12,
+        color: 'gray',
+    },
+
     preferenceText: {
         fontFamily: "SF Pro Display",
         fontWeight:"600",
         fontSize: 14,
         lineHeight: 22
-
     }
 
 });
