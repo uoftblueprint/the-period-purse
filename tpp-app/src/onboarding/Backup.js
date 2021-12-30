@@ -19,7 +19,7 @@ export default function Backup ({ navigation }) {
       </BodyText>
 
       <CustomStartButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
-      <CustomStartButton title="Continue as guest" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Main Page"])}/>
+      <CustomStartButton title="Continue as guest" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Confirmation"])}/>
     </ImageBackground>
   );
 }

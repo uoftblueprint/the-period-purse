@@ -11,12 +11,6 @@ export const CustomNextButton = ({ onPress, title }) => (
   </TouchableOpacity>
 );
 
-export const CustomSkipButton = ({ onPress, title }) => (
-    <TouchableOpacity onPress={onPress} style={{ marginTop: 7}}>
-        <Text style={styles.skipButtonText}>{title}</Text>
-    </TouchableOpacity>
-)
-
 export const CustomBackButton = ({ onPress, title }) => (
   <TouchableOpacity onPress={onPress} style={styles.backButtonContainer}>
       <Text style={styles.backButtonText}>{title}</Text>
@@ -84,14 +78,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center'
-  }, 
-  skipButtonText: {
-    color: "#5A9F93",
-    textAlign: 'center', 
-    textDecorationLine: 'underline', 
-    fontWeight: '800', 
-    fontSize: 15, 
-    fontFamily: 'Avenir'
   }, 
   nextButtonContainer: {
     alignItems: 'stretch', 

@@ -12,6 +12,7 @@ import Registration from './Registration'
 import Password from './Password';
 import { MainPage as MainPage } from '../../App';
 import Success from './Success';
+import Confirmation from './Confirmation';
 
 export const STACK_SCREENS = {
   "Get Started" : "Get Started",
@@ -22,7 +23,8 @@ export const STACK_SCREENS = {
   "Main Page": "Main Page", 
   "Registration": "Registration",
   "Password": "Password", 
-  "Success": "Success"
+  "Success": "Success", 
+  "Confirmation": "Confirmation"
 };
 
 export const CustomStartButton = ({ onPress, title, color }) => (
@@ -95,6 +97,10 @@ export default function Welcome() {
       <Stack.Screen 
         name={STACK_SCREENS["Success"]}
         component={Success}
+      />
+      <Stack.Screen 
+        name={STACK_SCREENS["Confirmation"]}
+        component={Confirmation}
       />
       </Stack.Navigator>
     </NavigationContainer>
