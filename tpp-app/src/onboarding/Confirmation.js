@@ -2,32 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, Image } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Welcome';
-import { BackButtonContainer } from './PeriodStart';
 import Paddy from '../../ios/tppapp/Images.xcassets/icons/paddy.png'
-import Icon from 'react-native-vector-icons/Entypo';
-import { Button } from 'react-native-elements';
 import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/flow.png'
 import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png'
-
-export const CrossButton = ({ onPress, title }) => {
-  return (
-  <Button icon={<Icon name="cross" size={30} color="#000000"/>}
-      titleStyle={styles.backButtonText}
-      title={title}
-      onPress={onPress}
-      type="clear"
-  />);
-}
-
-export const HorizontalLine = () => {
-  return (
-    <View
-    style={{
-      borderBottomColor: "#CFCFCF",
-      borderBottomWidth: 1,
-    }}
-  />); 
-}
+import { CrossButton } from './components/ButtonComponents';
+import { BackButtonContainer, HorizontalLine } from './components/ContainerComponents';
 
 export default function Confirmation ({ navigation }) {
   return (
@@ -43,14 +22,12 @@ export default function Confirmation ({ navigation }) {
         <Text style={styles.smallText}>Average period length</Text>
         <Text style={styles.text}>5 days</Text>
       </View>
-
       <HorizontalLine></HorizontalLine>
 
       <View style={styles.table}>
         <Text style={styles.smallText}>Last period</Text>
         <Text style={styles.text}>Nov 1-5, 2021</Text>
       </View>
-
       <HorizontalLine></HorizontalLine>
 
       <View style={styles.table}>
@@ -63,7 +40,6 @@ export default function Confirmation ({ navigation }) {
           <Image source={SleepIcon} style={{marginRight: 15, marginBottom: 15, marginTop: 4}}></Image>
         </View>
       </View>
-
       <HorizontalLine></HorizontalLine>
     </ImageBackground>
   );

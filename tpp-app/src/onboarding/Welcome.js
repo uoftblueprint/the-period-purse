@@ -13,6 +13,7 @@ import Password from './Password';
 import { MainPage as MainPage } from '../../App';
 import Success from './Success';
 import Confirmation from './Confirmation';
+import { WideButton } from './components/ButtonComponents';
 
 export const STACK_SCREENS = {
   "Get Started" : "Get Started",
@@ -27,28 +28,14 @@ export const STACK_SCREENS = {
   "Confirmation": "Confirmation"
 };
 
-export const CustomStartButton = ({ onPress, title, color }) => (
-  <TouchableOpacity onPress={onPress} 
-    style={{alignItems: 'stretch', 
-            justifyContent: 'center',
-            backgroundColor: color,
-            borderRadius: 10,
-            width: 330,
-            height: 52,
-            alignSelf: 'center',
-            margin: 10}}>
-    <Text style={styles.appButtonText}>{title}</Text>
-  </TouchableOpacity>
-);
-
 // Get Start Page Component 
 const GetStarted = ({ navigation }) => (
   <ImageBackground source={OnboardingBackground} style={styles.container}>
     <Image style={styles.appIcon} source={MNationIcon}/>
     <Text style={styles.titleText}>Welcome!</Text>
     <View style={{height: 80}}></View>
-    <CustomStartButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Period Length"])}/>
-    <CustomStartButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
+    <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Period Length"])}/>
+    <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
   </ImageBackground>
 );
 
@@ -125,11 +112,4 @@ const styles = StyleSheet.create({
     fontWeight: '800', 
     marginTop: 50
   },
-  appButtonText: {
-    color: "#FFFFFF",
-    textAlign: 'center',
-    fontFamily: 'Avenir',
-    fontSize: 18, 
-    fontWeight: '800' 
-  }
 });

@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
-import { STACK_SCREENS, CustomStartButton } from './Welcome';
-import { BodyText, TitleText, BackButtonContainer } from './PeriodStart';
+import { STACK_SCREENS } from './Welcome';
 import { BackButton } from '../home/components/BackButtonComponent';
+import { WideButton } from './components/ButtonComponents';
+import { BodyText, TitleText } from './components/TextComponents';
+import { BackButtonContainer } from './components/ContainerComponents';
 
 export default function Backup ({ navigation }) {
   return (
@@ -19,8 +21,8 @@ export default function Backup ({ navigation }) {
       </BodyText>
 
       <View style={{marginTop: 20}}>
-        <CustomStartButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
-        <CustomStartButton title="Continue as guest" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Confirmation"])}/>
+        <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
+        <WideButton title="Continue as guest" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Confirmation"])}/>
       </View>
     </ImageBackground>
   );

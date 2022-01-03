@@ -1,26 +1,21 @@
 import React from 'react';
-import { StyleSheet, Text, View, ImageBackground, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
-import { STACK_SCREENS, CustomStartButton } from './Welcome';
-import { BackButtonContainer } from './PeriodStart';
+import { STACK_SCREENS } from './Welcome';
 import { BackButton } from '../home/components/BackButtonComponent';
 import Paddy from '../../ios/tppapp/Images.xcassets/icons/paddy.png'
-
-export const UnderlineButton = ({ onPress, title }) => (
-    <TouchableOpacity onPress={onPress} style={{ marginTop: 7}}>
-        <Text style={styles.underlineButtonText}>{title}</Text>
-    </TouchableOpacity>
-)
+import { WideButton, UnderlineButton } from './components/ButtonComponents';
+import { BackButtonContainer } from './components/ContainerComponents';
+import { PageTitle } from './components/TextComponents'
 
 export default function Success ({ navigation }) {
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
-
       <BackButtonContainer>
-      <BackButton onPress={() => {navigation.navigate(STACK_SCREENS["Password"])}}/>
-      <View style={{width: 320, height: 40}}>
-        <Text style={styles.pageTitle}>Registration</Text>
-      </View>
+        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS["Password"])}}/>
+        <View style={{width: 320, height: 40}}>
+          <PageTitle>Registration</PageTitle>
+        </View>
       </BackButtonContainer>
       
       <Image source={Paddy} style={{alignSelf: "center"}}></Image>
@@ -32,7 +27,7 @@ export default function Success ({ navigation }) {
         <UnderlineButton title="Resend email"></UnderlineButton>
       </View>
       <View style={{bottom: "-23%"}}>
-        <CustomStartButton title="OK" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Main Page"])}/>
+        <WideButton title="OK" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Main Page"])}/>
       </View>
     </ImageBackground>
   );
@@ -43,13 +38,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center'
-  }, 
-  pageTitle: {
-    fontFamily: "Avenir", 
-    fontSize: 20,
-    fontWeight: "800",
-    alignSelf: "center",
-    color: "#181818",
   }, 
   success: {
     alignSelf: "center",
@@ -75,12 +63,4 @@ const styles = StyleSheet.create({
     color: "#000000",
     marginTop: 7
   },
-  underlineButtonText: {
-    color: "#5A9F93",
-    textAlign: 'center', 
-    textDecorationLine: 'underline', 
-    fontWeight: '800', 
-    fontSize: 15, 
-    fontFamily: 'Avenir'
-  }, 
 });
