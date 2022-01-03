@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
-import { NavigationContainer, useIsFocused } from '@react-navigation/native';
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Calendar from './src/home/Calendar';
 import Info from './src/info/Info';
@@ -13,9 +13,11 @@ const Tab = createBottomTabNavigator();
 
 const CustomTabBarButton = ({ onPress }) => {
   const calendarShowing = useIsFocused();
-  
+
   let icon = calendarShowing ? <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/blood_drop.svg')}/> : <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/calendar_icon.svg')} />;
   let bgColor = calendarShowing ? '#D32729' : '#5A9F93';
+  const navigation = useNavigation();
+
   return (
     <TouchableOpacity
         style={{
@@ -24,9 +26,15 @@ const CustomTabBarButton = ({ onPress }) => {
           alignItems: 'center',
           ...styles.shadow
         }}
-        onPress={onPress}
+        onPress={() => {
+          if (calendarShowing) {
+            navigation.navigate('MiddleButton', { screen: 'LogSymptoms' });
+          } else {
+            navigation.navigate('MiddleButton', { screen: 'Calendar' });
+          }
+        }}
     >
-      
+
       <View style={{
         width: 70,
         height: 70,
@@ -66,11 +74,11 @@ const SettingsIconStyled = ({tintColor}) => (
   </View>
 );
 
-function MyTabs() {
+export function MyTabs() {
   return (
       <Tab.Navigator>
-        <Tab.Screen name="Info" component={InfoScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Info" component={Info} />
+        <Tab.Screen name="Settings" component={Settings} />
       </Tab.Navigator>
   );
 }
@@ -87,7 +95,7 @@ export default function App() {
                 )
 
           }}/>
-          <Tab.Screen name="MiddleButton" component={Calendar} options={{
+          <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
             headerShown: false,
             tabBarButton: (props) => (
                 <CustomTabBarButton {...props} />
