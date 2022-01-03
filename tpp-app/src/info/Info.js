@@ -1,10 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity } from 'react-native';
-import padIcon from '../../ios/tppapp/Images.xcassets/icons/pad_icon.png';
-import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png';
-import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon.png';
-import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
-import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png';
+import { StyleSheet, Text, View, Linking, ScrollView, TouchableOpacity } from 'react-native';
+import VectorImage from 'react-native-vector-image';
+
+const padIcon = <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/pad_icon.svg')}/>
+const tamponsIcon = <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/tampons_icon.svg')}/>
+const underwearIcon = <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/underwear_icon.svg')}/>
+const cupIcon = <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/cup_icon.svg')}/>
+const clothPadIcon = <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/clothpad_icon.svg')}/>
 
 const LearnMoreCard = () => {
     return(
@@ -29,7 +31,7 @@ const LearnMoreCard = () => {
 const MenstrualProductCard = ({name, image}) =>{
     return(
         <View style={styles.productCard}>
-            <Image style={styles.productIcon} source={image}/>
+            {image}
             <Text style={styles.productText}>{name}</Text>
         </View>
     )
