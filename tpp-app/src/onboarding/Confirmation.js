@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, ImageBackground, Image } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Welcome';
 import { CrossButton } from './components/ButtonComponents';
-import { BackButtonContainer, HorizontalLine } from './components/ContainerComponents';
+import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
 import VectorImage from 'react-native-vector-image';
 
 export default function Confirmation ({ navigation }) {
@@ -13,30 +13,27 @@ export default function Confirmation ({ navigation }) {
         <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS["Main Page"])}}/>
       </BackButtonContainer>
       
-      <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/paddy.svg')} style={{alignSelf: "center"}}/>
-      <Text style={styles.success}>You're all set!</Text> 
+      <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/paddy.svg')} style={{ alignSelf: "center" }}/>
+      <Text style={styles.bigText}>You're all set!</Text> 
 
-      <View style={styles.table}>
+      <View style={styles.row}>
         <Text style={styles.smallText}>Average period length</Text>
         <Text style={styles.text}>5 days</Text>
       </View>
       <HorizontalLine></HorizontalLine>
 
-      <View style={styles.table}>
+      <View style={styles.row}>
         <Text style={styles.smallText}>Last period</Text>
         <Text style={styles.text}>Nov 1-5, 2021</Text>
       </View>
       <HorizontalLine></HorizontalLine>
 
-      <View style={styles.table}>
+      <View style={styles.row}>
         <Text style={styles.smallText}>Symptoms to log</Text>
-        <View style={{
-          marginTop: 4,
-          flexDirection: "row"
-        }}>
+        <SymptomIconContainer>
             <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/flow.svg')} style={styles.icon}/>
             <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/sleep.svg')} style={styles.icon}/>
-        </View>
+        </SymptomIconContainer>
       </View>
       <HorizontalLine></HorizontalLine>
     </ImageBackground>
@@ -49,10 +46,10 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center'
   }, 
-  success: {
+  bigText: {
     alignSelf: "center",
     fontFamily: "Avenir", 
-    fontSize: 24,
+    fontSize: 34,
     fontWeight: "800",
     color: "#000000",
     marginTop: 13, 
@@ -73,7 +70,7 @@ const styles = StyleSheet.create({
     color: "#5A9F93",
     marginTop: 20
   },
-  table: {
+  row: {
     textAlign: "left",
     marginLeft: 30
   },

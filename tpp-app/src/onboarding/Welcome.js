@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, Image, ImageBackground, TouchableOpacity, View } from 'react-native';
+import {StyleSheet, Text, Image, ImageBackground, View } from 'react-native';
 import MNationIcon from '../../ios/tppapp/Images.xcassets/AppIcon.appiconset/1024.png'
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { NavigationContainer } from '@react-navigation/native';
@@ -10,7 +10,7 @@ import SymptomsChoices from './SymptomsChoices';
 import Backup from './Backup';
 import Registration from './Registration'
 import Password from './Password';
-import { MainPage as MainPage } from '../../App';
+import MainPage from '../../App';
 import Success from './Success';
 import Confirmation from './Confirmation';
 import { WideButton } from './components/ButtonComponents';

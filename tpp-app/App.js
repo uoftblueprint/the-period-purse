@@ -113,29 +113,7 @@ export function MainPage() {
 export default function App() {
   return (
     <Welcome></Welcome>
-      // <NavigationContainer>
-      //   <Tab.Navigator>
-      //     <Tab.Screen name="Info" component={Info} options={{
-      //       headerShown: false,
-      //       tabBarIcon: ({tintColor}) => (
-      //           <InfoIconStyled {...tintColor} />
-      //           )
-
-      //     }}/>
-      //     <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
-      //       headerShown: false,
-      //       tabBarButton: (props) => (
-      //           <CustomTabBarButton {...props} />
-      //       )
-      //     }}/>
-      //     <Tab.Screen name="Settings" component={Settings} options={{
-      //       headerShown: false,
-      //       tabBarIcon: (props) => (
-      //         <SettingsIconStyled {...props} />
-      //     )
-      //     }}/>
-      //   </Tab.Navigator>
-      // </NavigationContainer>
+    // <MainPage></MainPage>
   );
 }
 

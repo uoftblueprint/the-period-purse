@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, ImageBackground, TextInput, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, ImageBackground, TextInput, KeyboardAvoidingView } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Welcome';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { WideButton } from './components/ButtonComponents';
-import { BackButtonContainer } from './components/ContainerComponents';
+import { BackButtonContainer, InputBorderContainer, PageTitleContainer } from './components/ContainerComponents';
 import { PageTitle, InputLabel } from './components/TextComponents'
 
 export default function Registration ({ navigation }) {
@@ -12,18 +12,18 @@ export default function Registration ({ navigation }) {
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
         <BackButton onPress={() => {navigation.navigate(STACK_SCREENS["Backup"])}}/>
-        <View style={{width: 320, height: 40, marginBottom: 200}}>
+        <PageTitleContainer>
           <PageTitle>Registration</PageTitle>
-        </View>
+        </PageTitleContainer>
       </BackButtonContainer>
       
-      <View style={styles.labelBorder}>
+      <InputBorderContainer>
         <InputLabel>EMAIL ADDRESS</InputLabel>
         <TextInput style={styles.input} placeholder="me@email.com" keyboardType="email-address" autoCapitalize="none"/>
-      </View>
+      </InputBorderContainer>
 
       <KeyboardAvoidingView 
-        style={{flex: 1}} 
+        style={{ flex: 1 }} 
         enabled behavior={ Platform.OS === 'ios'? 'padding': null}
         keyboardVerticalOffset={30}>
         <View style={{height: "80%"}}></View>
@@ -43,15 +43,5 @@ const styles = StyleSheet.create({
     fontFamily: "Avenir", 
     fontSize: 14,
     height: 35
-  },
-  labelBorder: {
-    alignSelf: "center",
-    width: "90%",
-    height: 80,
-    borderWidth: 2,
-    borderColor: "#5A9F93",
-    borderRadius: 10,
-    padding: 18, 
-    marginTop: 200
   }
 });

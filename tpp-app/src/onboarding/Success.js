@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, ImageBackground, Image } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Welcome';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { WideButton, UnderlineButton } from './components/ButtonComponents';
-import { BackButtonContainer } from './components/ContainerComponents';
+import { BackButtonContainer, PageTitleContainer, TextButtonContainer } from './components/ContainerComponents';
 import { PageTitle } from './components/TextComponents'
 import VectorImage from 'react-native-vector-image';
 
@@ -13,20 +13,20 @@ export default function Success ({ navigation }) {
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
         <BackButton onPress={() => {navigation.navigate(STACK_SCREENS["Password"])}}/>
-        <View style={{width: 320, height: 40}}>
+        <PageTitleContainer>
           <PageTitle>Registration</PageTitle>
-        </View>
+        </PageTitleContainer>
       </BackButtonContainer>
       
-      <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/paddy.svg')} style={{alignSelf: "center"}}/>
+      <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/paddy.svg')} style={{ alignSelf: "center" }}/>
       <Text style={styles.success}>Success!</Text> 
       <Text style={styles.text}>Email confirmation sent. Click link {'\n'} in email to confirm registration.</Text> 
 
-      <View style={{flexDirection: "row", alignSelf: "center", bottom: "-45%"}}>
+      <TextButtonContainer>
         <Text style={styles.smallText}>Didn't get email? </Text> 
         <UnderlineButton title="Resend email"></UnderlineButton>
-      </View>
-      <View style={{bottom: "-23%"}}>
+      </TextButtonContainer>
+      <View style={{ bottom: "-23%" }}>
         <WideButton title="OK" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Main Page"])}/>
       </View>
     </ImageBackground>
