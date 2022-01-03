@@ -7,9 +7,6 @@ import { BackButton } from '../home/components/BackButtonComponent';
 
 export default function Password ({ navigation }) {
   return (
-    <KeyboardAvoidingView
-      style={{flexGrow : 1}} 
-      enabled behavior={ Platform.OS === 'ios'? 'height': null}>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
 
     <BackButtonContainer>
@@ -23,15 +20,17 @@ export default function Password ({ navigation }) {
         <Text style={styles.labelText}>PASSWORD</Text>
         <TextInput style={styles.input} placeholder="At least 6 characters" autoCapitalize="none" secureTextEntry={true}/>
       </View>
-      
-      <KeyboardAvoidingView enabled behavior={ Platform.OS === 'ios'? 'padding': null}>
-      {/* <View style={{top: "35%"}}> */}
-          <CustomStartButton title="Continue" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Success"])}/>
-      {/* </View> */}
+
+      <KeyboardAvoidingView 
+        style={{flex: 1}} 
+        enabled behavior={ Platform.OS === 'ios'? 'padding': null}
+        keyboardVerticalOffset={30}
+      >
+        <View style={{height: "80%"}}></View>
+        <CustomStartButton title="Continue" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Success"])}/>
       </KeyboardAvoidingView>
 
       </ImageBackground>
-    </KeyboardAvoidingView>
   );
 }
 
@@ -67,6 +66,6 @@ const styles = StyleSheet.create({
     borderColor: "#5A9F93",
     borderRadius: 10,
     padding: 18, 
-    bottom: 150
+    marginTop: 200
   }
 });

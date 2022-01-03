@@ -75,13 +75,6 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center'
   }, 
-  pageTitle: {
-    fontFamily: "Avenir", 
-    fontSize: 20,
-    fontWeight: "800",
-    alignSelf: "center",
-    color: "#181818",
-  }, 
   success: {
     alignSelf: "center",
     fontFamily: "Avenir", 
@@ -110,12 +103,4 @@ const styles = StyleSheet.create({
     textAlign: "left",
     marginLeft: 30
   },
-  underlineButtonText: {
-    color: "#5A9F93",
-    textAlign: 'center', 
-    textDecorationLine: 'underline', 
-    fontWeight: '800', 
-    fontSize: 15, 
-    fontFamily: 'Avenir'
-  }, 
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+import { StyleSheet, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS, CustomStartButton } from './Welcome';
 import { BodyText, TitleText, BackButtonContainer } from './PeriodStart';
@@ -18,8 +18,10 @@ export default function Backup ({ navigation }) {
         Your data will be lost if you {'\n'} switch devices
       </BodyText>
 
-      <CustomStartButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
-      <CustomStartButton title="Continue as guest" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Confirmation"])}/>
+      <View style={{marginTop: 20}}>
+        <CustomStartButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
+        <CustomStartButton title="Continue as guest" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Confirmation"])}/>
+      </View>
     </ImageBackground>
   );
 }
