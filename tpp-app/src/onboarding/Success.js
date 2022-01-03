@@ -3,10 +3,10 @@ import { StyleSheet, Text, View, ImageBackground, Image } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Welcome';
 import { BackButton } from '../home/components/BackButtonComponent';
-import Paddy from '../../ios/tppapp/Images.xcassets/icons/paddy.png'
 import { WideButton, UnderlineButton } from './components/ButtonComponents';
 import { BackButtonContainer } from './components/ContainerComponents';
 import { PageTitle } from './components/TextComponents'
+import VectorImage from 'react-native-vector-image';
 
 export default function Success ({ navigation }) {
   return (
@@ -18,7 +18,7 @@ export default function Success ({ navigation }) {
         </View>
       </BackButtonContainer>
       
-      <Image source={Paddy} style={{alignSelf: "center"}}></Image>
+      <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/paddy.svg')} style={{alignSelf: "center"}}/>
       <Text style={styles.success}>Success!</Text> 
       <Text style={styles.text}>Email confirmation sent. Click link {'\n'} in email to confirm registration.</Text> 
 

@@ -2,11 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, Image } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Welcome';
-import Paddy from '../../ios/tppapp/Images.xcassets/icons/paddy.png'
-import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/flow.png'
-import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png'
 import { CrossButton } from './components/ButtonComponents';
 import { BackButtonContainer, HorizontalLine } from './components/ContainerComponents';
+import VectorImage from 'react-native-vector-image';
 
 export default function Confirmation ({ navigation }) {
   return (
@@ -15,7 +13,7 @@ export default function Confirmation ({ navigation }) {
         <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS["Main Page"])}}/>
       </BackButtonContainer>
       
-      <Image source={Paddy} style={{alignSelf: "center"}}></Image>
+      <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/paddy.svg')} style={{alignSelf: "center"}}/>
       <Text style={styles.success}>You're all set!</Text> 
 
       <View style={styles.table}>
@@ -36,8 +34,8 @@ export default function Confirmation ({ navigation }) {
           marginTop: 4,
           flexDirection: "row"
         }}>
-          <Image source={FlowIcon} style={{marginRight: 15, marginBottom: 15, marginTop: 4}}></Image>
-          <Image source={SleepIcon} style={{marginRight: 15, marginBottom: 15, marginTop: 4}}></Image>
+            <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/flow.svg')} style={styles.icon}/>
+            <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/sleep.svg')} style={styles.icon}/>
         </View>
       </View>
       <HorizontalLine></HorizontalLine>
@@ -79,4 +77,9 @@ const styles = StyleSheet.create({
     textAlign: "left",
     marginLeft: 30
   },
+  icon: {
+    marginRight: 15, 
+    marginBottom: 15, 
+    marginTop: 4
+  }
 });
