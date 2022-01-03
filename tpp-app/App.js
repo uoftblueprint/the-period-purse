@@ -3,9 +3,9 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Calendar from './src/home/Calendar';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
+import CalendarNavigator from './src/home/CalendarNavigator';
 
 import VectorImage from 'react-native-vector-image';
 
