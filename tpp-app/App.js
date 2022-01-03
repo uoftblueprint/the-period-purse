@@ -61,7 +61,6 @@ const CustomTabBarButton = ({ onPress }) => {
   );
 };
 
-
 const InfoIconStyled = ({tintColor}) => (
     <View style={{top: 3}}>
         <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/info_icon.svg')} />
