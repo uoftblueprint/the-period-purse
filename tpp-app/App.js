@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
@@ -6,15 +5,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
-
-import VectorImage from 'react-native-vector-image';
+import InfoIcon from './ios/tppapp/Images.xcassets/info-icon-3x.png'
+import BloodDropIcon from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
+import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar-icon.png'
+import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.png';
 
 const Tab = createBottomTabNavigator();
 
 const CustomTabBarButton = ({ onPress }) => {
   const calendarShowing = useIsFocused();
-
-  let icon = calendarShowing ? <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/blood_drop.svg')}/> : <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/calendar_icon.svg')} />;
+  let icon = calendarShowing ? BloodDropIcon : CalendarIcon;
   let bgColor = calendarShowing ? '#D32729' : '#5A9F93';
   const navigation = useNavigation();
 
@@ -34,7 +34,6 @@ const CustomTabBarButton = ({ onPress }) => {
           }
         }}
     >
-
       <View style={{
         width: 70,
         height: 70,
@@ -55,7 +54,13 @@ const CustomTabBarButton = ({ onPress }) => {
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-        {icon}
+        <Image
+          style={{
+            width: 24.67,
+            height: 30.83
+          }}
+          source={icon}
+        />
       </View>
     </TouchableOpacity>
   );
@@ -64,13 +69,19 @@ const CustomTabBarButton = ({ onPress }) => {
 
 const InfoIconStyled = ({tintColor}) => (
     <View style={{top: 3}}>
-        <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/info_icon.svg')} />
-    </View>
+                      <Image
+                        source={InfoIcon}
+                        style={{width: 20, height: 20, tintColor: tintColor}}
+                      />
+                </View>
 );
 
 const SettingsIconStyled = ({tintColor}) => (
   <View style={{top: 3}}>
-      <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/settings_icon.svg')} />
+      <Image
+        source={SettingsIcon}
+        style={{width: 20, height: 20, tintColor: tintColor}}
+      />
   </View>
 );
 
