@@ -1,11 +1,33 @@
-import React, {useState} from 'react';
-import {View, Switch, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking} from 'react-native';
 import {Card} from 'react-native-elements';
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
 import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import MoodIcon from '../../ios/tppapp/Images.xcassets/icons/mood.png';
 import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
+import {
+    GoogleSignin,
+    GoogleSigninButton,
+    statusCodes,
+} from '@react-native-google-signin/google-signin';
+// import GDrive from 'react-native-google-drive-api-wrapper';
+
+var isLoggedIn = false;
+const CLIENT_ID = "64015320596-sj0gule87m7s205lb5lv5jnlhd68c8u4.apps.googleusercontent.com";
+const CLIENT_SECRET = "";
+const REDIRECT_URI = "";
+
+// const oauth2Client = new google.auth.OAuth2(
+//     CLIENT_ID,
+//     CLIENT_SECRET,
+//     REDIRECT_URI
+// )
+//
+// const drive = google.drive({
+//    version: "v3",
+//    auth: oauth2Client,
+// });
 
 const Stats = (props) => {
 
@@ -75,7 +97,79 @@ const Preferences = (props) => {
         </View>
 
     );
+}
 
+const signIn = async () => {
+    console.log("SIGN IN")
+    try {
+        await GoogleSignin.hasPlayServices();
+        const userInfo = await GoogleSignin.signIn();
+        const token = (await GoogleSignin.getTokens()).accessToken
+        console.log(userInfo);
+        console.log("\n");
+        console.log(token);
+        console.log("YUH");
+        isLoggedIn = true;
+    } catch (error) {
+        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+            // user cancelled the login flow
+            console.log("sign in cancelled");
+        } else if (error.code === statusCodes.IN_PROGRESS) {
+            // operation (e.g. sign in) is in progress already
+            console.log("in progress ");
+        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            // play services not available or outdated
+            console.log("play services not available");
+        } else {
+            // some other error happened
+            console.log("some error happened");
+            console.log(error);
+        }
+    }
+}
+
+const _initGoogleDrive = async() => {
+    let token = await GoogleSignin.getTokens();
+    if (!token) return false
+    console.log("res.accessToken: ", token.accessToken);
+    // GDrive.setAccessToken(token.accessToken);
+    // GDrive.init();
+    // return GDrive.isInitialized();
+}
+
+const uploadDrive = async() => {
+    if (!(await _initGoogleDrive())) {
+        console.log("Failed to initialize Google Drive");
+    }
+}
+
+
+const SaveDataToGoogleDriveAPI = (props) => {
+    return (
+        <View>
+            <Text style={styles.heading}>Sign In to Google Drive! </Text>
+            <TouchableOpacity
+                style={styles.visitButton}
+                onPress={() => signIn()}
+            >
+                <Text style={{...styles.productText, margin: 10}}>Sign In</Text>
+            </TouchableOpacity>
+        </View>
+    )
+}
+
+const UploadFile = (props) => {
+    return (
+        <View>
+            <Text style={styles.heading}>Backup Data to Google Drive! </Text>
+            <TouchableOpacity
+                style={styles.visitButton}
+                onPress={() => uploadDrive()}
+            >
+                <Text style={{...styles.productText, margin: 10}}>Backup</Text>
+            </TouchableOpacity>
+        </View>
+    )
 }
 
 
@@ -156,6 +250,10 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 22
 
-    }
+    },
+    visitButton: {
+        backgroundColor: "#73C7B7",
+        borderRadius: 8,
+    },
 
 });

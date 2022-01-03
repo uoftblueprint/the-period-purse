@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,6 +10,11 @@ import InfoIcon from './ios/tppapp/Images.xcassets/info-icon-3x.png'
 import BloodDropIcon from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
 import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar-icon.png'
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.png';
+import {
+    GoogleSignin,
+    GoogleSigninButton,
+    statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 const Tab = createBottomTabNavigator();
 
@@ -89,6 +94,20 @@ export function MyTabs() {
 
 
 export default function App() {
+    useEffect(() => {
+        GoogleSignin.configure({
+            scopes: ['https://www.googleapis.com/auth/drive',
+                'https://www.googleapis.com/auth/drive.file',
+                'https://www.googleapis.com/auth/drive.appdata',
+                'https://www.googleapis.com/auth/drive.metadata',
+                'https://www.googleapis.com/auth/drive.readonly',
+                'https://www.googleapis.com/auth/drive.metadata.readonly',
+                'https://www.googleapis.com/auth/drive.apps.readonly'], // We want   read and write access
+            webClientId: "64015320596-sj0gule87m7s205lb5lv5jnlhd68c8u4.apps.googleusercontent.com", // REPLACE WITH YOUR ACTUAL  CLIENT ID !
+            offlineAccess: true
+        });
+    }, []);
+
   return (
       <NavigationContainer>
         <Tab.Navigator>
