@@ -6,8 +6,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
-
 import VectorImage from 'react-native-vector-image';
+import Welcome from './src/onboarding/Welcome'
 
 const Tab = createBottomTabNavigator();
 
@@ -83,11 +83,10 @@ export function MyTabs() {
   );
 }
 
-
-export default function App() {
+export function MainPage() {
   return (
-      <NavigationContainer>
-        <Tab.Navigator>
+      <NavigationContainer independent={true}>
+        <Tab.Navigator initialRouteName='MiddleButton'>
           <Tab.Screen name="Info" component={Info} options={{
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
@@ -109,6 +108,35 @@ export default function App() {
           }}/>
         </Tab.Navigator>
       </NavigationContainer>
+  );
+}
+
+export default function App() {
+  return (
+    <Welcome></Welcome>
+      // <NavigationContainer>
+      //   <Tab.Navigator>
+      //     <Tab.Screen name="Info" component={Info} options={{
+      //       headerShown: false,
+      //       tabBarIcon: ({tintColor}) => (
+      //           <InfoIconStyled {...tintColor} />
+      //           )
+
+      //     }}/>
+      //     <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
+      //       headerShown: false,
+      //       tabBarButton: (props) => (
+      //           <CustomTabBarButton {...props} />
+      //       )
+      //     }}/>
+      //     <Tab.Screen name="Settings" component={Settings} options={{
+      //       headerShown: false,
+      //       tabBarIcon: (props) => (
+      //         <SettingsIconStyled {...props} />
+      //     )
+      //     }}/>
+      //   </Tab.Navigator>
+      // </NavigationContainer>
   );
 }
 
