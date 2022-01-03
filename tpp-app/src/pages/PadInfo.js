@@ -3,10 +3,10 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import PadImage from "tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-2x.png";
 import { BackButton } from '../home/components/BackButtonComponent';
 
-export default function PadInfo() {
+export default function PadInfo({ navigation }) {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-           <View style={styles.arrowPosition}><BackButton  /></View>
+           <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()} /></View>
             <Image
                 source= {PadImage}
                 style={styles.image}

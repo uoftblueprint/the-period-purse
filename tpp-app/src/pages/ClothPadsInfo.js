@@ -3,10 +3,10 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import ClothImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/cloth-pads-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
 
-export default function ClothPadInfo() {
+export default function ClothPadInfo({ navigation }) {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-           <View style={styles.arrowPosition}><BackButton  /></View>
+           <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
             <Image 
             source= {ClothImage}
             style={styles.image}

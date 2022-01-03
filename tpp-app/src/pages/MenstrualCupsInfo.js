@@ -4,10 +4,10 @@ import CupImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/Cup-2x.p
 import { BackButton } from '../home/components/BackButtonComponent';
 
 
-export default function MenstrualCupInfo() {
+export default function MenstrualCupInfo({ navigation }) {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <View style={styles.arrowPosition}><BackButton  /></View>
+            <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()} /></View>
             <Image
             source= {CupImage}
             style={styles.image}

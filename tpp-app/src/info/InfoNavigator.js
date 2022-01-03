@@ -6,13 +6,11 @@ import PadsPage from '../pages/PadInfo.js'
 import MenstrualCupsPage from '../pages/MenstrualCupsInfo.js'
 import ClothPadsPage from '../pages/ClothPadsInfo.js'
 import TamponsPage from "../pages/TamponInfo.js"
-import { NavigationContainer } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
 export default function InfoNavigator() {
     return(
-        <NavigationContainer>
         <Stack.Navigator intialRouteName="Info" screenOptions={{ headerShown: false }}>
             <Stack.Screen name={"Info"} component={InfoPage} />
             <Stack.Screen name={"Period Underwears"} component={PeriodUnderwearsPage} />
@@ -21,6 +19,5 @@ export default function InfoNavigator() {
             <Stack.Screen name={"Menstrual Cups"} component={MenstrualCupsPage} />
             <Stack.Screen name={"Tampons"} component={TamponsPage} />
         </Stack.Navigator>
-        </NavigationContainer>
     )
 }

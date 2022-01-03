@@ -11,6 +11,8 @@ import BloodDropIcon from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
 import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar-icon.png'
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.png';
 
+import InfoNavigator from './src/info/InfoNavigator'
+
 const Tab = createBottomTabNavigator();
 
 const CustomTabBarButton = ({ onPress }) => {
@@ -92,7 +94,7 @@ export default function App() {
   return (
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Info" component={Info} options={{
+          <Tab.Screen name="Info" component={InfoNavigator} options={{
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
                 <InfoIconStyled {...tintColor} />

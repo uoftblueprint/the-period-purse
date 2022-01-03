@@ -3,10 +3,10 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import TamponImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/tampons-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
 
-export default function TamponInfo() {
+export default function TamponInfo({ navigation }) {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-         <View style={styles.arrowPosition}><BackButton  /></View>
+         <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
             <Image
              source= {TamponImage}
              style={styles.image}

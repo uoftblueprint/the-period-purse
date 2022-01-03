@@ -3,10 +3,10 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import { BackButton } from '../home/components/BackButtonComponent';
 
 
-export default function MenstrualDiscInfo() {
+export default function MenstrualDiscInfo({ navigation }) {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <View style={styles.arrowPosition}><BackButton  /></View>
+          <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
             <Image 
                 />
         <Text>Menstural Disc</Text>

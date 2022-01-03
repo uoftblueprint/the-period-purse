@@ -3,16 +3,16 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import UnderwearImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/underwear-clear-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
 
-export default function PeriodUnderwearInfo() {
+export default function PeriodUnderwearInfo({navigation}) {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <View style={styles.arrowPosition}><BackButton  /></View>
+            <View style={styles.arrowPosition}><BackButton  onPress={() => navigation.goBack()}/></View>
             
             <Image
             source= {UnderwearImage}
             style={styles.image}
                 />
-        <Text style={styles.titleText}>Period Underwear</Text>
+        <Text style={styles.titleText}>Period {"\n"} Underwears</Text>
         
         <Text style={styles.bodyText}>
         Quick, your period is “OMW”- period underwear has you covered. Wow, the first period 
@@ -34,23 +34,21 @@ export default function PeriodUnderwearInfo() {
 const styles = StyleSheet.create({
     image: {
             position: 'absolute', 
-            width: 81, 
+            width: 200, 
             height: 130, 
-            left: 160, 
-            top: 139, 
-            bottom: 560
+            left: 110, 
+            top: 136
     },
     titleText: {
-        position: 'absolute',
+        position: 'relative',
         textAlign: 'center',
         fontFamily: 'Avenir',
-        left: '3.62%',
+        left: '1.00%',
         right: '0%',
-        top: '11.36%',
         bottom: '11.36%',
         fontWeight: '800',
         fontSize: 34,
-        lineHeight: 34
+        lineHeight: 40
     },
     bodyText: {
            position: 'absolute',
