@@ -10,7 +10,7 @@ import SymptomsChoices from './SymptomsChoices';
 import Backup from './Backup';
 import Registration from './Registration'
 import Password from './Password';
-import MainPage from '../../App';
+import { MainPage } from '../../App';
 import Success from './Success';
 import Confirmation from './Confirmation';
 import { WideButton } from './components/ButtonComponents';

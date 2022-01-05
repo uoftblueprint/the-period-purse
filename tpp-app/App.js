@@ -112,8 +112,8 @@ export function MainPage() {
 
 export default function App() {
   return (
-    <Welcome></Welcome>
-    // <MainPage></MainPage>
+    // <Welcome></Welcome>
+    <MainPage></MainPage>
   );
 }
 
