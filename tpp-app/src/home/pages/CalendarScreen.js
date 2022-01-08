@@ -1,12 +1,28 @@
-import React, {useState} from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
-const Calendar = () => {
+const DayComponent = ({ date, state, marking, navigation }) => {
+
+    // useEffect(() => {
+
+    // }, [])
+
+    return(
+    <TouchableOpacity onPress={date => navigation.navigate("LogSymptoms", date)}>
+        <View style={styles.dayContainer}>
+            <Text>
+                {date.day}
+            </Text>
+        </View>
+    </TouchableOpacity>)
+}
+
+const Calendar = ({navigation}) => {
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -20,6 +36,7 @@ const Calendar = () => {
 
         // Enable or disable vertical scroll indicator. Default = false
         showScrollIndicator={true}
+        dayComponent={({date, state, marking}) => <DayComponent date={date} state={state} marking={marking} navigation={navigation}/>}
 
         theme={{
             calendarBackground: '#ffffff',
@@ -36,8 +53,38 @@ const Calendar = () => {
             textDayHeaderFontWeight: '800',
             textDayFontSize: 10,
             textMonthFontSize: 14,
-            textDayHeaderFontSize: 10
+            textDayHeaderFontSize: 10,
+            'stylesheet.calendar.main': {
+                dayContainer: {
+                //   borderColor: '#D1D3D4',
+                //   borderWidth: 1,
+                //   borderRadius: 8,
+                flex:1,
+                // alignItems: 'flex-start',
+                //   paddingRight: 20,
+                //   paddingBottom: 20,
+                //   paddingLeft: 0,
+                  margin: 0,
+                },
+                emptyDayContainer: {
+                //   borderColor: '#D1D3D4',
+                //   borderWidth: 1,
+                //   borderRadius: 8,
+                flex:1,
+                //   padding:10,
+                  margin: 0,
+                },
+                week: {
+                  marginTop: 0,
+                  marginBottom: 0,
+                  flexDirection: 'row',
+                  justifyContent: 'space-around'
+                },
+            }
         }}
+
+
+        
         />
     )
 }
@@ -54,7 +101,7 @@ export default function CalendarScreen ({ navigation }) {
                     title='Year'
                 />
             </View>
-            <Calendar></Calendar>
+            <Calendar navigation={navigation}></Calendar>
         </View>
     )
 }
@@ -71,4 +118,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'flex-start',
     },
+    dayContainer:{
+        borderColor: '#D1D3D4',
+        borderWidth: 1,
+        borderRadius: 8,
+        width: 50,
+        height: 50,
+        // paddingRight: 30,
+        // paddingBottom: 30,
+        paddingLeft: 5,
+        paddingTop:3,
+        margin: 2,
+    }
 })
