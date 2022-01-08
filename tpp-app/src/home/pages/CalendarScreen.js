@@ -13,7 +13,7 @@ const DayComponent = ({ date, state, marking, navigation }) => {
     // }, [])
 
     return(
-    <TouchableOpacity onPress={date => navigation.navigate("LogSymptoms", date)}>
+    <TouchableOpacity onPress={() => navigation.navigate("LogSymptoms", {"date": date})}>
         <View style={styles.dayContainer}>
             <Text>
                 {date.day}
