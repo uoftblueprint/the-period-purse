@@ -4,9 +4,11 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
-    "start": "react-native start"
+    "start": "react-native start",
+    "svg": "react-native-vector-image generate --no-android-output --ios-output ./ios/tppapp/Images.xcassets/SVGs"
   },
   "dependencies": {
+    "@klarna/react-native-vector-drawable": "^0.1.2",
     "@react-navigation/bottom-tabs": "^6.0.9",
     "@react-navigation/native-stack": "^6.2.5",
     "expo": "~42.0.1",
@@ -23,6 +25,7 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-unimodules": "~0.14.5",
+    "react-native-vector-image": "^0.3.3",
     "react-native-web": "~0.13.12",
     "styled-components": "^5.3.3"
   },
