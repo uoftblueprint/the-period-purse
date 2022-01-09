@@ -4,9 +4,9 @@ import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
-export const BackButton = ({ onPress, title }) => {
+export const BackButton = ({ onPress, title, width }) => {
     return (
-        <View style={styles.backButtonContainer}>
+        <View style={[styles.backButtonContainer, {width: width}]}>
             <Button
                 icon={
                     <Icon
@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         justifyContent: 'center',
         borderRadius: 10,
-        width: 120,
         height: 54,
         bottom: 10
     },

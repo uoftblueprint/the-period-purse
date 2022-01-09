@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Button, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Button, Text, Image, TouchableOpacity } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,6 +14,10 @@ const VIEWS = {
     Cramps: "Cramps",
     Sleep: "Sleep"
 }
+/*TODO: This is kinda cringe. Wanted this to prevent magic #.
+ Need side components to be same width so the selectedView is centered by flexbox
+ */
+const sideComponentWidth = 120
 const Calendar = () => {
     return (
         <CalendarList
@@ -63,9 +67,16 @@ export default function CalendarScreen ({ navigation }) {
                         navigation.navigate('Year')
                     }}
                     title='Year'
+                    width={sideComponentWidth}
                 />
                 <View>
                     <Button title={selectedView} onPress={() => setDropdownExpanded(!dropdownExpanded)}/>
+                </View>
+                <View style={{width:sideComponentWidth}}>
+                    {/* This is a placeholder for the help button on final. Needed it for spacing*/}
+                    <Text>
+                        ?
+                    </Text>
                 </View>
             </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={setSelectedView}/>
@@ -83,7 +94,9 @@ const styles = StyleSheet.create({
     navbarContainer: {
         marginTop: 98,
         flexDirection: 'row',
-        alignSelf: 'flex-start',
+        justifyContent: 'space-between',
+        alignSelf: 'stretch',
+        backgroundColor: '#00FF00'
     },
     horizContainer: {
         flex:1,
