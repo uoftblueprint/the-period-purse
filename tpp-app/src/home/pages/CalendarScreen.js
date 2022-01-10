@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Button, Text, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Selector from '../components/Selector';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Button} from 'react-native-elements';
 
 const VIEWS = {
     Flow: "Period Flow",
@@ -59,6 +61,7 @@ const Calendar = () => {
 export default function CalendarScreen ({ navigation }) {
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
     const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
+    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
@@ -69,14 +72,15 @@ export default function CalendarScreen ({ navigation }) {
                     title='Year'
                     width={sideComponentWidth}
                 />
-                <View>
-                    <Button title={selectedView} onPress={() => setDropdownExpanded(!dropdownExpanded)}/>
-                </View>
+                <Button icon={renderedArrow}
+                    iconRight={true}
+                    title={selectedView}
+                    titleStyle={styles.dropdownText}
+                        type="clear"
+                    onPress={() => setDropdownExpanded(!dropdownExpanded)}
+                    />
                 <View style={{width:sideComponentWidth}}>
                     {/* This is a placeholder for the help button on final. Needed it for spacing*/}
-                    <Text>
-                        ?
-                    </Text>
                 </View>
             </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={setSelectedView}/>
@@ -103,4 +107,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         flexDirection: "row"
     },
+    dropdownText:{
+        fontStyle: 'normal',
+        fontWeight: "700",
+        color: "#000",
+        alignItems: 'center',
+        lineHeight:20,
+
+    }
 })
