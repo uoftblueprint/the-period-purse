@@ -95,8 +95,7 @@ const styles = StyleSheet.create({
         marginTop: 98,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignSelf: 'stretch',
-        backgroundColor: '#00FF00'
+        backgroundColor: '#FFFFFF'
     },
     horizContainer: {
         flex:1,
