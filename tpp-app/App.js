@@ -6,8 +6,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
-
 import VectorImage from 'react-native-vector-image';
+import Welcome from './src/onboarding/Welcome'
 
 import InfoNavigator from './src/info/InfoNavigator'
 
@@ -63,7 +63,6 @@ const CustomTabBarButton = ({ onPress }) => {
   );
 };
 
-
 const InfoIconStyled = ({tintColor}) => (
     <View style={{top: 3}}>
         <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/info_icon.svg')} />
@@ -85,12 +84,11 @@ export function MyTabs() {
   );
 }
 
-
-export default function App() {
+export function MainPage() {
   return (
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="Info" component={InfoNavigator} options={{
+      <NavigationContainer independent={true}>
+        <Tab.Navigator initialRouteName='MiddleButton'>
+          <Tab.Screen name="Info" component={Info} options={{
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
                 <InfoIconStyled {...tintColor} />
@@ -111,6 +109,13 @@ export default function App() {
           }}/>
         </Tab.Navigator>
       </NavigationContainer>
+  );
+}
+
+export default function App() {
+  return (
+    // <Welcome></Welcome>
+    <MainPage></MainPage>
   );
 }
 
