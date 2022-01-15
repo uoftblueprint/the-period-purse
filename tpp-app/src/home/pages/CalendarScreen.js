@@ -65,13 +65,15 @@ export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                <BackButton
-                    onPress={() => {
-                        navigation.navigate('Year')
-                    }}
-                    title='Year'
-                    width={sideComponentWidth}
-                />
+                <View style={styles.backButtonContainer}>
+                    <BackButton
+                        onPress={() => {
+                            navigation.navigate('Year')
+                        }}
+                        title='Year'
+                        width={sideComponentWidth}
+                    />
+                </View>
                 <Button icon={renderedArrow}
                     iconRight={true}
                     title={selectedView}
@@ -94,6 +96,14 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'stretch',
         justifyContent: 'flex-start',
+    },
+    backButtonContainer: {
+        alignItems: 'stretch',
+        justifyContent: 'center',
+        borderRadius: 10,
+        width: 120,
+        height: 54,
+        bottom: 10,
     },
     navbarContainer: {
         marginTop: 98,
