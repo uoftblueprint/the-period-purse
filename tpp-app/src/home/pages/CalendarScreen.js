@@ -1,11 +1,25 @@
 import React, {useState} from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Selector from '../components/Selector';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Button} from 'react-native-elements';
 
-
+const VIEWS = {
+    Flow: "Period Flow",
+    Nothing: "Select",
+    Mood: "Mood",
+    Exercise: "Exercise",
+    Cramps: "Cramps",
+    Sleep: "Sleep"
+}
+/*TODO: This is kinda cringe. Wanted this to prevent magic #.
+ Need side components to be same width so the selectedView is centered by flexbox
+ */
+const sideComponentWidth = 120
 const Calendar = () => {
     return (
         <CalendarList
@@ -42,21 +56,37 @@ const Calendar = () => {
     )
 }
 
+
 // Calendar Screen component that can be accessed by other functions
 export default function CalendarScreen ({ navigation }) {
+    const [dropdownExpanded, setDropdownExpanded] = useState(false);
+    const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
+    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
                 <View style={styles.backButtonContainer}>
-                <BackButton 
-                    onPress={() => {
-                        navigation.navigate('Year')
-                    }}
-                    title='Year'
-                />
+                    <BackButton
+                        onPress={() => {
+                            navigation.navigate('Year')
+                        }}
+                        title='Year'
+                        width={sideComponentWidth}
+                    />
+                </View>
+                <Button icon={renderedArrow}
+                    iconRight={true}
+                    title={selectedView}
+                    titleStyle={styles.dropdownText}
+                        type="clear"
+                    onPress={() => setDropdownExpanded(!dropdownExpanded)}
+                    />
+                <View style={{width:sideComponentWidth}}>
+                    {/* This is a placeholder for the help button on final. Needed it for spacing*/}
                 </View>
             </View>
-            <Calendar></Calendar>
+            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={setSelectedView}/>
+            <Calendar/>
         </View>
     )
 }
@@ -65,7 +95,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'stretch',
-        justifyContent: 'flex-start',  
+        justifyContent: 'flex-start',
     },
     backButtonContainer: {
         alignItems: 'stretch',
@@ -77,8 +107,22 @@ const styles = StyleSheet.create({
     },
     navbarContainer: {
         marginTop: 98,
-        position: 'relative',
         flexDirection: 'row',
-        alignSelf: 'flex-start',
+        justifyContent: 'space-between',
+        backgroundColor: '#FFFFFF'
     },
+    horizContainer: {
+        flex:1,
+        alignSelf:'stretch',
+        justifyContent: 'space-around',
+        flexDirection: "row"
+    },
+    dropdownText:{
+        fontStyle: 'normal',
+        fontWeight: "700",
+        color: "#000",
+        alignItems: 'center',
+        lineHeight:20,
+
+    }
 })
