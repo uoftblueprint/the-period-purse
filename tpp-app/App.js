@@ -1,14 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
+import VectorImage from 'react-native-vector-image';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import VectorImage from 'react-native-vector-image';
-import Info from './src/info/Info';
+import InfoNavigator from './src/info/InfoNavigator';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
 import { TabBarMiddleButton } from './src/home/components/TabBarMiddleButton';
-import Welcome from './src/onboarding/Welcome'
-import InfoNavigator from './src/info/InfoNavigator'
+import Welcome from './src/onboarding/Welcome';
+
 
 const Tab = createBottomTabNavigator();
 

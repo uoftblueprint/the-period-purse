@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
-import { STACK_SCREENS } from './Welcome';
+import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { WideButton, UnderlineButton } from './components/ButtonComponents';
 import { BackButtonContainer, PageTitleContainer, TextButtonContainer } from './components/ContainerComponents';
@@ -17,13 +17,13 @@ export default function Success ({ navigation }) {
           <PageTitle>Registration</PageTitle>
         </PageTitleContainer>
       </BackButtonContainer>
-      
+
       <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/paddy.svg')} style={{ alignSelf: "center" }}/>
-      <Text style={styles.success}>Success!</Text> 
-      <Text style={styles.text}>Email confirmation sent. Click link {'\n'} in email to confirm registration.</Text> 
+      <Text style={styles.success}>Success!</Text>
+      <Text style={styles.text}>Email confirmation sent. Click link {'\n'} in email to confirm registration.</Text>
 
       <TextButtonContainer>
-        <Text style={styles.smallText}>Didn't get email? </Text> 
+        <Text style={styles.smallText}>Didn't get email? </Text>
         <UnderlineButton title="Resend email"></UnderlineButton>
       </TextButtonContainer>
       <View style={{ bottom: "-23%" }}>
@@ -38,26 +38,26 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center'
-  }, 
+  },
   success: {
     alignSelf: "center",
-    fontFamily: "Avenir", 
+    fontFamily: "Avenir",
     fontSize: 24,
     fontWeight: "800",
     color: "#5A9F93",
     marginTop: 35
-  }, 
+  },
   text: {
     alignSelf: "center",
-    fontFamily: "Avenir", 
+    fontFamily: "Avenir",
     fontSize: 18,
     fontWeight: "400",
     color: "#000000",
     marginTop: 7
-  }, 
+  },
   smallText: {
     alignSelf: "center",
-    fontFamily: "Avenir", 
+    fontFamily: "Avenir",
     fontSize: 16,
     fontWeight: "400",
     color: "#000000",

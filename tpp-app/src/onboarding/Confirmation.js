@@ -1,10 +1,22 @@
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
-import { STACK_SCREENS } from './Welcome';
 import { CrossButton } from './components/ButtonComponents';
 import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
 import VectorImage from 'react-native-vector-image';
+
+export const STACK_SCREENS = {
+  "Get Started" : "Get Started",
+  "Period Length" : "Period Length",
+  "Period Start":  "Period Start",
+  "Symptoms Choices" : "Symptoms Choices",
+  "Backup" : "Backup",
+  "Main Page": "Main Page",
+  "Registration": "Registration",
+  "Password": "Password",
+  "Success": "Success",
+  "Confirmation": "Confirmation"
+};
 
 export default function Confirmation ({ navigation }) {
   return (
@@ -12,9 +24,9 @@ export default function Confirmation ({ navigation }) {
       <BackButtonContainer>
         <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS["Main Page"])}}/>
       </BackButtonContainer>
-      
+
       <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/paddy.svg')} style={{ alignSelf: "center" }}/>
-      <Text style={styles.bigText}>You're all set!</Text> 
+      <Text style={styles.bigText}>You're all set!</Text>
 
       <View style={styles.row}>
         <Text style={styles.smallText}>Average period length</Text>
@@ -45,26 +57,26 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center'
-  }, 
+  },
   bigText: {
     alignSelf: "center",
-    fontFamily: "Avenir", 
+    fontFamily: "Avenir",
     fontSize: 34,
     fontWeight: "800",
     color: "#000000",
-    marginTop: 13, 
+    marginTop: 13,
     marginBottom: 24
-  }, 
+  },
   text: {
-    fontFamily: "System", 
+    fontFamily: "System",
     fontSize: 17,
     fontWeight: "400",
     color: "#000000",
     marginTop: 4,
     marginBottom: 15
-  }, 
+  },
   smallText: {
-    fontFamily: "Avenir", 
+    fontFamily: "Avenir",
     fontSize: 12,
     fontWeight: "800",
     color: "#5A9F93",
@@ -75,8 +87,8 @@ const styles = StyleSheet.create({
     marginLeft: 30
   },
   icon: {
-    marginRight: 15, 
-    marginBottom: 15, 
+    marginRight: 15,
+    marginBottom: 15,
     marginTop: 4
   }
 });
