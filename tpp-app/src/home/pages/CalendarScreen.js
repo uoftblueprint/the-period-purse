@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
         fontWeight: "700",
         color: "#000",
         alignItems: 'center',
-        lineHeight:20,
-
+        lineHeight: 20,
     }
 })
