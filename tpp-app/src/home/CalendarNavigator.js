@@ -4,6 +4,7 @@ import CalendarScreen from './pages/CalendarScreen'
 import YearScreen from './pages/YearScreen'
 import LogSymptomsScreen from './pages/LogSymptomsScreen';
 import SelectLogOptionOverlay from './pages/SelectLogOptionOverlay';
+import LogMultipleDatesScreen from './pages/LogMultipleDatesScreen';
 
 // Create a navigation stack that can be used to access other pages
 // Stack begins first page at CalendarScreen. This is done so that the global
@@ -16,6 +17,7 @@ export default function CalendarNavigator() {
             <Stack.Screen name={"Year"} component={YearScreen} />
             <Stack.Screen name={"SelectLogOption"} component={SelectLogOptionOverlay} options={{ presentation: 'containedTransparentModal' }} />
             <Stack.Screen name={"LogSymptoms"} component={LogSymptomsScreen} options={{ presentation: 'modal' }}/>
+            <Stack.Screen name={"LogMultipleDates"} component={LogMultipleDatesScreen} options={{ presentation: 'fullScreenModal' }}/>
         </Stack.Navigator>
     )
 }

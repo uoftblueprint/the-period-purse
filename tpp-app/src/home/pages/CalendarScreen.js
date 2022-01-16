@@ -20,7 +20,8 @@ const VIEWS = {
  Need side components to be same width so the selectedView is centered by flexbox
  */
 const sideComponentWidth = 120
-const Calendar = () => {
+
+export const Calendar = () => {
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
