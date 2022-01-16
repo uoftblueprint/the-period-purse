@@ -9,6 +9,8 @@ import CalendarNavigator from './src/home/CalendarNavigator';
 import VectorImage from 'react-native-vector-image';
 import Welcome from './src/onboarding/Welcome'
 
+import InfoNavigator from './src/info/InfoNavigator'
+
 const Tab = createBottomTabNavigator();
 
 const CustomTabBarButton = ({ onPress }) => {
