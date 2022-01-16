@@ -1,5 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
+import VectorImage from 'react-native-vector-image';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';

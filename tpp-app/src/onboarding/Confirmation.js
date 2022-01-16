@@ -1,12 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
-import { STACK_SCREENS } from './Welcome';
 import { CrossButton } from './components/ButtonComponents';
 import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
+
+export const STACK_SCREENS = {
+  "Get Started" : "Get Started",
+  "Period Length" : "Period Length",
+  "Period Start":  "Period Start",
+  "Symptoms Choices" : "Symptoms Choices",
+  "Backup" : "Backup",
+  "Main Page": "Main Page",
+  "Registration": "Registration",
+  "Password": "Password",
+  "Success": "Success",
+  "Confirmation": "Confirmation"
+};
 
 export default function Confirmation ({ navigation }) {
   return (

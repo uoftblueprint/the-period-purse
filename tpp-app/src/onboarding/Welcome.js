@@ -14,6 +14,7 @@ import { MainPage } from '../../App';
 import Success from './Success';
 import Confirmation from './Confirmation';
 import { WideButton } from './components/ButtonComponents';
+import { STACK_SCREENS } from './Confirmation';
 
 export const STACK_SCREENS = {
   "Get Started" : "Get Started",
