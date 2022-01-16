@@ -71,7 +71,7 @@ export function MainPage() {
   return (
       <NavigationContainer ref={navigationRef} independent={true}>
         <Tab.Navigator initialRouteName='MiddleButton'>
-          <Tab.Screen name="Info" component={Info} options={{
+          <Tab.Screen name="Info" component={InfoNavigator} options={{
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
               <InfoIconStyled {...tintColor} />
