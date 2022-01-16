@@ -29,6 +29,52 @@ const getActiveRouteState = function (route) {
     return getActiveRouteState(childActiveRoute);
 }
 
+/**
+ * RotateView component. Toggle rotation based on passed in prop values.
+ *
+ * @prop {number | string} spinValue If spinValue is a string, no animation is rendered.
+ * Otherwise, spinValue is either 1 to rotate forward 45deg or 0 to rotate back to 0deg.
+ */
+const RotateView = (props) => {
+  const rotateDeg = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (typeof props.spinValue === 'number') {
+      Animated.timing(
+        rotateDeg,
+        {
+          toValue: props.spinValue,
+          duration: 200,
+          easing: Easing.linear,
+          useNativeDriver: true
+        }
+      ).start();
+    }
+  }, [props.spinValue]);
+
+  const spin = rotateDeg.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '45deg']
+  });
+
+  const animateRotationStyle =
+    typeof props.spinValue === 'number'
+      ? { transform: [
+          { rotate: spin },     // Bind rotate to animated value
+          { perspective: 1000 }
+        ]}
+      : { transform: [
+          { rotate: '0deg' },   // Set calendar icon to 0deg
+          { perspective: 1000 }
+        ]};
+
+  return (
+    <Animated.View style={[ props.style, animateRotationStyle ]} >
+      {props.children}
+    </Animated.View>
+  );
+}
+
 const CustomTabBarButton = ({ onPress }) => {
   const calendarShowing = useIsFocused();
 
@@ -39,6 +85,8 @@ const CustomTabBarButton = ({ onPress }) => {
   const activeRoute = getActiveRouteState(navigation.getState());
   let overlayVisible = activeRoute?.state?.routes?.some((screen) => screen["name"] === "SelectLogOption");
 
+  const [rotate, setRotation] = useState(0);
+
   return (
     <TouchableOpacity
         style={{
@@ -48,37 +96,24 @@ const CustomTabBarButton = ({ onPress }) => {
           ...styles.shadow
         }}
         onPress={() => {
-          calendarShowing && !overlayVisible
-            ? navigation.navigate('MiddleButton', { screen: 'SelectLogOption' })
-            : navigation.navigate('MiddleButton', { screen: 'Calendar' })
+          if (calendarShowing && !overlayVisible) {
+            setRotation(1);
+            navigation.navigate('MiddleButton', { screen: 'SelectLogOption' })
+          } else {
+            setRotation(0);
+            navigation.navigate('MiddleButton', { screen: 'Calendar' })
+          }
         }}
     >
 
-      <View style={{
-        width: 70,
-        height: 70,
-        borderRadius: 70,
-        borderWidth: 2,
-        borderColor: '#FFFFFF',
-        boxSizing: 'border-box',
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
-        elevation: 5,
-        backgroundColor: bgColor,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        transform: [
-          { rotate: "45deg" }
-        ]
-      }}>
+      <RotateView
+        style={[ styles.middleButton, { backgroundColor: bgColor } ]}
+        // disable rotation with string if focus switches to a non-calendar screen OR
+        // rotate back to 0 if overlay closes from gestures that aren't from the tab bar
+        spinValue={ !calendarShowing ? '0degIcon' : (!overlayVisible ? 0 : rotate) }
+      >
         {icon}
-      </View>
+      </RotateView>
 
     </TouchableOpacity>
   );
@@ -181,4 +216,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  middleButton: {
+    width: 70,
+    height: 70,
+    borderRadius: 70,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });
