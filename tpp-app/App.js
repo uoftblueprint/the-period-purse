@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
@@ -20,12 +19,25 @@ import InfoNavigator from './src/info/InfoNavigator'
 
 const Tab = createBottomTabNavigator();
 
+/** Recursive function to get the current active screen state through nested navigators */
+const getActiveRouteState = function (route) {
+    if (!route.routes || route.routes.length === 0 || route.index >= route.routes.length) {
+      return route;
+    }
+
+    const childActiveRoute = route.routes[route.index];
+    return getActiveRouteState(childActiveRoute);
+}
+
 const CustomTabBarButton = ({ onPress }) => {
   const calendarShowing = useIsFocused();
 
   let icon = calendarShowing ? <BloodDrop/> : <CalendarIcon/>
   let bgColor = calendarShowing ? '#D32729' : '#5A9F93';
+
   const navigation = useNavigation();
+  const activeRoute = getActiveRouteState(navigation.getState());
+  let overlayVisible = activeRoute?.state?.routes?.some((screen) => screen["name"] === "SelectLogOption");
 
   return (
     <TouchableOpacity
@@ -36,11 +48,9 @@ const CustomTabBarButton = ({ onPress }) => {
           ...styles.shadow
         }}
         onPress={() => {
-          if (calendarShowing) {
-            navigation.navigate('MiddleButton', { screen: 'LogSymptoms' });
-          } else {
-            navigation.navigate('MiddleButton', { screen: 'Calendar' });
-          }
+          calendarShowing && !overlayVisible
+            ? navigation.navigate('MiddleButton', { screen: 'SelectLogOption' })
+            : navigation.navigate('MiddleButton', { screen: 'Calendar' })
         }}
     >
 
@@ -62,10 +72,14 @@ const CustomTabBarButton = ({ onPress }) => {
         backgroundColor: bgColor,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        transform: [
+          { rotate: "45deg" }
+        ]
       }}>
         {icon}
       </View>
+
     </TouchableOpacity>
   );
 };
