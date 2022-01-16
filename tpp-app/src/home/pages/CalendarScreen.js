@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
-import Selector from '../components/Selector';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Button } from 'react-native-elements';
 
 const VIEWS = {
     Flow: "Period Flow",
@@ -30,7 +27,7 @@ const DayComponent = ({ date, state, marking, navigation }) => {
     )
 }
 
-const Calendar = ({navigation}) => {
+export const Calendar = () => {
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -100,13 +97,13 @@ export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                {/*<BackButton
+                <BackButton
                     onPress={() => {
                         navigation.navigate('Year')
                     }}
                     title='Year'
                     width={sideComponentWidth}
-                />*/}
+                />
                 <Button icon={renderedArrow}
                     iconRight={true}
                     title={selectedView}
@@ -126,10 +123,7 @@ export default function CalendarScreen ({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'stretch',
-        justifyContent: 'flex-start',
-        backgroundColor: '#FFFFFF'
+        flex: 1
     },
     navbarContainer: {
         marginTop: 98,
@@ -151,14 +145,4 @@ const styles = StyleSheet.create({
         lineHeight:20,
 
     },
-    dayContainer:{
-        borderColor: '#D1D3D4',
-        borderWidth: 1,
-        borderRadius: 8,
-        width: 50,
-        height: 50,
-        paddingLeft: 5,
-        paddingTop:3,
-        margin: 2,
-    }
 })
