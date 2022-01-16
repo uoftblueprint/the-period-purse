@@ -2,11 +2,11 @@ import React, { useRef, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Animated, Easing } from 'react-native';
 import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import VectorImage from 'react-native-vector-image';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
 
-import VectorImage from 'react-native-vector-image';
 
 const Tab = createBottomTabNavigator();
 

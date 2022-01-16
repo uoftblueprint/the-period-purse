@@ -2,11 +2,9 @@ import React, {useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
-const Calendar = () => {
+export const Calendar = () => {
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -47,7 +45,7 @@ export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                <BackButton 
+                <BackButton
                     onPress={() => {
                         navigation.navigate('Year')
                     }}
@@ -61,9 +59,7 @@ export default function CalendarScreen ({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'stretch',
-        justifyContent: 'flex-start',  
+        flex: 1
     },
     navbarContainer: {
         marginTop: 98,
