@@ -24,20 +24,11 @@ const SettingsIconStyled = ({tintColor}) => (
   </View>
 );
 
-export function MyTabs() {
-  return (
-      <Tab.Navigator>
-        <Tab.Screen name="Info" component={Info} />
-        <Tab.Screen name="Settings" component={Settings} />
-      </Tab.Navigator>
-  );
-}
-
 export function MainPage() {
   return (
       <NavigationContainer independent={true}>
         <Tab.Navigator initialRouteName='MiddleButton'>
-          <Tab.Screen name="Info" component={Info} options={{
+          <Tab.Screen name="Info" component={InfoNavigator} options={{
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
               <InfoIconStyled {...tintColor} />
