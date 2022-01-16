@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'stretch',
         justifyContent: 'flex-start',
+        backgroundColor: '#FFFFFF'
     },
     backButtonContainer: {
         alignItems: 'stretch',
