@@ -1,12 +1,10 @@
-import React, {useState} from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Button} from 'react-native-elements';
+import { Button } from 'react-native-elements';
 
 const VIEWS = {
     Flow: "Period Flow",
