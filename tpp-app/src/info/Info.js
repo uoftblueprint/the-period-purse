@@ -75,8 +75,9 @@ export default function Info ({ navigation }) {
                 </Text>
 
                 <View style={styles.containerRow}>
-                    {cardData.map((card) => { return (
+                    {cardData.map((card, i) => { return (
                         <MenstrualProductCard
+                            key={i}
                             name={card.name}
                             image={card.image}
                             onPress={() => navigation.navigate(card.screen)}
@@ -92,7 +93,6 @@ export default function Info ({ navigation }) {
 
 const styles = StyleSheet.create({
     productCard: {
-        flex: 1,
         backgroundColor: '#FFA3A4',
         alignItems: 'center',
         justifyContent: 'center',

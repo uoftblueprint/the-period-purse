@@ -8,38 +8,37 @@ import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 export const OptionButton = ({ title, icon, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.button}>
+      <Text style={styles.optionText}>{title}</Text>
       <View style={styles.iconCircle}>
         {icon}
       </View>
-      <Text style={styles.optionText}>{title}</Text>
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
   button: {
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 21
+    margin: 20
   },
   optionText: {
     textAlign: 'center',
     maxWidth: 100,
-    marginLeft: 15,
-    fontSize: 14
+    fontSize: 14,
+    marginBottom: 10
   },
   iconCircle: {
-    backgroundColor: '#fff',
-    width: 54,
-    height: 54,
-    borderRadius: 54,
+    width: 70,
+    height: 70,
+    borderRadius: 70,
+    backgroundColor: '#B31F20',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 2,
     },
-    shadowOpacity: 0.35,
+    shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 5,
     display: 'flex',
