@@ -26,11 +26,44 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 
 <img width="378" alt="Screen Shot 2021-10-27 at 11 46 38 AM" src="https://user-images.githubusercontent.com/35851484/139100763-95605bfc-a224-401b-9f17-b3a5e0a3f3fb.png">
 
-
 ## SVG Color Change
-https://github.com/kristerkari/react-native-svg-transformer#changing-svg-fill-color-in-js-code
+The `.svgrrc` file, found at the root of the project. The version of it at the time of writing is 
+```
+{
+  "replaceAttrValues": {
+    "#000": "{props.fill}"
+  }
+}
+```
+Essentially, we are telling `svg-react-native-transformer` to replace the hex code "#000" in a .svg file we import with the `fill` property of the React Component that corresponds to the .svg file. As far as I can tell, this only allows you to alter the highest level of `fill` (i.e. the one defined in the `<svg>` tag).
 
-Check the `.svgrrc` for the hex code that is being replaced bythe `fill` attribute for the SVG component. As far as I can tell, this only allows you to alter the highest level of `fill` (i.e. the one defined in the `<svg>` tag). If I am wrong, please update this. 
+This means you must set `fill` to `"#000"` for any .svg file for which you want to change colours programatically.
+
+
+See [this](https://github.com/kristerkari/react-native-svg-transformer#changing-svg-fill-color-in-js-code) for further explanation.
+
+### Usage Example
+Assume the .svg file below is saved as "logo.svg"
+```html
+  <svg fill="#000"> </svg>
+```
+
+Import your .svg file inside a React component:
+
+```javascript
+import Logo from "./logo.svg";
+```
+
+You can then use your image as a component:
+
+```javascript
+<Logo fill={"#ff0000"} />
+```
+
+and the `fill` property in the svg file is functionally replaced by `#ff0000` when rendered. You can also set other properties like `width`, `height`, etc. You can also style it, as normal.
+
+
+
 
 ## Setup Local Environment (Windows/Linux)
 
