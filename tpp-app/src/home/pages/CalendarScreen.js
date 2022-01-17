@@ -16,9 +16,6 @@ const VIEWS = {
     Cramps: "Cramps",
     Sleep: "Sleep"
 }
-/*TODO: This is kinda cringe. Wanted this to prevent magic #.
- Need side components to be same width so the selectedView is centered by flexbox
- */
 const sideComponentWidth = 120
 const Calendar = () => {
     return (
