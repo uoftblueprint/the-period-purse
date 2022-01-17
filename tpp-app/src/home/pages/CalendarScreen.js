@@ -61,6 +61,14 @@ const Calendar = () => {
 export default function CalendarScreen ({ navigation }) {
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
     const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
+    const toggleSelectedView = (targetView) => {
+        if (selectedView === targetView){
+            setSelectedView(VIEWS.Nothing);
+        }
+        else {
+            setSelectedView(targetView);
+        }
+    }
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
     return (
         <View style={styles.container}>
@@ -83,7 +91,7 @@ export default function CalendarScreen ({ navigation }) {
                     {/* This is a placeholder for the help button on final. Needed it for spacing*/}
                 </View>
             </View>
-            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={setSelectedView}/>
+            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={setSelectedView} toggleSelectedView={toggleSelectedView}/>
             <Calendar/>
         </View>
     )
@@ -94,14 +102,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'stretch',
         justifyContent: 'flex-start',
-    },
-    backButtonContainer: {
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        borderRadius: 10,
-        width: 120,
-        height: 54,
-        bottom: 10,
     },
     navbarContainer: {
         marginTop: 98,
