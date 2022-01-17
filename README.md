@@ -31,13 +31,13 @@ The `.svgrrc` file, found at the root of the project. The version of it at the t
 ```
 {
   "replaceAttrValues": {
-    "#000": "{props.fill}"
+    "black": "{props.fill}"
   }
 }
 ```
-Essentially, we are telling `svg-react-native-transformer` to replace the hex code "#000" in a .svg file we import with the `fill` property of the React Component that corresponds to the .svg file. As far as I can tell, this only allows you to alter the highest level of `fill` (i.e. the one defined in the `<svg>` tag).
+Essentially, we are telling `svg-react-native-transformer` to replace the color "black" in a .svg file we import with the `fill` property of the React Component that corresponds to the .svg file. As far as I can tell, this only allows you to alter the highest level of `fill` (i.e. the one defined in the `<svg>` tag).
 
-This means you must set `fill` to `"#000"` for any .svg file for which you want to change colours programatically.
+This means you must set `fill` to `"black"` for any .svg file for which you want to change colours programatically.
 
 
 See [this](https://github.com/kristerkari/react-native-svg-transformer#changing-svg-fill-color-in-js-code) for further explanation.
@@ -45,7 +45,7 @@ See [this](https://github.com/kristerkari/react-native-svg-transformer#changing-
 ### Usage Example
 Assume the .svg file below is saved as "logo.svg"
 ```html
-  <svg fill="#000"> </svg>
+  <svg fill="black"> </svg>
 ```
 
 Import your .svg file inside a React component:
