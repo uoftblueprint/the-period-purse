@@ -88,7 +88,7 @@ export default function CalendarScreen ({ navigation }) {
                     {/* This is a placeholder for the help button on final. Needed it for spacing*/}
                 </View>
             </View>
-            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={setSelectedView} toggleSelectedView={toggleSelectedView}/>
+            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
             <Calendar/>
         </View>
     )
