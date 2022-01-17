@@ -2,17 +2,20 @@ import React from "react";
 import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import VectorImage from 'react-native-vector-image';
 import { OptionButton } from "../components/LoggingOptionButton";
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 
 export default function SelectLogOptionOverlay({ navigation }) {
+  const tabBarHeight = useBottomTabBarHeight();
+
   return (
       <TouchableWithoutFeedback onPress={() => navigation.goBack()} >
         <View style={styles.overlay}>
-          <View style={styles.buttonContainer}>
+          <View style={[ styles.buttonContainer, { marginBottom: tabBarHeight } ]}>
 
             <OptionButton
               title={"Log daily symptoms"}
-              icon={<VectorImage source={require('../../../ios/tppapp/Images.xcassets/icons/red_blood_drop.svg')}/>}
+              icon={<VectorImage source={require('../../../ios/tppapp/Images.xcassets/icons/blood_drop.svg')}/>}
               onPress={() => {
                 navigation.goBack(); // dismiss this overlay first
                 navigation.navigate('LogSymptoms');
@@ -21,7 +24,7 @@ export default function SelectLogOptionOverlay({ navigation }) {
 
             <OptionButton
               title={"Log multiple period dates"}
-              icon={<VectorImage source={require('../../../ios/tppapp/Images.xcassets/icons/red_calendar.svg')}/>}
+              icon={<VectorImage source={require('../../../ios/tppapp/Images.xcassets/icons/calendar_icon_multiple_dates.svg')}/>}
               onPress={() => {
                 navigation.goBack();
                 navigation.navigate('LogMultipleDates');
@@ -43,7 +46,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 45,
+    bottom: 40,
+    flexDirection: 'row',
     justifyContent: 'center'
   }
 });

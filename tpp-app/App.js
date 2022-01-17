@@ -3,6 +3,8 @@ import { View } from 'react-native';
 import VectorImage from 'react-native-vector-image';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+//import { BlurView } from 'expo-blur';
+
 import InfoNavigator from './src/info/InfoNavigator';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
@@ -26,8 +28,13 @@ const SettingsIconStyled = ({tintColor}) => (
 
 export function MainPage() {
   return (
-      <NavigationContainer independent={true}>
-        <Tab.Navigator initialRouteName='MiddleButton'>
+      <NavigationContainer independent={true} >
+        <Tab.Navigator
+          initialRouteName='MiddleButton'
+          screenOptions={{
+            tabBarStyle: { position: 'absolute' },
+          }}
+        >
           <Tab.Screen name="Info" component={InfoNavigator} options={{
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
