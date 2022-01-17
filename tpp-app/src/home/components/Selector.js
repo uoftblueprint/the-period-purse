@@ -13,19 +13,19 @@ const Selector = (props) => {
     <View style={{backgroundColor: '#FFFFFF'}}>
         {props.expanded &&
         <View style={styles.selectorContainer}>
-            <TouchableOpacity onPress={() => props.setSelectedView(props.views.Flow)} style={[props.selectedView === props.views.Flow&& styles.selectedIcon, styles.iconContainer]} >
+            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Flow)} style={[props.selectedView === props.views.Flow&& styles.selectedIcon, styles.iconContainer]} >
                 <VectorImage style={styles.icon} source={flowIcon}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.setSelectedView(props.views.Mood)} style={[props.selectedView === props.views.Mood && styles.selectedIcon, styles.iconContainer]}>
+            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Mood)} style={[props.selectedView === props.views.Mood && styles.selectedIcon, styles.iconContainer]}>
                 <VectorImage source={moodIcon}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.setSelectedView(props.views.Exercise)} style={[props.selectedView === props.views.Exercise && styles.selectedIcon, styles.iconContainer]}>
+            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Exercise)} style={[props.selectedView === props.views.Exercise && styles.selectedIcon, styles.iconContainer]}>
                 <VectorImage styles = {styles.icon} source={exerciseIcon}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.setSelectedView(props.views.Cramps)} style={[props.selectedView === props.views.Cramps && styles.selectedIcon, styles.iconContainer]}>
+            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Cramps)} style={[props.selectedView === props.views.Cramps && styles.selectedIcon, styles.iconContainer]}>
                 <VectorImage styles = {styles.icon} source={crampsIcon}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.setSelectedView(props.views.Sleep)} style={[props.selectedView === props.views.Sleep && styles.selectedIcon, styles.iconContainer]}>
+            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Sleep)} style={[props.selectedView === props.views.Sleep && styles.selectedIcon, styles.iconContainer]}>
                 <VectorImage styles = {styles.icon}  source={sleepIcon}/>
             </TouchableOpacity>
 
