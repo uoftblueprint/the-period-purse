@@ -5,6 +5,9 @@ import { STACK_SCREENS } from './Welcome';
 import { CrossButton } from './components/ButtonComponents';
 import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
 import VectorImage from 'react-native-vector-image';
+import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
+import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
+import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
 
 export default function Confirmation ({ navigation }) {
   return (
@@ -12,9 +15,9 @@ export default function Confirmation ({ navigation }) {
       <BackButtonContainer>
         <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS["Main Page"])}}/>
       </BackButtonContainer>
-      
-      <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/paddy.svg')} style={{ alignSelf: "center" }}/>
-      <Text style={styles.bigText}>You're all set!</Text> 
+
+      <PaddyIcon style={{alignSelf: "center"}}/>
+      <Text style={styles.bigText}>You're all set!</Text>
 
       <View style={styles.row}>
         <Text style={styles.smallText}>Average period length</Text>
@@ -31,8 +34,8 @@ export default function Confirmation ({ navigation }) {
       <View style={styles.row}>
         <Text style={styles.smallText}>Symptoms to log</Text>
         <SymptomIconContainer>
-            <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/flow.svg')} style={styles.icon}/>
-            <VectorImage source={require('../../ios/tppapp/Images.xcassets/icons/sleep.svg')} style={styles.icon}/>
+            <FlowIcon style={styles.icon}/>
+            <SleepIcon style={styles.icon}/>
         </SymptomIconContainer>
       </View>
       <HorizontalLine></HorizontalLine>
@@ -45,26 +48,26 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center'
-  }, 
+  },
   bigText: {
     alignSelf: "center",
-    fontFamily: "Avenir", 
+    fontFamily: "Avenir",
     fontSize: 34,
     fontWeight: "800",
     color: "#000000",
-    marginTop: 13, 
+    marginTop: 13,
     marginBottom: 24
-  }, 
+  },
   text: {
-    fontFamily: "System", 
+    fontFamily: "System",
     fontSize: 17,
     fontWeight: "400",
     color: "#000000",
     marginTop: 4,
     marginBottom: 15
-  }, 
+  },
   smallText: {
-    fontFamily: "Avenir", 
+    fontFamily: "Avenir",
     fontSize: 12,
     fontWeight: "800",
     color: "#5A9F93",
@@ -75,8 +78,8 @@ const styles = StyleSheet.create({
     marginLeft: 30
   },
   icon: {
-    marginRight: 15, 
-    marginBottom: 15, 
+    marginRight: 15,
+    marginBottom: 15,
     marginTop: 4
   }
 });

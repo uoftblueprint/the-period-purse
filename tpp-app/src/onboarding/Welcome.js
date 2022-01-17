@@ -17,18 +17,18 @@ import { WideButton } from './components/ButtonComponents';
 
 export const STACK_SCREENS = {
   "Get Started" : "Get Started",
-  "Period Length" : "Period Length", 
+  "Period Length" : "Period Length",
   "Period Start":  "Period Start",
   "Symptoms Choices" : "Symptoms Choices",
-  "Backup" : "Backup", 
-  "Main Page": "Main Page", 
+  "Backup" : "Backup",
+  "Main Page": "Main Page",
   "Registration": "Registration",
-  "Password": "Password", 
-  "Success": "Success", 
+  "Password": "Password",
+  "Success": "Success",
   "Confirmation": "Confirmation"
 };
 
-// Get Start Page Component 
+// Get Start Page Component
 const GetStarted = ({ navigation }) => (
   <ImageBackground source={OnboardingBackground} style={styles.container}>
     <Image style={styles.appIcon} source={MNationIcon}/>
@@ -39,12 +39,12 @@ const GetStarted = ({ navigation }) => (
   </ImageBackground>
 );
 
-// Stack Navigation for the Onboarding Pages 
+// Stack Navigation for the Onboarding Pages
 const Stack = createNativeStackNavigator();
 export default function Welcome() {
   return (
     <NavigationContainer independent={true}>
-      <Stack.Navigator 
+      <Stack.Navigator
         screenOptions={{
           headerShown: false
         }}
@@ -69,23 +69,23 @@ export default function Welcome() {
         name={STACK_SCREENS["Backup"]}
         component={Backup}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name={STACK_SCREENS["Main Page"]}
         component={MainPage}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name={STACK_SCREENS["Registration"]}
         component={Registration}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name={STACK_SCREENS["Password"]}
         component={Password}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name={STACK_SCREENS["Success"]}
         component={Success}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name={STACK_SCREENS["Confirmation"]}
         component={Confirmation}
       />
@@ -99,17 +99,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center'
-  }, 
+  },
   appIcon: {
-    width: 182, 
+    width: 182,
     height: 182,
     alignSelf: 'center'
   },
   titleText: {
     textAlign: 'center',
     fontFamily: 'Avenir',
-    fontSize: 26, 
-    fontWeight: '800', 
+    fontSize: 26,
+    fontWeight: '800',
     marginTop: 50
   },
 });
