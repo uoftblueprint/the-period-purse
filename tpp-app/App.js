@@ -6,7 +6,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
-import VectorImage from 'react-native-vector-image';
 import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood_drop.svg';
 import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar_icon.svg';
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';

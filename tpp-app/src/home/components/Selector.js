@@ -6,7 +6,6 @@ import MoodIcon from "../../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 import SleepIcon from "../../../ios/tppapp/Images.xcassets/icons/sleep.svg";
-import VectorImage from 'react-native-vector-image';
 
 const Selector = (props) => {
   return (

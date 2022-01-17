@@ -6,7 +6,6 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { WideButton, UnderlineButton } from './components/ButtonComponents';
 import { BackButtonContainer, PageTitleContainer, TextButtonContainer } from './components/ContainerComponents';
 import { PageTitle } from './components/TextComponents'
-import VectorImage from 'react-native-vector-image';
 import PaddyIcon from '../../ios/tppapp/Images.xcassets/icons/paddy.svg';
 
 export default function Success ({ navigation }) {

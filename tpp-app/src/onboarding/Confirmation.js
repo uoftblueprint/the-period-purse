@@ -4,7 +4,6 @@ import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenB
 import { STACK_SCREENS } from './Welcome';
 import { CrossButton } from './components/ButtonComponents';
 import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
-import VectorImage from 'react-native-vector-image';
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
