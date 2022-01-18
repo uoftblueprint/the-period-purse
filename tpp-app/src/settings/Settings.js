@@ -116,8 +116,8 @@ export default function Settings () {
     const getCorrectDate = () => {
         const date = new Date();
         date.setDate(date.getDate() + 1);
-        date.setHours(9);
-        date.setMinutes(0);
+        date.setHours(21);
+        date.setMinutes(34);
         return date;
     };
     

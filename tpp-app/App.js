@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
-import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
+import {NavigationContainer, useIsFocused, useNavigation, useNavigationContainerRef} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
@@ -98,12 +98,13 @@ export function MyTabs() {
 
 
 export default function App() {
+    const navigationRef = useNavigationContainerRef();
+  // const navigation = useNavigation();
 
   // Requests for notification permissions and also creates a local notification listener
   // Does not handle remote notifications from a server.
   useEffect(() => {
     PushNotificationIOS.addEventListener('localNotification', onLocalNotification);
-
 
     PushNotificationIOS.requestPermissions({
       alert: true,
@@ -125,12 +126,14 @@ export default function App() {
 
   const onLocalNotification = (notification) => {
     const isClicked = notification.getData().userInteraction === 1;
+    if (isClicked) {  // Do something if it is clicked
+        navigationRef.navigate('MiddleButton', {screen: 'Calendar'});
+    } else {
 
-    // Do something if it is clicked
+    }
   };
-
   return (
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Tab.Navigator>
           <Tab.Screen name="Info" component={Info} options={{
             headerShown: false,
