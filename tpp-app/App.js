@@ -1,22 +1,29 @@
+import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { NavigationContainer, useIsFocused, useNavigation, useNavigationContainerRef } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
-import InfoIcon from './ios/tppapp/Images.xcassets/info-icon-3x.png'
-import BloodDropIcon from './ios/tppapp/Images.xcassets/icons/blood-drop.png'
-import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar-icon.png'
-import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.png';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood_drop.svg';
+import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar_icon.svg';
+import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
+import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
+
+import Welcome from './src/onboarding/Welcome'
+
+import InfoNavigator from './src/info/InfoNavigator'
+
 
 const Tab = createBottomTabNavigator();
 
 const CustomTabBarButton = ({ onPress }) => {
   const calendarShowing = useIsFocused();
-  let icon = calendarShowing ? BloodDropIcon : CalendarIcon;
+
+  let icon = calendarShowing ? <BloodDrop/> : <CalendarIcon/>
   let bgColor = calendarShowing ? '#D32729' : '#5A9F93';
   const navigation = useNavigation();
 
@@ -36,6 +43,7 @@ const CustomTabBarButton = ({ onPress }) => {
           }
         }}
     >
+
       <View style={{
         width: 70,
         height: 70,
@@ -56,34 +64,21 @@ const CustomTabBarButton = ({ onPress }) => {
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-        <Image
-          style={{
-            width: 24.67,
-            height: 30.83
-          }}
-          source={icon}
-        />
+        {icon}
       </View>
     </TouchableOpacity>
   );
 };
 
-
 const InfoIconStyled = ({tintColor}) => (
     <View style={{top: 3}}>
-                      <Image
-                        source={InfoIcon}
-                        style={{width: 20, height: 20, tintColor: tintColor}}
-                      />
-                </View>
+        <InfoIcon/>
+    </View>
 );
 
 const SettingsIconStyled = ({tintColor}) => (
   <View style={{top: 3}}>
-      <Image
-        source={SettingsIcon}
-        style={{width: 20, height: 20, tintColor: tintColor}}
-      />
+      <SettingsIcon/>
   </View>
 );
 
@@ -97,7 +92,7 @@ export function MyTabs() {
 }
 
 
-export default function App() {
+export default function MainPage() {
   const navigationRef = useNavigationContainerRef();
 
   // Requests for notification permissions and also creates a local notification listener
@@ -133,8 +128,8 @@ export default function App() {
   }, [])
 
   return (
-      <NavigationContainer ref={navigationRef}>
-        <Tab.Navigator>
+      <NavigationContainer ref={navigationRef} independent={true}>
+        <Tab.Navigator initialRouteName='MiddleButton'>
           <Tab.Screen name="Info" component={Info} options={{
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
@@ -155,6 +150,13 @@ export default function App() {
           }}/>
         </Tab.Navigator>
       </NavigationContainer>
+  );
+}
+
+export default function App() {
+  return (
+    // <Welcome></Welcome>
+     <MainPage></MainPage>
   );
 }
 
