@@ -101,7 +101,7 @@ export default function Settings () {
                 title: 'Daily Log Reminder',
                 body: 'Daily reminder to log your symptoms!',
                 badge: 1,
-//                fireDate: getCorrectDate(),
+                fireDate: getCorrectDate(),
                 repeats: true,
                 repeatsComponent: {
                     hour: true,
