@@ -87,16 +87,6 @@ const SettingsIconStyled = ({tintColor}) => (
   </View>
 );
 
-const onLocalNotification = (notification) => {
-  const isClicked = notification.getData().userInteraction === 1;
-
-  // Write code to do something special if it is clicked
-  if (isClicked) {
-    PushNotificationIOS.setApplicationIconBadgeNumber(0)
-    navigation.navigate('MiddleButton', { screen: 'Calendar' })
-  }
-};
-
 export function MyTabs() {
   return (
       <Tab.Navigator>
