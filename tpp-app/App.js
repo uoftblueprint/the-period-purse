@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
-import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useIsFocused, useNavigation, useNavigationContainerRef } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
@@ -87,6 +87,16 @@ const SettingsIconStyled = ({tintColor}) => (
   </View>
 );
 
+const onLocalNotification = (notification) => {
+  const isClicked = notification.getData().userInteraction === 1;
+
+  // Write code to do something special if it is clicked
+  if (isClicked) {
+    PushNotificationIOS.setApplicationIconBadgeNumber(0)
+    navigation.navigate('MiddleButton', { screen: 'Calendar' })
+  }
+};
+
 export function MyTabs() {
   return (
       <Tab.Navigator>
@@ -98,12 +108,21 @@ export function MyTabs() {
 
 
 export default function App() {
+  const navigationRef = useNavigationContainerRef();
 
   // Requests for notification permissions and also creates a local notification listener
   // Does not handle remote notifications from a server.
   useEffect(() => {
-    PushNotificationIOS.addEventListener('localNotification', onLocalNotification);
 
+    PushNotificationIOS.addEventListener('localNotification', ((notification) => {
+      const isClicked = notification.getData().userInteraction === 1;
+    
+      // Write code to do something special if it is clicked
+      if (isClicked) {
+        PushNotificationIOS.setApplicationIconBadgeNumber(0)
+        navigationRef.navigate('MiddleButton', {screen: 'Calendar'})
+      }
+    }));
 
     PushNotificationIOS.requestPermissions({
       alert: true,
@@ -123,21 +142,14 @@ export default function App() {
     }
   }, [])
 
-  const onLocalNotification = (notification) => {
-    const isClicked = notification.getData().userInteraction === 1;
-
-    // Do something if it is clicked
-  };
-
   return (
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Tab.Navigator>
           <Tab.Screen name="Info" component={Info} options={{
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
                 <InfoIconStyled {...tintColor} />
                 )
-
           }}/>
           <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
             headerShown: false,
