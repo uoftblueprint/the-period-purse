@@ -26,6 +26,15 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 
 <img width="378" alt="Screen Shot 2021-10-27 at 11 46 38 AM" src="https://user-images.githubusercontent.com/35851484/139100763-95605bfc-a224-401b-9f17-b3a5e0a3f3fb.png">
 
+### Installing Debugger
+1. Install Homebrew 
+2. run ```brew install --cask react-native-debugger```
+3. Run project using ```npm run ios```
+4. After simulator launches, go to "Device" > "Shake" to launch debugger
+![image](https://user-images.githubusercontent.com/22108651/150660743-7a188d88-300d-4a12-8cfb-ef2712d0e506.png)
+
+
+TODO: update to reflect auto-launching debugger
 
 ## Setup Local Environment (Windows/Linux)
 
