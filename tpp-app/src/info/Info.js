@@ -4,7 +4,7 @@ import padIcon from '../../ios/tppapp/Images.xcassets/icons/pad_icon.png';
 import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png';
 import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon.png';
 import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
-import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png';
+import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png'
 
 const LearnMoreCard = () => {
     return(
@@ -28,15 +28,13 @@ const LearnMoreCard = () => {
 
 const MenstrualProductCard = ({name, image}) =>{
     return(
-        <View style={styles.productCard}>
+        <View>
             <Image style={styles.productIcon} source={image}/>
             <Text style={styles.productText}>{name}</Text>
         </View>
     )
 }
-
-
-export default function Info () {
+export default function Info ({navigation}) {
     return (
         <ScrollView>
             <View style={styles.cardContainer}>
@@ -45,11 +43,21 @@ export default function Info () {
         margin: 15}}>Learn more about period products</Text>
 
                 <View style={styles.containerRow}>
-                    <MenstrualProductCard name={"Period" + "\n" + "Underwears"} image={underwearIcon}/>
-                    <MenstrualProductCard name="Menstrual Cups" image={cupIcon}/>
-                    <MenstrualProductCard name="Pads" image={padIcon}/>
-                    <MenstrualProductCard name="Cloth Pads" image={clothPadIcon}/>
-                    <MenstrualProductCard name="Tampons" image={tamponsIcon}/>
+                <TouchableOpacity  style={styles.productCard} onPress={() => navigation.navigate("Period Underwears")}>
+                    <MenstrualProductCard name={"Period" + "\n" + "Underwears"} image={underwearIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity  style={styles.productCard} onPress={() => navigation.navigate("Menstrual Cups")}>
+                    <MenstrualProductCard name="Menstrual Cups" image={cupIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity  style={styles.productCard} onPress={() => navigation.navigate("Pads")}>
+                    <MenstrualProductCard name="Pads" image={padIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity  style={styles.productCard} onPress={() => navigation.navigate("Cloth Pads")}>
+                    <MenstrualProductCard name="Cloth Pads" image={clothPadIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity  style={styles.productCard} onPress={() => navigation.navigate("Tampons")}>
+                    <MenstrualProductCard name="Tampons" image={tamponsIcon} />
+                </TouchableOpacity>
                 </View>
                 
                 <LearnMoreCard/>
@@ -99,7 +107,7 @@ const styles = StyleSheet.create({
         paddingTop: 80, 
     },
     containerRow: {
-        flex:1,
+        flex: 1,
         flexDirection: 'row',
         flexWrap: "wrap",
         
