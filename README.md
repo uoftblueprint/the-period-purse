@@ -35,6 +35,9 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 5. Launch the react-native debugger (It's a separate application)
 6. Call ```showAsyncStorageContentInDev()``` in the react-native debugger console to see async storage
 
+### Running Debugger Notes
+* You need to close the debugger in your browser so you can use RND (React Native Debugger)
+* After switching debuggers and/or turning on/off debug mode, you may need to reload the app (try via metro & via the app) for the debugger to work.
 
 ## Setup Local Environment (Windows/Linux)
 
