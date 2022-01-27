@@ -6,7 +6,16 @@ The Period Purse strives to achieve menstrual equity by providing people who men
 
 The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of relevant information related to branching, PRs, etc that you should review!
 
-## Setup Local Environment (Mac)
+# Table of Contents 
+1. [ Setup Local Environment (Mac) ](#setup-mac)
+2. [ Installing React Native Debugger ](#debugger)
+3. [ SVG Color Change ](#svg-color-change)
+4. [ Setup Local Envrionment (Windows + Linux) ](#setup-windows-linux)
+5. [ Common Setup Errors ](#errors)
+6. [ VM Specific Errors ](#vm-errors)
+
+<a name="setup-mac"></a>
+# Setup Local Environment (Mac)
 
 0. Prerequisites:
 
@@ -26,7 +35,8 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 
 <img width="378" alt="Screen Shot 2021-10-27 at 11 46 38 AM" src="https://user-images.githubusercontent.com/35851484/139100763-95605bfc-a224-401b-9f17-b3a5e0a3f3fb.png">
 
-## Installing Debugger
+<a name="debugger"></a>
+# Installing Debugger
 1. Install Homebrew 
 2. run ```brew install --cask react-native-debugger```
 3. Run project using ```npm run ios```
@@ -35,11 +45,12 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 5. Launch the react-native debugger (It's a separate application)
 6. Call ```showAsyncStorageContentInDev()``` in the react-native debugger console to see async storage
 
-### Running Debugger Notes
+## Running Debugger Notes
 * You need to close the debugger in your browser so you can use RND (React Native Debugger)
 * After switching debuggers and/or turning on/off debug mode, you may need to reload the app (try via metro & via the app) for the debugger to work.
 
-## SVG Color Change
+<a name="svg-color-change"></a>
+# SVG Color Change
 The `.svgrrc` file, found at the root of the project. The version of it at the time of writing is 
 ```
 {
@@ -77,15 +88,18 @@ You can then use your image as a component:
 
 and the `fill` property in the svg file is functionally replaced by `#ff0000` when rendered. You can also set other properties like `width`, `height`, etc. You can also style it, as normal.
 
-## Setup Local Environment (Windows/Linux)
 
-### Windows
+<a name="setup-windows-linux"></a>
+# Setup Local Environment (Windows/Linux)
+
+## Windows
 Coming soon
 
-### Linux
+## Linux
 Follow this [tutorial](https://www.youtube.com/watch?v=c30RLycIpVY)
 
-# Known Errors:
+<a name="errors"></a>
+# Common Setup Errors
 1. When trying to run project using ```npm run ios```, I see "Error: EMFILE: too many open files"
  - Ensure you have ```brew``` installed and run ```brew install watchmen```
  - Source: https://stackoverflow.com/questions/58675179/error-emfile-too-many-open-files-react-native-cli
@@ -124,7 +138,7 @@ Follow this [tutorial](https://www.youtube.com/watch?v=c30RLycIpVY)
 
 <br>
 
-1. When I try to open the app on the simulator I see: “Invariant Violation: “main” has not been registered”
+5. When I try to open the app on the simulator I see: “Invariant Violation: “main” has not been registered”
 - Delete "react-native-gesture-handler" from package.json
 - Go into node_modules folder and delete the react-native-gesture-handler folder manually
 - Run command ```npm install react-native gesture-handler``` and then ```expo install react-native-safe-area-context```
@@ -151,7 +165,8 @@ AppRegistry.registerComponent('main', () => App);
 - If that doesn't work, run ```npx react-native run-ios --simulator="iPhone 8"```, or any other model besides the one you just tried to simulate
 - Source: https://stackoverflow.com/questions/69312343/build-error-domain-com-apple-coresimulator-simerror-code-405
 
-## VM Specific Error
+<a name="vm-errors"></a>
+# VM Specific Errors
 1. You run ```npm run ios```, and the simulator doesn't launch. See error below
 
 ![image](https://user-images.githubusercontent.com/22108651/140632364-a3bdaf36-33d2-4d5c-9dce-4d2fd1ec1656.png)
