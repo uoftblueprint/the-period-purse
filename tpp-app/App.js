@@ -6,15 +6,22 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
-import VectorImage from 'react-native-vector-image';
+import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood_drop.svg';
+import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar_icon.svg';
+import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
+import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
+
 import Welcome from './src/onboarding/Welcome'
+
+import InfoNavigator from './src/info/InfoNavigator'
+
 
 const Tab = createBottomTabNavigator();
 
 const CustomTabBarButton = ({ onPress }) => {
   const calendarShowing = useIsFocused();
 
-  let icon = calendarShowing ? <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/blood_drop.svg')}/> : <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/calendar_icon.svg')} />;
+  let icon = calendarShowing ? <BloodDrop/> : <CalendarIcon/>
   let bgColor = calendarShowing ? '#D32729' : '#5A9F93';
   const navigation = useNavigation();
 
@@ -63,13 +70,13 @@ const CustomTabBarButton = ({ onPress }) => {
 
 const InfoIconStyled = ({tintColor}) => (
     <View style={{top: 3}}>
-        <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/info_icon.svg')} />
+        <InfoIcon/>
     </View>
 );
 
 const SettingsIconStyled = ({tintColor}) => (
   <View style={{top: 3}}>
-      <VectorImage source={require('./ios/tppapp/Images.xcassets/icons/settings_icon.svg')} />
+      <SettingsIcon/>
   </View>
 );
 
@@ -113,7 +120,7 @@ export function MainPage() {
 export default function App() {
   return (
     // <Welcome></Welcome>
-    <MainPage></MainPage>
+     <MainPage></MainPage>
   );
 }
 
