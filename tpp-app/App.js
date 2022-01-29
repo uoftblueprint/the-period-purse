@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
-import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useIsFocused, useNavigation, useNavigationContainerRef } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
@@ -89,16 +91,50 @@ export function MyTabs() {
   );
 }
 
-export function MainPage() {
+
+export default function MainPage() {
+  const navigationRef = useNavigationContainerRef();
+
+  // Requests for notification permissions and also creates a local notification listener
+  // Does not handle remote notifications from a server.
+  useEffect(() => {
+
+    PushNotificationIOS.addEventListener('localNotification', ((notification) => {
+      const isClicked = notification.getData().userInteraction === 1;
+    
+      // Write code to do something special if it is clicked
+      if (isClicked) {
+        PushNotificationIOS.setApplicationIconBadgeNumber(0)
+        navigationRef.navigate('MiddleButton', {screen: 'Calendar'})
+      }
+    }));
+
+    PushNotificationIOS.requestPermissions({
+      alert: true,
+      badge: true,
+      sound: true,
+      critical: true,
+    }).then(
+      (data) => {
+        console.log('PushNotificationsIOS.requestPermissions', data);
+      },
+      (data) => {
+        console.log('PushNotificationsIOS.requestPermissions failed', data);
+      }
+    )
+    return () => {
+      PushNotificationIOS.removeEventListener('localNotification')
+    }
+  }, [])
+
   return (
-      <NavigationContainer independent={true}>
+      <NavigationContainer ref={navigationRef} independent={true}>
         <Tab.Navigator initialRouteName='MiddleButton'>
           <Tab.Screen name="Info" component={Info} options={{
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
                 <InfoIconStyled {...tintColor} />
                 )
-
           }}/>
           <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
             headerShown: false,
