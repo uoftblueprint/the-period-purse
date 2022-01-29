@@ -2,8 +2,6 @@ import React, {useState} from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
@@ -17,7 +15,22 @@ const VIEWS = {
     Sleep: "Sleep"
 }
 const sideComponentWidth = 120
-const Calendar = () => {
+
+// The component that is used by each day in the calendar
+const DayComponent = ({ date, state, marking, navigation }) => {
+
+    return(
+        <TouchableOpacity onPress={() => navigation.navigate("LogSymptoms", {"date": date})}>
+            <View style={styles.dayContainer}>
+                <Text>
+                    {date.day}
+                </Text>
+            </View>
+        </TouchableOpacity>
+    )
+}
+
+const Calendar = ({navigation}) => {
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -31,6 +44,7 @@ const Calendar = () => {
 
         // Enable or disable vertical scroll indicator. Default = false
         showScrollIndicator={true}
+        dayComponent={({date, state, marking}) => <DayComponent date={date} state={state} marking={marking} navigation={navigation}/>}
 
         theme={{
             calendarBackground: '#ffffff',
@@ -47,7 +61,23 @@ const Calendar = () => {
             textDayHeaderFontWeight: '800',
             textDayFontSize: 10,
             textMonthFontSize: 14,
-            textDayHeaderFontSize: 10
+            textDayHeaderFontSize: 10,
+            'stylesheet.calendar.main': {
+                dayContainer: {
+                    flex:1,
+                    margin: 0,
+                },
+                emptyDayContainer: {
+                    flex:1,
+                    margin: 0,
+                },
+                week: {
+                    marginTop: 0,
+                    marginBottom: 0,
+                    flexDirection: 'row',
+                    justifyContent: 'space-around'
+                },
+            }
         }}
         />
     )
@@ -70,13 +100,13 @@ export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                    <BackButton
-                        onPress={() => {
-                            navigation.navigate('Year')
-                        }}
-                        title='Year'
-                        width={sideComponentWidth}
-                    />
+                {/*<BackButton
+                    onPress={() => {
+                        navigation.navigate('Year')
+                    }}
+                    title='Year'
+                    width={sideComponentWidth}
+                />*/}
                 <Button icon={renderedArrow}
                     iconRight={true}
                     title={selectedView}
@@ -89,7 +119,7 @@ export default function CalendarScreen ({ navigation }) {
                 </View>
             </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
-            <Calendar/>
+            <Calendar navigation={navigation}/>
         </View>
     )
 }
@@ -119,5 +149,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         lineHeight:20,
 
+    },
+    dayContainer:{
+        borderColor: '#D1D3D4',
+        borderWidth: 1,
+        borderRadius: 8,
+        width: 50,
+        height: 50,
+        paddingLeft: 5,
+        paddingTop:3,
+        margin: 2,
     }
 })
