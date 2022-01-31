@@ -6,13 +6,20 @@ The Period Purse strives to achieve menstrual equity by providing people who men
 
 The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of relevant information related to branching, PRs, etc that you should review!
 
-# Table of Contents 
-1. [ Setup Local Environment (Mac) ](#setup-mac)
-2. [ Installing React Native Debugger ](#debugger)
-3. [ SVG Color Change ](#svg-color-change)
-4. [ Setup Local Envrionment (Windows + Linux) ](#setup-windows-linux)
-5. [ Common Setup Errors ](#errors)
-6. [ VM Specific Errors ](#vm-errors)
+# Table of Contents
+- [The Period Purse](#the-period-purse)
+  - [For Developers](#for-developers)
+- [Table of Contents](#table-of-contents)
+- [Setup Local Environment (Mac)](#setup-local-environment-mac)
+- [Installing Debugger](#installing-debugger)
+  - [Running Debugger Notes](#running-debugger-notes)
+- [SVG Color Change](#svg-color-change)
+    - [Usage Example](#usage-example)
+- [Setup Local Environment (Windows/Linux)](#setup-local-environment-windowslinux)
+  - [Windows](#windows)
+  - [Linux](#linux)
+- [Common Setup Errors](#common-setup-errors)
+- [VM Specific Errors](#vm-specific-errors)
 
 <a name="setup-mac"></a>
 # Setup Local Environment (Mac)
@@ -37,7 +44,7 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 
 <a name="debugger"></a>
 # Installing Debugger
-1. Install Homebrew 
+1. Install Homebrew
 2. run ```brew install --cask react-native-debugger```
 3. Run project using ```npm run ios```
 4. After simulator launches, go to "Device" > "Shake" to launch debugger
@@ -51,7 +58,7 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 
 <a name="svg-color-change"></a>
 # SVG Color Change
-The `.svgrrc` file, found at the root of the project. The version of it at the time of writing is 
+The `.svgrrc` file, found at the root of the project. The version of it at the time of writing is
 ```
 {
   "replaceAttrValues": {
@@ -61,7 +68,7 @@ The `.svgrrc` file, found at the root of the project. The version of it at the t
 ```
 Essentially, we are telling `svg-react-native-transformer` to replace the color "black" in a .svg file we import with the `fill` property of the React Component that corresponds to the .svg file. As far as I can tell, this only allows you to alter the highest level of `fill` (i.e. the one defined in the `<svg>` tag).
 
-This means you must set `fill` to `"black"` for any .svg file for which you want to change colours programatically. 
+This means you must set `fill` to `"black"` for any .svg file for which you want to change colours programatically.
 
 **NOTE** that if you do this, you must have a `fill` property for your corresponding React Component, or else `fill` defaults to `none` and the svg won't show up.
 
