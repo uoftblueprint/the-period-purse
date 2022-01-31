@@ -81,7 +81,7 @@ export function MainPage() {
           <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
             headerShown: false,
             tabBarButton: (props) => (
-              <TabBarMiddleButton {...props} />
+              <TabBarMiddleButton {...props} style={{ top: -30 }} inOverlay={false} />
             )
           }}/>
           <Tab.Screen name="Settings" component={Settings} options={{

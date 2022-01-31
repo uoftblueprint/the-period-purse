@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import VectorImage from 'react-native-vector-image';
 import { OptionButton } from "../components/LoggingOptionButton";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { TabBarMiddleButton } from '../components/TabBarMiddleButton'
 
 
 export default function SelectLogOptionOverlay({ navigation }) {
@@ -32,6 +33,10 @@ export default function SelectLogOptionOverlay({ navigation }) {
             />
 
           </View>
+          <TabBarMiddleButton
+            style={{ position: 'absolute', bottom: tabBarHeight - 40 }}
+            inOverlay={true}
+          />
         </View>
       </TouchableWithoutFeedback>
   );
