@@ -16,19 +16,6 @@ import Confirmation from './Confirmation';
 import { WideButton } from './components/ButtonComponents';
 import { STACK_SCREENS } from './Confirmation';
 
-export const STACK_SCREENS = {
-  "Get Started" : "Get Started",
-  "Period Length" : "Period Length",
-  "Period Start":  "Period Start",
-  "Symptoms Choices" : "Symptoms Choices",
-  "Backup" : "Backup",
-  "Main Page": "Main Page",
-  "Registration": "Registration",
-  "Password": "Password",
-  "Success": "Success",
-  "Confirmation": "Confirmation"
-};
-
 // Get Start Page Component
 const GetStarted = ({ navigation }) => (
   <ImageBackground source={OnboardingBackground} style={styles.container}>

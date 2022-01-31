@@ -1,13 +1,18 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
 import { TabBarMiddleButton } from './src/home/components/TabBarMiddleButton';
+//import Welcome from './src/onboarding/Welcome';
+import InfoNavigator from './src/info/InfoNavigator';
 
+import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
+import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
 
 const Tab = createBottomTabNavigator();
 

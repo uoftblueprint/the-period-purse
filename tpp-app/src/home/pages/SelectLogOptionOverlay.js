@@ -3,8 +3,8 @@ import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { OptionButton } from "../components/LoggingOptionButton";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { TabBarMiddleButton } from '../components/TabBarMiddleButton'
-import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood_drop.svg';
-import Calendar from './ios/tppapp/Images.xcassets/icons/calendar_icon_multiple_dates.svg';
+import BloodDrop from '../../../ios/tppapp/Images.xcassets/icons/blood_drop';
+import Calendar from '../../../ios/tppapp/Images.xcassets/icons/calendar_icon_multiple_dates';
 
 
 export default function SelectLogOptionOverlay({ navigation }) {
@@ -35,7 +35,11 @@ export default function SelectLogOptionOverlay({ navigation }) {
 
           </View>
           <TabBarMiddleButton
-            style={{ position: 'absolute', bottom: tabBarHeight - 40 }}
+            style={{
+              position: 'absolute',
+              bottom: tabBarHeight - 40,
+              transform: [{ rotate: "45deg" }]
+            }}
             inOverlay={true}
           />
         </View>
@@ -48,7 +52,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+    backgroundColor: 'rgba(255, 255, 255, 0.9)'
   },
   buttonContainer: {
     position: 'absolute',

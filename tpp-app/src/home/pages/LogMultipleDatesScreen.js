@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import VectorImage from 'react-native-vector-image';
-import { Calendar } from './CalendarScreen';
+import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 
 
 export default function LogMultipleDatesScreen ({ navigation }) {
@@ -10,12 +9,12 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             <View style={styles.navbarContainer}>
 
                 <TouchableOpacity onPress={() => navigation.navigate('Calendar')} style={styles.close}>
-                  <VectorImage source={require('../../../ios/tppapp/Images.xcassets/icons/close_icon.svg')}/>
+                  <CloseIcon fill={'#181818'}/>
                 </TouchableOpacity>
                 <Text style={styles.navbarTitle}>Tap date to log period</Text>
 
             </View>
-            <Calendar />
+            <Text>Calendar goes here. Might have pass in navigator to access it.</Text>
         </View>
     )
 }
