@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import VectorImage from 'react-native-vector-image';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-//import { BlurView } from 'expo-blur';
 
 import InfoNavigator from './src/info/InfoNavigator';
 import Settings from './src/settings/Settings';
@@ -44,7 +43,7 @@ export function MainPage() {
           <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
             headerShown: false,
             tabBarButton: (props) => (
-              <TabBarMiddleButton {...props} />
+              <TabBarMiddleButton {...props} style={{ top: -30 }} inOverlay={false} />
             )
           }}/>
           <Tab.Screen name="Settings" component={Settings} options={{
