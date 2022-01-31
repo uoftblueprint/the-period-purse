@@ -1,9 +1,10 @@
 import React from "react";
 import { View, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import VectorImage from 'react-native-vector-image';
 import { OptionButton } from "../components/LoggingOptionButton";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { TabBarMiddleButton } from '../components/TabBarMiddleButton'
+import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood_drop.svg';
+import Calendar from './ios/tppapp/Images.xcassets/icons/calendar_icon_multiple_dates.svg';
 
 
 export default function SelectLogOptionOverlay({ navigation }) {
@@ -16,7 +17,7 @@ export default function SelectLogOptionOverlay({ navigation }) {
 
             <OptionButton
               title={"Log daily symptoms"}
-              icon={<VectorImage source={require('../../../ios/tppapp/Images.xcassets/icons/blood_drop.svg')}/>}
+              icon={<BloodDrop/>}
               onPress={() => {
                 navigation.goBack(); // dismiss this overlay first
                 navigation.navigate('LogSymptoms');
@@ -25,7 +26,7 @@ export default function SelectLogOptionOverlay({ navigation }) {
 
             <OptionButton
               title={"Log multiple period dates"}
-              icon={<VectorImage source={require('../../../ios/tppapp/Images.xcassets/icons/calendar_icon_multiple_dates.svg')}/>}
+              icon={<Calendar />}
               onPress={() => {
                 navigation.goBack();
                 navigation.navigate('LogMultipleDates');

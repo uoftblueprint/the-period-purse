@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import VectorImage from 'react-native-vector-image';
+import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood_drop.svg';
+import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar_icon.svg';
 
 
 /** Recursive function to get the current active screen state through nested navigators */
@@ -20,9 +21,7 @@ export const TabBarMiddleButton = ({ style, inOverlay }) => {
   const calendarShowing = useIsFocused();
 
   // set icon and background color based on if the calendar screen is focused
-  let icon = calendarShowing
-    ? <VectorImage source={require('../../../ios/tppapp/Images.xcassets/icons/plus_sign.svg')}/>
-    : <VectorImage source={require('../../../ios/tppapp/Images.xcassets/icons/calendar_icon.svg')} />;
+  let icon = calendarShowing ? <BloodDrop /> : <CalendarIcon />;
   let bgColor = calendarShowing ? '#D32729' : '#5A9F93';
 
   // check if the SelectLogOption overlay is visible
