@@ -92,7 +92,7 @@ export function MyTabs() {
 }
 
 
-export default function MainPage() {
+export function MainPage() {
   const navigationRef = useNavigationContainerRef();
 
   // Requests for notification permissions and also creates a local notification listener
@@ -101,7 +101,7 @@ export default function MainPage() {
 
     PushNotificationIOS.addEventListener('localNotification', ((notification) => {
       const isClicked = notification.getData().userInteraction === 1;
-    
+
       // Write code to do something special if it is clicked
       if (isClicked) {
         PushNotificationIOS.setApplicationIconBadgeNumber(0)
