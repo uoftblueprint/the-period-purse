@@ -12,6 +12,7 @@ import BloodDrop from './ios/tppapp/Images.xcassets/icons/blood_drop.svg';
 import CalendarIcon from './ios/tppapp/Images.xcassets/icons/calendar_icon.svg';
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
+import DummyTest from './src/cycle/DummyTest.js';
 
 import Welcome from './src/onboarding/Welcome'
 
@@ -92,7 +93,7 @@ export function MyTabs() {
 }
 
 
-export default function MainPage() {
+export function MainPage() {
   const navigationRef = useNavigationContainerRef();
 
   // Requests for notification permissions and also creates a local notification listener
@@ -101,7 +102,7 @@ export default function MainPage() {
 
     PushNotificationIOS.addEventListener('localNotification', ((notification) => {
       const isClicked = notification.getData().userInteraction === 1;
-    
+
       // Write code to do something special if it is clicked
       if (isClicked) {
         PushNotificationIOS.setApplicationIconBadgeNumber(0)
@@ -156,7 +157,8 @@ export default function MainPage() {
 export default function App() {
   return (
     // <Welcome></Welcome>
-     <MainPage></MainPage>
+    //  <MainPage></MainPage>
+    <DummyTest></DummyTest>
   );
 }
 
