@@ -39,6 +39,12 @@ export default function DummyTest() {
           CycleService.GetAverageCycleLength();
         }}
         />
+      <Button
+        title = "Post calendar simple"
+        onPress={() => {
+          CycleService.PostDummyCalendarSimple();
+        }}
+        />
 
     </View>
   )
