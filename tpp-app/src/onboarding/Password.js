@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, ImageBackground, TextInput, KeyboardAvoidingView } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
-import { STACK_SCREENS } from './Welcome';
+import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { WideButton } from './components/ButtonComponents';
 import { BackButtonContainer, InputBorderContainer, PageTitleContainer } from './components/ContainerComponents';
@@ -22,8 +22,8 @@ export default function Password ({ navigation }) {
         <TextInput style={styles.input} placeholder="At least 6 characters" autoCapitalize="none" secureTextEntry={true}/>
       </InputBorderContainer>
 
-      <KeyboardAvoidingView 
-        style={{flex: 1}} 
+      <KeyboardAvoidingView
+        style={{flex: 1}}
         enabled behavior={ Platform.OS === 'ios'? 'padding': null}
         keyboardVerticalOffset={30}>
         <View style={{height: "80%"}}></View>
@@ -38,9 +38,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center'
-  }, 
+  },
   input: {
-    fontFamily: "Avenir", 
+    fontFamily: "Avenir",
     fontSize: 14,
     height: 35
   }
