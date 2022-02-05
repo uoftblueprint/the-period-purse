@@ -92,7 +92,7 @@ export function MyTabs() {
 }
 
 
-export default function MainPage() {
+export function MainPage() {
   const navigationRef = useNavigationContainerRef();
 
   // Requests for notification permissions and also creates a local notification listener

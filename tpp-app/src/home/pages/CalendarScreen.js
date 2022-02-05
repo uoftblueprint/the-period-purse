@@ -5,6 +5,7 @@ import { BackButton } from '../components/BackButtonComponent';
 import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const VIEWS = {
     Flow: "Period Flow",
@@ -16,9 +17,25 @@ const VIEWS = {
 }
 const sideComponentWidth = 120
 
+const storeData = async () => {
+    try {
+      const jsonValue = JSON.stringify("coollll")
+      await AsyncStorage.setItem('wooow', jsonValue)
+      console.log('did it')
+    } catch (e) {
+        console.log("big error" + e);
+    }
+
+    try {
+        const res = await AsyncStorage.getItem('wooow')
+        console.log('grabbed ' + res)
+    } catch (e) {
+        console.log("big error" + e);
+    }
+  }
+
 // The component that is used by each day in the calendar
 const DayComponent = ({ date, state, marking, navigation }) => {
-
     return(
         <TouchableOpacity onPress={() => navigation.navigate("LogSymptoms", {"date": date})}>
             <View style={styles.dayContainer}>
@@ -31,6 +48,7 @@ const DayComponent = ({ date, state, marking, navigation }) => {
 }
 
 const Calendar = ({navigation}) => {
+    storeData()
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
