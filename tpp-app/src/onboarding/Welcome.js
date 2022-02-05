@@ -14,19 +14,7 @@ import { MainPage } from '../../App';
 import Success from './Success';
 import Confirmation from './Confirmation';
 import { WideButton } from './components/ButtonComponents';
-
-export const STACK_SCREENS = {
-  "Get Started" : "Get Started",
-  "Period Length" : "Period Length",
-  "Period Start":  "Period Start",
-  "Symptoms Choices" : "Symptoms Choices",
-  "Backup" : "Backup",
-  "Main Page": "Main Page",
-  "Registration": "Registration",
-  "Password": "Password",
-  "Success": "Success",
-  "Confirmation": "Confirmation"
-};
+import { STACK_SCREENS } from './Confirmation';
 
 // Get Start Page Component
 const GetStarted = ({ navigation }) => (

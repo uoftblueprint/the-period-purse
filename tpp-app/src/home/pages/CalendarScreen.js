@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
 import Selector from '../components/Selector';
@@ -47,8 +47,9 @@ const DayComponent = ({ date, state, marking, navigation }) => {
     )
 }
 
-const Calendar = ({navigation}) => {
+export const Calendar = ({navigation}) => {
     storeData()
+
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -147,6 +148,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'stretch',
         justifyContent: 'flex-start',
+        backgroundColor: '#FFFFFF'
     },
     navbarContainer: {
         marginTop: 98,

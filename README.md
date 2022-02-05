@@ -6,13 +6,20 @@ The Period Purse strives to achieve menstrual equity by providing people who men
 
 The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of relevant information related to branching, PRs, etc that you should review!
 
-# Table of Contents 
-1. [ Setup Local Environment (Mac) ](#setup-mac)
-2. [ Installing React Native Debugger ](#debugger)
-3. [ SVG Color Change ](#svg-color-change)
-4. [ Setup Local Envrionment (Windows + Linux) ](#setup-windows-linux)
-5. [ Common Setup Errors ](#errors)
-6. [ VM Specific Errors ](#vm-errors)
+# Table of Contents
+- [The Period Purse](#the-period-purse)
+  - [For Developers](#for-developers)
+- [Table of Contents](#table-of-contents)
+- [Setup Local Environment (Mac)](#setup-local-environment-mac)
+- [Installing Debugger](#installing-debugger)
+  - [Running Debugger Notes](#running-debugger-notes)
+- [SVG Color Change](#svg-color-change)
+    - [Usage Example](#usage-example)
+- [Setup Local Environment (Windows/Linux)](#setup-local-environment-windowslinux)
+  - [Windows](#windows)
+  - [Linux](#linux)
+- [Common Setup Errors](#common-setup-errors)
+- [VM Specific Errors](#vm-specific-errors)
 
 <a name="setup-mac"></a>
 # Setup Local Environment (Mac)
@@ -37,21 +44,23 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 
 <a name="debugger"></a>
 # Installing Debugger
-1. Install Homebrew 
+1. Install Homebrew
 2. run ```brew install --cask react-native-debugger```
 3. Run project using ```npm run ios```
 4. After simulator launches, go to "Device" > "Shake" to launch debugger
 ![image](https://user-images.githubusercontent.com/22108651/150660743-7a188d88-300d-4a12-8cfb-ef2712d0e506.png)
-5. Launch the react-native debugger (It's a separate application)
+5. Launch the react-native debugger (It's a separate application that's now the browser) ![image](https://user-images.githubusercontent.com/63024415/152467946-b8ec8bef-a747-4039-b6f5-92b276ea8003.png)
 6. Call ```showAsyncStorageContentInDev()``` in the react-native debugger console to see async storage
 
 ## Running Debugger Notes
 * You need to close the debugger in your browser so you can use RND (React Native Debugger)
 * After switching debuggers and/or turning on/off debug mode, you may need to reload the app (try via metro & via the app) for the debugger to work.
+* If you're seeing the error message below, try restarting metro. If that doesn't fix it, then try rebuilding. ![image](https://user-images.githubusercontent.com/63024415/152467585-ce12bd5b-2c37-42a4-8363-1c9e78bbedb3.png)
+
 
 <a name="svg-color-change"></a>
 # SVG Color Change
-The `.svgrrc` file, found at the root of the project. The version of it at the time of writing is 
+The `.svgrrc` file, found at the root of the project. The version of it at the time of writing is
 ```
 {
   "replaceAttrValues": {
@@ -61,7 +70,7 @@ The `.svgrrc` file, found at the root of the project. The version of it at the t
 ```
 Essentially, we are telling `svg-react-native-transformer` to replace the color "black" in a .svg file we import with the `fill` property of the React Component that corresponds to the .svg file. As far as I can tell, this only allows you to alter the highest level of `fill` (i.e. the one defined in the `<svg>` tag).
 
-This means you must set `fill` to `"black"` for any .svg file for which you want to change colours programatically. 
+This means you must set `fill` to `"black"` for any .svg file for which you want to change colours programatically.
 
 **NOTE** that if you do this, you must have a `fill` property for your corresponding React Component, or else `fill` defaults to `none` and the svg won't show up.
 

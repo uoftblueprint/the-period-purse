@@ -3,6 +3,7 @@
     "name": "tpp-app",
     "slug": "tpp-app",
     "version": "1.0.0",
+    "orientation": "portrait",
     "assetBundlePatterns": [
       "**/*"
     ]
