@@ -20,7 +20,7 @@ export const LogMultipleDaysService = {
             console.log("the year " + year.toString())
             //check if year month exists
             const data = JSON.parse(await AsyncStorage.getItem(year.toString()));
-            console.log("HEERE " + data[0][0]["Flow"]);
+            // console.log("HEERE " + data[month-1][day-1]["Flow"]);
             if (data == null){
                 data = [];
             }
@@ -28,18 +28,25 @@ export const LogMultipleDaysService = {
             if (data[month-1] == null){
                 data[month-1] = [];
             }
-
+            
+            console.log("hmm",JSON.stringify(data[month-1][day-1]));
             if (data[month-1][day-1] == null){
-                data[month-1] = {"Flow": FLOW_LEVEL.MEDIUM}
+                data[month-1][day-1] = {"Flow": FLOW_LEVEL.MEDIUM}
+
             }else{
+                
                 if(data[month-1][day-1]["Flow"] == null || data[month-1][day-1]["Flow"] == FLOW_LEVEL.NONE){
                     data[month-1][day-1]["Flow"] = FLOW_LEVEL.MEDIUM;
                 }else{
                     data[month-1][day-1]["Flow"] = FLOW_LEVEL.NONE;
                 }
             }
+        
+
+            
 
             console.log(JSON.stringify(data));
+            console.log("updated",JSON.stringify(data[month-1][day-1]));
         })
         
     }
