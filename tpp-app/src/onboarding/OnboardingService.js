@@ -3,15 +3,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // console.log(showAsyncStorageContentInDev())
 
 const OnboardingService = {
-    // All APIs for Onboarding should be here
+    // All APIs for Onboarding below
 
     PostInitialPeriodLength: async function(periodLength) {
         try {
-            periodLength = JSON.stringify(periodLength)
-            const v = await AsyncStorage.setItem('initialPeriodLength', periodLength);
-            AsyncStorage.setItem('averagePeriodLength', periodLength);
-            console.log('Setting initialPeriodLength and averagePeriodLength as ' + periodLength);
-            return v;
+            if(periodLength != null) {
+                periodLength = JSON.stringify(periodLength)
+                const v = await AsyncStorage.setItem('initialPeriodLength', periodLength);
+                AsyncStorage.setItem('averagePeriodLength', periodLength);
+                console.log('Setting initialPeriodLength and averagePeriodLength as ' + periodLength);
+                return v;
+            }
+            else {
+
+            }
         } catch (e) {
             console.log('There was an error with POSTInitialPeriodLength');
         }
@@ -19,7 +24,7 @@ const OnboardingService = {
     PostInitialPeriodStart: async function(periodStart) {
         try {
             const periodLength = await AsyncStorage.getItem('initialPeriodLength');
-            if(periodLength != null) {
+            if(periodLength != null && periodStart != null) {
                 let year = Array.apply([null], Array(12))
                 let logs = [];
                 for (let i = 0; i < parseInt(periodLength); i++) {
@@ -30,6 +35,9 @@ const OnboardingService = {
                 console.log("Done");
                 return v;
             }
+            else {
+
+            }
         }
         catch (e) {
 
@@ -38,16 +46,20 @@ const OnboardingService = {
     POSTSymptomsToTrack: async function(flow, mood, sleep, cramps, exercise) {
         try {
             const symptomsPreferences = [flow, mood, sleep, cramps, exercise];
-            const symptoms = ['trackFlow', 'trackMood', 'trackSleep', 'trackCramps', 'trackExercise'];
-            for (let i = 0; i < symptoms.length; i++) {
-                const v = await AsyncStorage.setItem(symptoms[i], JSON.stringify(symptomsPreferences[i]));
-                console.log(v);
+            if(symptomsPreferences.some((bool) => bool)) {
+                const symptoms = ['trackFlow', 'trackMood', 'trackSleep', 'trackCramps', 'trackExercise'];
+                for (let i = 0; i < symptoms.length; i++) {
+                    const v = await AsyncStorage.setItem(symptoms[i], JSON.stringify(symptomsPreferences[i]));
+                    console.log(v);
+                }
+            }
+            else {
+
             }
         } catch (e) {
 
         }
     }
-
 };
 
 export default OnboardingService;
