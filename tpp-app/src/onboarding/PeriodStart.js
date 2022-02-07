@@ -6,6 +6,16 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
 import { TitleText, BodyText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
+import OnboardingService from './OnboardingService';
+
+async function savePeriodStart(periodStart) {
+  try {
+    await OnboardingService.PostInitialPeriodStart(periodStart); 
+  }
+  catch {
+
+  }
+}
 
 export default function PeriodStart ({ navigation }) {
   return (
@@ -22,7 +32,11 @@ export default function PeriodStart ({ navigation }) {
 
       <TwoButtonContainer>
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
-        <NextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
+        <NextButton title="Next" onPress={() => 
+          {
+            savePeriodStart(5)
+            navigation.navigate(STACK_SCREENS["Symptoms Choices"]);
+          }}/>
       </TwoButtonContainer>
     </ImageBackground>
   );

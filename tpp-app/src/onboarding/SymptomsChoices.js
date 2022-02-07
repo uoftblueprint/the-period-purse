@@ -6,6 +6,16 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
+import OnboardingService from './OnboardingService';
+
+async function saveSymptomPreferences(flow, mood, sleep, cramps, exercise) {
+  try {
+    await OnboardingService.POSTSymptomsToTrack(flow, mood, sleep, cramps, exercise); 
+  }
+  catch {
+
+  }
+}
 
 export default function SymptomsChoices ({ navigation }) {
   return (
@@ -22,7 +32,11 @@ export default function SymptomsChoices ({ navigation }) {
 
       <TwoButtonContainer>
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
-        <NextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
+        <NextButton title="Next" onPress={() => 
+          {
+            saveSymptomPreferences(true, true, false, false, true);
+            navigation.navigate(STACK_SCREENS["Backup"]);
+          }}/>
       </TwoButtonContainer>
     </ImageBackground>
   );
