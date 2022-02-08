@@ -45,6 +45,27 @@ export default function DummyTest() {
           CycleService.PostDummyCalendarSimple();
         }}
         />
+      <Button
+        title = "Clear Calendar"
+        onPress={() => {
+          CycleService.ClearCalendar();
+        }}/>
+      <Button
+        title = "get symptoms"
+        onPress={() => {
+          CycleService.getSymptomsForDate(8, 1, 2022).then(data => console.log(data));
+        }}/>
+      <Button
+        title = "get period day"
+        onPress={() => {
+          CycleService.GetPeriodDay().then(data => console.log(data));
+        }}
+        />
+      <Button
+        title="Get most recent period start day"
+        onPress={() => {
+          CycleService.GetMostRecentPeriodStartDay().then(data => console.log(data));
+        }}/>
 
     </View>
   )
