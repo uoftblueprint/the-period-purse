@@ -34,7 +34,7 @@ export default function PeriodStart ({ navigation }) {
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
         <NextButton title="Next" onPress={() => 
           {
-            savePeriodStart(5)
+            savePeriodStart(new Date(2022, 0, 1));
             navigation.navigate(STACK_SCREENS["Symptoms Choices"]);
           }}/>
       </TwoButtonContainer>
