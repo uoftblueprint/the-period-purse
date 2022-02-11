@@ -12,8 +12,8 @@ async function savePeriodStart(periodStart) {
   try {
     await OnboardingService.PostInitialPeriodStart(periodStart); 
   }
-  catch {
-
+  catch (e) {
+    console.log(e);
   }
 }
 
@@ -34,7 +34,7 @@ export default function PeriodStart ({ navigation }) {
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
         <NextButton title="Next" onPress={() => 
           {
-            savePeriodStart(new Date(2022, 0, 1));
+            savePeriodStart(new Date(2021, 11, 30));
             navigation.navigate(STACK_SCREENS["Symptoms Choices"]);
           }}/>
       </TwoButtonContainer>

@@ -10,10 +10,10 @@ import OnboardingService from './OnboardingService';
 
 async function saveSymptomPreferences(flow, mood, sleep, cramps, exercise) {
   try {
-    await OnboardingService.POSTSymptomsToTrack(flow, mood, sleep, cramps, exercise); 
+    await OnboardingService.PostSymptomsToTrack(flow, mood, sleep, cramps, exercise); 
   }
-  catch {
-
+  catch (e) {
+    console.log(e);
   }
 }
 

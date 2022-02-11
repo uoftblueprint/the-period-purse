@@ -12,8 +12,8 @@ async function savePeriodLength(periodLength) {
   try {
     await OnboardingService.PostInitialPeriodLength(periodLength); 
   }
-  catch {
-
+  catch (e) {
+    console.log(e);
   }
 }
 
