@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, ImageBackground, TextInput } from 'react-native';
-import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png'
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
@@ -52,9 +52,10 @@ const styles = StyleSheet.create({
   },
   input: {
     fontFamily: "Avenir",
-    fontSize: 14,
-    height: 35,
+    fontSize: 17,
+    height: 22,
     alignSelf: 'center',
-    marginTop: '7%'
+    marginTop: '10%',
+    color: "#6D6E71"
   }
 });

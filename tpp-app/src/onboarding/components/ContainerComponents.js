@@ -39,6 +39,7 @@ export const InputBorderContainer = styled.View`
   marginTop: 200px
 `;
 
+// Container for the input boxes on onboarding pages
 export const InputContainer = styled.View`
   alignSelf: center;
   width: 50%;

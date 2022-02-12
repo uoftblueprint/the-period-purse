@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { lessThan } from 'react-native-reanimated';
 
 const OnboardingService = {
     // All APIs for Onboarding below
@@ -24,18 +25,16 @@ const OnboardingService = {
             if(periodLength != null && periodStart != null) {
                 let daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 const periodStartTime = periodStart.getTime();
-                let [years, months, days] = [[], [], []];
+                let yearsSet = new Set(); 
+                let dates = [];
 
                 for(let i = 0; i < periodLength; i++) {
-                    const currentTime = periodStartTime + (1000 * 60 * 60 * 24 * i);
-                    const currentDate = new Date(currentTime);
-                    years.push(currentDate.getFullYear());
-                    months.push(currentDate.getMonth());
-                    days.push(currentDate.getDate()); 
+                    const currentDate = new Date(periodStartTime + (1000 * 60 * 60 * 24 * i));
+                    yearsSet.add(currentDate.getFullYear());
+                    dates.push(currentDate);
                 }
 
-                const yearDicts = {};
-                const yearsSet = new Set(years); 
+                let yearDicts = {};
                 yearsSet.forEach(year => {
                     // Initializes a list of 12 nulls for 12 months
                     yearDicts[year] = Array.apply(null, Array(12));
@@ -51,8 +50,9 @@ const OnboardingService = {
                 });
 
                 // Initialize the correct daily logs 
-                for (let i = 0; i < years.length; i++) 
-                    yearDicts[years[i]][months[i]][days[i] - 1] = {"Flow": "MEDIUM"};
+                dates.forEach(date => {
+                    yearDicts[date.getFullYear()][date.getMonth()][date.getDate() - 1] = {"Flow": "MEDIUM"};
+                });
 
                 let allRes = [];
                 yearsSet.forEach(async (year) => {

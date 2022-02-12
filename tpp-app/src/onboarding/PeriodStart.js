@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Confirmation';
@@ -9,6 +9,7 @@ import { TwoButtonContainer, BackButtonContainer } from './components/ContainerC
 import OnboardingService from './OnboardingService';
 
 export default function PeriodStart ({ navigation }) {
+  const [periodStart, setPeriodStart] = useState(new Date())
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
