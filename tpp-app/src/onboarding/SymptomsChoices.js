@@ -8,15 +8,6 @@ import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
 import OnboardingService from './OnboardingService';
 
-async function saveSymptomPreferences(flow, mood, sleep, cramps, exercise) {
-  try {
-    await OnboardingService.PostSymptomsToTrack(flow, mood, sleep, cramps, exercise); 
-  }
-  catch (e) {
-    console.log(e);
-  }
-}
-
 export default function SymptomsChoices ({ navigation }) {
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
@@ -34,7 +25,7 @@ export default function SymptomsChoices ({ navigation }) {
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
         <NextButton title="Next" onPress={() => 
           {
-            saveSymptomPreferences(true, true, false, false, true);
+            OnboardingService.PostSymptomsToTrack(true, true, false, false, true);
             navigation.navigate(STACK_SCREENS["Backup"]);
           }}/>
       </TwoButtonContainer>

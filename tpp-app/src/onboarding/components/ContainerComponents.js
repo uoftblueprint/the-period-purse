@@ -39,6 +39,15 @@ export const InputBorderContainer = styled.View`
   marginTop: 200px
 `;
 
+export const InputContainer = styled.View`
+  alignSelf: center;
+  width: 50%;
+  height: 7%;
+  marginTop: 5%;
+  borderRadius: 10px;
+  backgroundColor: #FFFFFF;
+`;
+
 // Container for the title of the page at the top
 export const PageTitleContainer = styled.View`
   width: 85%;

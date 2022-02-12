@@ -8,15 +8,6 @@ import { TitleText, BodyText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
 import OnboardingService from './OnboardingService';
 
-async function savePeriodStart(periodStart) {
-  try {
-    await OnboardingService.PostInitialPeriodStart(periodStart); 
-  }
-  catch (e) {
-    console.log(e);
-  }
-}
-
 export default function PeriodStart ({ navigation }) {
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
@@ -34,7 +25,7 @@ export default function PeriodStart ({ navigation }) {
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
         <NextButton title="Next" onPress={() => 
           {
-            savePeriodStart(new Date(2021, 11, 30));
+            OnboardingService.PostInitialPeriodStart(new Date(2021, 11, 30));
             navigation.navigate(STACK_SCREENS["Symptoms Choices"]);
           }}/>
       </TwoButtonContainer>

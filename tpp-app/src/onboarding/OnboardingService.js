@@ -1,7 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// console.log(showAsyncStorageContentInDev())
-
 const OnboardingService = {
     // All APIs for Onboarding below
 
