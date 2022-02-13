@@ -12,6 +12,11 @@ const FLOW_LEVEL = {
 }
 
 const CycleService = {
+  /**
+   *  Store how far the user is into their period as a percentage
+   *  @param {number} percent Float in range [0,1] of how far along period is
+   *  @return {Promise} Resolves when the set operation is completed
+   */
   PostCycleDonutPercent: async function(percent){
     try {
       var today = new Date();
@@ -21,11 +26,12 @@ const CycleService = {
       let datePercent = {
       }
       datePercent[date] = percent;
-      return await AsyncStorage.setItem('CycleDonutPercentage', JSON.stringify(datePercent));
+      return await AsyncStorage.setItem(Keys.CycleDonutPercent, JSON.stringify(datePercent));
     } catch (e) {
       console.log(e);
     }
   },
+
   getSymptomsForDate: async function(day, month, year){
     try {
       var calendar = await AsyncStorage.getItem(year.toString());
@@ -40,6 +46,10 @@ const CycleService = {
 
 
   // SIMPLE GETS
+  /**
+   * Get the user's average period length
+   * @return {Promise} Resolves into either an integer for number of days or NULL if info not present
+   */
   GetAveragePeriodLength: async function(){
     try {
       const res = await AsyncStorage.getItem(Keys['Average Period Length']);
@@ -53,6 +63,10 @@ const CycleService = {
     }
 
   },
+  /**
+   * Get the user's average cycle length
+   * @return {Promise} Resolves into either an integer for number of days or NULL if info is not present
+   */
   GetAverageCycleLength: async function(){
     try {
       //TODO: what returns when key is invalid
@@ -84,6 +98,7 @@ const CycleService = {
     }
 
   },
+  //TODO delete this
   ClearCalendar: async function() {
     try{
       return await AsyncStorage.removeItem("2022")
@@ -92,6 +107,7 @@ const CycleService = {
     }
   },
 
+  //TODO: delete this
   PostDummyCalendarSimple: async function() {
    let february = Array(28).fill(null);
    const symptoms = {
@@ -124,11 +140,8 @@ const CycleService = {
 
   },
 
-  PostDummyCalendarFlowIntermittent: async function() {
-   // flow intermittent. basically checking pattern matching
 
-  },
-
+  //TODO: delete this
   PostDummyCalendarOverMonth: async function(){
     // period overlaps over a month, so like oct 30 - Nov 3rd
 
@@ -140,7 +153,8 @@ const CycleService = {
 
   //COMPLEX GETS
   /**
-   * Return 0 if not in flow,
+   * Get the number of days the user has been on their period
+   * @return {Promise} Resolves into 0 if user not on period, and an integer of the days they have been on their period otherwise
    */
   GetPeriodDay: async function (){
     // TODO: how to handle when you go from 2022 -> 2021? Answer: Handled by date package lfg
@@ -172,6 +186,10 @@ const CycleService = {
 
   },
 
+  /**
+   * Get most recent period start date
+   * @return {Promise} A promise that resolves into a Date object that is when the most recent period started.
+   */
   GetMostRecentPeriodStartDay: async function () {
     var date = new Date()
     var tomorrow = new Date(date.getTime());
@@ -198,6 +216,23 @@ const CycleService = {
     }
     return tomorrow;
 
+  },
+  /**
+   * Get how far the user is into their period as a percentage
+   * @return {Promise}}
+   */
+  GetCycleDonutPercent: async function() {
+    //TODO: Is this the correct definition of
+    try{
+      let today = new Date();
+      let percent = await AsyncStorage.getItem(Keys.CycleDonutPercent)
+      if( percent == null || percent[]){
+
+      }
+
+    } catch(e){
+
+    }
   }
 }
 
