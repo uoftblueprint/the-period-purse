@@ -11,6 +11,18 @@ const FLOW_LEVEL = {
   SPOTTING: "SPOTTING"
 }
 
+class Symptoms {
+  constructor(flow = null, mood = null, sleep = null, cramps = null, exercise = null, notes = null) {
+    this.flow = flow;
+    this.mood = mood;
+    this.sleep = sleep;
+    this.cramps = cramps;
+    this.exercise = exercise;
+    this.notes = notes;
+  }
+}
+
+
 const CycleService = {
   /**
    *  Store how far the user is into their period as a percentage
@@ -36,8 +48,16 @@ const CycleService = {
     try {
       var calendar = await AsyncStorage.getItem(year.toString());
       calendar = calendar != null ? JSON.parse(calendar) : null;
-      console.log("Calendar: " +  calendar);
-      return calendar[month][day-1];
+      if (calendar === null){
+        return new Symptoms();
+      }
+      // day from Date object is 1-31 so we decrease by 1
+      let rawSymptoms =  calendar[month][day-1];
+      if (rawSymptoms === null){
+        return new Symptoms();
+      }
+      let symptoms = new Symptoms(rawSymptoms.Flow, rawSymptoms.mood, rawSymptoms.sleep, rawSymptoms.cramps, rawSymptoms.exercise, rawSymptoms.notes);
+      return symptoms;
     }
     catch(e) {
       console.log(e);
@@ -126,9 +146,21 @@ const CycleService = {
     'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
     'Notes': 'This is the fourth day'
   }
+  const symptomsFourteenth = {
+    "Flow":  "LIGHT",
+    "Mood": "HAPPY",
+    'Sleep': '7.5',
+    'Cramps': 'MEDIUM',
+    'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
+    'Notes': 'This is the fourthteenth day'
+  }
+
   february[6] = symptoms;
   february[7] = symptomsEight;
-  february[7] = null;
+  february[10] = symptoms;
+  february[12] = symptoms;
+  february[13] = symptomsFourteenth;
+  february[14] = symptoms;
 
   let calendar = [null, february]
   console.log(JSON.stringify(calendar));
@@ -158,30 +190,49 @@ const CycleService = {
    */
   GetPeriodDay: async function (){
     // TODO: how to handle when you go from 2022 -> 2021? Answer: Handled by date package lfg
-    //NOTE: do we need to implement a reasonable upper bound? like saying u prob can't have a period for like 2 months straight lol
 
+
+    // CASES:
+    /**
+     * 1. _ _ X X _ and today is that last blank.
+     * 2. _ _ X _ X _ X and today is last period day
+     * 3. _ _ X and today is last period day
+     */
+
+    let periodDays = 0;
     var date = new Date()
-    console.log("day :" + date.getDate() + " month: " + date.getMonth() + " year: " + date.getFullYear());
+    var tomorrow = new Date(date.getTime())
+    tomorrow.setDate(date.getDate() + 1)
+    console.log("day :" + date.getDate() + " month: " + date.getMonth()-1 + " year: " + date.getFullYear());
     let dateSymptoms = await this.getSymptomsForDate(date.getDate(), date.getMonth(), date.getFullYear());
-    if (dateSymptoms === null){
-      //nothing logged, so it's not a period day
-      return 0;
-    }
+    let tomorrowSymptoms = new Symptoms();
 
-    var inFlow = (dateSymptoms.Flow in FLOW_LEVEL && dateSymptoms.Flow !== FLOW_LEVEL.NONE);
+    var noFlowToday = dateSymptoms.flow === FLOW_LEVEL.NONE;
+    var noFlowTomorrow = tomorrowSymptoms.flow === FLOW_LEVEL.NONE;
 
-    var periodDays = 0;
-    if (!inFlow){
-      return 0;
-    }
-    while(dateSymptoms != null && ((dateSymptoms.Flow in FLOW_LEVEL && dateSymptoms.Flow !== FLOW_LEVEL.NONE))){
+
+    while(!(noFlowToday && noFlowTomorrow)){
+
       periodDays+=1;
       var yesterday = new Date(date.getTime());
       yesterday.setDate(date.getDate()-1);
+      tomorrow = date;
       date = yesterday;
       console.log("checking " + date)
+
+      tomorrowSymptoms = dateSymptoms;
       dateSymptoms = await this.getSymptomsForDate(date.getDate(), date.getMonth(), date.getFullYear());
+      console.log("date symptoms: " + JSON.stringify(dateSymptoms));
+      console.log("tomorrow  date symptoms: " + JSON.stringify(tomorrowSymptoms));
+      noFlowToday = dateSymptoms.flow === FLOW_LEVEL.NONE;
+      noFlowTomorrow = tomorrowSymptoms.flow === FLOW_LEVEL.NONE;
+      console.log(" flow today: " + !noFlowToday);
+      console.log("flow tomorrow: " + !noFlowTomorrow);
     }
+
+    //TODO: test this
+
+
     return periodDays;
 
   },
@@ -192,29 +243,10 @@ const CycleService = {
    */
   GetMostRecentPeriodStartDay: async function () {
     var date = new Date()
-    var tomorrow = new Date(date.getTime());
-    tomorrow.setDate(date.getDate() + 1);
-
-    console.log("day :" + date.getDate() + " month: " + date.getMonth() + " year: " + date.getFullYear());
-    let dateSymptoms = await this.getSymptomsForDate(date.getDate(), date.getMonth(), date.getFullYear());
-    let tomorrowSymptoms = null;
-    var noFlowToday = (dateSymptoms == null || dateSymptoms.Flow === FLOW_LEVEL.NONE);
-    var flowTomorrow = tomorrowSymptoms!== null && (tomorrowSymptoms.Flow in FLOW_LEVEL && tomorrowSymptoms.Flow !== FLOW_LEVEL.NONE);
-
-    while(!(noFlowToday && flowTomorrow)){
-
-      var yesterday = new Date(date.getTime());
-      yesterday.setDate(date.getDate()-1);
-      tomorrow = date;
-      date = yesterday;
-      console.log("checking " + date)
-      tomorrowSymptoms = dateSymptoms;
-      dateSymptoms = await this.getSymptomsForDate(date.getDate(), date.getMonth(), date.getFullYear());
-
-      noFlowToday = (dateSymptoms == null || dateSymptoms.Flow === FLOW_LEVEL.NONE);
-      flowTomorrow = tomorrowSymptoms!== null && (tomorrowSymptoms.Flow in FLOW_LEVEL && tomorrowSymptoms.Flow !== FLOW_LEVEL.NONE);
-    }
-    return tomorrow;
+    let periodDays = await this.GetPeriodDay();
+    var mostRecentPeriodDay = new Date(date.getTime());
+    mostRecentPeriodDay.setDate(date.getDate() - periodDays);
+    return mostRecentPeriodDay;
 
   },
   /**
@@ -226,15 +258,13 @@ const CycleService = {
     try{
       let today = new Date();
       let percent = await AsyncStorage.getItem(Keys.CycleDonutPercent)
-      if( percent == null || percent[]){
-
-      }
 
     } catch(e){
 
     }
   }
 }
+
 
 export default CycleService
 

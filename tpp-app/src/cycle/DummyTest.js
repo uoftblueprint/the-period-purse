@@ -53,7 +53,8 @@ export default function DummyTest() {
       <Button
         title = "get symptoms"
         onPress={() => {
-          CycleService.getSymptomsForDate(8, 1, 2022).then(data => console.log(data));
+          // months are zero index
+          CycleService.getSymptomsForDate(14, 1, 2022).then(data => console.log(data));
         }}/>
       <Button
         title = "get period day"
