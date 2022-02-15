@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
 import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Button} from 'react-native-elements';
+import { Button } from 'react-native-elements';
 
 const VIEWS = {
     Flow: "Period Flow",
@@ -30,7 +30,7 @@ const DayComponent = ({ date, state, marking, navigation }) => {
     )
 }
 
-const Calendar = ({navigation}) => {
+export const Calendar = ({navigation}) => {
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'stretch',
         justifyContent: 'flex-start',
+        backgroundColor: '#FFFFFF'
     },
     navbarContainer: {
         marginTop: 98,

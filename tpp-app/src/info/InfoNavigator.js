@@ -11,8 +11,8 @@ const Stack = createNativeStackNavigator();
 
 export default function InfoNavigator() {
     return(
-        <Stack.Navigator intialRouteName="Info" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name={"Info"} component={InfoPage} />
+        <Stack.Navigator intialRouteName="InfoHome" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name={"InfoHome"} component={InfoPage} />
             <Stack.Screen name={"Period Underwears"} component={PeriodUnderwearsPage} />
             <Stack.Screen name={"Pads"} component={PadsPage} />
             <Stack.Screen name={"Cloth Pads"} component={ClothPadsPage} />

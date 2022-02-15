@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
-import { STACK_SCREENS } from './Welcome';
+import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { WideButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
