@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
-import {initializeEmptyYear, getDaysDiff}  from '../utils/helpers';
+import {initializeEmptyYear, getDaysDiff, getDateString}  from '../utils/helpers';
 import {Symptoms} from '../utils/models';
 import Keys from '../utils/keys';
 
@@ -44,7 +44,6 @@ async function getLastPeriodStart(searchFrom){
       flowTwoDaysLater = (twoDaysLaterSymptoms.flow !== null && twoDaysLaterSymptoms.flow !== FLOW_LEVEL.NONE)
     }
 
-    //TODO: test CycleService
 
 
     console.log("last period start is at " + current);
@@ -61,7 +60,7 @@ const CycleService = {
     try {
       var today = new Date();
       // adding 1 b/c month is zero-indexed
-      var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+      var date = getDateString(today);
 
       let datePercent = {
       }
@@ -101,7 +100,6 @@ const CycleService = {
   GetAveragePeriodLength: async function(){
     try {
       const res = await AsyncStorage.getItem(Keys['Average Period Length']);
-      console.log(res);
       //already returns null if key is invalid
       return res;
     } catch (e) {
@@ -117,9 +115,7 @@ const CycleService = {
    */
   GetAverageCycleLength: async function(){
     try {
-      //TODO: what returns when key is invalid
       const res = await AsyncStorage.getItem(Keys['Average Cycle Length']);
-      console.log(res);
       return res;
     } catch (e) {
       console.log("unsuccesful promise");
@@ -135,7 +131,6 @@ const CycleService = {
    * @return {Promise} Resolves into 0 if user not on period, and an integer of the days they have been on their period otherwise
    */
   GetPeriodDay: async function (){
-    // TODO: how to handle when you go from 2022 -> 2021? Answer: Handled by date package lfg
 
 
     // CASES:
@@ -157,7 +152,6 @@ const CycleService = {
       return getDaysDiff(startDate, date);
     }
 
-    //TODO: test this
 
 
     return periodDays;
@@ -165,27 +159,58 @@ const CycleService = {
   },
 
   /**
+   * Produces the progress ring that displays where the user is at in their cycle
+Returns the percent away they are from their next period
+First check if CycleDonutPercentage has a value in AsyncStorage for today's date, if yes just use that percentage, if no, do calculation and use POSTCycleDonutPercent to replace with new date and percentage
+calls on GETPeriodDay
+calls on GETAverageCycleLength()
+calls on GETMostRecentPeriodStartDate()
+if the user is not on their period, call GETMostRecentPeriodStartDate(), GETAverageCycleLength(), and the current date to calculate how far they are from their period starting as a percentage
+   */
+
+  /**
    * Get most recent period start date
    * @return {Promise} A promise that resolves into a Date object that is when the most recent period started.
    */
   GetMostRecentPeriodStartDay: async function () {
-    //NOTE: we can't actually do this based off getPeriodDay. Basically b/c if today is not a period day, behavior is not identical
     var date = new Date()
 
     let mostRecentPeriodDay = getLastPeriodStart(date);
     return mostRecentPeriodDay;
-
   },
   /**
    * Get how far the user is into their period as a percentage
    * @return {Promise}}
    */
   GetCycleDonutPercent: async function() {
-    //TODO: Is this the correct definition of
     try{
       let today = new Date();
+      let today_str = getDateString(today);
       let percent = await AsyncStorage.getItem(Keys.CycleDonutPercent)
-      console.log(percent.keys());
+      console.log("retrieved percent: " + percent)
+      percent = percent != null ? JSON.parse(percent) : null;
+
+
+
+      if (percent != null && today_str in percent){
+        console.log(`accessing pre-computed cycle donut percentage for ${today_str} because we stored it for ${Object.keys(percent)[0]} `);
+        return percent[today_str];
+      }
+      else{
+        let mostRecentPeriodStart = await this.GetMostRecentPeriodStartDay();
+        let avgCycleLength = await this.GetAverageCycleLength();
+        if (mostRecentPeriodStart && avgCycleLength){
+          let daysSincePeriodStart = getDaysDiff(mostRecentPeriodStart, today);
+          console.log("days diff:" + daysSincePeriodStart)
+          let cycleDonutPercent = daysSincePeriodStart / avgCycleLength;
+          this.PostCycleDonutPercent(cycleDonutPercent);
+          return cycleDonutPercent;
+        }
+        else{
+          //TODO: is 0 the best value to default to? idk
+          return 0;
+        }
+      }
 
     } catch(e){
 

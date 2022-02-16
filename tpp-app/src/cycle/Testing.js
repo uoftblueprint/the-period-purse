@@ -32,6 +32,14 @@ const Testing = {
       console.log(e);
     }
   },
+  //TODO delete this
+  ClearCycleDonut: async function() {
+    try{
+      return await AsyncStorage.removeItem(Keys.CycleDonutPercent);
+    } catch(e){
+      console.log(e);
+    }
+  },
 
   //TODO: delete this
   PostDummyCalendarOffPeriodToday: async function() {

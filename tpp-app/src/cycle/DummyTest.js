@@ -5,7 +5,7 @@ import Testing from './Testing';
 
 
 export default function DummyTest() {
-  const [donutPercent, setDonutPercent] = useState(0.0)
+  const [donutPercent, setDonutPercent] = useState(0.3)
   return (
     <View>
       <Text style={{height:50}}>
@@ -58,6 +58,11 @@ export default function DummyTest() {
           Testing.ClearCalendar();
         }}/>
       <Button
+        title = "Clear Cycle Donut"
+        onPress={() => {
+          Testing.ClearCycleDonut();
+        }}/>
+      <Button
         title = "get symptoms"
         onPress={() => {
           // months are zero index
@@ -75,6 +80,13 @@ export default function DummyTest() {
         onPress={() => {
           CycleService.GetMostRecentPeriodStartDay().then(data => console.log(data));
         }}/>
+
+      <Button
+        title = "get cycle donut percent"
+        onPress={() => {
+          CycleService.GetCycleDonutPercent().then(data => console.log(data));
+        }}
+        />
 
     </View>
   )

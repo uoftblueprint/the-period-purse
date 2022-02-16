@@ -17,6 +17,12 @@ export const initializeEmptyYear = (yearNumber) => {
   return year
 }
 
+/**
+ * Computes the number of days between the two dates provided
+ * @param {Date} earlierDate
+ * @param {Date} laterDate
+ * @return {number} number of days between the two dates provided, ignoring their hours, minutes and seconds.
+ */
 export const getDaysDiff = (earlierDate, laterDate) => {
   console.log("earlier date: " + JSON.stringify(earlierDate))
   console.log("later date: " + JSON.stringify(laterDate))
@@ -35,5 +41,16 @@ export const getDaysDiff = (earlierDate, laterDate) => {
 
   var diffDays = Math.round(Math.abs(laterDate.getTime() - earlierDate.getTime()));
   return diffDays/oneDay;
+
+}
+
+/**
+ * Convert a Date object into a date string, encoding year, month and day. Note it encodes months as 1 indexed, and days as 0 indexed
+ * @param {Date} date Object to convert to string
+ * @return {String} String encoding year, month and day
+ */
+export const getDateString = (date) => {
+  var date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+  return date;
 
 }
