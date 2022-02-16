@@ -16,3 +16,24 @@ export const initializeEmptyYear = (yearNumber) => {
 
   return year
 }
+
+export const getDaysDiff = (earlierDate, laterDate) => {
+  console.log("earlier date: " + JSON.stringify(earlierDate))
+  console.log("later date: " + JSON.stringify(laterDate))
+
+  //NOTE: Imo this computation is simple but there's like 2000 JS libraries for manipulating dates so maybe this computation is not that simple?
+  var oneDay = 24 * 60 * 60 * 1000;
+  earlierDate.setHours(0);
+  earlierDate.setMinutes(0);
+  earlierDate.setSeconds(0);
+  earlierDate.setMilliseconds(0);
+
+  laterDate.setHours(0);
+  laterDate.setMinutes(0);
+  laterDate.setSeconds(0);
+  laterDate.setMilliseconds(0);
+
+  var diffDays = Math.round(Math.abs(laterDate.getTime() - earlierDate.getTime()));
+  return diffDays/oneDay;
+
+}

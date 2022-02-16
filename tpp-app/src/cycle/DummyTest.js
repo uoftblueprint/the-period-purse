@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Button, View, Text} from 'react-native';
 import CycleService from './CycleService';
+import Testing from './Testing';
 
 
 export default function DummyTest() {
@@ -20,12 +21,12 @@ export default function DummyTest() {
         title="Post average Period length"
         onPress={() => {
           // CycleService.PostCycleDonutPercent(donutPercent);
-          CycleService.PostAveragePeriodLength();
+          Testing.PostAveragePeriodLength();
         }}/>
       <Button
         title="Post average Cycle length"
         onPress={() => {
-          CycleService.PostAverageCycleLength();
+          Testing.PostAverageCycleLength();
         }}/>
       <Button
         title="average Period length"
@@ -40,21 +41,28 @@ export default function DummyTest() {
         }}
         />
       <Button
-        title = "Post calendar simple"
+        title = "Post calendar off period today"
         onPress={() => {
-          CycleService.PostDummyCalendarSimple();
+          Testing.PostDummyCalendarCalendarOffPeriodToday();
+        }}
+        />
+      <Button
+        title = "Post calendar on period today"
+        onPress={() => {
+          Testing.PostDummyCalendarOnPeriod();
         }}
         />
       <Button
         title = "Clear Calendar"
         onPress={() => {
-          CycleService.ClearCalendar();
+          Testing.ClearCalendar();
         }}/>
       <Button
         title = "get symptoms"
         onPress={() => {
           // months are zero index
-          CycleService.getSymptomsForDate(14, 1, 2022).then(data => console.log(data));
+          let date = new Date()
+          CycleService.getSymptomsForDate(date.getDate(), date.getMonth(), date.getFullYear()).then(data => console.log(data));
         }}/>
       <Button
         title = "get period day"
