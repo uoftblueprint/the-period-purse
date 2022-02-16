@@ -11,3 +11,5 @@ class Symptoms {
     this.notes = notes;
   }
 }
+
+export {Symptoms};

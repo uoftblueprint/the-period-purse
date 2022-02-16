@@ -1,27 +1,67 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Keys from "../utils/Keys";
+import {FLOW_LEVEL} from '../utils/constants';
+import {initializeEmptyYear}  from '../utils/helpers';
+import {Symptoms} from '../utils/models';
+import Keys from '../utils/keys';
 
 
-//I think this should be in some shared file
-const FLOW_LEVEL = {
-  NONE: "NONE",
-  LIGHT: "LIGHT",
-  MEDIUM: "MEDIUM",
-  HEAVY: "HEAVY",
-  SPOTTING: "SPOTTING"
+
+
+/**
+ * @param {Date} searchFrom Date from which to find the last period start
+ */
+async function getLastPeriodStart(searchFrom){
+  //TODO: how to deal with date? so like it is jan 1st, your period started in december last year. This should carry over
+    var current = searchFrom;
+    var tomorrow = new Date(current.getTime())
+    tomorrow.setDate(current.getDate() + 1)
+    var twoDaysLater = new Date(current.getTime());
+    twoDaysLater.setDate(current.getDate() + 2);
+
+    console.log("Starting with " + current);
+    let dateSymptoms = await this.getSymptomsForDate(current.getDate(), current.getMonth(), current.getFullYear());
+    let tomorrowSymptoms = new Symptoms();
+    let twoDaysLaterSymptoms = new Symptoms()
+
+    var noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
+    var noFlowTomorrow = (tomorrowSymptoms.flow === FLOW_LEVEL.NONE || tomorrowSymptoms.flow === null) ;
+    var flowTwoDaysLater = (twoDaysLater.flow !== null && twoDaysLater.flow !== FLOW_LEVEL.NONE)
+    console.log(" flow today: " + !noFlowToday);
+    console.log("flow tomorrow: " + !noFlowTomorrow);
+    console.log("flow 2 days later: " + flowTwoDaysLater);
+
+
+    while(!(noFlowToday && noFlowTomorrow && flowTwoDaysLater)){
+
+      var yesterday = new Date(current.getTime());
+      yesterday.setDate(current.getDate()-1);
+      twoDaysLater = tomorrow;
+      tomorrow = current;
+      current = yesterday;
+      console.log("checking " + current)
+
+      twoDaysLaterSymptoms = tomorrowSymptoms;
+      tomorrowSymptoms = dateSymptoms;
+      dateSymptoms = await this.getSymptomsForDate(current.getDate(), current.getMonth(), current.getFullYear());
+      console.log("date symptoms: " + JSON.stringify(dateSymptoms));
+      console.log("tomorrow  date symptoms: " + JSON.stringify(tomorrowSymptoms));
+      console.log("2 Days later date symptoms: " + JSON.stringify(twoDaysLaterSymptoms));
+      noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
+      noFlowTomorrow = (tomorrowSymptoms.flow === FLOW_LEVEL.NONE || tomorrowSymptoms.flow === null) ;
+      flowTwoDaysLater = (twoDaysLater.flow !== null && twoDaysLater.flow !== FLOW_LEVEL.NONE)
+      console.log(" flow today: " + !noFlowToday);
+      console.log("flow tomorrow: " + !noFlowTomorrow);
+      console.log("flow 2 days later: " + flowTwoDaysLater);
+    }
+
+    //TODO: test this
+
+
+    return periodDays;
+
+
+
 }
-
-class Symptoms {
-  constructor(flow = null, mood = null, sleep = null, cramps = null, exercise = null, notes = null) {
-    this.flow = flow;
-    this.mood = mood;
-    this.sleep = sleep;
-    this.cramps = cramps;
-    this.exercise = exercise;
-    this.notes = notes;
-  }
-}
-
 
 const CycleService = {
   /**
@@ -129,7 +169,8 @@ const CycleService = {
 
   //TODO: delete this
   PostDummyCalendarSimple: async function() {
-   let february = Array(28).fill(null);
+
+   let calendar = initializeEmptyYear(2022);
    const symptoms = {
     "Flow":  "LIGHT",
     "Mood": "HAPPY",
@@ -155,14 +196,15 @@ const CycleService = {
     'Notes': 'This is the fourthteenth day'
   }
 
-  february[6] = symptoms;
-  february[7] = symptomsEight;
-  february[10] = symptoms;
-  february[12] = symptoms;
-  february[13] = symptomsFourteenth;
-  february[14] = symptoms;
+  // note index i is for day i+1
+  calendar[1][6] = symptoms;
+  calendar[1][7] = symptomsEight;
+  calendar[1][10] = symptoms;
+  calendar[1][12] = symptoms;
+  calendar[1][13] = symptomsFourteenth;
+  calendar[1][14] = symptoms;
+  calendar[1][15] = symptoms;
 
-  let calendar = [null, february]
   console.log(JSON.stringify(calendar));
    try {
      return await AsyncStorage.setItem("2022", JSON.stringify(calendar));
@@ -203,12 +245,14 @@ const CycleService = {
     var date = new Date()
     var tomorrow = new Date(date.getTime())
     tomorrow.setDate(date.getDate() + 1)
-    console.log("day :" + date.getDate() + " month: " + date.getMonth()-1 + " year: " + date.getFullYear());
+    console.log("Starting with " + date);
     let dateSymptoms = await this.getSymptomsForDate(date.getDate(), date.getMonth(), date.getFullYear());
     let tomorrowSymptoms = new Symptoms();
 
-    var noFlowToday = dateSymptoms.flow === FLOW_LEVEL.NONE;
-    var noFlowTomorrow = tomorrowSymptoms.flow === FLOW_LEVEL.NONE;
+    var noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
+    var noFlowTomorrow = (tomorrowSymptoms.flow === FLOW_LEVEL.NONE || tomorrowSymptoms.flow === null) ;
+    console.log(" flow today: " + !noFlowToday);
+    console.log("flow tomorrow: " + !noFlowTomorrow);
 
 
     while(!(noFlowToday && noFlowTomorrow)){
@@ -224,8 +268,8 @@ const CycleService = {
       dateSymptoms = await this.getSymptomsForDate(date.getDate(), date.getMonth(), date.getFullYear());
       console.log("date symptoms: " + JSON.stringify(dateSymptoms));
       console.log("tomorrow  date symptoms: " + JSON.stringify(tomorrowSymptoms));
-      noFlowToday = dateSymptoms.flow === FLOW_LEVEL.NONE;
-      noFlowTomorrow = tomorrowSymptoms.flow === FLOW_LEVEL.NONE;
+      noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
+      noFlowTomorrow = (tomorrowSymptoms.flow === FLOW_LEVEL.NONE || tomorrowSymptoms.flow === null) ;
       console.log(" flow today: " + !noFlowToday);
       console.log("flow tomorrow: " + !noFlowTomorrow);
     }
@@ -242,6 +286,7 @@ const CycleService = {
    * @return {Promise} A promise that resolves into a Date object that is when the most recent period started.
    */
   GetMostRecentPeriodStartDay: async function () {
+    //NOTE: we can't actually do this based off getPeriodDay. Basically b/c if today is not a period day, behavior is not identical
     var date = new Date()
     let periodDays = await this.GetPeriodDay();
     var mostRecentPeriodDay = new Date(date.getTime());
@@ -258,6 +303,7 @@ const CycleService = {
     try{
       let today = new Date();
       let percent = await AsyncStorage.getItem(Keys.CycleDonutPercent)
+      console.log(percent.keys());
 
     } catch(e){
 

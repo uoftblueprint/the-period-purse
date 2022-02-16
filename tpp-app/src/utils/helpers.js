@@ -5,7 +5,7 @@
  * Within each month array is X null values corresponding to X days of that month in that year.
  * @param yearNumber number
  */
-const initializeEmptyYear = (yearNumber) => {
+export const initializeEmptyYear = (yearNumber) => {
   let year = new Array(12);
 
   for (let i = 0; i < 12; ++i) {
