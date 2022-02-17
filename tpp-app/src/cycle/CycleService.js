@@ -18,7 +18,6 @@ async function getLastPeriodStart(searchFrom){
     var twoDaysLater = new Date(current.getTime());
     twoDaysLater.setDate(current.getDate() + 2);
 
-    console.log("Starting with " + current);
     let dateSymptoms = await CycleService.getSymptomsForDate(current.getDate(), current.getMonth(), current.getFullYear());
     let tomorrowSymptoms = new Symptoms();
     let twoDaysLaterSymptoms = new Symptoms()
@@ -46,7 +45,6 @@ async function getLastPeriodStart(searchFrom){
 
 
 
-    console.log("last period start is at " + current);
     return current;
 }
 
@@ -142,9 +140,10 @@ const CycleService = {
 
     let periodDays = 0;
     var date = new Date()
+    console.log("in GetPeriodDay: " +  getDateString(date))
+    console.log("in GetPeriodDay: localized" +  date.toLocaleString())
     let dateSymptoms = await this.getSymptomsForDate(date.getDate(), date.getMonth(), date.getFullYear());
     if (dateSymptoms.flow === null || dateSymptoms.flow === FLOW_LEVEL.NONE){
-      console.log("%o", dateSymptoms);
       return 0;
     }
     else {
@@ -213,7 +212,41 @@ if the user is not on their period, call GETMostRecentPeriodStartDate(), GETAver
       }
 
     } catch(e){
+      console.log(e);
 
+    }
+  },
+
+  /** Get the start and length of each period in the given year
+   * @param {number} year The year to retrive history for
+   * @return {Promise} an object that contains intervals of the user's period (start & length) in that year
+   */
+  GetCycleHistoryByYear: async function(year) {
+    try {
+      let current = new Date(year, 11, 31);
+      // Search backwards until date switches to the previous year
+      while(current.getFullYear() === year){
+        var yesterday = new Date(current.getTime())
+        yesterday.setDate(current.getDate() - 1)
+        current = yesterday;
+
+        let currentSymptoms = await CycleService.getSymptomsForDate(current.getDate(), current.getMonth(), current.getFullYear());
+
+        if (currentSymptoms.flow !== null && currentSymptoms.flow !== FLOW_LEVEL.NONE){
+          let start = await getLastPeriodStart(current);
+          let periodDays = getDaysDiff(current, start);
+          console.log(`start: ${start} periodDays: ${periodDays}`);
+          var beforeStart = new Date(start.getTime());
+          beforeStart.setDate(beforeStart.getDate() - 1);
+          current = beforeStart;
+        }
+
+      }
+      console.log("finished");
+
+
+    } catch(e) {
+      console.log(e);
     }
   }
 }

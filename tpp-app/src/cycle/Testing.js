@@ -107,30 +107,6 @@ const Testing = {
     'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
     'Notes': 'Happy new year! My resolution is to log symptoms every day.'
   }
-  const symptomsEight = {
-    "Flow":  "LIGHT",
-    "Mood": "HAPPY",
-    'Sleep': '7.5',
-    'Cramps': 'MEDIUM',
-    'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
-    'Notes': 'This is the fourth day'
-  }
-  const symptomsFourteenth = {
-    "Flow":  "LIGHT",
-    "Mood": "HAPPY",
-    'Sleep': '7.5',
-    'Cramps': 'MEDIUM',
-    'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
-    'Notes': 'This is the fourthteenth day'
-  }
-  const symptomsSixteenth = {
-    "Flow":  "Light",
-    "Mood": "HAPPY",
-    'Sleep': '7.5',
-    'Cramps': 'MEDIUM',
-    'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
-    'Notes': 'This is the sixteenth day'
-  }
 
   // note index i is for day i+1
   calendar[1][6] = symptoms;
@@ -156,6 +132,49 @@ const Testing = {
   PostDummyCalendarOverMonth: async function(){
     // period overlaps over a month, so like oct 30 - Nov 3rd
 
+
+
+   let calendar = initializeEmptyYear(2022);
+   const symptoms = {
+    "Flow":  "LIGHT",
+    "Mood": "HAPPY",
+    'Sleep': '7.5',
+    'Cramps': 'MEDIUM',
+    'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
+    'Notes': 'Happy new year! My resolution is to log symptoms every day.'
+  }
+
+  // JANUARY
+
+  // jan 29, periodDays: 5
+  calendar[0][30] = symptoms;
+
+  // FEBRUARY
+  // note index i is for day i+1
+
+
+  calendar[1][0] = symptoms;
+  calendar[1][1] = symptoms;
+  calendar[1][2] = symptoms;
+
+
+  // feb 05, periodDays: 2
+  calendar[1][6] = symptoms;
+  calendar[1][7] = symptoms;
+
+  // feb 09, periodDays: 6
+  calendar[1][10] = symptoms;
+  calendar[1][12] = symptoms;
+  calendar[1][13] = symptoms;
+  calendar[1][14] = symptoms;
+  calendar[1][15] = symptoms;
+
+  console.log(JSON.stringify(calendar));
+   try {
+     return await AsyncStorage.setItem("2022", JSON.stringify(calendar));
+  } catch (e) {
+    console.log(e);
+  }
   },
 }
 

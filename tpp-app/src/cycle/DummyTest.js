@@ -53,6 +53,12 @@ export default function DummyTest() {
         }}
         />
       <Button
+        title = "Post calendar where period stretches across month"
+        onPress={() => {
+          Testing.PostDummyCalendarOverMonth();
+
+        }}/>
+      <Button
         title = "Clear Calendar"
         onPress={() => {
           Testing.ClearCalendar();
@@ -85,6 +91,12 @@ export default function DummyTest() {
         title = "get cycle donut percent"
         onPress={() => {
           CycleService.GetCycleDonutPercent().then(data => console.log(data));
+        }}
+        />
+      <Button
+        title = "get cycle History"
+        onPress={() => {
+          CycleService.GetCycleHistoryByYear(2022);
         }}
         />
 
