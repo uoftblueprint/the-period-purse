@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { lessThan } from 'react-native-reanimated';
+import { FLOW_LEVEL, TRACK_SYMPTOMS, KEYS } from '../home/service/utils/constants.js'
+import { initializeEmptyYear } from "../home/service/utils/helpers.js"
+import { Symptoms } from '../home/service/utils/models.js';
 
 const OnboardingService = {
     // All APIs for Onboarding below
@@ -8,8 +10,8 @@ const OnboardingService = {
         try {
             if(periodLength != null) {
                 periodLength = JSON.stringify(periodLength)
-                const initialRes = await AsyncStorage.setItem('initialPeriodLength', periodLength);
-                const averageRes = AsyncStorage.setItem('averagePeriodLength', periodLength);
+                const initialRes = await AsyncStorage.setItem(KEYS.INITIAL_PERIOD_LENGTH, periodLength);
+                const averageRes = AsyncStorage.setItem(KEYS.AVERAGE_PERIOD_LENGTH, periodLength);
 
                 console.log('Initialized initialPeriodLength and averagePeriodLength as ' + periodLength);
                 return Promise.all([initialRes, averageRes]);
@@ -23,7 +25,6 @@ const OnboardingService = {
         try {
             const periodLength = await AsyncStorage.getItem('initialPeriodLength');
             if(periodLength != null && periodStart != null) {
-                let daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 const periodStartTime = periodStart.getTime();
                 let yearsSet = new Set(); 
                 let dates = [];
@@ -36,22 +37,12 @@ const OnboardingService = {
 
                 let yearDicts = {};
                 yearsSet.forEach(year => {
-                    // Initializes a list of 12 nulls for 12 months
-                    yearDicts[year] = Array.apply(null, Array(12));
-
-                    // Handles leap year situation for February 
-                    if(year % 4 === 0 || (year % 100 === 0 && year % 400 === 0))
-                        daysPerMonth[1] = 29;
-                    else
-                        daysPerMonth[1] = 28;
-                    
-                    for (let i = 0; i < 12; i++) 
-                        yearDicts[year][i] = Array.apply(null, Array(daysPerMonth[i]));
+                    yearDicts[year] = initializeEmptyYear(year);
                 });
 
                 // Initialize the correct daily logs 
                 dates.forEach(date => {
-                    yearDicts[date.getFullYear()][date.getMonth()][date.getDate() - 1] = {"Flow": "MEDIUM"};
+                    yearDicts[date.getFullYear()][date.getMonth()][date.getDate() - 1] = new Symptoms(FLOW_LEVEL.MEDIUM);
                 });
 
                 let allRes = [];
@@ -70,16 +61,13 @@ const OnboardingService = {
     }, 
     PostSymptomsToTrack: async function(flow, mood, sleep, cramps, exercise) {
         try {
-            const symptomsPreferences = [flow, mood, sleep, cramps, exercise];
             if(symptomsPreferences.some((bool) => bool)) {
-                const symptoms = ['trackFlow', 'trackMood', 'trackSleep', 'trackCramps', 'trackExercise'];
-                let res = [];
-                for (let i = 0; i < symptoms.length; i++) {
-                    let currRes = await AsyncStorage.setItem(symptoms[i], JSON.stringify(symptomsPreferences[i]));
-                    res.push(currRes); 
-                    console.log("Initialized preferences for " + symptoms[i]);
-                }
-                return Promise.all(res);
+                let flowRes = await AsyncStorage.setItem(TRACK_SYMPTOMS.TRACK_FLOW, JSON.stringify(flow));
+                let moodRes = await AsyncStorage.setItem(TRACK_SYMPTOMS.TRACK_MOOD, JSON.stringify(mood));
+                let sleepRes = await AsyncStorage.setItem(TRACK_SYMPTOMS.TRACK_SLEEP, JSON.stringify(sleep));
+                let crampsRes = await AsyncStorage.setItem(TRACK_SYMPTOMS.TRACK_CRAMPS, JSON.stringify(cramps));
+                let exerciseRes = await AsyncStorage.setItem(TRACK_SYMPTOMS.TRACK_EXERCISE, JSON.stringify(exercise));
+                return Promise.all([flowRes, moodRes, sleepRes, crampsRes, exerciseRes]);
             }
         } catch (e) {
             console.log('There was an error with POSTSymptomsToTrack');
