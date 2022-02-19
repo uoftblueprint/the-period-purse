@@ -13,7 +13,7 @@ import InfoNavigator from './src/info/InfoNavigator';
 
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
-import DummyTest from './src/cycle/DummyTest.js';
+import DummyTest from './src/services/cycle/DummyTest.js';
 
 const Tab = createBottomTabNavigator();
 

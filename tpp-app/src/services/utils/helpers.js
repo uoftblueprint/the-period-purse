@@ -1,4 +1,3 @@
-import differenceInDays from 'date-fns/differenceInDays'
 // Backend helper functions used across app
 
 /**
@@ -6,7 +5,7 @@ import differenceInDays from 'date-fns/differenceInDays'
  * Within each month array is X null values corresponding to X days of that month in that year.
  * @param yearNumber number
  */
-export const initializeEmptyYear = (yearNumber) => {
+const initializeEmptyYear = (yearNumber) => {
   let year = new Array(12);
 
   for (let i = 0; i < 12; ++i) {
