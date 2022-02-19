@@ -110,12 +110,15 @@ const Testing = {
 
   // note index i is for day i+1
   calendar[1][6] = symptoms;
-  calendar[1][7] = symptomsEight;
+  calendar[1][7] = symptoms;
+
+  // feb 09, periodDays: 7
   calendar[1][10] = symptoms;
   calendar[1][12] = symptoms;
-  calendar[1][13] = symptomsFourteenth;
+  calendar[1][13] = symptoms;
   calendar[1][14] = symptoms;
-  calendar[1][15] = symptomsSixteenth;
+  calendar[1][15] = symptoms;
+  calendar[1][16] = symptoms;
 
   console.log(JSON.stringify(calendar));
    try {
