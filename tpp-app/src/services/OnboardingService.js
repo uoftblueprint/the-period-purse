@@ -20,8 +20,8 @@ const OnboardingService = {
                 return Promise.all([initialRes, averageRes]);
             }
         } catch (e) {
-            console.log('There was an error with POSTInitialPeriodLength');
-            console.log(e);
+            console.log(`POSTInitialPeriodLength error: ${JSON.stringify(e)}`);
+            reject("Something went wrong");
         }
     },
     /**
@@ -34,7 +34,7 @@ const OnboardingService = {
     PostInitialPeriodStart: async function(periodStart) {
         try {
             const periodLength = await AsyncStorage.getItem('initialPeriodLength');
-            if(periodLength != null && periodStart != null) {
+            if(!periodLength && !periodStart) {
                 const periodStartTime = periodStart.getTime();
                 let yearsSet = new Set(); 
                 let dates = [];
@@ -67,8 +67,8 @@ const OnboardingService = {
             }
         }
         catch (e) {
-            console.log('There was an error with POSTInitialPeriodStart');
-            console.log(e);
+            console.log(`POSTInitialPeriodStart error: ${JSON.stringify(e)}`);
+            reject("Something went wrong");
         }
     }, 
     /**
@@ -93,8 +93,8 @@ const OnboardingService = {
                 return Promise.all([flowRes, moodRes, sleepRes, crampsRes, exerciseRes]);
             }
         } catch (e) {
-            console.log('There was an error with POSTSymptomsToTrack');
-            console.log(e);
+            console.log(`POSTSymptomsToTrack error: ${JSON.stringify(e)}`);
+            reject("Something went wrong");
         }
     }
 };
