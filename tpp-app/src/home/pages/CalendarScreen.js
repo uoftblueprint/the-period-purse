@@ -47,12 +47,8 @@ const DayComponent = ({ date, state, marking, navigation }) => {
     )
 }
 
-<<<<<<< HEAD
-export const Calendar = ({navigation}) => {
-=======
 const Calendar = ({navigation}) => {
     storeData()
->>>>>>> 7dc6336 (added some stuff to test my asyncstorage)
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
