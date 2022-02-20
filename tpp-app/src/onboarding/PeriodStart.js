@@ -6,10 +6,9 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
 import { TitleText, BodyText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
-import OnboardingService from './OnboardingService';
+import OnboardingService from '../services/OnboardingService';
 
 export default function PeriodStart ({ navigation }) {
-  const [periodStart, setPeriodStart] = useState(new Date())
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
@@ -26,7 +25,7 @@ export default function PeriodStart ({ navigation }) {
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
         <NextButton title="Next" onPress={() => 
           {
-            OnboardingService.PostInitialPeriodStart(new Date(2021, 11, 30));
+            OnboardingService.PostInitialPeriodStart(new Date(2011, 11, 30));
             navigation.navigate(STACK_SCREENS["Symptoms Choices"]);
           }}/>
       </TwoButtonContainer>

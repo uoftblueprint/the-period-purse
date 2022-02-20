@@ -11,8 +11,7 @@ export const MOOD_LEVEL = {
   SAD: "SAD",
   NEUTRAL: "NEUTRAL",
   SICK: "SICK",
-  ANGRY: "ANGRY",
-  CUSTOM: "" // empty string
+  ANGRY: "ANGRY"
 }
 
 export const CRAMP_LEVEL = {
@@ -28,14 +27,13 @@ export const EXERCISE_TYPE = {
   YOGA: "YOGA",
   STRENGTH: "STRENGTH",
   TEAM: "TEAM",
-  MARTIAL_ARTS: "MARTIAL ARTS",
-  CUSTOM: "" // empty string
+  MARTIAL_ARTS: "MARTIAL ARTS"
 }
 
 export const TRACK_SYMPTOMS = {
   TRACK_FLOW: 'trackFlow', 
   TRACK_MOOD: 'trackMood', 
-  TRCK_SLEEP: 'trackSleep', 
+  TRACK_SLEEP: 'trackSleep', 
   TRACK_CRAMPS: 'trackCramps', 
   TRACK_EXERCISE: 'trackExercise'
 }

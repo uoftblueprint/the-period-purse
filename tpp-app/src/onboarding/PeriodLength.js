@@ -6,7 +6,7 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer, InputContainer } from './components/ContainerComponents';
-import OnboardingService from './OnboardingService';
+import OnboardingService from '../services/OnboardingService';
 
 export default function PeriodLength ({ navigation }) {
   const [periodLength, setPeriodLength] = useState(0)

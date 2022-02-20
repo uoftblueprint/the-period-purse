@@ -1,11 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FLOW_LEVEL, TRACK_SYMPTOMS, KEYS } from '../home/service/utils/constants.js'
-import { initializeEmptyYear } from "../home/service/utils/helpers.js"
-import { Symptoms } from '../home/service/utils/models.js';
+import { FLOW_LEVEL, TRACK_SYMPTOMS, KEYS } from './utils/constants.js'
+import { initializeEmptyYear } from "./utils/helpers.js"
+import { Symptoms } from './utils/models.js';
 
 const OnboardingService = {
-    // All APIs for Onboarding below
-
+    /**
+     * Initializes user's initial period length and average period length. 
+     * @param periodLength number representing the period length
+     * @returns a promise resolving when the two set operations are complete 
+     */
     PostInitialPeriodLength: async function(periodLength) {
         try {
             if(periodLength != null) {
@@ -21,6 +24,13 @@ const OnboardingService = {
             console.log(e);
         }
     },
+    /**
+     * Initializes entries for the user's last period.  
+     * This only happens when the user has given inputs for both their 
+     * initial period length and the start date of their last period. 
+     * @param periodStart date representing the start date of their last period 
+     * @returns a promise resolving when the set operation is complete 
+     */
     PostInitialPeriodStart: async function(periodStart) {
         try {
             const periodLength = await AsyncStorage.getItem('initialPeriodLength');
@@ -29,12 +39,14 @@ const OnboardingService = {
                 let yearsSet = new Set(); 
                 let dates = [];
 
+                // Use timestamps to populate the list of dates to avoid 
+                // messing up when dealing with last day of a month and/or year
                 for(let i = 0; i < periodLength; i++) {
                     const currentDate = new Date(periodStartTime + (1000 * 60 * 60 * 24 * i));
                     yearsSet.add(currentDate.getFullYear());
                     dates.push(currentDate);
                 }
-
+                
                 let yearDicts = {};
                 yearsSet.forEach(year => {
                     yearDicts[year] = initializeEmptyYear(year);
@@ -59,14 +71,25 @@ const OnboardingService = {
             console.log(e);
         }
     }, 
+    /**
+     * Initializes the user's initial tracking preferences for what symptoms to track. 
+     * At least one symptom has to be selected for initialization to happen. 
+     * @param flow boolean representing whether to track flow
+     * @param mood boolean representing whether to track mood 
+     * @param sleep boolean representing whether to track sleep
+     * @param cramps boolean representing whether to track cramps
+     * @param exercise boolean representing whether to track exercise 
+     * @returns a promise resolving when all the set operations are complete 
+     */
     PostSymptomsToTrack: async function(flow, mood, sleep, cramps, exercise) {
         try {
-            if(symptomsPreferences.some((bool) => bool)) {
+            if([flow, mood, sleep, cramps, exercise].some((bool) => bool)) {
                 let flowRes = await AsyncStorage.setItem(TRACK_SYMPTOMS.TRACK_FLOW, JSON.stringify(flow));
                 let moodRes = await AsyncStorage.setItem(TRACK_SYMPTOMS.TRACK_MOOD, JSON.stringify(mood));
                 let sleepRes = await AsyncStorage.setItem(TRACK_SYMPTOMS.TRACK_SLEEP, JSON.stringify(sleep));
                 let crampsRes = await AsyncStorage.setItem(TRACK_SYMPTOMS.TRACK_CRAMPS, JSON.stringify(cramps));
                 let exerciseRes = await AsyncStorage.setItem(TRACK_SYMPTOMS.TRACK_EXERCISE, JSON.stringify(exercise));
+                console.log("Initialized tracking preferences");
                 return Promise.all([flowRes, moodRes, sleepRes, crampsRes, exerciseRes]);
             }
         } catch (e) {
