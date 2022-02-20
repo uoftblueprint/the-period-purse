@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Symptoms } from './utils/models'
+import {Symptoms} from './utils/models'
+import {FLOW_LEVEL} from './utils/constants'
 import { initializeEmptyYear } from './utils/helpers'
 
 /**
@@ -24,10 +25,6 @@ export const GETsymptomsForDate = async (day, month, year) => {
  * @param year number
  * @param symptoms Symptoms object
  */
-// Calls mergeItem() with the year as the key value, and the JSONified symptom
-// data as the value, {month: [...,{symptoms},...]}.
-// This means that if the element representing that day is empty, a new symptom object will be recorded.
-// If there already is data there, POSTsymptomsForDate will rewrite over any existing data for that date.
 export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Promise( (resolve, reject) => {
 
     // Check that symptoms object is not all null or not empty
@@ -64,37 +61,18 @@ export const LogMultipleDaysService = {
             const month = date.month;
             const day = date.day;
 
-            console.log(year, month, day)
-            console.log("the year " + year.toString())
-            //check if year month exists
-            const data = JSON.parse(await AsyncStorage.getItem(year.toString()));
-            // console.log("HEERE " + data[month-1][day-1]["Flow"]);
-            if (data == null){
-                data = [];
-            }
+            let symptoms = await GETsymptomsForDate(day, month, year)
 
-            if (data[month-1] == null){
-                data[month-1] = [];
-            }
-
-            console.log("hmm",JSON.stringify(data[month-1][day-1]));
-            if (data[month-1][day-1] == null){
-                data[month-1][day-1] = {"Flow": FLOW_LEVEL.MEDIUM}
+            if (symptoms.flow == null){
+                symptoms.flow = FLOW_LEVEL.MEDIUM;
 
             }else{
-
-                if(data[month-1][day-1]["Flow"] == null || data[month-1][day-1]["Flow"] == FLOW_LEVEL.NONE){
-                    data[month-1][day-1]["Flow"] = FLOW_LEVEL.MEDIUM;
-                }else{
-                    data[month-1][day-1]["Flow"] = FLOW_LEVEL.NONE;
-                }
+                symptoms.flow = FLOW_LEVEL.NONE;
             }
 
+            POSTsymptomsForDate(day, month, year, symptoms);
 
-
-
-            console.log(JSON.stringify(data));
-            console.log("updated",JSON.stringify(data[month-1][day-1]));
+            // console.log("updated",JSON.stringify(data[month-1][day-1]));
         })
 
     }
