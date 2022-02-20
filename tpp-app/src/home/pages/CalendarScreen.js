@@ -47,8 +47,9 @@ const DayComponent = ({ date, state, marking, navigation }) => {
     )
 }
 
-const Calendar = ({navigation}) => {
+export const Calendar = ({navigation}) => {
     storeData()
+
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
