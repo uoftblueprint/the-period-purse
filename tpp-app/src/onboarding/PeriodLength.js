@@ -6,7 +6,7 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer, InputContainer } from './components/ContainerComponents';
-import OnboardingService from '../services/OnboardingService';
+import { PostInitialPeriodLength } from '../services/OnboardingService';
 
 export default function PeriodLength ({ navigation }) {
   const [periodLength, setPeriodLength] = useState(0)
@@ -36,7 +36,7 @@ export default function PeriodLength ({ navigation }) {
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Period Start"])}/>
         <NextButton title="Next" onPress={() => 
           {
-            OnboardingService.PostInitialPeriodLength(parseInt(periodLength));
+            PostInitialPeriodLength(parseInt(periodLength));
             navigation.navigate(STACK_SCREENS["Period Start"]);
           }}/>
       </TwoButtonContainer>
