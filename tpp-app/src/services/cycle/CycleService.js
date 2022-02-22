@@ -1,11 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
-import {initializeEmptyYear, getDaysDiff, getDateString}  from '../utils/helpers';
+import {initializeEmptyYear, getDateString, GETsymptomsForDate}  from '../utils/helpers';
 import {Symptoms} from '../utils/models';
+import differenceInCalendarDays from 'date-fns/differenceInDays'
 import Keys from '../utils/keys';
 
 
 
+/**
+ * Computes the number of days between the two dates provided. If earlierDate and laterDate are equal, returns 1.
+ * @param {Date} earlierDate
+ * @param {Date} laterDate
+ * @return {number} number of days between the two dates provided, ignoring their hours, minutes and seconds.
+ */
+const getDaysDiff = (earlierDate, laterDate) => {
+  return Math.abs(differenceInCalendarDays(earlierDate, laterDate)) + 1;
+
+}
 
 /**
  * @param {Date} searchFrom Date from which to find the last period start
@@ -19,7 +30,7 @@ async function getLastPeriodStart(searchFrom){
     var twoDaysLater = new Date(current.getTime());
     twoDaysLater.setDate(current.getDate() + 2);
 
-    let dateSymptoms = await CycleService.getSymptomsForDate(current.getDate(), current.getMonth()+1, current.getFullYear());
+    let dateSymptoms = await GETsymptomsForDate(current.getDate(), current.getMonth()+1, current.getFullYear());
     let tomorrowSymptoms = new Symptoms();
     let twoDaysLaterSymptoms = new Symptoms()
 
@@ -38,7 +49,7 @@ async function getLastPeriodStart(searchFrom){
 
       twoDaysLaterSymptoms = tomorrowSymptoms;
       tomorrowSymptoms = dateSymptoms;
-      dateSymptoms = await CycleService.getSymptomsForDate(current.getDate(), current.getMonth() + 1, current.getFullYear());
+      dateSymptoms = await GETsymptomsForDate(current.getDate(), current.getMonth() + 1, current.getFullYear());
       noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
       noFlowTomorrow = (tomorrowSymptoms.flow === FLOW_LEVEL.NONE || tomorrowSymptoms.flow === null) ;
       flowTwoDaysLater = (twoDaysLaterSymptoms.flow !== null && twoDaysLaterSymptoms.flow !== FLOW_LEVEL.NONE)
@@ -46,7 +57,8 @@ async function getLastPeriodStart(searchFrom){
 
 
 
-    return tomorrow;
+    //return twoDaysLater since pattern searching for is _ _ X where x is the period
+    return twoDaysLater;
 }
 
 const CycleService = {
@@ -70,17 +82,7 @@ const CycleService = {
     }
   },
 
-  /**
-   * @param {number} month one indexed month. Note date months are 0 indexed.
-   */
-  getSymptomsForDate: async function(day, month, year){
-    //TODO:
-   // Get the year's data (value could be null if year is empty)
-   const yearData = JSON.parse(await AsyncStorage.getItem(year.toString()));
 
-   // Return symptoms for that day or empty symptoms object if it doesn't exist
-   return yearData[month-1][day-1] ? new Symptoms(yearData[month-1][day-1]) : new Symptoms();
-  },
 
 
   // SIMPLE GETS
@@ -134,19 +136,19 @@ const CycleService = {
     let periodDays = 0;
     // Maybe whenever we initialize a date we should remove the time portion?
     var date = new Date()
-    date.setHours(0,0,0,0);
     console.log("GetPeriodDay as default: " + date);
     // console.log("GetPeriodDay as toString: " + date.toString());
     // console.log("in GetPeriodDay as date string: " +  getDateString(date))
     // console.log("in GetPeriodDay: localized " +  date.toLocaleString())
-    let dateSymptoms = await this.getSymptomsForDate(date.getDate(), date.getMonth()+1, date.getFullYear());
+    let dateSymptoms = await GETsymptomsForDate(date.getDate(), date.getMonth()+1, date.getFullYear());
     if (dateSymptoms.flow === null || dateSymptoms.flow === FLOW_LEVEL.NONE){
       return 0;
     }
     else {
       let startDate = await this.GetMostRecentPeriodStartDay();
       console.log(`period day: start: ${startDate} and end: ${date}`)
-      return getDaysDiff(startDate, date);
+      // add 1 because we want to count the starting date
+      return getDaysDiff(startDate, date) ;
     }
 
 
@@ -155,15 +157,6 @@ const CycleService = {
 
   },
 
-  /**
-   * Produces the progress ring that displays where the user is at in their cycle
-Returns the percent away they are from their next period
-First check if CycleDonutPercentage has a value in AsyncStorage for today's date, if yes just use that percentage, if no, do calculation and use POSTCycleDonutPercent to replace with new date and percentage
-calls on GETPeriodDay
-calls on GETAverageCycleLength()
-calls on GETMostRecentPeriodStartDate()
-if the user is not on their period, call GETMostRecentPeriodStartDate(), GETAverageCycleLength(), and the current date to calculate how far they are from their period starting as a percentage
-   */
 
   /**
    * Get most recent period start date
@@ -171,7 +164,6 @@ if the user is not on their period, call GETMostRecentPeriodStartDate(), GETAver
    */
   GetMostRecentPeriodStartDay: async function () {
     var date = new Date()
-    date.setHours(0,0,0,0);
 
     let mostRecentPeriodDay = getLastPeriodStart(date);
     return mostRecentPeriodDay;
@@ -225,11 +217,7 @@ if the user is not on their period, call GETMostRecentPeriodStartDate(), GETAver
       let current = new Date(year, 11, 31);
       // Search backwards until date switches to the previous year
       while(current.getFullYear() === year){
-        var yesterday = new Date(current.getTime())
-        yesterday.setDate(current.getDate() - 1)
-        current = yesterday;
-
-        let currentSymptoms = await CycleService.getSymptomsForDate(current.getDate(), current.getMonth()+1, current.getFullYear());
+        let currentSymptoms = await GETsymptomsForDate(current.getDate(), current.getMonth()+1, current.getFullYear());
 
         if (currentSymptoms.flow !== null && currentSymptoms.flow !== FLOW_LEVEL.NONE){
           let start = await getLastPeriodStart(current);
@@ -240,6 +228,10 @@ if the user is not on their period, call GETMostRecentPeriodStartDate(), GETAver
           beforeStart.setDate(beforeStart.getDate() - 1);
           current = beforeStart;
         }
+
+        var yesterday = new Date(current.getTime())
+        yesterday.setDate(current.getDate() - 1)
+        current = yesterday;
 
       }
       console.log("finished");

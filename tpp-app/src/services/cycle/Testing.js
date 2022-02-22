@@ -109,16 +109,23 @@ const Testing = {
   }
 
   // note index i is for day i+1
+  // feb 7th, period days: 2
   calendar[1][6] = symptoms;
   calendar[1][7] = symptoms;
 
-  // feb 09, periodDays: 7
+  // feb 11, periodDays: 9
   calendar[1][10] = symptoms;
   calendar[1][12] = symptoms;
   calendar[1][13] = symptoms;
   calendar[1][14] = symptoms;
   calendar[1][15] = symptoms;
   calendar[1][16] = symptoms;
+  calendar[1][17] = symptoms;
+  calendar[1][18] = symptoms;
+
+
+  // feb 22, periodDays: 1
+  calendar[1][21] = symptoms;
 
   console.log(JSON.stringify(calendar));
    try {
@@ -149,7 +156,7 @@ const Testing = {
 
   // JANUARY
 
-  // jan 29, periodDays: 5
+  // jan 31, periodDays: 4
   calendar[0][30] = symptoms;
 
   // FEBRUARY
@@ -161,11 +168,11 @@ const Testing = {
   calendar[1][2] = symptoms;
 
 
-  // feb 05, periodDays: 2
+  // feb 07, periodDays: 2
   calendar[1][6] = symptoms;
   calendar[1][7] = symptoms;
 
-  // feb 09, periodDays: 6
+  // feb 11, periodDays: 6
   calendar[1][10] = symptoms;
   calendar[1][12] = symptoms;
   calendar[1][13] = symptoms;
@@ -175,6 +182,61 @@ const Testing = {
   console.log(JSON.stringify(calendar));
    try {
      return await AsyncStorage.setItem("2022", JSON.stringify(calendar));
+  } catch (e) {
+    console.log(e);
+  }
+  },
+
+  PostDummyCalendarOverYear: async function(){
+    // post something with a period that strecthes from 2022 into 2021.
+
+
+
+   let currentYear = initializeEmptyYear(2022);
+   let lastYear = initializeEmptyYear(2021);
+   const symptoms = {
+    "Flow":  "LIGHT",
+    "Mood": "HAPPY",
+    'Sleep': '7.5',
+    'Cramps': 'MEDIUM',
+    'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
+    'Notes': 'Happy new year! My resolution is to log symptoms every day.'
+  }
+  // Dec 2021
+  // dec 30, periodDays: 3
+  lastYear[11][29] = symptoms;
+  lastYear[11][30] = symptoms;
+
+  // JANUARY
+  currentYear[0][1] = symptoms
+
+  // jan 31, periodDays: 4
+  currentYear[0][30] = symptoms;
+
+  // FEBRUARY
+  // note index i is for day i+1
+
+
+  currentYear[1][0] = symptoms;
+  currentYear[1][1] = symptoms;
+  currentYear[1][2] = symptoms;
+
+
+  // feb 07, periodDays: 2
+  currentYear[1][6] = symptoms;
+  currentYear[1][7] = symptoms;
+
+  // feb 11, periodDays: 6
+  currentYear[1][10] = symptoms;
+  currentYear[1][12] = symptoms;
+  currentYear[1][13] = symptoms;
+  currentYear[1][14] = symptoms;
+  currentYear[1][15] = symptoms;
+
+  console.log(JSON.stringify(currentYear));
+   try {
+     await AsyncStorage.setItem("2021", JSON.stringify(lastYear));
+     return await AsyncStorage.setItem("2022", JSON.stringify(currentYear));
   } catch (e) {
     console.log(e);
   }

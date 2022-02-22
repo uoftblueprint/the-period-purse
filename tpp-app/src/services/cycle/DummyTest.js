@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Button, View, Text} from 'react-native';
+import {GETsymptomsForDate}  from '../utils/helpers';
 import CycleService from './CycleService';
 import Testing from './Testing';
 
@@ -59,6 +60,12 @@ export default function DummyTest() {
 
         }}/>
       <Button
+        title = "Post calendar where period stretches across 2021-2022"
+        onPress={() => {
+          Testing.PostDummyCalendarOverYear();
+
+        }}/>
+      <Button
         title = "Clear Calendar"
         onPress={() => {
           Testing.ClearCalendar();
@@ -72,8 +79,8 @@ export default function DummyTest() {
         title = "get symptoms"
         onPress={() => {
           // months are zero index
-          let date = new Date()
-          CycleService.getSymptomsForDate(date.getDate(), date.getMonth(), date.getFullYear()).then(data => console.log(data));
+          let date = new Date();
+          GETsymptomsForDate(date.getDate(), date.getMonth()+1, date.getFullYear()).then(data => console.log(data));
         }}/>
       <Button
         title = "get period day"
