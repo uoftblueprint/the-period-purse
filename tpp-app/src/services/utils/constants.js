@@ -8,12 +8,16 @@ export const FLOW_LEVEL = {
 
 export const MOOD_LEVEL = {
   HAPPY: "HAPPY",
-  SAD: "SAD",
   NEUTRAL: "NEUTRAL",
+  SAD: "SAD",
+  LOL: "LOL",
+  IDK: "IDK",
+  GREAT: "GREAT",
   SICK: "SICK",
   ANGRY: "ANGRY",
-  CUSTOM: "" // empty string
+  LOVED: "LOVED"
 }
+
 
 export const CRAMP_LEVEL = {
   NEUTRAL: "NEUTRAL",
@@ -23,11 +27,14 @@ export const CRAMP_LEVEL = {
   NONE: "NONE",
 }
 
-export const EXERCISE_TYPE = {
-    CARDIO: "CARDIO",
-    YOGA: "YOGA",
-    STRENGTH: "STRENGTH",
-    TEAM: "TEAM",
-    MARTIAL_ARTS: "MARTIAL ARTS",
-    CUSTOM: "" // empty string
+export const EXERCISE_TYPE =  {
+  CARDIO: "CARDIO",
+  YOGA: "YOGA",
+  STRENGTH: "STRENGTH",
+  BALL_SPORT: "BALL SPORT",
+  MARTIAL_ARTS: "MARTIAL ARTS",
+  WATER_SPORT: "WATER SPORT",
+  CYCLE_SPORT: "CYCLE SPORT",
+  RACKET_SPORT: "RACKET SPORT",
+  WINTER_SPORT: "WINTER SPORT"
 }

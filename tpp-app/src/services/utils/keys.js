@@ -1,7 +1,7 @@
 const Keys = {
-  'Average Period Length': "averagePeriodLength",
-  'Average Cycle Length': "averageCycleLength",
-  CycleDonutPercent: "CycleDonutPercent"
+  AVERAGE_PERIOD_LENGTH: "averagePeriodLength",
+  AVERAGE_CYCLE_LENGTH: "averageCycleLength",
+  CYCLE_DONUT_PERCENT: "CycleDonutPercent"
 }
 
 

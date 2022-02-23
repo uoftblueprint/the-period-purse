@@ -9,7 +9,7 @@ const Testing = {
   // TODO: delete this
   PostAveragePeriodLength: async function() {
     try {
-      return await AsyncStorage.setItem(Keys['Average Period Length'], "6" );
+      return await AsyncStorage.setItem(Keys.AVERAGE_PERIOD_LENGTH, "6" );
     } catch (e) {
       console.log(e);
     }
@@ -18,7 +18,7 @@ const Testing = {
   // TODO: delete this
   PostAverageCycleLength: async function() {
     try {
-      return await AsyncStorage.setItem(Keys['Average Cycle Length'], "6" );
+      return await AsyncStorage.setItem(Keys.AVERAGE_CYCLE_LENGTH, "6" );
     } catch (e) {
       console.log(e);
     }
@@ -35,7 +35,7 @@ const Testing = {
   //TODO delete this
   ClearCycleDonut: async function() {
     try{
-      return await AsyncStorage.removeItem(Keys.CycleDonutPercent);
+      return await AsyncStorage.removeItem(Keys.CYCLE_DONUT_PERCENT);
     } catch(e){
       console.log(e);
     }
@@ -194,6 +194,7 @@ const Testing = {
 
    let currentYear = initializeEmptyYear(2022);
    let lastYear = initializeEmptyYear(2021);
+   let nextYear = initializeEmptyYear(2023);
    const symptoms = {
     "Flow":  "LIGHT",
     "Mood": "HAPPY",
@@ -203,7 +204,7 @@ const Testing = {
     'Notes': 'Happy new year! My resolution is to log symptoms every day.'
   }
   // Dec 2021
-  // dec 30, periodDays: 3
+  // dec 30, periodDays: 4
   lastYear[11][29] = symptoms;
   lastYear[11][30] = symptoms;
 
@@ -233,9 +234,23 @@ const Testing = {
   currentYear[1][14] = symptoms;
   currentYear[1][15] = symptoms;
 
+  // dec 27, periodDays:
+  currentYear[11][26] = symptoms;
+  currentYear[11][27] = symptoms;
+  currentYear[11][28] = symptoms;
+  currentYear[11][30] = symptoms
+
+  // 2023
+
+  //TODO: test with dec 31, Jan 2 -> jan 3rd as well
+  nextYear[0][0] = symptoms;
+  nextYear[0][1] = symptoms;
+  nextYear[0][2] = symptoms;
+
   console.log(JSON.stringify(currentYear));
    try {
      await AsyncStorage.setItem("2021", JSON.stringify(lastYear));
+     await AsyncStorage.setItem("2023", JSON.stringify(nextYear));
      return await AsyncStorage.setItem("2022", JSON.stringify(currentYear));
   } catch (e) {
     console.log(e);

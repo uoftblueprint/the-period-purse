@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, View, Text} from 'react-native';
 import {GETsymptomsForDate}  from '../utils/helpers';
-import CycleService from './CycleService';
+import CycleService, {getNextPeriodEnd} from './CycleService';
 import Testing from './Testing';
 
 
@@ -32,13 +32,13 @@ export default function DummyTest() {
       <Button
         title="average Period length"
         onPress={() => {
-          CycleService.GetAveragePeriodLength();
+          CycleService.GetAveragePeriodLength().then(data => console.log(data));
         }}
         />
       <Button
         title="average Cycle length"
         onPress={() => {
-          CycleService.GetAverageCycleLength();
+          CycleService.GetAverageCycleLength().then(data => console.log(data));
         }}
         />
       <Button
@@ -93,6 +93,11 @@ export default function DummyTest() {
         onPress={() => {
           CycleService.GetMostRecentPeriodStartDay().then(data => console.log(data));
         }}/>
+      <Button
+        title="Get next period end relative to Dec 27 2022 "
+        onPress={() => {
+          getNextPeriodEnd(new Date("12/27/2022")).then(data => console.log(data));
+        }}/>
 
       <Button
         title = "get cycle donut percent"
@@ -103,7 +108,7 @@ export default function DummyTest() {
       <Button
         title = "get cycle History"
         onPress={() => {
-          CycleService.GetCycleHistoryByYear(2022);
+          CycleService.GetCycleHistoryByYear(2022).then(data => console.log(data));
         }}
         />
 
