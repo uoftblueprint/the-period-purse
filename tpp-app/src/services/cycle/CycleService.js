@@ -48,7 +48,6 @@ async function getNextPeriodEnd(searchFrom){
       yesterday = current;
       current = tomorrow;
 
-      console.log(`Current date is: ${current}`);
 
       twoDaysEarlierSymptoms = yesterdaySymptoms;
       yesterdaySymptoms = dateSymptoms;
@@ -65,7 +64,6 @@ async function getNextPeriodEnd(searchFrom){
 
 
 }
-export {getNextPeriodEnd};
 
 /**
  * Gets the most recent period start date for a given date (searchFrom)
@@ -116,7 +114,7 @@ const CycleService = {
    *  @param {number} percent Float in range [0,1] of how far along period is
    *  @return {Promise} Resolves when the set operation is completed
    */
-  PostCycleDonutPercent: async function(percent){
+  POSTCycleDonutPercent: async function(percent){
     try {
       var today = new Date();
       var date = getDateString(today);
@@ -134,7 +132,7 @@ const CycleService = {
    * Get the user's average period length
    * @return {Promise} Resolves into either an integer for number of days or NULL if info not present
    */
-  GetAveragePeriodLength: async function(){
+  GETAveragePeriodLength: async function(){
     try {
       const res = await AsyncStorage.getItem(Keys.AVERAGE_PERIOD_LENGTH);
       return res;
@@ -148,7 +146,7 @@ const CycleService = {
    * Get the user's average cycle length
    * @return {Promise} Resolves into either an integer for number of days or NULL if info is not present
    */
-  GetAverageCycleLength: async function(){
+  GETAverageCycleLength: async function(){
     try {
       const res = await AsyncStorage.getItem(Keys.AVERAGE_CYCLE_LENGTH);
       return res;
@@ -163,18 +161,16 @@ const CycleService = {
    * Get the number of days the user has been on their period
    * @return {Promise} Resolves into 0 if user not on period, and an integer of the days they have been on their period otherwise
    */
-  GetPeriodDay: async function (){
+  GETPeriodDay: async function (){
 
     let periodDays = 0;
     var date = new Date()
-    console.log("GetPeriodDay as default: " + date);
     let dateSymptoms = await GETsymptomsForDate(date.getDate(), date.getMonth()+1, date.getFullYear());
     if (dateSymptoms.flow === null || dateSymptoms.flow === FLOW_LEVEL.NONE){
       return 0;
     }
     else {
-      let startDate = await this.GetMostRecentPeriodStartDay();
-      console.log(`period day: start: ${startDate} and end: ${date}`)
+      let startDate = await this.GETMostRecentPeriodStartDay();
       return getDaysDiff(startDate, date) ;
     }
 
@@ -187,7 +183,7 @@ const CycleService = {
    * Get most recent period start date
    * @return {Promise} A promise that resolves into a Date object that is when the most recent period started.
    */
-  GetMostRecentPeriodStartDay: async function () {
+  GETMostRecentPeriodStartDay: async function () {
     var date = new Date()
 
     let mostRecentPeriodDay = getLastPeriodStart(date);
@@ -198,28 +194,25 @@ const CycleService = {
    * Get how far the user is into their period as a percentage
    * @return {Promise} A percentage approximation (meaning in range [0,1]) of how far the user is into their period
    */
-  GetCycleDonutPercent: async function() {
+  GETCycleDonutPercent: async function() {
     try{
       let today = new Date();
       let today_str = getDateString(today);
       let percent = await AsyncStorage.getItem(Keys.CYCLE_DONUT_PERCENT)
-      console.log("retrieved percent: " + percent)
       percent = percent != null ? JSON.parse(percent) : null;
 
 
 
       if (percent != null && today_str in percent){
-        console.log(`accessing pre-computed cycle donut percentage for ${today_str} because we stored it for ${Object.keys(percent)[0]} `);
         return percent[today_str];
       }
       else{
-        let mostRecentPeriodStart = await this.GetMostRecentPeriodStartDay();
-        let avgCycleLength = await this.GetAverageCycleLength();
+        let mostRecentPeriodStart = await this.GETMostRecentPeriodStartDay();
+        let avgCycleLength = await this.GETAverageCycleLength();
         if (mostRecentPeriodStart && avgCycleLength){
           let daysSincePeriodStart = getDaysDiff(mostRecentPeriodStart, today);
-          console.log("days diff:" + daysSincePeriodStart)
           let cycleDonutPercent = daysSincePeriodStart / avgCycleLength;
-          this.PostCycleDonutPercent(cycleDonutPercent);
+          this.POSTCycleDonutPercent(cycleDonutPercent);
           return cycleDonutPercent;
         }
         else{
@@ -238,7 +231,7 @@ const CycleService = {
    * @param {number} year The year to retrieve history for
    * @return {Promise} an object that contains intervals of the user's period (start & length) in that year
    */
-  GetCycleHistoryByYear: async function(year) {
+  GETCycleHistoryByYear: async function(year) {
     let intervals = []
     let endOfYear = new Date(year,11,31);
     let isYearsLastPeriod = true;
@@ -253,18 +246,14 @@ const CycleService = {
           let periodEnd = current;
           let start = await getLastPeriodStart(current);
           if (isYearsLastPeriod){
-            console.log(`start: ${start}`);
             periodEnd =  await getNextPeriodEnd(start);
-            console.log(`period end: ${periodEnd}`);
             isYearsLastPeriod = false;
           }
 
 
 
           let periodDays = getDaysDiff(periodEnd, start);
-          console.log(`start: ${start} periodDays: ${periodDays}`);
           intervals.push({"start": start, "periodDays": periodDays})
-          console.log(`moves to : ${periodEnd}`);
           var beforeStart = new Date(start.getTime());
           beforeStart.setDate(beforeStart.getDate() - 1);
           current = beforeStart;
@@ -275,7 +264,6 @@ const CycleService = {
         current = yesterday;
 
       }
-      console.log("finished");
 
 
 
