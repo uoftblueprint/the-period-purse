@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
-import {initializeEmptyYear, getDateString, GETsymptomsForDate, getCalendarByYear, getSymptomsFromCalendar}  from '../utils/helpers';
+import {initializeEmptyYear, getDateString, GETsymptomsFor getCalendarByYear, getSymptomsFromCalendar}  from '../utils/helpers';
 import {Symptoms} from '../utils/models';
 import differenceInCalendarDays from 'date-fns/differenceInDays'
 import isSameDay from 'date-fns/isSameDay'
