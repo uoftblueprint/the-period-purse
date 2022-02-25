@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
-import {initializeEmptyYear, getDateString, GETsymptomsForDate}  from '../utils/helpers';
+import {initializeEmptyYear, getDateString, GETsymptomsForDate, getCalendarByYear, getSymptomsFromCalendar}  from '../utils/helpers';
 import {Symptoms} from '../utils/models';
 import differenceInCalendarDays from 'date-fns/differenceInDays'
 import isSameDay from 'date-fns/isSameDay'
@@ -243,13 +243,19 @@ const CycleService = {
     let endOfYear = new Date(year,11,31);
     let isYearsLastPeriod = true;
 
+    let calendar = await getCalendarByYear(year);
+
+
+
     let current = endOfYear;
     try {
       // Search backwards until date switches to the previous year
       while(current.getFullYear() === year){
-        let currentSymptoms = await GETsymptomsForDate(current.getDate(), current.getMonth()+1, current.getFullYear());
+        let currentSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
 
         if (currentSymptoms.flow !== null && currentSymptoms.flow !== FLOW_LEVEL.NONE){
+          console.log(`THINKS that ${current} has flow`);
+          console.log(currentSymptoms);
           let periodEnd = current;
           let start = await getLastPeriodStart(current);
           if (isYearsLastPeriod){

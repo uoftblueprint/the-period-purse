@@ -107,6 +107,14 @@ const Testing = {
     'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
     'Notes': 'Happy new year! My resolution is to log symptoms every day.'
   }
+   const today = {
+    "Flow":  "LIGHT",
+    "Mood": "HAPPY",
+    'Sleep': '7.5',
+    'Cramps': 'MEDIUM',
+    'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
+    'Notes': 'This is today'
+  }
 
   // note index i is for day i+1
   // feb 7th, period days: 2
@@ -126,6 +134,8 @@ const Testing = {
 
   // feb 22, periodDays: 1
   calendar[1][21] = symptoms;
+
+  calendar[1][24] = today;
 
   console.log(JSON.stringify(calendar));
    try {
@@ -203,6 +213,16 @@ const Testing = {
     'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
     'Notes': 'Happy new year! My resolution is to log symptoms every day.'
   }
+
+  const target = {
+    "Flow":  "LIGHT",
+    "Mood": "HAPPY",
+    'Sleep': '7.5',
+    'Cramps': 'MEDIUM',
+    'Exercise': {'BIKING': '0.5', 'RUNNING': '1' },
+    'Notes': 'THIS IS THE TARGET'
+
+  }
   // Dec 2021
   // dec 30, periodDays: 4
   lastYear[11][29] = symptoms;
@@ -234,7 +254,11 @@ const Testing = {
   currentYear[1][14] = symptoms;
   currentYear[1][15] = symptoms;
 
-  // dec 27, periodDays:
+  // target is march 4th
+  // march 4th, periodDays: 1
+  currentYear[2][3] = target;
+
+  // dec 27, periodDays: 8
   currentYear[11][26] = symptoms;
   currentYear[11][27] = symptoms;
   currentYear[11][28] = symptoms;

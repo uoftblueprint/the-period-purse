@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Button, View, Text} from 'react-native';
-import {GETsymptomsForDate}  from '../utils/helpers';
+import {GETsymptomsForDate, getCalendarByYear, getSymptomsFromCalendar}  from '../utils/helpers';
 import CycleService, {getNextPeriodEnd} from './CycleService';
 import Testing from './Testing';
 
@@ -109,6 +109,19 @@ export default function DummyTest() {
         title = "get cycle History"
         onPress={() => {
           CycleService.GetCycleHistoryByYear(2022).then(data => console.log(data));
+        }}
+        />
+      <Button
+        title = "get calendars"
+        onPress={() => {
+          getCalendarByYear(2022).then(data => console.log(data));
+        }}
+        />
+      <Button
+        title = "get symptoms for Dec 25th"
+        onPress={() => {
+          let date = new Date();
+          getCalendarByYear(2022).then(calendar => getSymptomsFromCalendar(calendar,25, 12, 2022).then(data => console.log(data)));
         }}
         />
 

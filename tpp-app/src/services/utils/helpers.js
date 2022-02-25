@@ -42,5 +42,69 @@ export const getDateString = (date) => {
   const yearData = JSON.parse(await AsyncStorage.getItem(year.toString()));
 
   // Return symptoms for that day or empty symptoms object if it doesn't exist
-  return yearData[month-1][day-1] ? new Symptoms(yearData[month-1][day-1]) : new Symptoms();
+  let rawSymptoms = yearData[month - 1][day-1];
+  return rawSymptoms ? new Symptoms(rawSymptoms.Flow, rawSymptoms.Mood, rawSymptoms.Sleep, rawSymptoms.Cramps, rawSymptoms.Exercise,rawSymptoms.Notes) : new Symptoms();
+}
+
+/**
+ * Check if the date, month, year combination is a valid date.
+ * @param day number
+ * @param month number (January = 1)
+ * @param year number
+ * @return True or False boolean
+ */
+ export const isValidDate = (day, month, year) => {
+  // COPIED FROM EMILY. TODO: delete this for original when merge
+  // Check the ranges of month and year
+  if (year < 1000 || year > 3000 || month == 0 || month > 12)
+      return false;
+
+  let monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+
+  // Adjust for leap years
+  if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+      monthLength[1] = 29;
+
+  // Check the range of the day
+  return day > 0 && day <= monthLength[month - 1];
+};
+
+export const getCalendarByYear = async (year) => {
+  let prevYear = year - 1;
+  let nextYear = year + 1;
+  // should do the checking from get symptoms
+  let currentCalendarString = await AsyncStorage.getItem(year.toString());
+  let prevCalendarString = await AsyncStorage.getItem(prevYear.toString());
+  let nextCalendarString = await AsyncStorage.getItem(nextYear.toString());
+
+  let calendars = {}
+  if (prevCalendarString){
+    let prevCalendar = JSON.parse(prevCalendarString);
+    calendars[prevYear] = prevCalendar;
+  }
+  if (currentCalendarString){
+    let currentCalendar = JSON.parse(currentCalendarString);
+    calendars[year] = currentCalendar;
+  }
+  if (nextCalendarString){
+    let nextCalendar = JSON.parse(nextCalendarString);
+    calendars[nextYear] = nextCalendar;
+  }
+  return calendars;
+}
+
+/**
+ * Retrieves the user's symptom data for the given date.
+ * @param day number
+ * @param month number (January = 1)
+ * @param year number
+ */
+export const getSymptomsFromCalendar = async (calendar, day, month, year) => {
+  if (year in calendar && isValidDate(day,month, year)){
+    let rawSymptoms = calendar[year][month - 1][day-1];
+    return rawSymptoms ? new Symptoms(rawSymptoms.Flow, rawSymptoms.Mood, rawSymptoms.Sleep, rawSymptoms.Cramps, rawSymptoms.Exercise,rawSymptoms.Notes) : new Symptoms();
+  }
+  else {
+    return new Symptoms();
+  }
 }
