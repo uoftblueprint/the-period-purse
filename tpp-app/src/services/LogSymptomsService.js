@@ -6,7 +6,7 @@ import { initializeEmptyYear, GETsymptomsForDate, isValidDate } from './utils/he
 
 /**
  * Posts the user's symptom data into the local storage for the given date.
- * @param day number
+ * @param day number (1st day of month = 1)
  * @param month number (January = 1)
  * @param year number
  * @param symptoms Symptoms object

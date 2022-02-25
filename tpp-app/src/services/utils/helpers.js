@@ -20,7 +20,7 @@ export const initializeEmptyYear = (yearNumber) => {
 
 /**
  * Check if the date, month, year combination is a valid date.
- * @param day number
+ * @param day number (1st day of month = 1)
  * @param month number (January = 1)
  * @param year number
  * @return True or False boolean
@@ -42,7 +42,7 @@ export const isValidDate = (day, month, year) => {
 
 /**
  * Retrieves the user's symptom data for the given date.
- * @param day number
+ * @param day number (1st day of month = 1)
  * @param month number (January = 1)
  * @param year number
  */
@@ -52,7 +52,15 @@ export const GETsymptomsForDate = async (day, month, year) => {
     const yearData = JSON.parse(await AsyncStorage.getItem(year.toString()));
 
     // Return symptoms for that day or empty symptoms object if it doesn't exist
-    return yearData[month-1][day-1] ? new Symptoms(yearData[month-1][day-1]) : new Symptoms();
+    return yearData[month-1][day-1]
+      ? new Symptoms(
+        yearData[month-1][day-1].flow,
+        yearData[month-1][day-1].mood,
+        yearData[month-1][day-1].sleep,
+        yearData[month-1][day-1].cramps,
+        yearData[month-1][day-1].exercise,
+        yearData[month-1][day-1].notes)
+      : new Symptoms();
   } else {
     // Not a valid date
     return new Symptoms();
