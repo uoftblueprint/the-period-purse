@@ -23,7 +23,7 @@ export const initializeEmptyYear = (yearNumber) => {
 /**
  * Convert a Date object into a date string, encoding year, month and day. Note it encodes months as 1 indexed, and days as 0 indexed
  * @param {Date} date Object to convert to string
- * @return {String} String encoding year, month and day
+ * @return {String} String encoding year, month and day in YYYY-MM-DD format
  */
 export const getDateString = (date) => {
   var date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
@@ -31,20 +31,6 @@ export const getDateString = (date) => {
 
 }
 
-/**
- * Retrieves the user's symptom data for the given date.
- * @param day number
- * @param month number (January = 0)
- * @param year number
- */
- export const GETsymptomsForDate = async (day, month, year) => {
-  // Get the year's data (value could be null if year is empty)
-  const yearData = JSON.parse(await AsyncStorage.getItem(year.toString()));
-
-  // Return symptoms for that day or empty symptoms object if it doesn't exist
-  let rawSymptoms = yearData[month - 1][day-1];
-  return rawSymptoms ? new Symptoms(rawSymptoms.Flow, rawSymptoms.Mood, rawSymptoms.Sleep, rawSymptoms.Cramps, rawSymptoms.Exercise,rawSymptoms.Notes) : new Symptoms();
-}
 
 /**
  * Check if the date, month, year combination is a valid date.
