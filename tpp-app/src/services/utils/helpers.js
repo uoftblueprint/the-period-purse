@@ -69,10 +69,14 @@ export const getDateString = (date) => {
   return day > 0 && day <= monthLength[month - 1];
 };
 
+/**
+ * @param {number} year The year for which to get calendars
+ * @return {Object} A dictionary containing the calendars for the year before, current year, and next year. Keys are the year numbers
+ */
 export const getCalendarByYear = async (year) => {
   let prevYear = year - 1;
   let nextYear = year + 1;
-  // should do the checking from get symptoms
+
   let currentCalendarString = await AsyncStorage.getItem(year.toString());
   let prevCalendarString = await AsyncStorage.getItem(prevYear.toString());
   let nextCalendarString = await AsyncStorage.getItem(nextYear.toString());
@@ -94,10 +98,11 @@ export const getCalendarByYear = async (year) => {
 }
 
 /**
- * Retrieves the user's symptom data for the given date.
- * @param day number
- * @param month number (January = 1)
- * @param year number
+ * Retrieves the user's symptom data for the given date from the calendar.
+* @param {Object} calendar The object containing the symptoms for this year, last year, and next year.
+ * @param {Number} day number (First day = 0)
+ * @param {Number} month number (January = 1)
+ * @param {Number} year number
  */
 export const getSymptomsFromCalendar = async (calendar, day, month, year) => {
   if (year in calendar && isValidDate(day,month, year)){

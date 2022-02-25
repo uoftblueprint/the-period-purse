@@ -15,6 +15,8 @@ import Keys from '../utils/keys';
  * @return {number} number of days between the two dates provided, ignoring their hours, minutes and seconds.
  */
 const getDaysDiff = (earlierDate, laterDate) => {
+  earlierDate.setHours(0,0,0,0)
+  laterDate.setHours(0,0,0,0)
   return Math.abs(differenceInCalendarDays(earlierDate, laterDate)) + 1;
 
 }
@@ -22,16 +24,21 @@ const getDaysDiff = (earlierDate, laterDate) => {
 /**
  * Gets the next period end date for a given date. This is not a prediction.
  * @param {Date} searchFrom The date relative to which to find the next period end date. Must be an earlier date than today
+ * @param {Object} calendar The object containing the symptoms for this year, last year, and next year. Optional.
  * @return {Promise} Resolves into Date object that is the closest day after searchFrom that is the end of a period
  */
-async function getNextPeriodEnd(searchFrom){
+async function getNextPeriodEnd(searchFrom, calendar = null){
     var current = searchFrom;
     var yesterday = new Date(current.getTime())
     yesterday.setDate(current.getDate() - 1)
     var twoDaysEarlier = new Date(current.getTime());
     twoDaysEarlier.setDate(current.getDate() - 2);
 
-    let dateSymptoms = await GETsymptomsForDate(current.getDate(), current.getMonth()+1, current.getFullYear());
+    if (!calendar){
+      calendar = await getCalendarByYear(current.getFullYear());
+    }
+
+    let dateSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
     let yesterdaySymptoms = new Symptoms();
     let twoDaysEarlierSymptoms = new Symptoms()
 
@@ -52,7 +59,7 @@ async function getNextPeriodEnd(searchFrom){
 
       twoDaysEarlierSymptoms = yesterdaySymptoms;
       yesterdaySymptoms = dateSymptoms;
-      dateSymptoms = await GETsymptomsForDate(current.getDate(), current.getMonth() + 1, current.getFullYear());
+      dateSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
       noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
       noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null) ;
       flowTwoDaysEarlier = (twoDaysEarlierSymptoms.flow !== null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE)
@@ -70,16 +77,21 @@ export {getNextPeriodEnd};
 /**
  * Gets the most recent period start date for a given date (searchFrom)
  * @param {Date} searchFrom Date from which to find the last period start
+ * @param {Object} calendar The object containing the symptoms for this year, last year, and next year. Optional.
  * @return {Promise} Resolves into Date that is the most recent day that a period started, relative to searchFrom
  */
-async function getLastPeriodStart(searchFrom){
+async function getLastPeriodStart(searchFrom, calendar = null){
     var current = searchFrom;
     var tomorrow = new Date(current.getTime())
     tomorrow.setDate(current.getDate() + 1)
     var twoDaysLater = new Date(current.getTime());
     twoDaysLater.setDate(current.getDate() + 2);
 
-    let dateSymptoms = await GETsymptomsForDate(current.getDate(), current.getMonth()+1, current.getFullYear());
+    if (!calendar){
+      calendar = await getCalendarByYear(current.getFullYear());
+    }
+
+    let dateSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
     let tomorrowSymptoms = new Symptoms();
     let twoDaysLaterSymptoms = new Symptoms()
 
@@ -98,7 +110,7 @@ async function getLastPeriodStart(searchFrom){
 
       twoDaysLaterSymptoms = tomorrowSymptoms;
       tomorrowSymptoms = dateSymptoms;
-      dateSymptoms = await GETsymptomsForDate(current.getDate(), current.getMonth() + 1, current.getFullYear());
+      dateSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
       noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
       noFlowTomorrow = (tomorrowSymptoms.flow === FLOW_LEVEL.NONE || tomorrowSymptoms.flow === null) ;
       flowTwoDaysLater = (twoDaysLaterSymptoms.flow !== null && twoDaysLaterSymptoms.flow !== FLOW_LEVEL.NONE)
@@ -161,21 +173,25 @@ const CycleService = {
 
   /**
    * Get the number of days the user has been on their period
+   *
+   * @param {Object} calendar The object containing the symptoms for this year, last year, and next year. Optional.
    * @return {Promise} Resolves into 0 if user not on period, and an integer of the days they have been on their period otherwise
    */
-  GetPeriodDay: async function (){
+  GetPeriodDay: async function (calendar = null){
 
     let periodDays = 0;
     var date = new Date()
-    console.log("GetPeriodDay as default: " + date);
-    let dateSymptoms = await GETsymptomsForDate(date.getDate(), date.getMonth()+1, date.getFullYear());
+    if (!calendar){
+      calendar = await getCalendarByYear(date.getFullYear());
+    }
+    let dateSymptoms = await getSymptomsFromCalendar(calendar, date.getDate(), date.getMonth()+1, date.getFullYear());
     if (dateSymptoms.flow === null || dateSymptoms.flow === FLOW_LEVEL.NONE){
       return 0;
     }
     else {
       let startDate = await this.GetMostRecentPeriodStartDay();
       console.log(`period day: start: ${startDate} and end: ${date}`)
-      return getDaysDiff(startDate, date) ;
+      return getDaysDiff(startDate, date);
     }
 
     return periodDays;
@@ -185,12 +201,14 @@ const CycleService = {
 
   /**
    * Get most recent period start date
+   *
+   * @param {Object} calendar The object containing the symptoms for this year, last year, and next year. Optional.
    * @return {Promise} A promise that resolves into a Date object that is when the most recent period started.
    */
-  GetMostRecentPeriodStartDay: async function () {
+  GetMostRecentPeriodStartDay: async function (calendar = null) {
     var date = new Date()
 
-    let mostRecentPeriodDay = getLastPeriodStart(date);
+    let mostRecentPeriodDay = getLastPeriodStart(date, calendar);
     return mostRecentPeriodDay;
   },
 

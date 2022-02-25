@@ -135,6 +135,8 @@ const Testing = {
   // feb 22, periodDays: 1
   calendar[1][21] = symptoms;
 
+
+  calendar[1][23] = symptoms;
   calendar[1][24] = today;
 
   console.log(JSON.stringify(calendar));
