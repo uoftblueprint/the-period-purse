@@ -1,7 +1,7 @@
 /**
  * The symptoms of each day
  */
-class Symptoms {
+export class Symptoms {
   constructor(flow = null, mood = null, sleep = null, cramps = null, exercise = null, notes = null) {
     this.flow = flow;
     this.mood = mood;
