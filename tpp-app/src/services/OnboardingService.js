@@ -10,7 +10,7 @@ import { Symptoms } from './utils/models.js';
  */
 export const PostInitialPeriodLength = async (periodLength) => new Promise( async (resolve, reject) => {
     try {
-        if(periodLength != null) {
+        if(periodLength) {
             periodLength = JSON.stringify(periodLength);
             await AsyncStorage.multiSet([
                 [KEYS.INITIAL_PERIOD_LENGTH, periodLength], 
