@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
-import {initializeEmptyYear, getDateString, GETsymptomsFor getCalendarByYear, getSymptomsFromCalendar}  from '../utils/helpers';
+import {initializeEmptyYear, getDateString, getCalendarByYear, getSymptomsFromCalendar}  from '../utils/helpers';
 import {Symptoms} from '../utils/models';
 import differenceInCalendarDays from 'date-fns/differenceInDays'
 import isSameDay from 'date-fns/isSameDay'
@@ -189,7 +189,7 @@ const CycleService = {
       return 0;
     }
     else {
-      let startDate = await this.GETMostRecentPeriodStartDay();
+      let startDate = await this.GETMostRecentPeriodStartDate();
       return getDaysDiff(startDate, date);
     }
 
@@ -204,8 +204,12 @@ const CycleService = {
    * @param {Object} calendar The object containing the symptoms for this year, last year, and next year. Optional.
    * @return {Promise} A promise that resolves into a Date object that is when the most recent period started.
    */
-  GETMostRecentPeriodStartDay: async function (calendar = null) {
+  GETMostRecentPeriodStartDate: async function (calendar = null) {
     var date = new Date()
+
+    if (!calendar){
+      calendar = await getCalendarByYear(date.getFullYear());
+    }
 
     let mostRecentPeriodDay = getLastPeriodStart(date, calendar);
     return mostRecentPeriodDay;
@@ -223,13 +227,14 @@ const CycleService = {
       percent = percent != null ? JSON.parse(percent) : null;
 
 
+      let calendar = await getCalendarByYear(date.getFullYear());
 
       if (percent != null && today_str in percent){
         return percent[today_str];
       }
       else{
-        let mostRecentPeriodStart = await this.GETMostRecentPeriodStartDay();
-        let avgCycleLength = await this.GETAverageCycleLength();
+        let mostRecentPeriodStart = await this.GETMostRecentPeriodStartDate(calendar);
+        let avgCycleLength = await this.GETAverageCycleLength(calendar);
         if (mostRecentPeriodStart && avgCycleLength){
           let daysSincePeriodStart = getDaysDiff(mostRecentPeriodStart, today);
           let cycleDonutPercent = daysSincePeriodStart / avgCycleLength;
