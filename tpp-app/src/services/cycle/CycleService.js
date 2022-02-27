@@ -137,7 +137,8 @@ const CycleService = {
       datePercent[date] = percent;
       return await AsyncStorage.setItem(Keys.CYCLE_DONUT_PERCENT, JSON.stringify(datePercent));
     } catch (e) {
-      reject("Something went wrong");
+      console.log(e);
+      return null;
     }
   },
 
@@ -150,7 +151,6 @@ const CycleService = {
       const res = await AsyncStorage.getItem(Keys.AVERAGE_PERIOD_LENGTH);
       return res;
     } catch (e) {
-      reject("Something went wrong");
       console.log(e);
       return null;
     }
@@ -189,7 +189,7 @@ const CycleService = {
       return 0;
     }
     else {
-      let startDate = await this.GETMostRecentPeriodStartDate();
+      let startDate = await this.GETMostRecentPeriodStartDate(calendar);
       return getDaysDiff(startDate, date);
     }
 
