@@ -1,25 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
-import {initializeEmptyYear, getDateString, getCalendarByYear, getSymptomsFromCalendar}  from '../utils/helpers';
+import {initializeEmptyYear, getDateString, getCalendarByYear, getSymptomsFromCalendar, getDaysDiffInclusive}  from '../utils/helpers';
 import {Symptoms} from '../utils/models';
-import differenceInCalendarDays from 'date-fns/differenceInDays'
-import isSameDay from 'date-fns/isSameDay'
-import Keys from '../utils/keys';
+import differenceInCalendarDays from 'date-fns/differenceInDays';
+import isSameDay from 'date-fns/isSameDay';
+import subDays from 'date-fns/subDays';
+import Keys from '../utils/keys';;
 
 
 
-/**
- * Computes the number of days between the two dates provided. If earlierDate and laterDate are equal, returns 1.
- * @param {Date} earlierDate
- * @param {Date} laterDate
- * @return {number} number of days between the two dates provided, ignoring their hours, minutes and seconds.
- */
-const getDaysDiff = (earlierDate, laterDate) => {
-  earlierDate.setHours(0,0,0,0)
-  laterDate.setHours(0,0,0,0)
-  return Math.abs(differenceInCalendarDays(earlierDate, laterDate)) + 1;
 
-}
 
 /**
  * Gets the next period end date for a given date. This is not a prediction.
@@ -190,7 +180,7 @@ const CycleService = {
     }
     else {
       let startDate = await this.GETMostRecentPeriodStartDate(calendar);
-      return getDaysDiff(startDate, date);
+      return getDaysDiffInclusive(startDate, date);
     }
 
     return periodDays;
@@ -227,7 +217,7 @@ const CycleService = {
       percent = percent != null ? JSON.parse(percent) : null;
 
 
-      let calendar = await getCalendarByYear(date.getFullYear());
+      let calendar = await getCalendarByYear(today.getFullYear());
 
       if (percent != null && today_str in percent){
         return percent[today_str];
@@ -236,7 +226,7 @@ const CycleService = {
         let mostRecentPeriodStart = await this.GETMostRecentPeriodStartDate(calendar);
         let avgCycleLength = await this.GETAverageCycleLength(calendar);
         if (mostRecentPeriodStart && avgCycleLength){
-          let daysSincePeriodStart = getDaysDiff(mostRecentPeriodStart, today);
+          let daysSincePeriodStart = getDaysDiffInclusive(mostRecentPeriodStart, today);
           let cycleDonutPercent = daysSincePeriodStart / avgCycleLength;
           this.POSTCycleDonutPercent(cycleDonutPercent);
           return cycleDonutPercent;
@@ -282,7 +272,7 @@ const CycleService = {
 
 
 
-          let periodDays = getDaysDiff(periodEnd, start);
+          let periodDays = getDaysDiffInclusive(periodEnd, start);
           intervals.push({"start": start, "periodDays": periodDays})
           var beforeStart = new Date(start.getTime());
           beforeStart.setDate(beforeStart.getDate() - 1);

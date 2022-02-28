@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Symptoms} from '../utils/models';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 // Backend helper functions used across app
 
 /**
@@ -99,3 +100,16 @@ export const getSymptomsFromCalendar = async (calendar, day, month, year) => {
     return new Symptoms();
   }
 }
+
+/**
+ * Computes the number of days between the two dates provided, including the two dates. If earlierDate and laterDate are equal, returns 1.
+ * @param {Date} earlierDate
+ * @param {Date} laterDate
+ * @return {number} number of days between the two dates provided, ignoring their hours, minutes and seconds.
+ */
+export const getDaysDiffInclusive = (earlierDate, laterDate) => {
+  earlierDate.setHours(0,0,0,0)
+  laterDate.setHours(0,0,0,0)
+  return Math.abs(differenceInCalendarDays(earlierDate, laterDate)) + 1;
+}
+
