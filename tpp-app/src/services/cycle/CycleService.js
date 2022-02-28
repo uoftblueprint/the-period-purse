@@ -5,6 +5,7 @@ import {Symptoms} from '../utils/models';
 import differenceInCalendarDays from 'date-fns/differenceInDays';
 import isSameDay from 'date-fns/isSameDay';
 import subDays from 'date-fns/subDays';
+import addDays from 'date-fns/addDays';
 import Keys from '../utils/keys';;
 
 
@@ -19,10 +20,8 @@ import Keys from '../utils/keys';;
  */
 async function getNextPeriodEnd(searchFrom, calendar = null){
     var current = searchFrom;
-    var yesterday = new Date(current.getTime())
-    yesterday.setDate(current.getDate() - 1)
-    var twoDaysEarlier = new Date(current.getTime());
-    twoDaysEarlier.setDate(current.getDate() - 2);
+    var yesterday = subDays(current, 1);
+    var twoDaysEarlier = subDays(current, 2);
 
     if (!calendar){
       calendar = await getCalendarByYear(current.getFullYear());
@@ -39,8 +38,7 @@ async function getNextPeriodEnd(searchFrom, calendar = null){
 
     while(!(noFlowToday && noFlowYesterday && flowTwoDaysEarlier)){
 
-      var tomorrow = new Date(current.getTime());
-      tomorrow.setDate(current.getDate()+1);
+      var tomorrow = addDays(current, 1);
       twoDaysEarlier = yesterday;
       yesterday = current;
       current = tomorrow;
@@ -71,11 +69,8 @@ export {getNextPeriodEnd};
  */
 async function getLastPeriodStart(searchFrom, calendar = null){
     var current = searchFrom;
-    var tomorrow = new Date(current.getTime())
-    tomorrow.setDate(current.getDate() + 1)
-    var twoDaysLater = new Date(current.getTime());
-    twoDaysLater.setDate(current.getDate() + 2);
-
+    var tomorrow = addDays(current, 1);
+    var twoDaysLater = addDays(current, 2);
     if (!calendar){
       calendar = await getCalendarByYear(current.getFullYear());
     }
@@ -91,8 +86,7 @@ async function getLastPeriodStart(searchFrom, calendar = null){
 
     while(!(noFlowToday && noFlowTomorrow && flowTwoDaysLater)){
 
-      var yesterday = new Date(current.getTime());
-      yesterday.setDate(current.getDate()-1);
+      var yesterday = subDays(current, 1);
       twoDaysLater = tomorrow;
       tomorrow = current;
       current = yesterday;
@@ -232,7 +226,6 @@ const CycleService = {
           return cycleDonutPercent;
         }
         else{
-          //TODO: is 0 the best value to default to? idk
           return 0;
         }
       }
@@ -274,13 +267,11 @@ const CycleService = {
 
           let periodDays = getDaysDiffInclusive(periodEnd, start);
           intervals.push({"start": start, "periodDays": periodDays})
-          var beforeStart = new Date(start.getTime());
-          beforeStart.setDate(beforeStart.getDate() - 1);
+          var beforeStart = subDays(start, 1);
           current = beforeStart;
         }
 
-        var yesterday = new Date(current.getTime())
-        yesterday.setDate(current.getDate() - 1)
+        var yesterday = subDays(current, 1);
         current = yesterday;
 
       }
