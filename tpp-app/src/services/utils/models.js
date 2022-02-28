@@ -12,4 +12,3 @@ export class Symptoms {
   }
 }
 
-export {Symptoms};
