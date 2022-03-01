@@ -50,6 +50,13 @@ export const UnderlineButton = ({ onPress, title }) => {
     </TouchableOpacity>);
 }
 
+export const DatePickerButton = ({ onPress, title }) => {
+  return (
+  <TouchableOpacity onPress={onPress} style={{ marginTop: 7 }}>
+      <Text style={styles.datePickerButtonText}>{title}</Text>
+  </TouchableOpacity>);
+}
+
 const styles = StyleSheet.create({
   wideButtonText: {
     color: "#FFFFFF",
@@ -94,4 +101,12 @@ const styles = StyleSheet.create({
     fontSize: 15, 
     fontFamily: 'Avenir'
   }, 
+  datePickerButtonText: {
+    color: "#6D6E71", 
+    fontFamily: 'Avenir', 
+    fontSize: 17, 
+    textAlign: 'center', 
+    fontWeight: '400',
+    marginTop: '7%'
+  }
 });

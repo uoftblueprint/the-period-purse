@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, ImageBackground, TextInput } from 'react-native';
-import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
@@ -9,7 +9,7 @@ import { TwoButtonContainer, BackButtonContainer, InputContainer } from './compo
 import { PostInitialPeriodLength } from '../services/OnboardingService';
 
 export default function PeriodLength ({ navigation }) {
-  const [periodLength, setPeriodLength] = useState(0)
+  const [periodLength, setPeriodLength] = useState(null)
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
