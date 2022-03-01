@@ -6,6 +6,7 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
+import { PostSymptomsToTrack } from '../services/OnboardingService';
 
 export default function SymptomsChoices ({ navigation }) {
   return (
@@ -22,7 +23,11 @@ export default function SymptomsChoices ({ navigation }) {
 
       <TwoButtonContainer>
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
-        <NextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
+        <NextButton title="Next" onPress={() => 
+          {
+            PostSymptomsToTrack(true, true, false, false, false);
+            navigation.navigate(STACK_SCREENS["Backup"]);
+          }}/>
       </TwoButtonContainer>
     </ImageBackground>
   );
