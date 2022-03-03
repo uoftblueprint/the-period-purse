@@ -27,6 +27,20 @@ export const PostInitialPeriodLength = async (periodLength) => new Promise( asyn
 })
 
 /**
+ * Gets the user's initial period length. 
+ * @return a promise resolving into either an integer for number of days or null if info is not present
+ */
+export const GetInitialPeriodLength = async () => {
+    try {
+        return await AsyncStorage.getItem(KEYS.INITIAL_PERIOD_LENGTH);
+    }
+    catch (e) {
+        console.log(e);
+        return null;
+    }
+}
+
+/**
  * Initializes entries for the user's last period.  
  * This only happens when the user has given inputs for both their 
  * initial period length and the start date of their last period. 
@@ -35,7 +49,7 @@ export const PostInitialPeriodLength = async (periodLength) => new Promise( asyn
  */
 export const PostInitialPeriodStart = async (periodStart) => new Promise ( async (resolve, reject) => {
     try {
-        const periodLength = await AsyncStorage.getItem(KEYS.INITIAL_PERIOD_LENGTH);
+        const periodLength = await GetInitialPeriodLength();
         if(periodLength && periodStart) {
             const periodStartTime = periodStart.getTime();
             let yearsSet = new Set(); 
