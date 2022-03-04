@@ -43,27 +43,29 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
     }
 })
 
-export const LogMultipleDaysService = {
-    LogMultipleDayPeriod: async (dates) => {
-        // run this code for each value in the dates array
-        dates.map(async (date)=>{
-            const year = date.year;
-            const month = date.month;
-            const day = date.day;
 
-            let symptoms = await GETsymptomsForDate(day, month, year)
+/**
+ * Updates user's flow to medium on selected days where the user's flow was originally null or none.
+ * @param date 
+ * where date.day is a number (1st day of month = 1),
+ * date.month is a number (January = 1), 
+ * date.year is a number.
+ */
+export const LogMultipleDayPeriod = async (dates) => {
+    // run this code for each value in the dates array
+    dates.map(async (date)=>{
+        const year = date.year;
+        const month = date.month;
+        const day = date.day;
 
-            if (symptoms.flow == null){
-                symptoms.flow = FLOW_LEVEL.MEDIUM;
+        let symptoms = await GETsymptomsForDate(day, month, year)
 
-            }else{
-                symptoms.flow = FLOW_LEVEL.NONE;
-            }
+        if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
+            symptoms.flow = FLOW_LEVEL.MEDIUM;
+        }
 
-            POSTsymptomsForDate(day, month, year, symptoms);
+        POSTsymptomsForDate(day, month, year, symptoms);
 
-            // console.log("updated",JSON.stringify(data[month-1][day-1]));
-        })
+    })
 
-    }
 }

@@ -17,22 +17,6 @@ const VIEWS = {
 }
 const sideComponentWidth = 120
 
-const storeData = async () => {
-    try {
-      const jsonValue = JSON.stringify("coollll")
-      await AsyncStorage.setItem('wooow', jsonValue)
-      console.log('did it')
-    } catch (e) {
-        console.log("big error" + e);
-    }
-
-    try {
-        const res = await AsyncStorage.getItem('wooow')
-        console.log('grabbed ' + res)
-    } catch (e) {
-        console.log("big error" + e);
-    }
-  }
 
 // The component that is used by each day in the calendar
 const DayComponent = ({ date, state, marking, navigation }) => {
