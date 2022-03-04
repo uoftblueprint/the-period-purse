@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, ImageBackground } from 'react-native';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { configureFonts, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
@@ -50,7 +50,10 @@ export default function PeriodStart ({ navigation }) {
         </BodyText>
 
         <InputContainer>
-          <DatePickerButton title="Choose date" onPress={() => setOpen(true)}></DatePickerButton>
+          <DatePickerButton 
+            title={range.startDate ? range.startDate.toISOString().split('T')[0] : "Choose date"} 
+            onPress={() => setOpen(true)}>
+          </DatePickerButton>
         </InputContainer>
         <DatePickerModal 
           backgroundColor="#000000"
@@ -78,7 +81,7 @@ export default function PeriodStart ({ navigation }) {
           <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
           <NextButton title="Next" onPress={() => 
             {
-              PostInitialPeriodStart(new Date(2011, 11, 30));
+              PostInitialPeriodStart(range.startDate);
               navigation.navigate(STACK_SCREENS["Symptoms Choices"]);
             }}/>
         </TwoButtonContainer>
@@ -90,15 +93,31 @@ export default function PeriodStart ({ navigation }) {
 // https://callstack.github.io/react-native-paper/theming.html
 const theme = {
   ...DefaultTheme,
-  fonts: { 
-    regular: 'Avenir',
-    medium: 'Avenir',
-    light: 'Avenir',
-    thin: 'Avenir'
-  },
+  fonts: configureFonts(fontConfig),
   colors: {
     ...DefaultTheme.colors,
     primary: '#5A9F93',
+  }
+};
+
+const fontConfig = {
+  default: {
+      regular: {
+          fontFamily: 'Avenir',
+          fontWeight: 'normal',
+      },
+      medium: {
+          fontFamily: 'Avenir',
+          fontWeight: 'normal',
+      },
+      light: {
+          fontFamily: 'Avenir',
+          fontWeight: 'normal',
+      },
+      thin: {
+          fontFamily: 'Avenir',
+          fontWeight: 'normal',
+      },
   },
 };
 

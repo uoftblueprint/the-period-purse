@@ -57,6 +57,13 @@ export const DatePickerButton = ({ onPress, title }) => {
   </TouchableOpacity>);
 }
 
+export const SymptomsChoicesButton = ({ onPress, title, color }) => {
+  return (
+    <TouchableOpacity onPress={onPress} style={{ backgroundColor: color }}>
+      <Text style={styles.symptomsChoicesButtonText}>{title}</Text>
+    </TouchableOpacity>);
+}
+
 const styles = StyleSheet.create({
   wideButtonText: {
     color: "#FFFFFF",
@@ -108,5 +115,13 @@ const styles = StyleSheet.create({
     textAlign: 'center', 
     fontWeight: '400',
     marginTop: '7%'
+  },
+  symptomsChoicesButtonText: {
+    color: "#000000",
+    fontFamily: "System",
+    fontWeight: '600',
+    fontSize: 17, 
+    marginLeft: 41,
+    marginTop: 24,
   }
 });
