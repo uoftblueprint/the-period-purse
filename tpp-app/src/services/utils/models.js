@@ -11,3 +11,13 @@ export class Symptoms {
     this.notes = notes;
   }
 }
+
+/**
+ * Exercise object stored in Symptoms.exercise
+ */
+export class ExerciseActivity {
+  constructor(exercise = null, exercise_minutes = 0) {
+    this.exercise = exercise;
+    this.exercise_minutes = exercise_minutes;
+  }
+}
