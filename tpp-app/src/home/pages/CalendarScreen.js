@@ -32,7 +32,6 @@ const DayComponent = ({ date, state, marking, navigation }) => {
 }
 
 export const Calendar = ({navigation}) => {
-    storeData()
 
     return (
         <CalendarList
