@@ -5,6 +5,7 @@ import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png
 import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon.png';
 import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
 import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png'
+import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
 
 const LearnMoreCard = () => {
     return(
@@ -24,11 +25,22 @@ const LearnMoreCard = () => {
     )
 }
 
-const MenstrualProductCard = ({ onPress, name, image }) =>{
-    return (
+const DidYouKnowCard = () => {
+    return(
+        <View>
+        <Text style={styles.didYouKnowText}>Did you know?</Text>
+        <Image style={styles.paddyIcon} source={PadImageHappy}/>
+        </View>
+    )
+}
+
+const MenstrualProductCard = ({name, image}) =>{
+    return(
         <TouchableOpacity style={styles.productCard} onPress={onPress}>
+        <View>
             <Image style={styles.productIcon} source={image}/>
             <Text style={styles.productText}>{name}</Text>
+        </View>
         </TouchableOpacity>
     )
 }
@@ -64,6 +76,9 @@ const cardData = [
 export default function Info ({ navigation }) {
     return (
         <ScrollView>
+            <TouchableOpacity style={styles.didYouKnowCard} onPress={() => navigation.navigate("DidYouKnow")}>
+                <DidYouKnowCard />
+            </TouchableOpacity>
             <View style={styles.cardContainer}>
                 <Text style={{
                     ...styles.productText,
@@ -92,6 +107,15 @@ export default function Info ({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    didYouKnowCard: {
+        backgroundColor: '#72C6B7',
+        borderRadius: 12,
+        borderWidth: 0,
+        width: 350,
+        height: 148,
+        left: 17,
+        top: 77
+    },
     productCard: {
         backgroundColor: '#FFA3A4',
         alignItems: 'center',
@@ -134,6 +158,15 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         justifyContent: 'space-between',
     },
+    didYouKnowText: {
+        fontFamily: "Avenir",
+        fontWeight: "800",
+        fontSize: 16,
+        color: "#FFFFFF",
+        height: 20,
+        left: 25,
+        top: 19
+    },
     productText: {
         fontFamily: "Avenir",
         fontWeight: "800",
@@ -153,4 +186,11 @@ const styles = StyleSheet.create({
     productIcon: {
         marginBottom: 10
     },
+    paddyIcon:{
+        height: 97,
+        width: 75,
+        top: 10,
+        left: 226,
+        marginBottom: 22
+    }
 });
