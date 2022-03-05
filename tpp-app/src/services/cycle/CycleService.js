@@ -329,12 +329,25 @@ const CycleService = {
     let current = endOfYear;
     try {
       // Search backwards until date switches to the previous year
-      let periodDays = 0;
       var periodEnd = null;
       var periodStart = null;
 
+      //THIS IS TURBO DISGUSTING. TODO: Do this less badly
       var justCheckedPeriodStart = false;
+      var isLastPeriodStart = true;
+
       for (let i =periods.length - 1; i>= 0; i--){
+
+        //TODO: Need to put this code so it happens on first time isPeriodStart is true
+        // if(i == (periods.length - 1)){
+        //     periodStart = periods[i];
+        //     periodEnd =  await getLastPeriodsEnd(periodStart);
+        //     console.log(`last period: interval start: ${periodStart} and interval end: ${periodEnd} with period days of ${periodDays}`);
+
+        //     intervals.push({"start": periodStart, "periodDays": periodDays});
+        //     break;
+        // }
+
         //period interval should be periodStart -> period day before next period start
         let current = periods[i];
         if(await isPeriodStart(current, calendar)){
@@ -345,50 +358,41 @@ const CycleService = {
           periodStart = current;
           justCheckedPeriodStart = true;
           // console.log(`this day is a period start: ${current}`);
-          if(periodEnd && periodStart){
-            let periodDays = getDaysDiffInclusive(periodEnd, periodStart);
+          if(isLastPeriodStart){
+            periodStart = periods[i];
+            periodEnd = await getLastPeriodsEnd(periodStart);
+            var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
+            console.log(`special case: final period: interval start: ${periodStart} and interval end: ${periodEnd} with period days of ${periodDays}`);
+            intervals.push({"start": periodStart, "periodDays": periodDays});
+          }
+
+          else if(periodEnd && periodStart){
+            var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
             intervals.push({"start": periodStart, "periodDays": periodDays});
 
             console.log(`interval start: ${current} and interval end: ${periodEnd} with period days of ${periodDays}`);
           }
+          isLastPeriodStart = false;
 
         }
         else{
           if(justCheckedPeriodStart){
             periodEnd = current;
-            // console.log(`found a period end of ${periodEnd}`);
             justCheckedPeriodStart = false;
-          }
-          else{
-        //    periodEnd = null;
           }
 
         }
 
-        // console.log(`checking period date of ${JSON.stringify(current)}`);
-        // let currentSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
 
-        // if (currentSymptoms.flow !== null && currentSymptoms.flow !== FLOW_LEVEL.NONE){
-        //   let periodEnd = current;
-        //   let start = await getLastPeriodStart(current, periods, calendar);
-        //   if (isYearsLastPeriod){
-        //     periodEnd =  await getLastPeriodsEnd(start);
-        //     isYearsLastPeriod = false;
-        //   }
-
-
-
-        //   if(start){
-        //     let periodDays = getDaysDiffInclusive(periodEnd, start);
-        //     console.log(`start is ${JSON.stringify(start)} and end is ${JSON.stringify(periodEnd)}`);
-        //     intervals.push({"start": start, "periodDays": periodDays})
-        //   }
-        //   else {
-        //     console.log(` last period start is null for ${JSON.stringify(current)}`);
-        //   }
-        // }
 
       }
+      // add in first period
+      console.log(`doing special case on ${periodEnd}`);
+      periodStart = await getFirstPeriodStart(periodEnd);
+      var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
+      console.log(`special case first period: interval start: ${periodStart} and interval end: ${periodEnd} with period days of ${periodDays}`);
+      intervals.push({"start": periodStart, "periodDays": periodDays});
+
 
     } catch(e) {
       console.log(e);
