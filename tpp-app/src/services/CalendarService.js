@@ -48,35 +48,41 @@ export const GETYearData = async (year) => new Promise( async (resolve, reject) 
 //      - may want to return error if Selected View is not one of TRACK_SYMPTOMS
 
 export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, selectedYear) => new Promise( (resolve, reject) => {
+    
     // Check if it's a valid view or month
     if (selectedMonth > 12 || selectedMonth < 1) {
         reject("No month to record")
     }
 
-    if (!Object.values(TRACK_SYMPTOMS).indexOf(selectedView) > -1) {
+    var exists = Object.keys(TRACK_SYMPTOMS).some(function(k) {
+        return TRACK_SYMPTOMS[k] === selectedView;
+    });
+
+    if (exists) {
+        // Try to POST most recent calendar state
+        try {
+            AsyncStorage.multiSet([
+                KEYS.SELECTED_VIEW,
+                KEYS.SELECTED_MONTH,
+                KEYS.SELECTED_YEAR
+            ],
+            [
+                selectedView,
+                selectedMonth - 1,
+                selectedYear
+            ]).then(() => resolve())
+            .catch((e) => {
+                reject(`Unable to update most recent calendar state`);
+                console.log(JSON.stringify(e));
+            })
+        } catch(e) {
+            console.log(`POSTMostRecentCalendarState error: ${JSON.stringify(e)}`);
+            reject("Something went wrong");
+        }
+    } else {
         reject("No view to record")
     }
     
-    // Try to POST most recent calendar state
-    try {
-        await AsyncStorage.multiSet([
-            KEYS.SELECTED_VIEW,
-            KEYS.SELECTED_MONTH,
-            KEYS.SELECTED_YEAR
-        ],
-        [
-            selectedView,
-            selectedMonth - 1,
-            selectedYear
-        ]).then(() => resolve())
-        .catch((e) => {
-            reject(`Unable to update most recent calendar state`);
-            console.log(JSON.stringify(e));
-        })
-    } catch(e) {
-        console.log(`POSTMostRecentCalendarState error: ${JSON.stringify(e)}`);
-        reject("Something went wrong");
-    }
 })
 
 /**
@@ -105,13 +111,16 @@ export const GETMostRecentCalendarState = async () => new Promise( async (resolv
         cramps: true, 
         exercise: true
     }
-    
+
     const selectedView = JSON.parse(await AsyncStorage.getItem(KEYS.SELECTED_VIEW));
     const selectedMonth = JSON.parse(await AsyncStorage.getItem(KEYS.SELECTED_MONTH));
     const selectedYear = JSON.parse(await AsyncStorage.getItem(KEYS.SELECTED_YEAR));
 
     let index = Object.values(TRACK_SYMPTOMS).indexOf(selectedView)
 
+    console.log(selectedView)
+    console.log(selectedMonth)
+    console.log(selectedYear)
     if (tracking.getItem(index)) {
         return [selectedView, selectedMonth, selectedYear];
     }
