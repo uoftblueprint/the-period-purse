@@ -10,6 +10,7 @@ import CalendarNavigator from './src/home/CalendarNavigator';
 import { TabBarMiddleButton } from './src/home/components/TabBarMiddleButton';
 //import Welcome from './src/onboarding/Welcome';
 import InfoNavigator from './src/info/InfoNavigator';
+import DummyTest from './src/services/cycle/DummyTest';
 
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
@@ -102,6 +103,7 @@ export function MainPage() {
 export default function App() {
   return (
     // <Welcome></Welcome>
-     <MainPage></MainPage>
+    //  <MainPage></MainPage>
+    <DummyTest></DummyTest>
   );
 }
