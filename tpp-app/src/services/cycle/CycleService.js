@@ -222,7 +222,6 @@ const CycleService = {
    * @return {Promise} Resolves into 0 if user not on period, and an integer of the days they have been on their period otherwise
    */
   GETPeriodDay: async function (calendar = null){
-    console.log("running GETPeriodDay");
 
     let periodDays = 0;
     var date = new Date()
