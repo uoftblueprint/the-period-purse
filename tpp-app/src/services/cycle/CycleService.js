@@ -254,7 +254,7 @@ const CycleService = {
    * Get most recent period start date
    *
    * @param {Object} calendar The object containing the symptoms for this year, last year, and next year. Optional.
-   * @return {Promise} A promise that resolves into a Date object that is when the most recent period started.
+   * @return {Promise} A promise that resolves into a Date object that is when the most recent period started. Null if there are no periods.
    */
   GETMostRecentPeriodStartDate: async function (calendar = null) {
     var date = new Date()
@@ -307,7 +307,7 @@ const CycleService = {
 
   /** Get the start and length of each period in the given year
    * @param {number} year The year to retrieve history for
-   * @return {Promise} an object that contains intervals of the user's period (start & length) in that year
+   * @return {Promise} an object that contains intervals of the user's period (start & length) in that year in reverse chronological order
    */
   GETCycleHistoryByYear: async function(year) {
     //TODO: test this on the following cases:
@@ -324,6 +324,10 @@ const CycleService = {
     let calendar = await getCalendarByYear(year);
     let periods = await getPeriodsInYear(year, calendar);
 
+    if(periods.length == 0){
+      return intervals;
+    }
+
 
 
     let current = endOfYear;
@@ -338,15 +342,6 @@ const CycleService = {
 
       for (let i =periods.length - 1; i>= 0; i--){
 
-        //TODO: Need to put this code so it happens on first time isPeriodStart is true
-        // if(i == (periods.length - 1)){
-        //     periodStart = periods[i];
-        //     periodEnd =  await getLastPeriodsEnd(periodStart);
-        //     console.log(`last period: interval start: ${periodStart} and interval end: ${periodEnd} with period days of ${periodDays}`);
-
-        //     intervals.push({"start": periodStart, "periodDays": periodDays});
-        //     break;
-        // }
 
         //period interval should be periodStart -> period day before next period start
         let current = periods[i];
@@ -386,12 +381,19 @@ const CycleService = {
 
 
       }
+
       // add in first period
       console.log(`doing special case on ${periodEnd}`);
       periodStart = await getFirstPeriodStart(periodEnd);
-      var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
-      console.log(`special case first period: interval start: ${periodStart} and interval end: ${periodEnd} with period days of ${periodDays}`);
-      intervals.push({"start": periodStart, "periodDays": periodDays});
+
+      //check if the first period is not already in intervals, in which case we know it's the case where the first period spans 2 different years
+      if(!intervals.some(interval => isSameDay(interval.start, periodStart))){
+        var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
+        console.log(`special case first period: interval start: ${periodStart} and interval end: ${periodEnd} with period days of ${periodDays}`);
+        intervals.push({"start": periodStart, "periodDays": periodDays});
+
+      }
+
 
 
     } catch(e) {
