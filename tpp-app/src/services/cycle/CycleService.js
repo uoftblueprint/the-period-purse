@@ -20,7 +20,6 @@ import isAfter from 'date-fns/isAfter';
  * @return {Promise} Resolves into Date object that is the closest date after finalPeriodStart that is the end of a period. Date may be in a later year than finalPeriodStart
  */
 async function getLastPeriodsEnd(finalPeriodStart, calendar = null){
-    //NOTE: I suspect this won't have infinite loop issue from empty b/c the way we are using it guarantees searchFrom is a period date.
     var current = finalPeriodStart;
     var yesterday = subDays(current, 1);
     var twoDaysEarlier = subDays(current, 2);
@@ -69,7 +68,6 @@ export {getLastPeriodsEnd};
  * @return {Promise} Resolves into Date object that is the closest date before firstPeriodEnd that is the beginning of a period. Date may be in an earlier year than firstPeriodEnd.
  */
 async function getFirstPeriodStart(firstPeriodEnd, calendar = null){
-    //hypothesis: If searchFrom is a period day, then noFlowToday=false, noFlowTomorrow = true, flowTwoDaysLater = false;
     var current = firstPeriodEnd;
     var tomorrow = addDays(current, 1);
     var twoDaysLater = addDays(current, 2);
@@ -235,8 +233,6 @@ const CycleService = {
     if (dateSymptoms.flow === null || dateSymptoms.flow === FLOW_LEVEL.NONE){
       return 0;
     }
-    //this shouldn't infinite loop b/c GETMostRecentPeriodStartDate is only called on a day where searchFrom is a period day. Therefore, can't have case where there are no period days.
-    // "base" case, given assumption searchFrom is a period day, is that searchFrom is the periodstart
     else {
       let startDate = await this.GETMostRecentPeriodStartDate(calendar);
       return getDaysDiffInclusive(startDate, date);
