@@ -1,5 +1,6 @@
 // Backend helper functions used across app
 import { Symptoms } from './models'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.

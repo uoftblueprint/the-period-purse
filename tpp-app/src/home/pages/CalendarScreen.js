@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
@@ -6,6 +6,10 @@ import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GETsymptomsForDate, initializeEmptyYear } from '../../services/utils/helpers';
+import { FLOW_LEVEL } from '../../services/utils/constants';
+import { POSTsymptomsForDate } from '../../services/LogSymptomsService';
+import { Symptoms } from '../../services/utils/models';
 
 const VIEWS = {
     Flow: "Period Flow",
@@ -20,9 +24,23 @@ const sideComponentWidth = 120
 
 // The component that is used by each day in the calendar
 const DayComponent = ({ date, state, marking, navigation }) => {
+
+    const [symptoms, setSymptoms] = useState(new Symptoms);
+
+    useEffect(() => {
+        getSymptoms()
+    }, [])
+
+    const getSymptoms = async () => {
+        const data = await GETsymptomsForDate(date.day, date.month, date.year);
+        setSymptoms(data);
+    }
+
+    const backgroundColor = symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE ? "#FFFFFF" : "#B31F20";    
+
     return(
         <TouchableOpacity onPress={() => navigation.navigate("LogSymptoms", {"date": date})}>
-            <View style={styles.dayContainer}>
+            <View style={{...styles.dayContainer, backgroundColor: backgroundColor}}>
                 <Text>
                     {date.day}
                 </Text>
@@ -32,8 +50,17 @@ const DayComponent = ({ date, state, marking, navigation }) => {
 }
 
 export const Calendar = ({navigation}) => {
-    storeData()
 
+    // will need to choose the correct year depending on which year the user is looking at
+    const data = AsyncStorage.getItem("2022");
+    // AsyncStorage.setItem("2022", JSON.stringify(initializeEmptyYear(2022)));
+    data.then((val) =>{
+        console.log(JSON.parse(val));
+    })
+    // let symptomtest = new Symptoms();
+    // symptomtest.flow = FLOW_LEVEL.MEDIUM;
+    // POSTsymptomsForDate(10, 3, 2022, symptomtest);
+    // console.log(GETsymptomsForDate(10, 3, 2022));
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -156,6 +183,7 @@ const styles = StyleSheet.create({
     },
     dayContainer:{
         borderColor: '#D1D3D4',
+        // backgroundColor: '#B31F20',
         borderWidth: 1,
         borderRadius: 8,
         width: 50,

@@ -11,7 +11,7 @@ import { initializeEmptyYear, GETsymptomsForDate, isValidDate } from './utils/he
  * @param year number
  * @param symptoms Symptoms object
  */
-export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Promise( (resolve, reject) => {
+export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Promise( async (resolve, reject) => {
     // Check that symptoms object is not all null or not empty
     let notEmpty = Object.values(symptoms).some((symptom) => symptom !== null)
     if (!symptoms || notEmpty) {
@@ -31,7 +31,7 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
         yearData[month-1][day-1] = symptoms
 
         // post symptoms to storage
-        await AsyncStorage.setItem(year, JSON.stringify(yearData))
+        await AsyncStorage.setItem(year.toString(), JSON.stringify(yearData))
             .then(() => resolve())
             .catch((e) => {
                 console.log(JSON.stringify(e));
