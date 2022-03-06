@@ -139,13 +139,11 @@ async function isPeriodStart(date, calendar){
  * @return {Promise} Resolves into Date that is the most recent day that a period started, relative to searchFrom
  */
 async function getLastPeriodStart(searchFrom, periods, calendar = null){
-  //TODO: binary search on periods array by date comparison
 
   if(!calendar){
     calendar = await getCalendarByYear();
   }
 
-  //TODO: check if searchFrom is periods[0], use special case to handle year-spanning periods
   if(isSameDay(searchFrom, periods[0])){
     return getFirstPeriodStart(searchFrom, calendar);
 
@@ -164,7 +162,6 @@ async function getLastPeriodStart(searchFrom, periods, calendar = null){
 
   }
 
-  //TODO: what happens if periods is empty (No periods logged)
   return null;
 }
 
@@ -310,13 +307,6 @@ const CycleService = {
    * @return {Promise} an object that contains intervals of the user's period (start & length) in that year in reverse chronological order
    */
   GETCycleHistoryByYear: async function(year) {
-    //TODO: test this on the following cases:
-    /*
-    * 1. no period ever, but other symptoms are logged
-    * 2. nothing logged
-    * 3. periods spanning a year (beginning and end periods)
-    * 4. periods do not span a year on either side
-    */
     let intervals = []
     let endOfYear = new Date(year,11,31);
     let isYearsLastPeriod = true;
@@ -336,62 +326,50 @@ const CycleService = {
       var periodEnd = null;
       var periodStart = null;
 
-      //THIS IS TURBO DISGUSTING. TODO: Do this less badly
-      var justCheckedPeriodStart = false;
+      var isPeriodEnd = false;
       var isLastPeriodStart = true;
 
       for (let i =periods.length - 1; i>= 0; i--){
 
 
-        //period interval should be periodStart -> period day before next period start
         let current = periods[i];
         if(await isPeriodStart(current, calendar)){
-          if (justCheckedPeriodStart){
+          if (isPeriodEnd){
             //handle the case where a period is a single day long
             periodEnd = current;
           }
           periodStart = current;
-          justCheckedPeriodStart = true;
-          // console.log(`this day is a period start: ${current}`);
+          isPeriodEnd = true;
+
           if(isLastPeriodStart){
+            //handle special case for the last period, since it could possibly span multiple years
             periodStart = periods[i];
             periodEnd = await getLastPeriodsEnd(periodStart);
             var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
-            console.log(`special case: final period: interval start: ${periodStart} and interval end: ${periodEnd} with period days of ${periodDays}`);
             intervals.push({"start": periodStart, "periodDays": periodDays});
           }
-
           else if(periodEnd && periodStart){
+            //general case for any period besides first or last in the year
             var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
             intervals.push({"start": periodStart, "periodDays": periodDays});
-
-            console.log(`interval start: ${current} and interval end: ${periodEnd} with period days of ${periodDays}`);
           }
           isLastPeriodStart = false;
-
         }
         else{
-          if(justCheckedPeriodStart){
+          if(isPeriodEnd){
             periodEnd = current;
-            justCheckedPeriodStart = false;
+            isPeriodEnd = false;
           }
-
         }
-
-
 
       }
 
-      // add in first period
-      console.log(`doing special case on ${periodEnd}`);
       periodStart = await getFirstPeriodStart(periodEnd);
 
       //check if the first period is not already in intervals, in which case we know it's the case where the first period spans 2 different years
       if(!intervals.some(interval => isSameDay(interval.start, periodStart))){
         var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
-        console.log(`special case first period: interval start: ${periodStart} and interval end: ${periodEnd} with period days of ${periodDays}`);
         intervals.push({"start": periodStart, "periodDays": periodDays});
-
       }
 
 
