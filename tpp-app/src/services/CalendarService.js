@@ -47,8 +47,8 @@ export const GETYearData = async (year) => new Promise( async (resolve, reject) 
 // - selectedView should be one of TRACK_SYMPTOMS which Helen added in her PR: https://github.com/uoftblueprint/the-period-purse/pull/94/files
 //      - may want to return error if Selected View is not one of TRACK_SYMPTOMS
 
-export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, selectedYear) => new Promise( (resolve, reject) => {
-    
+export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, selectedYear) => new Promise( async (resolve, reject) => {
+
     // Check if it's a valid view or month
     if (selectedMonth > 12 || selectedMonth < 1) {
         reject("No month to record")
@@ -59,18 +59,11 @@ export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, s
     });
 
     if (exists) {
-        // Try to POST most recent calendar state
+        const viewPair = [KEYS.SELECTED_VIEW, selectedView]
+        const monthPair = [KEYS.SELECTED_MONTH, String(selectedMonth - 1)]
+        const yearPair = [KEYS.SELECTED_YEAR, String(selectedYear)]
         try {
-            AsyncStorage.multiSet([
-                KEYS.SELECTED_VIEW,
-                KEYS.SELECTED_MONTH,
-                KEYS.SELECTED_YEAR
-            ],
-            [
-                selectedView,
-                selectedMonth - 1,
-                selectedYear
-            ]).then(() => resolve())
+            await AsyncStorage.multiSet([viewPair, monthPair, yearPair]).then(() => resolve())
             .catch((e) => {
                 reject(`Unable to update most recent calendar state`);
                 console.log(JSON.stringify(e));
@@ -82,7 +75,7 @@ export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, s
     } else {
         reject("No view to record")
     }
-    
+      
 })
 
 /**
