@@ -97,27 +97,30 @@ const Preferences = (props) => {
 
 const Socials = () => {
     return (
-        <View>
-            <View style={styles.iconsContainer}>
-                {
-                    socialMediaIcons.map(socialMedia => {
-                        return <SocialMediaButton icon={socialMedia.component} url={socialMedia.url} />
-                    })
-                }
-            </View>
+        <View style={styles.iconsContainer}>
+            {
+                socialMediaIcons.map(socialMedia => {
+                    return <SocialMediaButton icon={socialMedia.component} url={socialMedia.url} />
+                })
+            }
         </View>
     );
 }
 
 const TermsAndConditions = () => {
+    const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
+        Linking.openURL("https://www.google.com/");
+    });
+
     return (
-        <View>
-            <View> 
-                <Text>&copy; 2022 The Period Purse, All rights reserved.</Text>
+        <View styles={styles.termsAndConditionsContainer}>
+            <View style={styles.copyright}> 
+                <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
             </View>
-            <View>
-                <TouchableOpacity style={styles.icon}>
-                    <Text> Terms and Privacy Policy. </Text>
+            <View style={styles.terms}>
+                <TouchableOpacity onPress={openLink} style={styles.icon} >
+                    <Text style={styles.termsText}> Terms and Privacy Policy. </Text>
+                    <Text style={styles.lineText}> ______________________ </Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -246,8 +249,33 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "row",
         alignItems: "center",
+        marginBottom: 10,
     },
     icon: {
         margin: 10,
     },
+    termsAndConditionsContainer: {
+        marginTop: 10,
+    },
+    copyright: {
+        justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+        color: "red"
+    },
+    copyrightText: {
+        color: "#6D6E71"
+    },
+    terms: {
+        justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    lineText: {
+        marginTop: -10,
+        color: "#5A9F93",
+    },
+    termsText: {
+        color: "#5A9F93",
+    }
 });
