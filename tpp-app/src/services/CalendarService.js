@@ -93,7 +93,7 @@ export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, s
 //      - If selectedView is not one the symptoms the user is tracking i.e. in GETAllTrackingPreferences, don't return
 //          it (maybe return empty or null instead so the front end knows no symptom filter is selected )
 
-export const GETMostRecentCalendarState = async () => new Promise( async (resolve, reject) => {
+export const GETMostRecentCalendarState = async () => {
 
     //var tracking = await GETAllTrackingPreferences()
     // Used for testing
@@ -105,18 +105,20 @@ export const GETMostRecentCalendarState = async () => new Promise( async (resolv
         exercise: true
     }
 
-    const selectedView = JSON.parse(await AsyncStorage.getItem(KEYS.SELECTED_VIEW));
-    const selectedMonth = JSON.parse(await AsyncStorage.getItem(KEYS.SELECTED_MONTH));
-    const selectedYear = JSON.parse(await AsyncStorage.getItem(KEYS.SELECTED_YEAR));
-
-    let index = Object.values(TRACK_SYMPTOMS).indexOf(selectedView)
-
-    console.log(selectedView)
-    console.log(selectedMonth)
-    console.log(selectedYear)
-    if (tracking.getItem(index)) {
-        return [selectedView, selectedMonth, selectedYear];
+    try {
+        const selectedView = await AsyncStorage.getItem(KEYS.SELECTED_VIEW);
+        const selectedMonth = await AsyncStorage.getItem(KEYS.SELECTED_MONTH);
+        const selectedYear = await AsyncStorage.getItem(KEYS.SELECTED_YEAR);
+        
+        let index = Object.values(TRACK_SYMPTOMS).indexOf(selectedView)
+        
+        if (tracking[Object.keys(tracking)[index]]) {
+            console.log("DEBUG: " + selectedMonth)
+            return [selectedView, selectedMonth, selectedYear];
+        }    
+    } catch(e) {
+        // error reading value
     }
 
     return null;
-})
+}
