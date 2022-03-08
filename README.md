@@ -49,7 +49,7 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 3. Run project using ```npm run ios```
 4. After simulator launches, go to "Device" > "Shake" to launch debugger
 ![image](https://user-images.githubusercontent.com/22108651/150660743-7a188d88-300d-4a12-8cfb-ef2712d0e506.png)
-5. Launch the react-native debugger (It's a separate application that's now the browser) ![image](https://user-images.githubusercontent.com/63024415/152467946-b8ec8bef-a747-4039-b6f5-92b276ea8003.png)
+5. Launch the react-native debugger (It's a separate application that's not the browser) ![image](https://user-images.githubusercontent.com/63024415/152467946-b8ec8bef-a747-4039-b6f5-92b276ea8003.png)
 6. Call ```showAsyncStorageContentInDev()``` in the react-native debugger console to see async storage
 
 ## Running Debugger Notes
