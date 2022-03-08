@@ -4,7 +4,7 @@ import { Symptoms } from './models'
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.
  * Within each month array is X null values corresponding to X days of that month in that year.
- * @param yearNumber number
+ * @param {number} yearNumber
  */
 export const initializeEmptyYear = (yearNumber) => {
   let year = new Array(12);
@@ -20,10 +20,10 @@ export const initializeEmptyYear = (yearNumber) => {
 
 /**
  * Check if the date, month, year combination is a valid date.
- * @param day number (1st day of month = 1)
- * @param month number (January = 1)
- * @param year number
- * @return True or False boolean
+ * @param {number} day 1st day of month = 1
+ * @param {number} month January = 1
+ * @param {number} year
+ * @return {boolean} if date is valid and not in the future
  */
 export const isValidDate = (day, month, year) => {
     // Check the ranges of month and year
@@ -48,9 +48,9 @@ export const isValidDate = (day, month, year) => {
 
 /**
  * Retrieves the user's symptom data for the given date.
- * @param day number (1st day of month = 1)
- * @param month number (January = 1)
- * @param year number
+ * @param {number} day 1st day of month = 1
+ * @param {number} month January = 1
+ * @param {number} year
  */
 export const GETsymptomsForDate = async (day, month, year) => {
   if (isValidDate(day, month, year)) {
