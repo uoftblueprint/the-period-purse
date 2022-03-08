@@ -37,7 +37,13 @@ export const isValidDate = (day, month, year) => {
         monthLength[1] = 29;
 
     // Check the range of the day
-    return day > 0 && day <= monthLength[month - 1];
+    if (!(day > 0 && day <= monthLength[month - 1]))
+        return false
+
+    // Check that date isn't in the future
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    return new Date(year, month-1, day) <= today
 };
 
 /**
