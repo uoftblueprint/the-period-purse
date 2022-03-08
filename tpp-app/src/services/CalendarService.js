@@ -11,20 +11,20 @@ export const GETYearData = async (year) => {
     // https://github.com/uoftblueprint/the-period-purse/pull/95#discussion_r813506726
     // Essentially retrieve the calendar for a given year and convert each day's data into a Symptom object for better front-end handling
 
-
-    await AsyncStorage.setItem('2022', JSON.stringify(
-        [
-            // 0th index of the 2022 array is 1st month i.e. January has size 31
-            [
-                {
-                    'Flow': 'LIGHT',
-                    'Mood': 'HAPPY',
-                    'Sleep': '7.5', 
-                    'Cramps': 'MEDIUM', 
-                }
-            ]
-        ])
-    )    
+    // Used for testing
+    // await AsyncStorage.setItem('2022', JSON.stringify(
+    //     [
+    //         // 0th index of the 2022 array is 1st month i.e. January has size 31
+    //         [
+    //             {
+    //                 'Flow': 'LIGHT',
+    //                 'Mood': 'HAPPY',
+    //                 'Sleep': '7.5', 
+    //                 'Cramps': 'MEDIUM', 
+    //             }
+    //         ]
+    //     ])
+    // )    
 
     const yearData = JSON.parse(await AsyncStorage.getItem(year.toString()));
 
@@ -87,17 +87,17 @@ export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, s
  */
 export const GETMostRecentCalendarState = async () => {
 
-    //var tracking = await GETAllTrackingPreferences()
+    var tracking = await GETAllTrackingPreferences()
 
     // This is used for testing
     // TODO: This is HARDCODED
-    tracking = {
-        flow: true, 
-        mood: true, 
-        sleep: true, 
-        cramps: true, 
-        exercise: true
-    }
+    // tracking = {
+    //     flow: true, 
+    //     mood: true, 
+    //     sleep: true, 
+    //     cramps: true, 
+    //     exercise: true
+    // }
 
     try {
         const selectedView = await AsyncStorage.getItem(KEYS.SELECTED_VIEW);
