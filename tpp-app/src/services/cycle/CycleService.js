@@ -315,7 +315,6 @@ const CycleService = {
 
 
 
-    let current = endOfYear;
     try {
       // Search backwards until date switches to the previous year
       var periodEnd = null;
