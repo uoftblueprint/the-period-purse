@@ -59,7 +59,9 @@ export const DatePickerButton = ({ onPress, title }) => {
 
 export const SymptomsChoicesButton = ({ onPress, title, color }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={{ backgroundColor: color }}>
+    <TouchableOpacity 
+      onPress={onPress} 
+      style={{ width: 227, height: 70, borderRadius: 16, backgroundColor: color }}>
       <Text style={styles.symptomsChoicesButtonText}>{title}</Text>
     </TouchableOpacity>);
 }

@@ -5,7 +5,7 @@ import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton, SymptomsChoicesButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
-import { TwoButtonContainer, BackButtonContainer, SymptomsChoicesButtonContainer } from './components/ContainerComponents';
+import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
 import { PostSymptomsToTrack } from '../services/OnboardingService';
 // import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 // import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
@@ -37,18 +37,20 @@ export default function SymptomsChoices ({ navigation }) {
   }
 
   return (
-    <ImageBackground  source={OnboardingBackground} style={styles.container}>
-      <BackButtonContainer>
-        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Start"])}}/>
-      </BackButtonContainer>
-      <TitleText>
-        What symptoms do you {'\n'} want to track?
-      </TitleText>
-      <BodyText>
-        You can change these later in {'\n'} your settings
-      </BodyText>
+    <ImageBackground source={OnboardingBackground} style={styles.container}>
+      <View style={{ alignItems: 'stretch', justifyContent: 'center', flex: 3.5 }}>
+        <BackButtonContainer>
+          <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Start"])}}/>
+        </BackButtonContainer>
+        <TitleText>
+          What symptoms do you {'\n'} want to track?
+        </TitleText>
+        <BodyText>
+          You can change these later in {'\n'} your settings
+        </BodyText>
+      </View>
 
-      <ScrollView style={{height: 10}}>
+      <ScrollView style={{ flex: 1.5 }}>
         <View style={[styles.symptoms, { backgroundColor: flow }]}>
           <SymptomsChoicesButton onPress={handleFlow} title="Flow"></SymptomsChoicesButton>
         </View>
@@ -66,14 +68,17 @@ export default function SymptomsChoices ({ navigation }) {
         </View>
       </ScrollView>
 
-      <TwoButtonContainer>
-        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
-        <NextButton title="Next" onPress={() => 
-          {
-            PostSymptomsToTrack(true, true, false, false, false);
-            navigation.navigate(STACK_SCREENS["Backup"]);
-          }}/>
-      </TwoButtonContainer>
+      <View style={{ flex: 1, backgroundColor: '#FFFFFF'}}>
+        <TwoButtonContainer style={{ top: 20 }}>
+          <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
+          <NextButton title="Next" onPress={() => 
+            {
+              PostSymptomsToTrack(flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
+                                  cramp == '#73C7B7', exercise == '#73C7B7');
+              navigation.navigate(STACK_SCREENS["Backup"]);
+            }}/>
+        </TwoButtonContainer>
+      </View>
     </ImageBackground>
   );
 }

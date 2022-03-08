@@ -67,13 +67,3 @@ export const TextButtonContainer = styled.View`
   alignSelf: center;
   bottom: -45%
 `; 
-
-// export const SymptomsChoicesButtonContainer = (color) = styled.View`
-//   flexDirection: row;
-//   alignSelf: center;
-//   borderRadius: 16px;
-//   backgroundColor: color;
-//   width: 227px;
-//   height: 70px;
-//   margin-bottom: 13px 
-// `;
