@@ -11,3 +11,4 @@ export class Symptoms {
     this.notes = notes;
   }
 }
+
