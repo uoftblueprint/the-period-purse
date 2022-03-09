@@ -50,3 +50,11 @@ export const KEYS = {
   AVERAGE_PERIOD_LENGTH: "averagePeriodLength",
   INITIAL_PERIOD_LENGTH: "initialPeriodLength"
 }
+export const REMINDERS = {
+  REMIND_LOG_PERIOD: "remindLogPeriod",
+  REMIND_LOG_SYMPTOMS: "remindLogSymptoms"
+}
+
+export const FACT_NUM = {
+  FACT_CYCLE_NUM: "factCycleNumber"
+}
