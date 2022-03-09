@@ -2,12 +2,13 @@ import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
+import DYDFacts from "DYKFacts.json"
+import Midnight from 'react-native-midnight'
 
-
-export default function DidYouKnow() {
+export default function DidYouKnow( {navigation} ) {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-         <View style={styles.arrowPosition}><BackButton  /></View>
+         <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
             <Image
             source= {PadImageHappy}
             style={styles.image}
