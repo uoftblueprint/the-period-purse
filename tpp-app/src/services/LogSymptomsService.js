@@ -2,14 +2,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {FLOW_LEVEL} from './utils/constants'
 import { initializeEmptyYear, GETsymptomsForDate, isValidDate } from './utils/helpers'
+import { Symptoms } from './utils/models';
 
 
 /**
  * Posts the user's symptom data into the local storage for the given date.
- * @param day number (1st day of month = 1)
- * @param month number (January = 1)
- * @param year number
- * @param symptoms Symptoms object
+ * @param {number} day 1st day of month = 1
+ * @param {number} month January = 1
+ * @param {number} year
+ * @param {Symptoms} symptoms
  */
 export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Promise(async (resolve, reject) => {
     // Check that symptoms object is not all null or not empty
@@ -46,9 +47,9 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
 
 /**
  * Updates user's flow to medium on selected days where the user's flow was originally null or none.
- * @param date 
+ * @param {Array<date>} dates
  * where date.day is a number (1st day of month = 1),
- * date.month is a number (January = 1), 
+ * date.month is a number (January = 1),
  * date.year is a number.
  */
 export const LogMultipleDayPeriod = async (dates) => {

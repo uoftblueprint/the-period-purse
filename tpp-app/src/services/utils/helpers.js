@@ -9,7 +9,7 @@ import { Symptoms } from './models'
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.
  * Within each month array is X null values corresponding to X days of that month in that year.
- * @param yearNumber number
+ * @param {number} yearNumber
  */
 export const initializeEmptyYear = (yearNumber) => {
   let year = new Array(12);
@@ -38,10 +38,10 @@ export const getDateString = (date) => {
 
 /**
  * Check if the date, month, year combination is a valid date.
- * @param day number
- * @param month number (January = 1)
- * @param year number
- * @return True or False boolean
+ * @param {number} day 1st day of month = 1
+ * @param {number} month January = 1
+ * @param {number} year
+ * @return {boolean} if date is valid and not in the future
  */
  export const isValidDate = (day, month, year) => {
   // COPIED FROM EMILY. TODO: delete this for original when merge
@@ -56,7 +56,13 @@ export const getDateString = (date) => {
       monthLength[1] = 29;
 
   // Check the range of the day
-  return day > 0 && day <= monthLength[month - 1];
+  if (!(day > 0 && day <= monthLength[month - 1]))
+      return false
+
+  // Check that date isn't in the future
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  return new Date(year, month-1, day) <= today
 };
 
 /**
