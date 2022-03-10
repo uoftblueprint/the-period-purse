@@ -57,18 +57,23 @@ export default function SymptomsChoices ({ navigation }) {
       <ScrollView style={{ flex: 1.5 }}>
         <View style={[styles.symptoms, { backgroundColor: flow }]}>
           <SymptomsChoicesButton onPress={handleFlow} title="Flow"></SymptomsChoicesButton>
+          <FlowIcon style={styles.icon}/>
         </View>
         <View style={[styles.symptoms, { backgroundColor: mood }]}>
           <SymptomsChoicesButton onPress={handleMood} title="Mood"></SymptomsChoicesButton>
-          </View>
+          <MoodIcon style={styles.icon}/>
+        </View>
         <View style={[styles.symptoms, { backgroundColor: sleep }]}>
           <SymptomsChoicesButton onPress={handleSleep} title="Sleep"></SymptomsChoicesButton>
-          </View>
+          <SleepIcon style={styles.icon}/>
+        </View>
         <View style={[styles.symptoms, { backgroundColor: cramp }]}>
           <SymptomsChoicesButton onPress={handleCramp} title="Cramps"></SymptomsChoicesButton>
-          </View>
+          <CrampsIcon style={styles.icon}/>
+        </View>
         <View style={[styles.symptoms, { backgroundColor: exercise }]}>
           <SymptomsChoicesButton onPress={handleExercise} title="Exercise"></SymptomsChoicesButton>
+          <ExerciseIcon style={styles.icon}/>
         </View>
       </ScrollView>
 
@@ -100,5 +105,9 @@ const styles = StyleSheet.create({
     width: 227,
     height: 70,
     marginBottom: 13
+  },
+  icon: {
+    right: 60, 
+    top: 25
   }
 });
