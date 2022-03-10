@@ -100,13 +100,6 @@ export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                {/*<BackButton
-                    onPress={() => {
-                        navigation.navigate('Year')
-                    }}
-                    title='Year'
-                    width={sideComponentWidth}
-                />*/}
                 <Button icon={renderedArrow}
                     iconRight={true}
                     title={selectedView}
