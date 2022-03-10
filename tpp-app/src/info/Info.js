@@ -34,7 +34,7 @@ const DidYouKnowCard = () => {
     )
 }
 
-const MenstrualProductCard = ({name, image}) =>{
+const MenstrualProductCard = ({name, image, onPress}) =>{
     return(
         <TouchableOpacity style={styles.productCard} onPress={onPress}>
         <View>
