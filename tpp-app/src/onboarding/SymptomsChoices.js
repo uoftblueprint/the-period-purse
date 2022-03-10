@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { StyleSheet, ImageBackground, ScrollView, View } from 'react-native';
-import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png'
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton, SymptomsChoicesButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
 import { PostSymptomsToTrack } from '../services/OnboardingService';
-// import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
-// import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
-// import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
-// import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
-// import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
+import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
+import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
+import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
+import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
+import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
+import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
+import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/symptoms_track_img.svg";
 
 export default function SymptomsChoices ({ navigation }) {
   const [flow, setFlow] = useState('#FFFFFF');
@@ -42,10 +44,12 @@ export default function SymptomsChoices ({ navigation }) {
         <BackButtonContainer>
           <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Start"])}}/>
         </BackButtonContainer>
-        <TitleText>
+        <BackgroundShape style={{ top: -10, position: 'absolute' }}/>
+        <CalendarIcon style={{ alignSelf: 'center', top: -10 }}/>
+        <TitleText style={{ top: 60 }}>
           What symptoms do you {'\n'} want to track?
         </TitleText>
-        <BodyText>
+        <BodyText style={{ top: 60 }}>
           You can change these later in {'\n'} your settings
         </BodyText>
       </View>

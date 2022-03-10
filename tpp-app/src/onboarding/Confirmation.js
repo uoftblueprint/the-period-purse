@@ -6,6 +6,9 @@ import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './com
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
+import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
+import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
+import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 
 export const STACK_SCREENS = {
   "Get Started" : "Get Started",

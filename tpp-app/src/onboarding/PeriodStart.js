@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, ImageBackground } from 'react-native';
 import { configureFonts, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png'
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton, DatePickerButton } from './components/ButtonComponents';
@@ -9,6 +9,8 @@ import { TitleText, BodyText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer, InputContainer } from './components/ContainerComponents';
 import { PostInitialPeriodStart, GetInitialPeriodLength } from '../services/OnboardingService';
 import { DatePickerModal } from 'react-native-paper-dates';
+import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
+import PeriodStartIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_date.svg";
 
 let periodLength;
 export default function PeriodStart ({ navigation }) {
@@ -42,6 +44,9 @@ export default function PeriodStart ({ navigation }) {
         <BackButtonContainer>
           <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Length"])}}/>
         </BackButtonContainer>
+        
+        <BackgroundShape style={{ top: -10, position: 'absolute' }}/>
+        {/* <PeriodStartIcon style={{ alignSelf: 'center', top: -10 }}/> */}
         <TitleText>
           When did your {'\n'} period last start?
         </TitleText>
