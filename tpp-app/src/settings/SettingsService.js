@@ -47,11 +47,11 @@ import { TRACK_SYMPTOMS, REMINDERS } from './utils/constants.js'
 
     /**
      * Posts any changes in symptom tracking preferences 
-     * @param flow boolean representing whether to track flow
-     * @param mood boolean representing whether to track mood 
-     * @param sleep boolean representing whether to track sleep 
-     * @param cramps boolean representing whether to track cramps
-     * @param exercise boolean representing whether to track exercise
+     * @param {boolean} flow representing whether to track flow
+     * @param {boolean} mood representing whether to track mood 
+     * @param {boolean} sleep representing whether to track sleep 
+     * @param {boolean} cramps representing whether to track cramps
+     * @param {boolean} exercise representing whether to track exercise
      * @returns a promise resolving when the post operation is complete
      */
     export const POSTUpdatePreferences = async (flow, mood, sleep, cramps, exercise) => new Promise (async (resolve, reject) => {
@@ -77,7 +77,7 @@ import { TRACK_SYMPTOMS, REMINDERS } from './utils/constants.js'
 
     /**
      * Posts whether the user wants a reminder to log period
-     * @param {*} enableRemind boolean representing whether the user wants to a reminder to log period
+     * @param {boolean} enableRemind representing whether the user wants to a reminder to log period
      * @returns a promise resolving when the post operation is complete 
      */
 
@@ -97,7 +97,7 @@ import { TRACK_SYMPTOMS, REMINDERS } from './utils/constants.js'
     });
     /**
     * Posts whether the user wants a reminder to log period symptoms
-    * @param {*} enableRemind boolean representing whether the user wants to a remind to log period symptoms
+    * @param {boolean} enableRemind representing whether the user wants to a remind to log period symptoms
     * @returns a promise resolving when the post operation is complete 
     */
     export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (resolve, reject) => {
