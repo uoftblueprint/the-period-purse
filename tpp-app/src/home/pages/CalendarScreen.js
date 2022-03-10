@@ -20,7 +20,7 @@ const sideComponentWidth = 120
 const DayComponent = ({ date, state, marking, navigation }) => {
 
     return(
-        <TouchableOpacity onPress={() => navigation.navigate("LogSymptoms", {"date": date})}>
+        <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
             <View style={styles.dayContainer}>
                 <Text>
                     {date.day}
