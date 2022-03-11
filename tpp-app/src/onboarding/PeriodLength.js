@@ -9,6 +9,7 @@ import { TwoButtonContainer, BackButtonContainer, InputContainer } from './compo
 import { PostInitialPeriodLength } from '../services/OnboardingService';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import PeriodLengthIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_length.svg";
+import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
 
 export default function PeriodLength ({ navigation }) {
   const [periodLength, setPeriodLength] = useState(null)
@@ -19,12 +20,13 @@ export default function PeriodLength ({ navigation }) {
       </BackButtonContainer>
 
       <BackgroundShape style={{ top: -10, position: 'absolute' }}/>
-      {/* <PeriodLengthIcon style={{ alignSelf: 'center', top: -10 }}/> */}
+      <PeriodLengthIcon width='200' height='200' viewBox='45 12 215 100' style={{ left: 140,  bottom: 160}}/>
+      <BarIcon style={{ alignSelf: 'center', bottom: 70 }}/>
 
-      <TitleText>
+      <TitleText style={{ bottom: 30 }}>
         How long does your {'\n'} period usually last?
       </TitleText>
-      <BodyText>
+      <BodyText style={{ bottom: 30 }}>
         This will help us make our {'\n'} reminders more accurate
       </BodyText>
 

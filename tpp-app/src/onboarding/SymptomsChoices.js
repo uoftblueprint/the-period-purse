@@ -14,6 +14,7 @@ import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/symptoms_track_img.svg";
+import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
 
 export default function SymptomsChoices ({ navigation }) {
   const [flow, setFlow] = useState('#FFFFFF');
@@ -46,10 +47,11 @@ export default function SymptomsChoices ({ navigation }) {
         </BackButtonContainer>
         <BackgroundShape style={{ top: -10, position: 'absolute' }}/>
         <CalendarIcon style={{ alignSelf: 'center', top: -10 }}/>
-        <TitleText style={{ top: 60 }}>
+        <BarIcon style={{ alignSelf: 'center', top: 10 }}/>
+        <TitleText style={{ top: 30 }}>
           What symptoms do you {'\n'} want to track?
         </TitleText>
-        <BodyText style={{ top: 60 }}>
+        <BodyText style={{ top: 30 }}>
           You can change these later in {'\n'} your settings
         </BodyText>
       </View>

@@ -35,6 +35,7 @@ export const InputBorderContainer = styled.View`
   borderWidth: 2px;
   borderColor: #5A9F93;
   borderRadius: 10px;
+  backgroundColor: #FFFFFF;
   padding: 18px;
   marginTop: 200px
 `;
