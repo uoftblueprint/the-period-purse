@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
-import {GETFactCycle, POSTFactCycle } from "./InfoService"
+import {GETFactCycle, POSTFactCycle } from "../info/InfoService"
 import { getFullCurrentDateString } from "../services/utils/helpers.js"
 
 export default function DidYouKnow( {navigation} ) {
@@ -15,7 +15,7 @@ export default function DidYouKnow( {navigation} ) {
                 />
         <Text style={styles.bodyText}> 
         <Text style={styles.titleText}>Did you know?</Text>
-        {`${getFacts()}`}
+        {`${getFact()}`}
         </Text>
         </View>
     )
@@ -26,7 +26,7 @@ export default function DidYouKnow( {navigation} ) {
  * Retrieves the fact that the user is supposed to see that day
  * @returns a string of the relevant fact
  */
- export function getFactShortened() {
+ export function getFact() {
     // try to get the fact cycle array first
     var fact_array = GETFactCycle();
 
