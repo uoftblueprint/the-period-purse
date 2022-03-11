@@ -2,6 +2,8 @@ import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
+import {GETFactCycle, POSTFactCycle } from "./InfoService"
+import { getFullCurrentDateString } from "../services/utils/helpers.js"
 
 export default function DidYouKnow( {navigation} ) {
     return (
@@ -13,16 +15,37 @@ export default function DidYouKnow( {navigation} ) {
                 />
         <Text style={styles.bodyText}> 
         <Text style={styles.titleText}>Did you know?</Text>
-        A period is a natural part of a 
-        person's life when the body is 
-        preparing for pregnancy. If no 
-        pregnancy occurs, the lining 
-        of the uterus sheds. This is 
-        known as your period. 
+        {`${getFacts()}`}
         </Text>
-        
         </View>
     )
+}
+
+
+/**
+ * Retrieves the fact that the user is supposed to see that day
+ * @returns a string of the relevant fact
+ */
+ export function getFactShortened() {
+    // try to get the fact cycle array first
+    var fact_array = GETFactCycle();
+
+    // if the array is null, then this means we haven't initiatlized the fact cycle array
+    if (fact_array == null) {
+        // initialize the fact cycle with POSTFactCycle
+        infoService.POSTFactCycle();
+        fact_array = GETFactCycle();
+    }
+
+    // if today's date and the stored date don't match, update
+    if (getFullCurrentDateString() != fact_array[0]) {
+        POSTFactCycle();
+        fact_array = GETFactCycle();
+    }
+
+    const dykData = require('../pages/DYKFacts.json');
+
+    return dykData[fact_array[1]]
 }
 
 const styles = StyleSheet.create({
