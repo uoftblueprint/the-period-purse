@@ -151,3 +151,19 @@ export const getPeriodsInYear = async (year, calendar=null) => {
   }
 
 }
+
+/**
+ * Gets the full current date as a string in the format of "2022-1-1"
+ * @returns a string representing the current date
+ */
+
+ export function getFullCurrentDateString() {
+  const d = new Date();
+  const year = d.getFullYear()
+  const month = d.getMonth()
+  const day = d.getDate()
+
+  const fullDateArray  = [year, month, day]
+
+  return fullDateArray.join("-")
+}
