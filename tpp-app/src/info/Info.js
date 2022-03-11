@@ -6,6 +6,8 @@ import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon
 import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
 import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png'
 import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
+import { GETFactCycle, POSTFactCycle } from "./InfoService"
+import { getFullCurrentDateString } from "../services/utils/helpers.js"
 
 const LearnMoreCard = () => {
     return(
@@ -29,6 +31,7 @@ const DidYouKnowCard = () => {
     return(
         <View>
         <Text style={styles.didYouKnowText}>Did you know?</Text>
+        <Text style={styles.didYouKnowDescription}>{`${getFactShortened()}`}</Text>
         <Image style={styles.paddyIcon} source={PadImageHappy}/>
         </View>
     )
@@ -43,6 +46,32 @@ const MenstrualProductCard = ({name, image, onPress}) =>{
         </View>
         </TouchableOpacity>
     )
+}
+
+/**
+ * Retrieves the fact that the user is supposed to see that day
+ * @returns a string of the relevant fact, shortened to 90 characters
+ */
+export function getFactShortened() {
+    // try to get the fact cycle array first
+    var fact_array = GETFactCycle();
+
+    // if the array is null, then this means we haven't initiatlized the fact cycle array
+    if (fact_array == null) {
+        // initialize the fact cycle with POSTFactCycle
+        POSTFactCycle();
+        fact_array = GETFactCycle();
+    }
+
+    // if today's date and the stored date don't match, update
+    if (getFullCurrentDateString() != fact_array[0]) {
+        POSTFactCycle();
+        fact_array = GETFactCycle();
+    }
+
+    const dykData = require('../pages/DYKFacts.json');
+
+    return dykData[fact_array[1]].slice(87) + "..."
 }
 
 const cardData = [
@@ -111,7 +140,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#72C6B7',
         borderRadius: 12,
         borderWidth: 0,
-        width: 350,
+        width: 360,
         height: 148,
         left: 17,
         top: 77
@@ -167,6 +196,15 @@ const styles = StyleSheet.create({
         left: 25,
         top: 19
     },
+    didYouKnowDescription: {
+        fontFamily: "Avenir",
+        fontWeight: "400",
+        fontSize: 14,
+        color: "#0000",
+        height: 76,
+        left: 0,
+        top: 35
+    },
     productText: {
         fontFamily: "Avenir",
         fontWeight: "800",
@@ -190,7 +228,7 @@ const styles = StyleSheet.create({
         height: 97,
         width: 75,
         top: 10,
-        left: 226,
+        left: 250,
         marginBottom: 22
     }
 });
