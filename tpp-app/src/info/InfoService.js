@@ -1,16 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FACT_CYCLE_NUM } from './utils/constants.js'
+import { FACT_CYCLE } from '../services/utils/constants.js'
+import { getFullCurrentDateString } from "../services/utils/helpers.js"
 
 /**
- * Retrives an array containing the last date the user accessed the info screen and the fact number they saw
- * @returns returns an array with format ["2022-1-1", "1"]
+ * Retrieves an array containing the last date the user accessed the info screen and the fact number they saw
+ * @returns returns a promise resolving in an array with format ["2022-1-1", "1"]
  */
 export const GETFactCycle = async () => new Promise(async (resolve, reject) => {
     try {
-     if (await AsyncStorage.getItem(FACT_CYCLE_NUM) == null) {
+     if (await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM) == null) {
         return null;
      } else {
-         value = await AsyncStorage.getItem(FACT_CYCLE_NUM).then(() => {
+         value = await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM).then(() => {
              console.log("Retrieved Fact Cycle Date and Number");
              resolve();
          }).catch(() => {
@@ -34,12 +35,12 @@ export const GETFactCycle = async () => new Promise(async (resolve, reject) => {
 
 export const POSTFactCycle = async () => new Promise(async (resolve, reject) => {
     try {
-        if (GETFactCycle() == null) {
+        if (GETFactCycle() == null) { // if there is currently no fact/date array stored
             const value = [];
-            date = getFullCurrentDate();
+            date = getFullCurrentDateString();
             value[0] = date;
             value[1] = "1";
-            await AsyncStorage.setItem(FACT_CYCLE_NUM, JSON.stringify(value)).catch(() => {
+            await AsyncStorage.setItem(FACT_CYCLE.FACT_CYCLE_NUM, JSON.stringify(value)).catch(() => {
                 console.log("GETFactCycle error: failed to instantiate FACT_CYCLE_NUM")
                 reject();
             }).then(() => {
@@ -47,13 +48,14 @@ export const POSTFactCycle = async () => new Promise(async (resolve, reject) => 
                 resolve();
             })
         } else {
-            newDate = getFullCurrentDate()
-            if (newDate != GETFactCycle()[0]) {
+            // get the current date
+            newDate = getFullCurrentDateString()
+            if (newDate != GETFactCycle()[0]) { // update dateand fact only if the current date does not match the stored date
                 previousFactNum = GETFactCycle()[1]
                 newFactNum = toString(parseInt(previousFactNum) + 1);
                 const value = [newDate, newFactNum]
                 
-                await AsyncStorage.mergeItem(FACT_CYCLE_NUM, JSON.stringify(value)).then(() =>{
+                await AsyncStorage.mergeItem(FACT_CYCLE.FACT_CYCLE_NUM, JSON.stringify(value)).then(() =>{
                     console.log("Updated Fact Cycle Number");
                     resolve();
                 }).catch(() => {
@@ -67,20 +69,3 @@ export const POSTFactCycle = async () => new Promise(async (resolve, reject) => 
         reject();
     }
 });
-
-/**
- * gets the full current date as a string in the format of "2022-1-1"
- * @returns a string representing the current date
- */
-
-export function getFullCurrentDate() {
-    const d = new Date();
-    const year = d.getFullYear()
-    const month = d.getMonth()
-    const day = d.getDate()
-
-    const fullDateArray  = [year, month, day]
-
-    return fullDateArray.join("-")
-
-}
