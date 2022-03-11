@@ -15,6 +15,7 @@ import Success from './Success';
 import Confirmation from './Confirmation';
 import { WideButton } from './components/ButtonComponents';
 import { STACK_SCREENS } from './Confirmation';
+import AppleSignin from './AppleSignin';
 
 // Get Start Page Component
 const GetStarted = ({ navigation }) => (
@@ -24,6 +25,7 @@ const GetStarted = ({ navigation }) => (
     <View style={{height: 80}}></View>
     <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Period Length"])}/>
     <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
+    <AppleSignin />
   </ImageBackground>
 );
 
