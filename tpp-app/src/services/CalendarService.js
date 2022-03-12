@@ -4,7 +4,7 @@ import { Symptoms } from './utils/models.js';
 
 /**
  * Makes API request to AsyncStorage to access symptoms for the entire year
- * @param {number} year, the desired data from a specific year
+ * @param {number} year the desired data from a specific year
  * @returns: {Object} if data for that year exists
  */
 export const GETYearData = async (year) => {
@@ -27,9 +27,9 @@ export const GETYearData = async (year) => {
 /**
  * Saves user's current selected filter, selected month, and selected year, to preserve the thing they are looking at.
  * Meant to be used when user exits calendar page in any way.
- * @param {string} selected view, mostly used for filtering
- * @param {number} integer used to represent the month from 1 to 12
- * @param {number} integer to represent the year
+ * @param {string} selectedvVew, mostly used for filtering
+ * @param {number} selectedMonth integer used to represent the month from 1 to 12
+ * @param {number} selectedYear integer to represent the year
  */
 
 export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, selectedYear) => new Promise( async (resolve, reject) => {
@@ -40,7 +40,7 @@ export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, s
     }
 
     const exists = Object.keys(TRACK_SYMPTOMS).some((tracking) => tracking === selectedView);
-    
+
     if (exists) {
         const viewPair = [KEYS.SELECTED_VIEW, selectedView]
         const monthPair = [KEYS.SELECTED_MONTH, String(selectedMonth - 1)]
@@ -64,7 +64,7 @@ export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, s
 /**
  * Retrieves user's previous selected filter, selected month, and selected year, to preserve the thing they are looking at.
  * Meant to be used when user returns to the calendar page in any way.
- * @returns: list[selectedView, selectedMonth, selectedYear]
+ * @returns: {object} array of selectedView, selectedMonth and selectedYear
  */
 export const GETMostRecentCalendarState = async () => {
 
