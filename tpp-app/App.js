@@ -102,6 +102,7 @@ export function MainPage() {
 export default function App() {
   return (
     // <Welcome></Welcome>
-     <MainPage></MainPage>
+      <MainPage></MainPage>
+
   );
 }
