@@ -4,27 +4,10 @@ import { Symptoms } from './utils/models.js';
 
 /**
  * Makes API request to AsyncStorage to access symptoms for the entire year
- * @param year: number
- * @returns: object
+ * @param {number} year, the desired data from a specific year
+ * @returns: {Object} if data for that year exists
  */
 export const GETYearData = async (year) => {
-    // https://github.com/uoftblueprint/the-period-purse/pull/95#discussion_r813506726
-    // Essentially retrieve the calendar for a given year and convert each day's data into a Symptom object for better front-end handling
-
-    // Used for testing
-    // await AsyncStorage.setItem('2022', JSON.stringify(
-    //     [
-    //         // 0th index of the 2022 array is 1st month i.e. January has size 31
-    //         [
-    //             {
-    //                 'Flow': 'LIGHT',
-    //                 'Mood': 'HAPPY',
-    //                 'Sleep': '7.5', 
-    //                 'Cramps': 'MEDIUM', 
-    //             }
-    //         ]
-    //     ])
-    // )    
 
     const yearData = JSON.parse(await AsyncStorage.getItem(year.toString()));
 
@@ -44,9 +27,9 @@ export const GETYearData = async (year) => {
 /**
  * Saves user's current selected filter, selected month, and selected year, to preserve the thing they are looking at.
  * Meant to be used when user exits calendar page in any way.
- * @param selectedView: string
- * @param selectedMonth: number
- * @param selectedYear: number
+ * @param {string} selected view, mostly used for filtering
+ * @param {number} integer used to represent the month from 1 to 12
+ * @param {number} integer to represent the year
  */
 
 export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, selectedYear) => new Promise( async (resolve, reject) => {
@@ -56,10 +39,8 @@ export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, s
         reject("No month to record")
     }
 
-    var exists = Object.keys(TRACK_SYMPTOMS).some(function(k) {
-        return TRACK_SYMPTOMS[k] === selectedView;
-    });
-
+    const exists = Object.keys(TRACK_SYMPTOMS).some((tracking) => tracking === selectedView);
+    
     if (exists) {
         const viewPair = [KEYS.SELECTED_VIEW, selectedView]
         const monthPair = [KEYS.SELECTED_MONTH, String(selectedMonth - 1)]
@@ -87,17 +68,7 @@ export const POSTMostRecentCalendarState = async (selectedView, selectedMonth, s
  */
 export const GETMostRecentCalendarState = async () => {
 
-    var tracking = await GETAllTrackingPreferences()
-
-    // This is used for testing
-    // TODO: This is HARDCODED
-    // tracking = {
-    //     flow: true, 
-    //     mood: true, 
-    //     sleep: true, 
-    //     cramps: true, 
-    //     exercise: true
-    // }
+    let tracking = await GETAllTrackingPreferences()
 
     try {
         const selectedView = await AsyncStorage.getItem(KEYS.SELECTED_VIEW);
@@ -105,15 +76,14 @@ export const GETMostRecentCalendarState = async () => {
         const selectedYear = await AsyncStorage.getItem(KEYS.SELECTED_YEAR);
         
         // Checks which view it is on
-        // TODO: this is HARDCODED
         let index = Object.values(TRACK_SYMPTOMS).indexOf(selectedView)        
         
         if (tracking[Object.keys(tracking)[index]]) {
-            console.log("DEBUG: " + selectedMonth)
             return [selectedView, selectedMonth, selectedYear];
         }    
     } catch(e) {
         // error reading value
+        reject("Something went wrong");
     }
 
     return null;
