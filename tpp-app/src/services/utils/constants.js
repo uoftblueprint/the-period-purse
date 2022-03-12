@@ -18,6 +18,7 @@ export const MOOD_LEVEL = {
   LOVED: "LOVED"
 }
 
+
 export const CRAMP_LEVEL = {
   NEUTRAL: "NEUTRAL",
   BAD: "BAD",
@@ -39,10 +40,10 @@ export const EXERCISE_TYPE = {
 }
 
 export const TRACK_SYMPTOMS = {
-  FLOW: 'trackFlow', 
-  MOOD: 'trackMood', 
-  SLEEP: 'trackSleep', 
-  CRAMPS: 'trackCramps', 
+  FLOW: 'trackFlow',
+  MOOD: 'trackMood',
+  SLEEP: 'trackSleep',
+  CRAMPS: 'trackCramps',
   EXERCISE: 'trackExercise'
 }
 
@@ -53,4 +54,3 @@ export const KEYS = {
   SELECTED_MONTH: "selectedMonth",
   SELECTED_VIEW: "selectedView"
 }
-
