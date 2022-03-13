@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KEYS, TRACK_SYMPTOMS } from './utils/constants.js'
 import { Symptoms } from './utils/models.js';
+import { GETAllTrackingPreferences } from './SettingsService.js'; 
 
 /**
  * Makes API request to AsyncStorage to access symptoms for the entire year
