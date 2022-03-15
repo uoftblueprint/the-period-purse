@@ -49,5 +49,8 @@ export const TRACK_SYMPTOMS = {
 
 export const KEYS = {
   AVERAGE_PERIOD_LENGTH: "averagePeriodLength",
-  INITIAL_PERIOD_LENGTH: "initialPeriodLength"
+  INITIAL_PERIOD_LENGTH: "initialPeriodLength",
+  SELECTED_YEAR: "selectedYear",
+  SELECTED_MONTH: "selectedMonth",
+  SELECTED_VIEW: "selectedView"
 }
