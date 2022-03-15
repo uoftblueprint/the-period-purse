@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TRACK_SYMPTOMS, REMINDERS } from './utils/constants.js'
+import { TRACK_SYMPTOMS, REMINDERS, LOG_PERIOD_FREQ, LOG_SYMPTOMS_FREQ } from './utils/constantscs'
 
     /**
      * Clears all of the user's account data
@@ -25,15 +25,15 @@ import { TRACK_SYMPTOMS, REMINDERS } from './utils/constants.js'
      */
     export const GETAllTrackingPreferences = async () => new Promise (async (resolve, reject) => {
         try {
-             await AsyncStorage.multiGet([
+             values = await AsyncStorage.multiGet([
                 TRACK_SYMPTOMS.FLOW,
                 TRACK_SYMPTOMS.MOOD,
                 TRACK_SYMPTOMS.SLEEP,
                 TRACK_SYMPTOMS.CRAMPS,
                 TRACK_SYMPTOMS.EXERCISE
-             ]).then(() => {
+             ]).then((values) => {
                  console.log("Got All Tracking Preferences");
-                 resolve();
+                 resolve(values);
              }).catch((e) => {
                 console.log(JSON.stringify(e));
                 reject('Unable to getItem');
@@ -114,3 +114,46 @@ import { TRACK_SYMPTOMS, REMINDERS } from './utils/constants.js'
             reject();
         }
     });
+
+
+
+    export const POSTRemindLogPeriodAdvanceDays = async (advanceDays) => new Promise(async (resolve, reject) => {
+        try {
+            await AsyncStorage.setItem(REMINDERS)
+            
+        } catch(e) {
+
+        }
+    });
+
+    export const GETRemindLogPeriodAdvanceDays = async () => new Promise(async (resolve, reject) => {
+
+    });
+
+    export const POSTRemindLogPeriodTime = async () => new Promise(async (resolve, reject) => {
+
+    });
+
+    export const GETRemindLogPeriodTime = async () => new Promise(async (resolve, reject) => {
+
+    });
+
+    export const POSTRemindLogSymptomsFreq = async () => new Promise(async (resolve, reject) => {
+
+    });
+
+    export const GETRemindLogSymptomsFreq = async () => new Promise(async (resolve, reject) => {
+
+    });
+
+    export const POSTRemindLogSymptomsTime = async () => new Promise(async (resolve, reject) => {
+
+    });
+
+    export const GETRemindLogSymptomsTime = async () => new Promise(async (resolve, reject) => {
+
+    });
+
+
+    
+
