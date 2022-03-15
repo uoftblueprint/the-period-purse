@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TRACK_SYMPTOMS, REMINDERS, LOG_PERIOD_FREQ, LOG_SYMPTOMS_FREQ } from './utils/constantscs'
+import { TRACK_SYMPTOMS, REMINDERS} from './utils/constantscs'
 
     /**
      * Clears all of the user's account data
@@ -95,6 +95,7 @@ import { TRACK_SYMPTOMS, REMINDERS, LOG_PERIOD_FREQ, LOG_SYMPTOMS_FREQ } from '.
             reject();
         }
     });
+
     /**
     * Posts whether the user wants a reminder to log period symptoms
     * @param {boolean} enableRemind representing whether the user wants to a remind to log period symptoms
@@ -115,43 +116,165 @@ import { TRACK_SYMPTOMS, REMINDERS, LOG_PERIOD_FREQ, LOG_SYMPTOMS_FREQ } from '.
         }
     });
 
-
-
-    export const POSTRemindLogPeriodAdvanceDays = async (advanceDays) => new Promise(async (resolve, reject) => {
+    /**
+     * Posts the frequency to send log period reminders
+     * @param {string} advanceDays how many days in advance of period to send reminder
+     * @returns a promise resolving when the post operation is complete
+     */
+    export const POSTRemindLogPeriodFreq = async (advanceDays) => new Promise(async (resolve, reject) => {
         try {
-            await AsyncStorage.setItem(REMINDERS)
+            await AsyncStorage.setItem(REMINDERS.LOG_PERIOD_DAYS, JSON.stringify(advanceDays)).then(() => {
+                console.log("Posted the number of days in advance to send log period reminder");
+                resolve();
+            }).catch((e) => {
+                console.log(JSON.stringify(e));
+                reject("Unable to post number of days in advance to send log period reminder ");
+            })
             
-        } catch(e) {
-
+        } catch (e) {
+    console.log(`POSTRemindLogPeriodFreq error: ${JSON.stringify(e)}`)
+            reject();        
         }
     });
 
-    export const GETRemindLogPeriodAdvanceDays = async () => new Promise(async (resolve, reject) => {
-
+    /**
+     * Retrieves the frequency to send log period reminders 
+     * @returns a promise resolving in a string representing the number of days
+     */
+    export const GETRemindLogPeriodFreq= async () => new Promise(async (resolve, reject) => {
+        try {
+            value = await AsyncStorage.getItem(REMINDERS.LOG_PERIOD_DAYS).then((value) => {
+                        console.log("Retrieved the number of days in advance to send log period reminder");
+                        resolve(value);
+                    }).catch((e) => {
+                        console.log(JSON.stringify(e));
+                        reject("Unable to retrieve number of days in advance to send log period reminder");
+                    })
+        } catch (e) {
+            console.log(`POSTRemindLogPeriodFreq error: ${JSON.stringify(e)}`)
+            reject();
+        }
     });
 
-    export const POSTRemindLogPeriodTime = async () => new Promise(async (resolve, reject) => {
 
+    /**
+     * Posts the time (exp: 1 am, 2 am) to send reminder to log period 
+     * @param {string} time string representing the time
+     * @returns a promise resolving when the post method is complete
+     */
+    export const POSTRemindLogPeriodTime = async (time) => new Promise(async (resolve, reject) => {
+        try {
+            await AsyncStorage.setItem(REMINDERS.LOG_PERIOD_TIME, JSON.stringify(time)).then(() => {
+                console.log("Posted time to send log period reminder");
+                resolve();
+            }).catch((e) => {
+                console.log(JSON.stringify(e));
+                reject("Unable to post time to send log period reminder");
+            })
+        } catch (e) {
+            console.log(`POSTRemindLogPeriodTime error: ${JSON.stringify(e)}`)
+            reject();
+        }
     });
 
+    /**
+     * Retrieves the time (exp: 1 am, 2 am) to send reminder to log period 
+     * @returns a promise resolving in a string representing the time
+     */
     export const GETRemindLogPeriodTime = async () => new Promise(async (resolve, reject) => {
-
+        try {
+            value = await AsyncStorage.getItem(REMINDERS.LOG_PERIOD_TIME).then((value) => {
+                        console.log("Retrieved the time to log period reminder");
+                        resolve(value);
+                    }).catch((e) => {
+                        console.log(JSON.stringify(e));
+                        reject("Unable to retrieve the time to send log period reminder");
+                    })
+        } catch (e) {
+            console.log(`GETRemindLogPeriodTime error: ${JSON.stringify(e)}`)
+            reject();
+        }
     });
 
-    export const POSTRemindLogSymptomsFreq = async () => new Promise(async (resolve, reject) => {
-
+    /**
+     * Posts the frequency to send log symptom reminders
+     * @param {string} freq string representing the frequency to send reminder
+     * @returns a promise resolving when the post operation is complete
+     */
+    export const POSTRemindLogSymptomsFreq = async (freq) => new Promise(async (resolve, reject) => {
+       try {
+            await AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_DAYS, JSON.stringify(freq)).then(() => {
+                console.log("Posted log symptoms reminder frequency");
+                resolve();
+            }).catch((e) => {
+                console.log(JSON.stringify(e));
+                reject("Unable to post log symptoms reminder frequency");
+            })
+        } catch (e) {
+            console.log(`POSTRemindLogSymptomsFreq error: ${JSON.stringify(e)}`)
+            reject();
+        }
     });
 
+    /**
+     * Retrieves the frequency to send log symptom reminders
+     * @returns a promise resolving in a string that represents the frequency to send reminder
+     */
     export const GETRemindLogSymptomsFreq = async () => new Promise(async (resolve, reject) => {
-
+        try {
+            value = await AsyncStorage.get(REMINDERS.LOG_SYMPTOMS_DAYS).then((value) => {
+                console.log("Retrieved log symptoms reminder frequency");
+                resolve(value);
+            }).catch((e) => {
+                console.log(JSON.stringify(e));
+                reject("Unable to retrieve log symptoms reminder frequency");
+            })
+            } catch (e) {
+                console.log(`GETRemindLogSymptomsFreq error: ${JSON.stringify(e)}`)
+                reject();
+            }
     });
 
-    export const POSTRemindLogSymptomsTime = async () => new Promise(async (resolve, reject) => {
 
+    /**
+     * Posts the time (exp: 1 am, 2 am) to send reminder to log symptoms 
+     * @param {string} time string representing the time
+     * @returns a promise resolving when the post method is complete
+     */
+    export const POSTRemindLogSymptomsTime = async (time) => new Promise(async (resolve, reject) => {
+        try {
+            await AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_TIME, JSON.stringify(time)).then(() => {
+                console.log("Posted log symptoms reminder time");
+                resolve();
+            }).catch((e) => {
+                console.log(JSON.stringify(e));
+                reject("Unable to post log symptoms reminder time");
+            })
+
+        } catch (e) {
+            console.log(`POSTRemindLogSymptomsTime error: ${JSON.stringify(e)}`)
+            reject();
+        }
     });
 
+    /**
+     * Retrieves the time (exp: 1 am, 2 am) to send reminder to log symptoms 
+     * @returns a promise resolving in a string representing the time
+     */
     export const GETRemindLogSymptomsTime = async () => new Promise(async (resolve, reject) => {
+        try {
+            value = await AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_TIME).then((value) => {
+                console.log("Retrieved log symptoms reminder time");
+                resolve(value);
+            }).catch((e) => {
+                console.log(JSON.stringify(e));
+                reject("Unable to retrieve log symptoms reminder time");
+            })
 
+        } catch (e) {
+            console.log(`GETRemindLogSymptomsTime error: ${JSON.stringify(e)}`)
+            reject();
+        }
     });
 
 
