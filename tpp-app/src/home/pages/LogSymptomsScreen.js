@@ -49,7 +49,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
   // this is how you access the params passed from the previous page
   // const date = route.params.date
   // console.log(date)
-  // {year: 2022, month: 2, day: 22, timestamp: 1645488000000, dateString: "2022-02-22"}
+  // {year: 2022, month: 2, day: 22 }
 
   const dateStr = getDateString(
     new Date(route.params.date.year, route.params.date.month - 1, route.params.date.day),
