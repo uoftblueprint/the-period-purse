@@ -3,8 +3,6 @@ import {Symptoms} from '../utils/models';
 import {FLOW_LEVEL} from '../utils/constants';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
-// Backend helper functions used across app
-import { Symptoms } from './models'
 
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.
@@ -27,12 +25,17 @@ export const initializeEmptyYear = (yearNumber) => {
 /**
  * Convert a Date object into a date string, encoding year, month and day. Note it encodes months as 1 indexed, and days as 0 indexed
  * @param {Date} date Object to convert to string
- * @return {String} String encoding year, month and day in YYYY-MM-DD format
+ * @param {string | undefined} format String format to convert date to. If none is specified, uses 'YYYY-MM-DD'.
+ * @return {string} String encoding year, month and day in specified format
  */
-export const getDateString = (date) => {
-  var date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-  return date;
-
+export const getDateString = (date, format = 'YYYY-MM-DD') => {
+  switch (format) {
+    case 'MM DD, YYYY':
+      let options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleString('default', options)
+    default: // YYYY-MM-DD
+      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+  }
 }
 
 
