@@ -9,16 +9,17 @@ import { getFullCurrentDateString } from "../services/utils/helpers.js"
 export const GETFactCycle = async () => new Promise(async (resolve, reject) => {
     try {
      if (await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM) == null) {
+        reject();
         return null;
      } else {
-         value = await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM).then(() => {
+         value = await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM).then((value) => {
              console.log("Retrieved Fact Cycle Date and Number");
-             resolve();
+             resolve(value);
+             return value
          }).catch(() => {
              console.log("Failed to retrieve Fact Cycle Date and Number");
              reject();
          })
-         return value
      }
     } catch (e) {
         console.log(`GETFactCycle error: ${JSON.stringify(e)}`)
