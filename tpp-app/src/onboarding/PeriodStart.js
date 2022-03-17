@@ -12,7 +12,7 @@ import { DatePickerModal } from 'react-native-paper-dates';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import PeriodStartIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_date.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
-import PeriodLengthIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_length.svg";
+import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_calendar.svg";
 
 let periodLength;
 export default function PeriodStart ({ navigation }) {
@@ -40,6 +40,13 @@ export default function PeriodStart ({ navigation }) {
     periodLength = value;
   })
 
+  function CalendarIconPref() {
+    if(range.startDate)
+      return (null);
+    else
+      return (<CalendarIcon style={styles.icon}/>);
+  }
+
   return (
     <PaperProvider theme={theme}>
       <ImageBackground source={OnboardingBackground} style={styles.container}>
@@ -48,7 +55,7 @@ export default function PeriodStart ({ navigation }) {
         </BackButtonContainer>
         
         <BackgroundShape style={{ top: -10, position: 'absolute' }}/>
-        <PeriodStartIcon width='200' height='200' viewBox='50 0 260 280' style={{ left: 130, bottom: 130}} />
+        <PeriodStartIcon width='200' height='200' viewBox='50 0 260 280' style={{ left: 130, bottom: 130 }}/>
         <BarIcon style={{ alignSelf: 'center', bottom: 70 }}/>
         <TitleText style={{ bottom: 30 }}>
           When did your {'\n'} period last start?
@@ -60,8 +67,10 @@ export default function PeriodStart ({ navigation }) {
         <InputContainer>
           <DatePickerButton 
             title={range.startDate ? range.startDate.toISOString().split('T')[0] : "Choose date"} 
-            onPress={() => setOpen(true)}>
+            onPress={() => setOpen(true)}
+            inputted={range.startDate}>
           </DatePickerButton>
+          <CalendarIconPref/>
         </InputContainer>
         <DatePickerModal 
           backgroundColor="#000000"
@@ -91,7 +100,8 @@ export default function PeriodStart ({ navigation }) {
             {
               PostInitialPeriodStart(range.startDate);
               navigation.navigate(STACK_SCREENS["Symptoms Choices"]);
-            }}/>
+            }}
+            disabled={range.startDate ? false : true}/>
         </TwoButtonContainer>
       </ImageBackground>
     </PaperProvider>
@@ -134,5 +144,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center'
+  },
+  icon: {
+    alignSelf: 'center',
+    left: '30%',
+    bottom: '35%'
   }
 });

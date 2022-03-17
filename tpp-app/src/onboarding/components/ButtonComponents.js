@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import { Button } from 'react-native-elements';
 
-export const WideButton = ({ onPress, title, color }) => {
+export const WideButton = ({ onPress, title, color, disabled }) => {
     return (
     <TouchableOpacity onPress={onPress} 
       style={{
@@ -15,15 +15,16 @@ export const WideButton = ({ onPress, title, color }) => {
         height: 52,
         alignSelf: 'center',
         margin: 10
-      }}>
-      <Text style={styles.wideButtonText}>{title}</Text>
+      }} disabled={disabled}>
+      <Text style={[styles.wideButtonText, { opacity: disabled ? 0.5 : 1.0 }]}>{title}</Text>
     </TouchableOpacity>
   );
 }
 
-export const NextButton = ({ onPress, title }) => {
+export const NextButton = ({ onPress, title, disabled }) => {
     return (
-    <TouchableOpacity onPress={onPress} style={styles.nextButtonContainer}>
+    <TouchableOpacity onPress={onPress} disabled={disabled} 
+      style={[styles.nextButtonContainer, { opacity: disabled ? 0.5 : 1.0 }]}>
       <Text style={styles.nextButtonText}>{title}</Text>
     </TouchableOpacity>);
 }
@@ -50,10 +51,10 @@ export const UnderlineButton = ({ onPress, title }) => {
     </TouchableOpacity>);
 }
 
-export const DatePickerButton = ({ onPress, title }) => {
+export const DatePickerButton = ({ onPress, title, inputted }) => {
   return (
   <TouchableOpacity onPress={onPress} style={{ marginTop: 7 }}>
-      <Text style={styles.datePickerButtonText}>{title}</Text>
+      <Text style={inputted ? styles.datePickerOutput : styles.datePickerButtonText}>{title}</Text>
   </TouchableOpacity>);
 }
 
@@ -117,6 +118,14 @@ const styles = StyleSheet.create({
     textAlign: 'center', 
     fontWeight: '400',
     marginTop: '7%'
+  },
+  datePickerOutput: {
+    color: "#000000", 
+    fontFamily: 'System', 
+    fontSize: 22, 
+    textAlign: 'center', 
+    fontWeight: '600',
+    marginTop: '5%'
   },
   symptomsChoicesButtonText: {
     color: "#000000",

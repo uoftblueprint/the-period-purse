@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ImageBackground, TextInput, View } from 'react-native';
+import { StyleSheet, ImageBackground, TextInput, View, Keyboard, Text } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
@@ -10,9 +10,18 @@ import { PostInitialPeriodLength } from '../services/OnboardingService';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import PeriodLengthIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_length.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
+import KeyboardIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_keyboard.svg";
 
 export default function PeriodLength ({ navigation }) {
   const [periodLength, setPeriodLength] = useState(null)
+
+  function KeyboardIconPref() {
+    if(periodLength)
+      return (<Text style={styles.dayText}>days</Text>);
+    else
+      return (<KeyboardIcon style={styles.icon}/>);
+  }
+
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
@@ -31,12 +40,13 @@ export default function PeriodLength ({ navigation }) {
       </BodyText>
 
       <InputContainer>
-        <TextInput style={styles.input} 
+        <TextInput style={periodLength ? styles.output : styles.input} 
         placeholder="Tap to input" 
         keyboardType="number-pad" 
         returnKeyType='done'
         onChangeText={(periodLength) => setPeriodLength(periodLength)}
         />
+        <KeyboardIconPref/>
       </InputContainer>
 
       <TwoButtonContainer>
@@ -45,7 +55,8 @@ export default function PeriodLength ({ navigation }) {
           {
             PostInitialPeriodLength(parseInt(periodLength));
             navigation.navigate(STACK_SCREENS["Period Start"]);
-          }}/>
+          }}
+          disabled={periodLength ? false : true}/>
       </TwoButtonContainer>
     </ImageBackground>
   );
@@ -63,6 +74,30 @@ const styles = StyleSheet.create({
     height: 22,
     alignSelf: 'center',
     marginTop: '10%',
-    color: "#6D6E71"
+    color: "#6D6E71",
+    right: 5
+  },
+  icon: {
+    alignSelf: 'center',
+    left: '30%',
+    bottom: '30%'
+  },
+  dayText: {
+    fontFamily: "System",
+    fontSize: 18,
+    color: "#000000",
+    alignSelf: 'center',
+    left: '30%',
+    bottom: '35%'
+  },
+  output: {
+    fontFamily: "System",
+    fontSize: 36,
+    fontWeight: '600',
+    width: 30,
+    height: 30,
+    alignSelf: 'center',
+    marginTop: '8%',
+    color: "#000000",
   }
 });

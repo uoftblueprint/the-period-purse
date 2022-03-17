@@ -87,7 +87,8 @@ export default function SymptomsChoices ({ navigation }) {
               PostSymptomsToTrack(flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
                                   cramp == '#73C7B7', exercise == '#73C7B7');
               navigation.navigate(STACK_SCREENS["Backup"]);
-            }}/>
+            }}
+            disabled={[flow, mood, sleep, cramp, exercise].some((element) => element === '#73C7B7') ? false : true}/>
         </TwoButtonContainer>
       </View>
     </ImageBackground>

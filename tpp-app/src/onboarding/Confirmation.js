@@ -23,6 +23,41 @@ export const STACK_SCREENS = {
   "Confirmation": "Confirmation"
 };
 
+let trackingPreferences = [true, false, false, true, true]; 
+// GETAllTrackingPreferences().then((value) => {
+//   trackingPreferences = JSON.parse(value);
+// })
+function FlowPref() {
+  if(trackingPreferences[0])
+    return (<FlowIcon style={styles.icon}/>);
+  else
+    return (null);
+}
+function MoodPref() {
+  if(trackingPreferences[1])
+    return (<MoodIcon style={styles.icon}/>);
+  else
+    return (null);
+}
+function SleepPref() {
+  if(trackingPreferences[2])
+    return (<SleepIcon style={styles.icon}/>);
+  else
+    return (null);
+}
+function CrampsPref() {
+  if(trackingPreferences[3])
+    return (<CrampsIcon style={styles.icon}/>);
+  else
+    return (null);
+}
+function ExercisePref() {
+  if(trackingPreferences[4])
+    return (<ExerciseIcon style={styles.icon}/>);
+  else
+    return (null);
+}
+
 export default function Confirmation ({ navigation }) {
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
@@ -48,8 +83,11 @@ export default function Confirmation ({ navigation }) {
       <View style={styles.row}>
         <Text style={styles.smallText}>Symptoms to log</Text>
         <SymptomIconContainer>
-            <FlowIcon style={styles.icon}/>
-            <SleepIcon style={styles.icon}/>
+          <FlowPref/>
+          <MoodPref/>
+          <SleepPref/>
+          <CrampsPref/>
+          <ExercisePref/>
         </SymptomIconContainer>
       </View>
       <HorizontalLine></HorizontalLine>
