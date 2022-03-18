@@ -6,6 +6,7 @@ import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TabNavigator from '../components/TabNavigator';
 
 const VIEWS = {
     Flow: "Period Flow",
