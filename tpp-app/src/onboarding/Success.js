@@ -12,7 +12,7 @@ export default function Success ({ navigation }) {
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS["Password"])}}/>
+        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS.PASSWORD)}}/>
         <PageTitleContainer>
           <PageTitle>Registration</PageTitle>
         </PageTitleContainer>
@@ -27,7 +27,7 @@ export default function Success ({ navigation }) {
         <UnderlineButton title="Resend email"></UnderlineButton>
       </TextButtonContainer>
       <View style={{ bottom: "-23%" }}>
-        <WideButton title="OK" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Main Page"])}/>
+        <WideButton title="OK" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.MAIN_PAGE)}/>
       </View>
     </ImageBackground>
   );

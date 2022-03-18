@@ -11,7 +11,7 @@ export default function Backup ({ navigation }) {
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Symptoms Choices"])}}/>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES)}}/>
       </BackButtonContainer>
       <TitleText>
         Would you like to {'\n'} back up your data?
@@ -21,8 +21,8 @@ export default function Backup ({ navigation }) {
       </BodyText>
 
       <View style={{marginTop: 20}}>
-        <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
-        <WideButton title="Continue as guest" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Confirmation"])}/>
+        <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS.REGISTRATION)}/>
+        <WideButton title="Continue as guest" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.CONFIRMATION)}/>
       </View>
     </ImageBackground>
   );
