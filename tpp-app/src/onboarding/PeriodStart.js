@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
 import { STACK_SCREENS } from './Confirmation';
@@ -6,12 +6,13 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
 import { TitleText, BodyText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
+import { PostInitialPeriodStart } from '../services/OnboardingService';
 
 export default function PeriodStart ({ navigation }) {
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Length"])}}/>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}}/>
       </BackButtonContainer>
       <TitleText>
         When did your {'\n'} period last start?
@@ -21,8 +22,12 @@ export default function PeriodStart ({ navigation }) {
       </BodyText>
 
       <TwoButtonContainer>
-        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
-        <NextButton title="Next" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
+        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES)}/>
+        <NextButton title="Next" onPress={() => 
+          {
+            PostInitialPeriodStart(new Date(2011, 11, 30));
+            navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES);
+          }}/>
       </TwoButtonContainer>
     </ImageBackground>
   );

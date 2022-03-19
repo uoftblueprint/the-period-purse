@@ -39,7 +39,7 @@ const DayComponent = ({ date, state, marking, navigation }) => {
     const backgroundColor = symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE ? "#FFFFFF" : "#B31F20";    
 
     return(
-        <TouchableOpacity onPress={() => navigation.navigate("LogSymptoms", {"date": date})}>
+        <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
             <View style={{...styles.dayContainer, backgroundColor: backgroundColor}}>
                 <Text>
                     {date.day}
@@ -130,13 +130,6 @@ export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                {/*<BackButton
-                    onPress={() => {
-                        navigation.navigate('Year')
-                    }}
-                    title='Year'
-                    width={sideComponentWidth}
-                />*/}
                 <Button icon={renderedArrow}
                     iconRight={true}
                     title={selectedView}
