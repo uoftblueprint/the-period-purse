@@ -55,12 +55,13 @@ export default function PeriodStart ({ navigation }) {
         </BackButtonContainer>
         
         <BackgroundShape style={{ top: -10, position: 'absolute' }}/>
-        <PeriodStartIcon width='200' height='200' viewBox='50 0 260 280' style={{ left: 130, bottom: 130 }}/>
-        <BarIcon style={{ alignSelf: 'center', bottom: 70 }}/>
-        <TitleText style={{ bottom: 30 }}>
+        <PeriodStartIcon width='200' height='200' viewBox='50 0 260 280' style={{ left: "31%", bottom: "15%" }}/>
+        <BarIcon style={{ alignSelf: 'center', bottom: "9%" }}/>
+
+        <TitleText style={{ bottom: "6%" }}>
           When did your {'\n'} period last start?
         </TitleText>
-        <BodyText style={{ bottom: 30 }}>
+        <BodyText style={{ bottom: "6%" }}>
           Record your last period or {'\n'} skip if you don’t know
         </BodyText>
 

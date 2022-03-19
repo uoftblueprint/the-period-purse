@@ -46,12 +46,12 @@ export default function SymptomsChoices ({ navigation }) {
           <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Start"])}}/>
         </BackButtonContainer>
         <BackgroundShape style={{ top: -10, position: 'absolute' }}/>
-        <CalendarIcon style={{ alignSelf: 'center', top: -10 }}/>
-        <BarIcon style={{ alignSelf: 'center', top: 10 }}/>
-        <TitleText style={{ top: 30 }}>
+        <CalendarIcon style={{ alignSelf: 'center', bottom: "2%" }}/>
+        <BarIcon style={{ alignSelf: 'center', top: "2%" }}/>
+        <TitleText style={{ top: "5%" }}>
           What symptoms do you {'\n'} want to track?
         </TitleText>
-        <BodyText style={{ top: 30 }}>
+        <BodyText style={{ top: "5%" }}>
           You can change these later in {'\n'} your settings
         </BodyText>
       </View>

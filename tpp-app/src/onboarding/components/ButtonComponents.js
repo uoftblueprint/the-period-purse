@@ -97,11 +97,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 149,
     height: 54,
-    bottom: 10
+    bottom: 10,
+    marginRight: 20
   },
   skipButtonText: {
     color: "#5A9F93", 
-    fontSize: 15 
+    fontSize: 15,
+    textAlign: 'center'
   },
   underlineButtonText: {
     color: "#5A9F93",

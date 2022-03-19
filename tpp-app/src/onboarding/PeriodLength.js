@@ -29,13 +29,13 @@ export default function PeriodLength ({ navigation }) {
       </BackButtonContainer>
 
       <BackgroundShape style={{ top: -10, position: 'absolute' }}/>
-      <PeriodLengthIcon width='200' height='200' viewBox='45 12 215 100' style={{ left: 140,  bottom: 160}}/>
-      <BarIcon style={{ alignSelf: 'center', bottom: 70 }}/>
+      <PeriodLengthIcon width='200' height='200' viewBox='45 12 215 100' style={{ left: '32%',  bottom: "19%"}}/>
+      <BarIcon style={{ alignSelf: 'center', bottom: "9%" }}/>
 
-      <TitleText style={{ bottom: 30 }}>
+      <TitleText style={{ bottom: "6%" }}>
         How long does your {'\n'} period usually last?
       </TitleText>
-      <BodyText style={{ bottom: 30 }}>
+      <BodyText style={{ bottom: "6%" }}>
         This will help us make our {'\n'} reminders more accurate
       </BodyText>
 

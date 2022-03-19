@@ -5,8 +5,8 @@ export const TwoButtonContainer = styled.View`
   flexDirection: row;
   alignSelf: center;
   position: absolute;
-  bottom: 70px;
-  right: 40px
+  bottom: 8%;
+  right: 9%
 `;
 
 // Container for the back arrow button in the top-left corner 
@@ -45,7 +45,6 @@ export const InputContainer = styled.View`
   alignSelf: center;
   width: 50%;
   height: 7%;
-  marginTop: 5%;
   borderRadius: 10px;
   backgroundColor: #FFFFFF;
 `;
