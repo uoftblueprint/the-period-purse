@@ -6,10 +6,11 @@ import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GETsymptomsForDate, initializeEmptyYear } from '../../services/utils/helpers';
+import { getCalendarByYear, getSymptomsFromCalendar, initializeEmptyYear } from '../../services/utils/helpers';
 import { FLOW_LEVEL } from '../../services/utils/constants';
 import { POSTsymptomsForDate } from '../../services/LogSymptomsService';
 import { Symptoms } from '../../services/utils/models';
+import { STACK_SCREENS } from '../CalendarNavigator';
 
 const VIEWS = {
     Flow: "Period Flow",
@@ -23,7 +24,7 @@ const sideComponentWidth = 120
 
 
 // The component that is used by each day in the calendar
-const DayComponent = ({ date, state, marking, navigation }) => {
+const DayComponent = ({ date, state, marking, navigation, calendarData }) => {
 
     const [symptoms, setSymptoms] = useState(new Symptoms);
 
@@ -32,7 +33,7 @@ const DayComponent = ({ date, state, marking, navigation }) => {
     }, [])
 
     const getSymptoms = async () => {
-        const data = await GETsymptomsForDate(date.day, date.month, date.year);
+        const data = await getSymptomsFromCalendar(calendarData, date.day, date.month, date.year);
         setSymptoms(data);
     }
 
@@ -50,13 +51,20 @@ const DayComponent = ({ date, state, marking, navigation }) => {
 }
 
 export const Calendar = ({navigation}) => {
+    const [calendarData, setCalendarData] = useState({});
 
-    // will need to choose the correct year depending on which year the user is looking at
-    const data = AsyncStorage.getItem("2022");
+    useEffect(() => {
+        getCalendarData()
+    },[])
+
+    const getCalendarData = async () => {
+        // will need to choose the correct year depending on which year the user is looking at
+        const data = await getCalendarByYear(2022);
+        setCalendarData(data);
+    }
+
     // AsyncStorage.setItem("2022", JSON.stringify(initializeEmptyYear(2022)));
-    data.then((val) =>{
-        console.log(JSON.parse(val));
-    })
+    console.log(calendarData);
     // let symptomtest = new Symptoms();
     // symptomtest.flow = FLOW_LEVEL.MEDIUM;
     // POSTsymptomsForDate(10, 3, 2022, symptomtest);
@@ -74,7 +82,7 @@ export const Calendar = ({navigation}) => {
 
         // Enable or disable vertical scroll indicator. Default = false
         showScrollIndicator={true}
-        dayComponent={({date, state, marking}) => <DayComponent date={date} state={state} marking={marking} navigation={navigation}/>}
+        dayComponent={({date, state, marking}) => <DayComponent date={date} state={state} marking={marking} navigation={navigation} calendarData={calendarData}/>}
 
         theme={{
             calendarBackground: '#ffffff',

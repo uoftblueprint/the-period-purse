@@ -3,9 +3,6 @@ import {Symptoms} from '../utils/models';
 import {FLOW_LEVEL} from '../utils/constants';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
-// Backend helper functions used across app
-import { Symptoms } from './models'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.
@@ -133,8 +130,6 @@ export const getDaysDiffInclusive = (earlierDate, laterDate) => {
 export const getPeriodsInYear = async (year, calendar=null) => {
   let startOfYear = new Date(year, 0,1);
   let periods = []
-
-
 
   if(!calendar){
     calendar = await getCalendarByYear(year);
