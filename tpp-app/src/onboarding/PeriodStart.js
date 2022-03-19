@@ -7,7 +7,7 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton, DatePickerButton } from './components/ButtonComponents';
 import { TitleText, BodyText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer, InputContainer } from './components/ContainerComponents';
-import { PostInitialPeriodStart, GetInitialPeriodLength } from '../services/OnboardingService';
+import { PostInitialPeriodStart, GetInitialPeriodLength, PostInitialPeriodLength } from '../services/OnboardingService';
 import { DatePickerModal } from 'react-native-paper-dates';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import PeriodStartIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_date.svg";
@@ -79,12 +79,12 @@ export default function PeriodStart ({ navigation }) {
           visible={open}
           onDismiss={onDismiss}
           startDate={range.startDate}
-          endDate={range.startDate ? new Date(range.startDate.getTime() + ((periodLength-1)*24*60*60*1000)) : undefined}
+          endDate={periodLength && range.startDate ? new Date(range.startDate.getTime() + ((periodLength-1)*24*60*60*1000)) : range.endDate}
           onConfirm={onConfirm}
           onChange={onChange} 
           validRange={{
             // startDate: new Date(2021, 1, 2),  // optional
-            endDate: new Date(new Date().getTime() - ((periodLength-1)*24*60*60*1000)), // optional
+            endDate: periodLength ? new Date(new Date().getTime() - ((periodLength-1)*24*60*60*1000)) : new Date() // optional
             // disabledDates: [new Date()] // optional
           }}
           saveLabel="Done" // optional
@@ -99,10 +99,12 @@ export default function PeriodStart ({ navigation }) {
           <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
           <NextButton title="Next" onPress={() => 
             {
+              if(!periodLength)
+                PostInitialPeriodLength(Math.round((range.endDate.getTime() - range.startDate.getTime()) / (1000*60*60*24)))
               PostInitialPeriodStart(range.startDate);
               navigation.navigate(STACK_SCREENS["Symptoms Choices"]);
             }}
-            disabled={range.startDate ? false : true}/>
+            disabled={range.endDate ? false : true}/>
         </TwoButtonContainer>
       </ImageBackground>
     </PaperProvider>
