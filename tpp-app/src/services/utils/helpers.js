@@ -68,6 +68,7 @@ export const getDateString = (date, format = 'YYYY-MM-DD') => {
   return new Date(year, month-1, day) <= today
 };
 
+
 /**
  * @param {number} year The year for which to get calendars
  * @return {Object} A dictionary containing the calendars for the year before, current year, and next year. Keys are the year numbers
@@ -96,6 +97,7 @@ export const getCalendarByYear = async (year) => {
   return calendars;
 }
 
+
 /**
  * Retrieves the user's symptom data for the given date from the calendar.
 * @param {Object} calendar The object containing the symptoms for this year, last year, and next year.
@@ -112,6 +114,7 @@ export const getSymptomsFromCalendar = async (calendar, day, month, year) => {
     return new Symptoms();
   }
 }
+
 
 /**
  * Computes the number of days between the two dates provided, including the two dates. If earlierDate and laterDate are equal, returns 1.

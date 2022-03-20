@@ -4,7 +4,9 @@ import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
 import { getDateString } from "../../services/utils/helpers";
 import Accordion from "../components/Accordion";
+import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils/helpers";
 //import { GETAllTrackingPreferences } from '../../services/SettingsService.js';
+
 
 const DateArrow = ({ onPress, isRight }) => {
     const transform = { transform: [{ rotate: "180deg" }] };
@@ -15,34 +17,6 @@ const DateArrow = ({ onPress, isRight }) => {
     )
 }
 
-let accordionChildren;
-const accordionData = [
-  {
-    title: 'Flow',
-    child: 'blahblah'
-  },
-  {
-    title: 'Mood',
-    child: 'blahblah'
-  },
-  {
-    title: 'Sleep',
-    child: 'blahblah'
-  },
-  {
-    title: 'Cramps',
-    child: 'blahblah'
-  },
-  {
-    title: 'Exercise',
-    child: 'blahblah'
-  },
-  {
-    title: 'Notes',
-    child: 'blahblah'
-  },
-]
-
 
 export default function LogSymptomsScreen({ navigation, route }) {
 
@@ -50,13 +24,21 @@ export default function LogSymptomsScreen({ navigation, route }) {
   // const date = route.params.date
   // console.log(date)
   // {year: 2022, month: 2, day: 22 }
+  // TODO: MAKE SURE TO CONSOLE LOG THE DATE AND check that you're passing in the right indexed month for functions
 
-  const dateStr = getDateString(
-    new Date(route.params.date.year, route.params.date.month - 1, route.params.date.day),
-    'MM DD, YYYY');
+  const year = route.params.date.year;
+  const month = route.params.date.month;
+  const day = route.params.date.day;
+
+  const dateStr = getDateString(new Date(year, month - 1, day), 'MM DD, YYYY');
   const [selectedDate, changeDate] = useState(dateStr);
 
-  // GETAllTrackingPreferences returns array of booleans for [flow, mood, sleep, cramps, exercise]
+  const symptoms = ['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes'];
+  // TODO
+  // const trackingPrefs = GETAllTrackingPreferences returns array of booleans for [flow, mood, sleep, cramps, exercise, notes]
+  // const cal = getCalendarByYear(year)
+  // const currentSymptoms = await getSymptomsFromCalendar(cal, day, month, year);
+
 
   return (
     <View style={styles.screen}>
@@ -82,17 +64,18 @@ export default function LogSymptomsScreen({ navigation, route }) {
       </View>
 
       {/* SYMPTOM ACCORDIONS */}
-      {accordionData.map((acc, i) => {
+      {symptoms.map((symptom, i) => {
+        // TODO: if trackingPrefs[i]
+
         return (
           <Accordion
               key={i}
-              title={acc.title}
-              data={acc.child}
-              isLastChild={ (i === accordionData.length - 1) ? true : false }
+              type={symptom}
+              isLastChild={ (i === symptoms.length - 1) ? true : false }
+              initialValue={null} // TODO: change to currentSymptoms[acc.title]
           />)
       })}
 
-      <Button onPress={() => navigation.goBack()} title="Dismiss" />
     </View>
   );
 }
@@ -110,11 +93,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#EFEFF4',
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     switchDate: {
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     navbarTitle: {
         color: '#000000',
