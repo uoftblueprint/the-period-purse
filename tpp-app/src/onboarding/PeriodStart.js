@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ImageBackground } from 'react-native';
+import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import { configureFonts, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
@@ -54,18 +54,19 @@ export default function PeriodStart ({ navigation }) {
           <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Length"])}}/>
         </BackButtonContainer>
         
-        <BackgroundShape style={{ top: -10, position: 'absolute' }}/>
-        <PeriodStartIcon width='200' height='200' viewBox='50 0 260 280' style={{ left: "31%", bottom: "15%" }}/>
-        <BarIcon style={{ alignSelf: 'center', bottom: "9%" }}/>
+        <SafeAreaView pointerEvents="none" style={{ alignItems: 'center' }}>
+        <BackgroundShape style={{ top: 10 }}/>
+        <PeriodStartIcon width='130' height='130' style={{ bottom: "38%" }}/>
+        <BarIcon style={{ bottom: "30%" }}/>
 
-        <TitleText style={{ bottom: "6%" }}>
+        <TitleText style={{ bottom: "28%" }}>
           When did your {'\n'} period last start?
         </TitleText>
-        <BodyText style={{ bottom: "6%" }}>
+        <BodyText style={{ bottom: "28%" }}>
           Record your last period or {'\n'} skip if you don’t know
         </BodyText>
 
-        <InputContainer>
+        <InputContainer style={{ bottom: '25%'}}>
           <DatePickerButton 
             title={range.startDate ? range.startDate.toISOString().split('T')[0] : "Choose date"} 
             onPress={() => setOpen(true)}
@@ -94,6 +95,7 @@ export default function PeriodStart ({ navigation }) {
           endLabel="To" // optional
           animationType="slide" // optional, default is slide on ios/android and none on web
         />
+        </SafeAreaView>
 
         <TwoButtonContainer>
           <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Symptoms Choices"])}/>
@@ -151,6 +153,6 @@ const styles = StyleSheet.create({
   icon: {
     alignSelf: 'center',
     left: '30%',
-    bottom: '35%'
+    bottom: '38%'
   }
 });

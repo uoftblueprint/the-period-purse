@@ -119,7 +119,8 @@ const styles = StyleSheet.create({
     fontSize: 17, 
     textAlign: 'center', 
     fontWeight: '400',
-    marginTop: '7%'
+    marginTop: '7%',
+    right: '5%'
   },
   datePickerOutput: {
     color: "#000000", 

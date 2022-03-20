@@ -1,28 +1,26 @@
 import styled from "styled-components";
 
 // Container for the skip & start buttons on the onboarding pages 
-export const TwoButtonContainer = styled.View`
+export const TwoButtonContainer = styled.SafeAreaView`
   flexDirection: row;
   alignSelf: center;
   position: absolute;
-  bottom: 8%;
+  bottom: 5%;
   right: 9%
 `;
 
 // Container for the back arrow button in the top-left corner 
-export const BackButtonContainer = styled.View`
+export const BackButtonContainer = styled.SafeAreaView`
   alignItems: stretch;
   borderRadius: 10px;
-  left: 10px;
-  width: 90%;
-  height: 54px;
   position: absolute; 
-  top: 30px;
+  left: 10px;
+  top: 10px;
   flexDirection: row
 `;
 
 // Lines on the success page 
-export const HorizontalLine = styled.View`
+export const HorizontalLine = styled.SafeAreaView`
   borderBottomColor: #CFCFCF;
   borderBottomWidth: 1px
 `; 
@@ -41,29 +39,29 @@ export const InputBorderContainer = styled.View`
 `;
 
 // Container for the input boxes on onboarding pages
-export const InputContainer = styled.View`
+export const InputContainer = styled.SafeAreaView`
   alignSelf: center;
   width: 50%;
-  height: 7%;
+  height: 60px;
   borderRadius: 10px;
   backgroundColor: #FFFFFF;
 `;
 
 // Container for the title of the page at the top
-export const PageTitleContainer = styled.View`
+export const PageTitleContainer = styled.SafeAreaView`
   width: 85%;
   height: 40px
 `;
 
 // Last row on the success page for multiple icons
-export const SymptomIconContainer = styled.View`
+export const SymptomIconContainer = styled.SafeAreaView`
   marginTop: 4px;
   flexDirection: row
 `;
 
 // Container for text and button in the same line 
-export const TextButtonContainer = styled.View`
+export const TextButtonContainer = styled.SafeAreaView`
   flexDirection: row;
   alignSelf: center;
-  bottom: -45%
+  bottom: -35%
 `; 

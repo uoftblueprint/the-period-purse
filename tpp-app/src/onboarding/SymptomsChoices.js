@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ImageBackground, ScrollView, View } from 'react-native';
+import { StyleSheet, ImageBackground, ScrollView, SafeAreaView } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
@@ -41,45 +41,48 @@ export default function SymptomsChoices ({ navigation }) {
 
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
-      <View style={{ alignItems: 'stretch', justifyContent: 'center', flex: 3.5 }}>
-        <BackButtonContainer>
-          <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Start"])}}/>
-        </BackButtonContainer>
-        <BackgroundShape style={{ top: -10, position: 'absolute' }}/>
-        <CalendarIcon style={{ alignSelf: 'center', bottom: "2%" }}/>
-        <BarIcon style={{ alignSelf: 'center', top: "2%" }}/>
-        <TitleText style={{ top: "5%" }}>
+      <BackButtonContainer>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Start"])}}/>
+      </BackButtonContainer>
+      
+      <SafeAreaView pointerEvents="none" style={{  alignItems: 'center', justifyContent: 'center', flex: 4 }}>
+        <SafeAreaView style={{ alignItems: 'center'}}>
+        <BackgroundShape style={{ top: 150 }}/>
+        <CalendarIcon width='250' height='250' style={{ bottom: "28%" }}/>
+        <BarIcon style={{ bottom: "27%" }}/>
+        <TitleText style={{ bottom: "25%" }}>
           What symptoms do you {'\n'} want to track?
         </TitleText>
-        <BodyText style={{ top: "5%" }}>
+        <BodyText style={{ bottom: "25%" }}>
           You can change these later in {'\n'} your settings
         </BodyText>
-      </View>
+        </SafeAreaView>
+      </SafeAreaView>
 
-      <ScrollView style={{ flex: 1.5 }}>
-        <View style={[styles.symptoms, { backgroundColor: flow }]}>
+      <ScrollView style={{ flex: 1 }}>
+        <SafeAreaView style={[styles.symptoms, { backgroundColor: flow }]}>
           <SymptomsChoicesButton onPress={handleFlow} title="Flow"></SymptomsChoicesButton>
           <FlowIcon style={styles.icon}/>
-        </View>
-        <View style={[styles.symptoms, { backgroundColor: mood }]}>
+        </SafeAreaView>
+        <SafeAreaView style={[styles.symptoms, { backgroundColor: mood }]}>
           <SymptomsChoicesButton onPress={handleMood} title="Mood"></SymptomsChoicesButton>
           <MoodIcon style={styles.icon}/>
-        </View>
-        <View style={[styles.symptoms, { backgroundColor: sleep }]}>
+        </SafeAreaView>
+        <SafeAreaView style={[styles.symptoms, { backgroundColor: sleep }]}>
           <SymptomsChoicesButton onPress={handleSleep} title="Sleep"></SymptomsChoicesButton>
           <SleepIcon style={styles.icon}/>
-        </View>
-        <View style={[styles.symptoms, { backgroundColor: cramp }]}>
+        </SafeAreaView>
+        <SafeAreaView style={[styles.symptoms, { backgroundColor: cramp }]}>
           <SymptomsChoicesButton onPress={handleCramp} title="Cramps"></SymptomsChoicesButton>
           <CrampsIcon style={styles.icon}/>
-        </View>
-        <View style={[styles.symptoms, { backgroundColor: exercise }]}>
+        </SafeAreaView>
+        <SafeAreaView style={[styles.symptoms, { backgroundColor: exercise }]}>
           <SymptomsChoicesButton onPress={handleExercise} title="Exercise"></SymptomsChoicesButton>
           <ExerciseIcon style={styles.icon}/>
-        </View>
+        </SafeAreaView>
       </ScrollView>
 
-      <View style={{ flex: 1, backgroundColor: '#FFFFFF'}}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF'}}>
         <TwoButtonContainer style={{ top: 20 }}>
           <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
           <NextButton title="Next" onPress={() => 
@@ -90,7 +93,7 @@ export default function SymptomsChoices ({ navigation }) {
             }}
             disabled={[flow, mood, sleep, cramp, exercise].some((element) => element === '#73C7B7') ? false : true}/>
         </TwoButtonContainer>
-      </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 }
