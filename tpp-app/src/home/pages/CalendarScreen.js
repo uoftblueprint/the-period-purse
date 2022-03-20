@@ -58,18 +58,29 @@ const DayComponent = ({ date, state, marking, navigation, calendarData }) => {
 export const Calendar = ({navigation}) => {
     const [calendarData, setCalendarData] = useState({});
 
+    // useEffect(() => {
+    //     getCalendarData()
+    // },[navigation])
+
+    //updates the data when you come back to the calendar screen
     useEffect(() => {
-        getCalendarData()
-    },[])
+        const unsubscribe = navigation.addListener('focus', () => {
+            getCalendarData();
+        });
+        return unsubscribe;
+    }, [navigation]);
 
     const getCalendarData = async () => {
         // will need to choose the correct year depending on which year the user is looking at
         const data = await getCalendarByYear(2022);
-        setCalendarData(data);
+        if(data != calendarData){
+            setCalendarData(data);
+        }
+            
     }
 
     // AsyncStorage.setItem("2022", JSON.stringify(initializeEmptyYear(2022)));
-    console.log("Calendar stuff:",calendarData);
+    // console.log("Calendar stuff:",calendarData);
     // let symptomtest = new Symptoms();
     // symptomtest.flow = FLOW_LEVEL.MEDIUM;
     // POSTsymptomsForDate(10, 3, 2022, symptomtest);

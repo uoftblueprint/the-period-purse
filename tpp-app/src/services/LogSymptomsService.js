@@ -30,7 +30,7 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
         const yearData = JSON.parse(await AsyncStorage.getItem(year.toString())) ?? initializeEmptyYear(year);
 
         yearData[month-1][day-1] = symptoms
-        console.log(day,month,symptoms)
+        // console.log(day,month,symptoms)
         // post symptoms to storage
         await AsyncStorage.setItem(year.toString(), JSON.stringify(yearData))
             .then(() => resolve())
@@ -52,7 +52,7 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
  * date.month is a number (January = 1),
  * date.year is a number.
  */
-export const LogMultipleDayPeriod = async (dates) => {
+export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve, reject) => {
     // run this code for each value in the dates array
     if(dates.length > 0){
         try {
@@ -60,20 +60,17 @@ export const LogMultipleDayPeriod = async (dates) => {
             const calendarData = await getCalendarByYear(curYear);
         
 
-            dates.map(async (date)=>{
+            dates.map((date)=>{
                 const year = date.year;
                 const month = date.month;
                 const day = date.day;
                 try {
                     
-                    let symptoms = await getSymptomsFromCalendar(calendarData, day, month, year);
+                    let symptoms = getSymptomsFromCalendar(calendarData, day, month, year);
 
                     if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
                         symptoms.flow = FLOW_LEVEL.MEDIUM;
                     }
-                    // console.log(date, symptoms)
-
-                    // await POSTsymptomsForDate(day, month, year, symptoms);
 
                     calendarData[year][month-1][day-1] = symptoms;
                 } catch (error) {
@@ -83,14 +80,16 @@ export const LogMultipleDayPeriod = async (dates) => {
             })
 
             console.log(curYear, calendarData[curYear]);
-            // console.log(JSON.stringify(calendarData[curYear]));
+            console.log(curYear.toString());
+
+            // await AsyncStorage.getItem(curYear.toString());
 
             await AsyncStorage.setItem(curYear.toString(), JSON.stringify(calendarData[curYear]))
-            // .then(() => resolve())
-            // .catch((e) => {
-            //     reject(`Unable to mergeItem and post symptoms for multiselect.`);
-            //     console.log(JSON.stringify(e));
-            // });
+            .then(() => resolve())
+            .catch((e) => {
+                console.log(JSON.stringify(e));
+                reject(`Unable to mergeItem and post symptoms for multiselect.`);
+            });
 
             // await AsyncStorage.setItem((curYear - 1).toString(), JSON.stringify(calendarData[curYear - 1]))
             // .then(() => resolve())
@@ -112,4 +111,4 @@ export const LogMultipleDayPeriod = async (dates) => {
         }
     }
 
-}
+})

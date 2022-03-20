@@ -59,7 +59,6 @@ export const Calendar = ({navigation, addDate, removeDate}) => {
         setCalendarData(data);
     }
     
-    // AsyncStorage.setItem("2022", JSON.stringify(initializeEmptyYear(2022)));
     console.log(calendarData);
     // let symptomtest = new Symptoms();
     // symptomtest.flow = FLOW_LEVEL.MEDIUM;
@@ -156,7 +155,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             </View>
             
             <Calendar navigation={navigation} addDate={addDate} removeDate={removeDate}/>
-            <TouchableOpacity onPress={() => {onSubmit()}} style={styles.submitButton}>
+            <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
                 <CloseIcon fill={'#181818'}/>
             </TouchableOpacity>
         </View>
