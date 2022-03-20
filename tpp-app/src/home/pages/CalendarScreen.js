@@ -27,17 +27,22 @@ const sideComponentWidth = 120
 const DayComponent = ({ date, state, marking, navigation, calendarData }) => {
 
     const [symptoms, setSymptoms] = useState(new Symptoms);
+    const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
 
     useEffect(() => {
-        getSymptoms()
+        getSymptoms();
     }, [])
+    
+    useEffect(() => {
+        setBackgroundColor(symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE ? "#FFFFFF" : "#B31F20");
+    }, [symptoms])
 
     const getSymptoms = async () => {
         const data = await getSymptomsFromCalendar(calendarData, date.day, date.month, date.year);
         setSymptoms(data);
     }
 
-    const backgroundColor = symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE ? "#FFFFFF" : "#B31F20";    
+    // const backgroundColor = symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE ? "#FFFFFF" : "#B31F20";    
 
     return(
         <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
@@ -64,7 +69,7 @@ export const Calendar = ({navigation}) => {
     }
 
     // AsyncStorage.setItem("2022", JSON.stringify(initializeEmptyYear(2022)));
-    console.log(calendarData);
+    console.log("Calendar stuff:",calendarData);
     // let symptomtest = new Symptoms();
     // symptomtest.flow = FLOW_LEVEL.MEDIUM;
     // POSTsymptomsForDate(10, 3, 2022, symptomtest);

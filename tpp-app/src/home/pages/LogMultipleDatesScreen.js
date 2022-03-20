@@ -6,6 +6,7 @@ import { STACK_SCREENS } from '../CalendarNavigator';
 import { getCalendarByYear, getSymptomsFromCalendar, initializeEmptyYear } from '../../services/utils/helpers';
 import { Symptoms } from '../../services/utils/models';
 import { FLOW_LEVEL } from '../../services/utils/constants';
+import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 
 
 const DayComponent = ({ date, navigation, calendarData, addDate, removeDate }) => {
@@ -24,7 +25,7 @@ const DayComponent = ({ date, navigation, calendarData, addDate, removeDate }) =
 
     const multiSelect = () => {
         if(backgroundColor == "#FFFFFF"){
-            setBackgroundColor("#5A9F93");
+            setBackgroundColor("#73C7B7");
             addDate(date);
         } else {
             setBackgroundColor("#FFFFFF");
@@ -133,6 +134,16 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         }
     }
 
+    const onSubmit = async() => {
+        try {
+            await LogMultipleDayPeriod(selectedDates);
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
+
+
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
@@ -143,11 +154,11 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 <Text style={styles.navbarTitle}>Tap date to log period</Text>
 
             </View>
-            {/* <TouchableOpacity onPress={() => {}} style={styles.submitButton}>
-                <CloseIcon fill={'#181818'}/>
-            </TouchableOpacity> */}
-            <Calendar navigation={navigation} addDate={addDate} removeDate={removeDate}/>
             
+            <Calendar navigation={navigation} addDate={addDate} removeDate={removeDate}/>
+            <TouchableOpacity onPress={() => {onSubmit()}} style={styles.submitButton}>
+                <CloseIcon fill={'#181818'}/>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -192,12 +203,18 @@ const styles = StyleSheet.create({
         margin: 2,
     },
     submitButton: {
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 8, //IOS
+        alignItems: 'center',
+        justifyContent: 'center',
         position: 'absolute',
-        bottom:10,
-        right:10,
+        bottom:30,
+        right:40,
         width: 60,  
         height: 60,   
         borderRadius: 30,            
-        backgroundColor: '#ee6e73', 
+        backgroundColor: '#73C7B7', 
     }
 })

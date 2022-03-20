@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {FLOW_LEVEL} from './utils/constants'
-import { initializeEmptyYear, GETsymptomsForDate, isValidDate } from './utils/helpers'
+import { initializeEmptyYear, isValidDate, getCalendarByYear, getSymptomsFromCalendar } from './utils/helpers'
 import { Symptoms } from './utils/models';
 
 
@@ -14,8 +14,8 @@ import { Symptoms } from './utils/models';
  */
 export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Promise(async (resolve, reject) => {
     // Check that symptoms object is not all null or not empty
-    let notEmpty = Object.values(symptoms).some((symptom) => symptom !== null)
-    if (!symptoms || notEmpty) {
+    let notEmpty = Object.values(symptoms).some((symptom) => symptom !== null);
+    if (!symptoms || !notEmpty) {
         reject("No symptoms to record");
     }
 
@@ -30,7 +30,7 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
         const yearData = JSON.parse(await AsyncStorage.getItem(year.toString())) ?? initializeEmptyYear(year);
 
         yearData[month-1][day-1] = symptoms
-
+        console.log(day,month,symptoms)
         // post symptoms to storage
         await AsyncStorage.setItem(year.toString(), JSON.stringify(yearData))
             .then(() => resolve())
@@ -54,19 +54,62 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
  */
 export const LogMultipleDayPeriod = async (dates) => {
     // run this code for each value in the dates array
-    dates.map(async (date)=>{
-        const year = date.year;
-        const month = date.month;
-        const day = date.day;
+    if(dates.length > 0){
+        try {
+            curYear = dates[0].year;
+            const calendarData = await getCalendarByYear(curYear);
+        
 
-        let symptoms = await GETsymptomsForDate(day, month, year)
+            dates.map(async (date)=>{
+                const year = date.year;
+                const month = date.month;
+                const day = date.day;
+                try {
+                    
+                    let symptoms = await getSymptomsFromCalendar(calendarData, day, month, year);
 
-        if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
-            symptoms.flow = FLOW_LEVEL.MEDIUM;
+                    if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
+                        symptoms.flow = FLOW_LEVEL.MEDIUM;
+                    }
+                    // console.log(date, symptoms)
+
+                    // await POSTsymptomsForDate(day, month, year, symptoms);
+
+                    calendarData[year][month-1][day-1] = symptoms;
+                } catch (error) {
+                    console.log(error);
+                }
+
+            })
+
+            console.log(curYear, calendarData[curYear]);
+            // console.log(JSON.stringify(calendarData[curYear]));
+
+            await AsyncStorage.setItem(curYear.toString(), JSON.stringify(calendarData[curYear]))
+            // .then(() => resolve())
+            // .catch((e) => {
+            //     reject(`Unable to mergeItem and post symptoms for multiselect.`);
+            //     console.log(JSON.stringify(e));
+            // });
+
+            // await AsyncStorage.setItem((curYear - 1).toString(), JSON.stringify(calendarData[curYear - 1]))
+            // .then(() => resolve())
+            // .catch((e) => {
+            //     reject(`Unable to mergeItem and post symptoms for multiselect.`);
+            //     console.log(JSON.stringify(e));
+            // });
+
+            // await AsyncStorage.setItem((curYear + 1).toString(), JSON.stringify(calendarData[curYear + 1]))
+            // .then(() => resolve())
+            // .catch((e) => {
+            //     reject(`Unable to mergeItem and post symptoms for multiselect.`);
+            //     console.log(JSON.stringify(e));
+            // });
+
+            // calendarData[curYear]
+        } catch (error) {
+            console.log("error with multiselect:",error);
         }
-
-        POSTsymptomsForDate(day, month, year, symptoms);
-
-    })
+    }
 
 }
