@@ -8,21 +8,6 @@ import MoodIcon from '../../ios/tppapp/Images.xcassets/icons/mood.png';
 import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
-const Stats = (props) => {
-
-    return (
-        <View>
-            <Text style={styles.heading}>Your Stats</Text>
-            <Card containerStyle={[styles.dropShadow, styles.card]}>
-                <Text>Average cycle length: <Text style={{fontWeight: "bold"}}>{props.cycleLength} </Text> days</Text>
-            </Card>
-            <Card containerStyle={[styles.dropShadow, styles.card]}>
-                <Text>Average period length: <Text style={{fontWeight: "bold"}}> {props.periodLength} </Text> days</Text>
-            </Card>
-        </View>
-    )
-}
-
 const Notifications = (props) => {
 
     return (
@@ -124,7 +109,6 @@ export default function Settings () {
 
     return (
         <View style={styles.container}>
-            <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
             <Preferences/>
             <Notifications
                 remindPeriodEnabled={remindPeriodEnabled}
