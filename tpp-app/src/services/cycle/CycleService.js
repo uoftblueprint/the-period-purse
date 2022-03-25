@@ -75,6 +75,7 @@ async function getFirstPeriodStart(firstPeriodEnd, calendar = null){
       calendar = await getCalendarByYear(current.getFullYear());
     }
 
+    // TODO: what if current = Dec 31, tomorrow = Jan 1, twoDaysLater = Jan 2
     let dateSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
     let tomorrowSymptoms = new Symptoms();
     let twoDaysLaterSymptoms = new Symptoms()

@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from './utils/constants'
 import { initializeEmptyYear, GETsymptomsForDate, isValidDate } from './utils/helpers'
 import { Symptoms } from './utils/models';
+import {calculateAverageCycleLength, calculateAveragePeriodLength} from "./CalculationService";
 
 
 /**
@@ -38,6 +39,13 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
                 console.log(JSON.stringify(e));
                 reject(`Unable to mergeItem and post symptoms for this day, month, year: ${day, month, year}`);
             });
+
+        // Execute calculation for average period length
+        // TODO: add this somewhere else too
+        await calculateAveragePeriodLength();
+
+        // Execute calculation for average cycle length
+        await calculateAverageCycleLength();
     } catch (e) {
         console.log(`POSTsymptomsForDate error: ${JSON.stringify(e)}`);
         reject("Something went wrong");
