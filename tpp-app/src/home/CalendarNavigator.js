@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import CalendarScreen from './pages/CalendarScreen'
+import CycleCalendarTabs from './components/CycleCalendarTabs';
 import YearScreen from './pages/YearScreen'
 import LogSymptomsScreen from './pages/LogSymptomsScreen';
 import SelectLogOptionOverlay from './pages/SelectLogOptionOverlay';
@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 export default function CalendarNavigator() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name={"Calendar"} component={CalendarScreen} />
+            <Stack.Screen name={"CycleCalendarTabs"} component={CycleCalendarTabs} />
             <Stack.Screen name={"Year"} component={YearScreen} />
             <Stack.Screen name={"SelectLogOption"} component={SelectLogOptionOverlay}
               options={{

@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Symptoms} from '../utils/models';
 import {FLOW_LEVEL} from '../utils/constants';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
@@ -44,7 +43,6 @@ export const getDateString = (date) => {
  * @return {boolean} if date is valid and not in the future
  */
  export const isValidDate = (day, month, year) => {
-  // COPIED FROM EMILY. TODO: delete this for original when merge
   // Check the ranges of month and year
   if (year < 1000 || year > 3000 || month == 0 || month > 12)
       return false;

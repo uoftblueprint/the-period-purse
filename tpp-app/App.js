@@ -13,7 +13,7 @@ import InfoNavigator from './src/info/InfoNavigator';
 
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
-import TabNavigator from './src/home/components/TabNavigator';
+import CycleCalendarTabs from './src/home/components/CycleCalendarTabs';
 
 
 const Tab = createBottomTabNavigator();
@@ -104,7 +104,6 @@ export function MainPage() {
 export default function App() {
   return (
     // <Welcome></Welcome>
-      // <MainPage></MainPage>
-      <TabNavigator/>
+       <MainPage></MainPage>
   );
 }

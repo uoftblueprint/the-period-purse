@@ -1,12 +1,19 @@
 
 import AnimatedProgressWheel from 'react-native-progress-wheel';
 import React, { useState } from 'react';
-import {View, Text} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
+import CycleCard from '../components/CycleCard';
 
 export default function CycleScreen (){
   return (
-    <Text>
-      Cycle Screen placeholder
-    </Text>
+    <CycleCard/>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center'
+  }
+})

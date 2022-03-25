@@ -7,14 +7,11 @@ import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function navigator() {
+export default function HomeNavigator() {
   return (
-
-    <NavigationContainer >
       <Tab.Navigator style={{top: 40}}>
         <Tab.Screen name="Calendar" component={CalendarScreen} />
         <Tab.Screen name="Cycle" component={CycleScreen} />
       </Tab.Navigator>
-    </NavigationContainer>
   );
 }

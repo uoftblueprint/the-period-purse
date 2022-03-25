@@ -6,7 +6,6 @@ import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import TabNavigator from '../components/TabNavigator';
 
 const VIEWS = {
     Flow: "Period Flow",
@@ -103,13 +102,6 @@ export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                {/*<BackButton
-                    onPress={() => {
-                        navigation.navigate('Year')
-                    }}
-                    title='Year'
-                    width={sideComponentWidth}
-                />*/}
                 <Button icon={renderedArrow}
                     iconRight={true}
                     title={selectedView}
@@ -117,9 +109,6 @@ export default function CalendarScreen ({ navigation }) {
                         type="clear"
                     onPress={() => setDropdownExpanded(!dropdownExpanded)}
                     />
-                <View style={{width:sideComponentWidth}}>
-                    {/* This is a placeholder for the help button on final. Needed it for spacing*/}
-                </View>
             </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
             <Calendar navigation={navigation}/>
@@ -135,9 +124,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF'
     },
     navbarContainer: {
-        marginTop: 98,
+        marginTop: 0,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         backgroundColor: '#FFFFFF'
     },
     horizContainer: {

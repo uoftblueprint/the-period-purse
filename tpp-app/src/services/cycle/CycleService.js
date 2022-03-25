@@ -241,6 +241,33 @@ const CycleService = {
 
   },
 
+ /**
+    * Get the days since the last period has ended.
+    * @return {Promise} Reolves into 0 if user on their period, and an integer of the days they have been on their period otherwise
+    */
+  GETDaysSinceLastPeriodEnd: async function (){
+    //TODO: add this to the wiki
+    var curr = new Date()
+    var days = 0;
+
+    let calendar = await getCalendarByYear(curr.getFullYear());
+
+    let currSymptoms = await getSymptomsFromCalendar(calendar, curr.getDate(), curr.getMonth() + 1, curr.getFullYear());
+    let hasFlow = (currSymptoms.flow !== null && currSymptoms.flow !== FLOW_LEVEL.NONE);
+
+    // furthest back we will check for a last period
+    let furthest_date = new Date(curr.getFullYear() - 1,10, 30);
+
+    //TODO: test on empty calendar with no periods
+
+    while(!isSameDay(furthest_date, curr) && !hasFlow){
+      curr = subDays(curr, 1);
+      currSymptoms = await getSymptomsFromCalendar(calendar, curr.getDate(), curr.getMonth() + 1, curr.getFullYear());
+      hasFlow = (currSymptoms.flow !== null && currSymptoms.flow !== FLOW_LEVEL.NONE);
+      days+=1;
+    }
+    return days;
+  },
 
   /**
    * Get most recent period start date
@@ -250,6 +277,8 @@ const CycleService = {
    */
   GETMostRecentPeriodStartDate: async function (calendar = null) {
     var date = new Date()
+
+    console.log("GETMostRecentPeriodStartDate has value of " + date.getFullYear());
 
     if (!calendar){
       calendar = await getCalendarByYear(date.getFullYear());
