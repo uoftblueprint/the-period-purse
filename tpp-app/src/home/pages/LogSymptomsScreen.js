@@ -1,5 +1,5 @@
-import React, { useState, useEffect, setState, createRef } from "react";
-import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, StatusBar } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, StatusBar, Alert } from "react-native";
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
 import { getDateString } from "../../services/utils/helpers";
@@ -45,12 +45,16 @@ export default function LogSymptomsScreen({ navigation, route }) {
     new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum');
 
 
+  // FORM STATES
   const [flowStr, setFlow] = useState(currentSymptoms['flow']);
   const [moodStr, setMood] = useState(currentSymptoms['mood']);
   const [sleepMins, setSleep] = useState(currentSymptoms['sleep']);
   const [crampsStr, setCramps] = useState(currentSymptoms['cramps']);
   const [exerciseObj, setExercise] = useState(currentSymptoms['exercise']); // ExerciseActivity object
   const [notesStr, setNotes] = useState(currentSymptoms['notes']);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [isDirty, setDirty] = useState(false); // if there are changes to submit
 
   // literally to quick access states in a dynamic way
   const form = {
@@ -80,6 +84,64 @@ export default function LogSymptomsScreen({ navigation, route }) {
     },
   }
 
+  // update isDirty every time a form state changes
+  useEffect(() => {
+    const newDirty = symptoms.some((symptom) => {
+        console.log(symptom);
+        let newSymp = form[symptom].state;
+        if (newSymp && newSymp.constructor.name === 'ExerciseActivity') {
+          return (currentSymptoms[symptom].exercise !== newSymp.exercise ||
+            currentSymptoms[symptom].exercise_minutes !== newSymp.exercise_minutes)
+        } else if (typeof newSymp === 'string') {
+          return currentSymptoms[symptom].trim() !== newSymp.trim();
+        } else {
+          return currentSymptoms[symptom] !== newSymp;
+        }
+    })
+    setDirty(newDirty);
+  }, [flowStr, moodStr, sleepMins, crampsStr, exerciseObj, notesStr])
+
+  // POST symptoms when errors are gone and submitting is true
+  useEffect(() => {
+
+    if (!submitting) {
+      return;
+    }
+
+    // service?.createTicket(ticket)
+    //   .then((response: TicketData) => {
+    //       if (response.error) {
+    //           console.log(`ticket error: ${response.error}`);
+    //           setServerError(`Something went wrong: ${response.error}.`);
+    //       } else {
+    //           console.log(`ticket #${response.number} creation succesful!`)
+    //           router.setRoute('/issuethankyou');
+    //       }
+    //   })
+    //   .catch((e: AxiosResponse) => {
+    //       console.log(`error: ${e}`);
+    //       setServerError(`Something went wrong: ${e}.`);
+    //   })
+    //   .finally(() => setSubmitting(false));
+  }, [submitting])
+
+  const unsavedChangesAlert = () => new Promise((resolve, reject) => {
+    Alert.alert(
+      "Unsaved changes",
+      "Your changes have not been saved. Do you want to discard the changes and continue?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => reject(),
+          style: "cancel"
+        },
+        { text: "Yes", onPress: () => resolve() }
+      ]
+    );
+  })
+
+
+
   return (
     <SafeAreaView style={styles.screen}><ScrollView>
 
@@ -87,8 +149,19 @@ export default function LogSymptomsScreen({ navigation, route }) {
       <View style={styles.navbarContainer}>
 
           {/* CLOSE BUTTON */}
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.close}>
-            <CloseIcon fill={'#000000'}/>
+          <TouchableOpacity
+            onPress={() => {
+              if (isDirty) {
+                unsavedChangesAlert()
+                  .then(() => { // YES discard changes
+                    navigation.goBack();
+                  })
+              } else {
+                navigation.goBack();
+              }
+            }}
+            style={styles.close}>
+              <CloseIcon fill={'#000000'}/>
           </TouchableOpacity>
 
           {/* SWITCH AND DISPLAY DATE */}
@@ -121,8 +194,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
         <TouchableOpacity
           style={styles.saveButton}
           onPress={() => {
-            form.flow.setState(FLOW_LEVEL.SPOTTING)
-
+            //setSubmitting(true);
           }}
         >
           <Text style={{color: '#fff'}}>Save</Text>
