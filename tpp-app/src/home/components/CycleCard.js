@@ -2,7 +2,7 @@ import AnimatedProgressWheel from 'react-native-progress-wheel';
  import React, { useState, useEffect } from 'react';
  import {View, Text} from 'react-native';
  import CycleService from '../../services/cycle/CycleService';
-
+ import {Card} from 'react-native-elements';
 
  function onPeriodText(periodDays){
    return (
@@ -47,6 +47,7 @@ import AnimatedProgressWheel from 'react-native-progress-wheel';
 
 
   return (
+  
    <View style={{flex: 1,flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
                    <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',alignSelf:'center'}}>
                        <View style={{flex: 1,flexDirection:'row',alignItems:'center',alignSelf:'flex-end',margin:10}}>
