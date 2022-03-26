@@ -21,7 +21,7 @@ const sideComponentWidth = 120
 // The component that is used by each day in the calendar
 const DayComponent = ({ date, state, marking, navigation }) => {
     return(
-        <TouchableOpacity onPress={() => navigation.navigate("LogSymptoms", {"date": date})}>
+        <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
             <View style={styles.dayContainer}>
                 <Text>
                     {date.day}
@@ -102,13 +102,6 @@ export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                {/*<BackButton
-                    onPress={() => {
-                        navigation.navigate('Year')
-                    }}
-                    title='Year'
-                    width={sideComponentWidth}
-                />*/}
                 <Button icon={renderedArrow}
                     iconRight={true}
                     title={selectedView}

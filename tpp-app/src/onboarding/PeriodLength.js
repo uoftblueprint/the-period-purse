@@ -13,7 +13,7 @@ export default function PeriodLength ({ navigation }) {
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Get Started"])}}/>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.GET_STARTED)}}/>
       </BackButtonContainer>
 
       <TitleText>
@@ -33,11 +33,11 @@ export default function PeriodLength ({ navigation }) {
       </InputContainer>
 
       <TwoButtonContainer>
-        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Period Start"])}/>
+        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_START)}/>
         <NextButton title="Next" onPress={() => 
           {
             PostInitialPeriodLength(parseInt(periodLength));
-            navigation.navigate(STACK_SCREENS["Period Start"]);
+            navigation.navigate(STACK_SCREENS.PERIOD_START);
           }}/>
       </TwoButtonContainer>
     </ImageBackground>
