@@ -4,12 +4,13 @@ import { View, TouchableOpacity, Text, StyleSheet, LayoutAnimation } from "react
 import ExpandArrow from '../../../ios/tppapp/Images.xcassets/icons/arrow_accordion.svg';
 import SelectPicker from './SelectPicker';
 import TimeInput from './TimeInput';
-import { FLOW_LEVEL, CRAMP_LEVEL, MOOD_LEVEL } from "../../services/utils/constants";
+import { FLOW_LEVEL, CRAMP_LEVEL, MOOD_LEVEL, EXERCISE_TYPE } from "../../services/utils/constants";
+import { ExerciseActivity } from '../../services/utils/models';
 
 
 // ALL ICON IMPORTS
 import SleepIcon from '../../../ios/tppapp/Images.xcassets/icons/symptoms/sleep-moon.svg';
-import ExerciseIcon from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise-icon.svg';
+import ExerciseIcon from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-icon.svg';
 import NotesIcon from '../../../ios/tppapp/Images.xcassets/icons/symptoms/notes-lines.svg';
 
 // FLOW ICONS
@@ -36,6 +37,18 @@ import MoodGreat from '../../../ios/tppapp/Images.xcassets/icons/symptoms/mood/m
 import MoodSick from '../../../ios/tppapp/Images.xcassets/icons/symptoms/mood/mood-sick.svg';
 import MoodAngry from '../../../ios/tppapp/Images.xcassets/icons/symptoms/mood/mood-angry.svg';
 import MoodLoved from '../../../ios/tppapp/Images.xcassets/icons/symptoms/mood/mood-loved.svg';
+
+// EXERCISE ICONS
+import Cardio from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-cardio.svg';
+import Yoga from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-yoga.svg';
+import Strength from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-strength.svg';
+import BallSports from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-ball-sports.svg';
+import MartialArts from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-martial-arts.svg';
+import WaterSports from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-water-sports.svg';
+import CycleSports from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-cycle-sports.svg';
+import RacketSports from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-racket-sports.svg';
+import WinterSports from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-winter-sports.svg';
+
 
 const accordionData = {
     flow: {
@@ -66,8 +79,7 @@ const accordionData = {
     },
     sleep: {
         title: 'Sleep',
-        icon: SleepIcon,
-        content: <TimeInput />
+        icon: SleepIcon
     },
     cramps: {
         title: 'Cramps',
@@ -83,7 +95,17 @@ const accordionData = {
     exercise: {
         title: 'Exercise',
         icon: ExerciseIcon,
-        content: 'blahblah'
+        options: [
+            <Cardio value={EXERCISE_TYPE.CARDIO} />,
+            <Yoga value={EXERCISE_TYPE.YOGA} />,
+            <Strength value={EXERCISE_TYPE.STRENGTH} />,
+            <BallSports value={EXERCISE_TYPE.BALL_SPORT} />,
+            <MartialArts value={EXERCISE_TYPE.MARTIAL_ARTS} />,
+            <WaterSports value={EXERCISE_TYPE.WATER_SPORT} />,
+            <CycleSports value={EXERCISE_TYPE.CYCLE_SPORT} />,
+            <RacketSports value={EXERCISE_TYPE.RACKET_SPORT} />,
+            <WinterSports value={EXERCISE_TYPE.WINTER_SPORT} />,
+        ],
     },
     notes: {
         title: 'Notes',
@@ -112,6 +134,19 @@ export default class Accordion extends Component{
         this.setState({ expanded : !this.state.expanded });
     }
 
+    // Helper function to properly update ExerciseActivity state
+    updateExercise = (updatedVal) => {
+      // only update if value type is ExerciseActivity
+      if (this.props.value.constructor.name === 'ExerciseActivity') {
+        // check type to update appropriate exercise info
+        let activity = (typeof updatedVal === 'number') // TODO: careful of 0 vs null mins
+          ? new ExerciseActivity(this.props.value.exercise, updatedVal)
+          : new ExerciseActivity(updatedVal, this.props.value.exercise_minutes);
+        // set form state to new ExerciseActivity obj
+        this.props.setState(activity);
+      }
+    }
+
     render() {
         // Change icon color depending on if there's a selected value
         const iconFill = this.props.value ? '#72C6B7' : '#6D6E71';
@@ -124,11 +159,20 @@ export default class Accordion extends Component{
           case 'flow':
           case 'mood':
           case 'cramps':
-            accContent = <SelectPicker optionIcons={this.accordionType.options} selectThis={this.props.setState} curVal={this.props.value} />
+            accContent = <SelectPicker optionIcons={this.accordionType.options} selectThis={this.props.setState} curVal={this.props.value} />;
             break;
           case 'sleep':
-            accContent = <TimeInput />
-          default: // do nothing
+            accContent = <TimeInput selectMins={this.props.setState} currMins={this.props.value} />;
+            break;
+          case 'exercise':
+            accContent = (
+              <View>
+                <TimeInput selectMins={this.updateExercise} currMins={this.props.value.exercise_minutes} />
+                <SelectPicker optionIcons={this.accordionType.options} selectThis={this.updateExercise} curVal={this.props.value.exercise} />
+              </View>
+            );
+            break;
+          default: // render empty accordion
             break;
         }
 
@@ -146,7 +190,6 @@ export default class Accordion extends Component{
                                 this.props.value && styles.selected // if there's a selected value, title is teal
                             ]}>
                               {this.title}
-                              {/* {this.props.value} */}
                         </Text>
                     </View>
                     <ExpandArrow style={this.state.expanded && { transform: [{ rotate: "180deg" }] }} />

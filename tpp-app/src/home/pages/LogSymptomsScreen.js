@@ -1,5 +1,5 @@
 import React, { useState, useEffect, setState, createRef } from "react";
-import { Button, Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, StatusBar } from "react-native";
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
 import { getDateString } from "../../services/utils/helpers";
@@ -7,7 +7,6 @@ import Accordion from "../components/Accordion";
 import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils/helpers";
 import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { CRAMP_LEVEL, EXERCISE_TYPE, FLOW_LEVEL, MOOD_LEVEL } from "../../services/utils/constants";
-import SymptomsForm from "../components/SymptomsForm";
 //import { GETAllTrackingPreferences } from '../../services/SettingsService.js';
 
 
@@ -39,7 +38,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
   // TODO
   // const trackingPrefs = GETAllTrackingPreferences returns array of booleans for [flow, mood, sleep, cramps, exercise, notes]
-  const trackingPrefs = [true, true, true, true, false, true];
+  const trackingPrefs = [true, true, true, true, true, true];
   // const cal = getCalendarByYear(year)
   // const currentSymptoms = await getSymptomsFromCalendar(cal, day, month, year);
   const currentSymptoms = new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.GREAT, 2324, CRAMP_LEVEL.GOOD,
@@ -82,7 +81,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
   }
 
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen}><ScrollView>
 
       {/* HEADER NAV */}
       <View style={styles.navbarContainer}>
@@ -130,14 +129,15 @@ export default function LogSymptomsScreen({ navigation, route }) {
         </TouchableOpacity>
       </View>
 
-    </View>
+    </ScrollView></SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
     screen: {
         backgroundColor: '#ffffff',
-        flex: 1
+        flex: 1,
+        paddingTop: StatusBar.currentHeight,
     },
     navbarContainer: {
         paddingTop: 98,

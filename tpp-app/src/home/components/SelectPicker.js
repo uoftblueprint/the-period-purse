@@ -24,8 +24,8 @@ export default class SelectPicker extends Component{
                 >
                     {icon}
                 </TouchableOpacity>
-                <Text style={styles.label}>
-                    {value[0].toUpperCase() + value.slice(1).toLowerCase()}
+                <Text numberOfLines={1} style={styles.label}>
+                    {value}
                 </Text>
             </View>
         )
@@ -49,15 +49,15 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        maxWidth: 327
+        maxWidth: 327,
+        paddingBottom: 5
     },
     option: {
         flexDirection: 'column',
         alignItems: 'center',
-        marginLeft: 17,
-        marginRight: 17,
-        marginTop: 10,
-        marginBottom: 10
+        marginHorizontal: 17,
+        marginTop: 25,
+        marginBottom: 30
     },
     iconButton: {
         alignItems: 'center',
@@ -67,7 +67,12 @@ const styles = StyleSheet.create({
         borderRadius: 16
     },
     label: {
-        paddingTop: 10
+        flex: 1,
+        marginTop: 75,
+        paddingTop: 10,
+        position: 'absolute',
+        width: 105,
+        textAlign: 'center'
     },
     selected: {
         backgroundColor: '#72C6B7'
