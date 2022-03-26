@@ -9,15 +9,24 @@ import TamponsPage from "../pages/TamponInfo.js"
 
 const Stack = createNativeStackNavigator();
 
+export const STACK_SCREENS = {
+    INFO_HOME : "InfoHome",
+    PERIOD_UNDERWEARS: "Period Underwears",
+    PADS: "Pads",
+    CLOTH_PADS: "Cloth Pads",
+    MENSTRUAL_CUPS: "Menstrual Cups",
+    TAMPONS: "Tampons"
+};
+
 export default function InfoNavigator() {
     return(
-        <Stack.Navigator intialRouteName="InfoHome" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name={"InfoHome"} component={InfoPage} />
-            <Stack.Screen name={"Period Underwears"} component={PeriodUnderwearsPage} />
-            <Stack.Screen name={"Pads"} component={PadsPage} />
-            <Stack.Screen name={"Cloth Pads"} component={ClothPadsPage} />
-            <Stack.Screen name={"Menstrual Cups"} component={MenstrualCupsPage} />
-            <Stack.Screen name={"Tampons"} component={TamponsPage} />
+        <Stack.Navigator intialRouteName={STACK_SCREENS.INFO_HOME} screenOptions={{ headerShown: false }}>
+            <Stack.Screen name={STACK_SCREENS.INFO_HOME} component={InfoPage} />
+            <Stack.Screen name={STACK_SCREENS.PERIOD_UNDERWEARS} component={PeriodUnderwearsPage} />
+            <Stack.Screen name={STACK_SCREENS.PADS} component={PadsPage} />
+            <Stack.Screen name={STACK_SCREENS.CLOTH_PADS} component={ClothPadsPage} />
+            <Stack.Screen name={STACK_SCREENS.MENSTRUAL_CUPS} component={MenstrualCupsPage} />
+            <Stack.Screen name={STACK_SCREENS.TAMPONS} component={TamponsPage} />
         </Stack.Navigator>
     )
 }

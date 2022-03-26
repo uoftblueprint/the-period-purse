@@ -42,7 +42,7 @@ export default function SymptomsChoices ({ navigation }) {
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Period Start"])}}/>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.PERIOD_START)}}/>
       </BackButtonContainer>
       
       <SafeAreaView pointerEvents="none" style={{  alignItems: 'center', justifyContent: 'center', flex: 4 }}>
@@ -84,12 +84,12 @@ export default function SymptomsChoices ({ navigation }) {
 
       <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF'}}>
         <TwoButtonContainer style={{ top: 20 }}>
-          <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS["Backup"])}/>
+          <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.BACKUP)}/>
           <NextButton title="Next" onPress={() => 
             {
               PostSymptomsToTrack(flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
                                   cramp == '#73C7B7', exercise == '#73C7B7');
-              navigation.navigate(STACK_SCREENS["Backup"]);
+              navigation.navigate(STACK_SCREENS.BACKUP);
             }}
             disabled={[flow, mood, sleep, cramp, exercise].some((element) => element === '#73C7B7') ? false : true}/>
         </TwoButtonContainer>

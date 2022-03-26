@@ -11,7 +11,7 @@ export default function Password ({ navigation }) {
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS["Registration"])}}/>
+        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS.REGISTRATION)}}/>
         <PageTitleContainer>
           <PageTitle>Registration</PageTitle>
         </PageTitleContainer>
@@ -27,7 +27,7 @@ export default function Password ({ navigation }) {
         enabled behavior={ Platform.OS === 'ios'? 'padding': null}
         keyboardVerticalOffset={30}>
         <View style={{height: "80%"}}></View>
-        <WideButton title="Continue" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Success"])}/>
+        <WideButton title="Continue" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.SUCCESS)}/>
       </KeyboardAvoidingView>
     </ImageBackground>
   );

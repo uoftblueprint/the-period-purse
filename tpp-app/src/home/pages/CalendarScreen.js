@@ -4,7 +4,8 @@ import { CalendarList } from 'react-native-calendars';
 import { BackButton } from '../components/BackButtonComponent';
 import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Button } from 'react-native-elements';
+import {Button} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const VIEWS = {
     Flow: "Period Flow",
@@ -16,11 +17,11 @@ const VIEWS = {
 }
 const sideComponentWidth = 120
 
+
 // The component that is used by each day in the calendar
 const DayComponent = ({ date, state, marking, navigation }) => {
-
     return(
-        <TouchableOpacity onPress={() => navigation.navigate("LogSymptoms", {"date": date})}>
+        <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
             <View style={styles.dayContainer}>
                 <Text>
                     {date.day}
@@ -31,6 +32,7 @@ const DayComponent = ({ date, state, marking, navigation }) => {
 }
 
 export const Calendar = ({navigation}) => {
+
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -100,13 +102,6 @@ export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                {/*<BackButton
-                    onPress={() => {
-                        navigation.navigate('Year')
-                    }}
-                    title='Year'
-                    width={sideComponentWidth}
-                />*/}
                 <Button icon={renderedArrow}
                     iconRight={true}
                     title={selectedView}

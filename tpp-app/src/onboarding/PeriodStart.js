@@ -48,6 +48,7 @@ export default function PeriodStart ({ navigation }) {
   }
 
   return (
+<<<<<<< HEAD
     <PaperProvider theme={theme}>
       <ImageBackground source={OnboardingBackground} style={styles.container}>
         <BackButtonContainer>
@@ -110,6 +111,28 @@ export default function PeriodStart ({ navigation }) {
         </TwoButtonContainer>
       </ImageBackground>
     </PaperProvider>
+=======
+    <ImageBackground  source={OnboardingBackground} style={styles.container}>
+      <BackButtonContainer>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}}/>
+      </BackButtonContainer>
+      <TitleText>
+        When did your {'\n'} period last start?
+      </TitleText>
+      <BodyText>
+        Record your last period or {'\n'} skip if you don’t know
+      </BodyText>
+
+      <TwoButtonContainer>
+        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES)}/>
+        <NextButton title="Next" onPress={() => 
+          {
+            PostInitialPeriodStart(new Date(2011, 11, 30));
+            navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES);
+          }}/>
+      </TwoButtonContainer>
+    </ImageBackground>
+>>>>>>> e23c9bb6d3a0db0d472a22fe1f5ba358cf2fb55d
   );
 }
 

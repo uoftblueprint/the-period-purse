@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Switch, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking} from 'react-native';
 import {Card} from 'react-native-elements';
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
@@ -7,6 +7,8 @@ import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import MoodIcon from '../../ios/tppapp/Images.xcassets/icons/mood.png';
 import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import { socialMediaIcons } from './icons';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Stats = (props) => {
 
@@ -52,16 +54,29 @@ const Notifications = (props) => {
 }
 
 const PreferenceButton = (props) => {
-    return (
-    <View style = {styles.horizontalCenteredColumn}>
-        <TouchableOpacity style={[styles.dropShadow, styles.preferenceButton]}>
-                <Image
-                    source={props.source}
-                />
-        </TouchableOpacity>
-        <Text>{props.cardName}</Text>
 
-    </View>
+    return (
+        <View style = {styles.horizontalCenteredColumn}>
+            <TouchableOpacity style={[styles.dropShadow, styles.preferenceButton]}>
+                    <Image
+                        source={props.source}
+                    />
+            </TouchableOpacity>
+            <Text>{props.cardName}</Text>
+
+        </View>
+    );
+}
+
+const SocialMediaButton = (props) => {
+    const openLink = () => Linking.canOpenURL(props.url).then(() => {
+        Linking.openURL(props.url);
+    });
+
+    return (
+        <TouchableOpacity onPress={openLink} style={styles.icon}>
+            {props.icon}
+        </TouchableOpacity>
     );
 }
 
@@ -76,11 +91,40 @@ const Preferences = (props) => {
                 <PreferenceButton source={CrampsIcon} cardName="Cramps"/>
                 <PreferenceButton source={ExerciseIcon} cardName="Exercise"/>
             </View>
-
         </View>
-
     );
+}
 
+const Socials = () => {
+    return (
+        <View style={styles.iconsContainer}>
+            {
+                socialMediaIcons.map(socialMedia => {
+                    return <SocialMediaButton icon={socialMedia.component} url={socialMedia.url} />
+                })
+            }
+        </View>
+    );
+}
+
+const TermsAndConditions = () => {
+    const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
+        Linking.openURL("https://www.google.com/");
+    });
+
+    return (
+        <View styles={styles.termsAndConditionsContainer}>
+            <View style={styles.copyright}> 
+                <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
+            </View>
+            <View style={styles.terms}>
+                <TouchableOpacity onPress={openLink} style={styles.icon} >
+                    <Text style={styles.termsText}> Terms and Privacy Policy. </Text>
+                    <Text style={styles.lineText}> ______________________ </Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
 }
 
 export default function Settings () {
@@ -123,7 +167,7 @@ export default function Settings () {
     
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
             <Preferences/>
             <Notifications
@@ -132,7 +176,9 @@ export default function Settings () {
                 togglePeriodSwitch={togglePeriodSwitch}
                 toggleSymptomsSwitch={toggleSymptomsSwitch}
             />
-        </View>
+            <Socials />
+            <TermsAndConditions />
+        </ScrollView>
     )
 }
 
@@ -160,7 +206,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
-        justifyContent: 'space-evenly',
         marginLeft: 24,
         marginRight: 38,
         marginTop: 85,
@@ -197,6 +242,40 @@ const styles = StyleSheet.create({
         fontWeight:"600",
         fontSize: 14,
         lineHeight: 22
-    }
+    },
 
+    iconsContainer: {
+        marginTop: 50,
+        justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 10,
+    },
+    icon: {
+        margin: 10,
+    },
+    termsAndConditionsContainer: {
+        marginTop: 10,
+    },
+    copyright: {
+        justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+        color: "red"
+    },
+    copyrightText: {
+        color: "#6D6E71"
+    },
+    terms: {
+        justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    lineText: {
+        marginTop: -10,
+        color: "#5A9F93",
+    },
+    termsText: {
+        color: "#5A9F93",
+    }
 });
