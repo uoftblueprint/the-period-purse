@@ -1,42 +1,42 @@
 export const FLOW_LEVEL = {
-  NONE: "NONE",
-  LIGHT: "LIGHT",
-  MEDIUM: "MEDIUM",
-  HEAVY: "HEAVY",
-  SPOTTING: "SPOTTING"
+  NONE: "None",
+  LIGHT: "Light",
+  MEDIUM: "Medium",
+  HEAVY: "Heavy",
+  SPOTTING: "Spotting"
 }
 
 export const MOOD_LEVEL = {
-  HAPPY: "HAPPY",
-  SAD: "SAD",
-  NEUTRAL: "NEUTRAL",
-  SICK: "SICK",
-  ANGRY: "ANGRY",
-  LOL: "LOL",
-  IDK: "IDK",
-  GREAT: "GREAT",
-  LOVED: "LOVED"
+  HAPPY: "Happy",
+  SAD: "Sad",
+  NEUTRAL: "Neutral",
+  SICK: "Sick",
+  ANGRY: "Angry",
+  LOL: "lol",
+  IDK: "idk",
+  GREAT: "Great",
+  LOVED: "Loved"
 }
 
 
 export const CRAMP_LEVEL = {
-  NEUTRAL: "NEUTRAL",
-  BAD: "BAD",
-  TERRIBLE: "TERRIBLE",
-  GOOD: "GOOD",
-  NONE: "NONE",
+  NEUTRAL: "Neutral",
+  BAD: "Bad",
+  TERRIBLE: "Terrible",
+  GOOD: "Good",
+  NONE: "None",
 }
 
 export const EXERCISE_TYPE = {
-  CARDIO: "CARDIO",
-  YOGA: "YOGA",
-  STRENGTH: "STRENGTH",
-  BALL_SPORT: "BALL_SPORT",
-  MARTIAL_ARTS: "MARTIAL_ARTS",
-  WATER_SPORT: "WATER_SPORT",
-  CYCLE_SPORT: "CYCLE_SPORT",
-  RACKET_SPORT: "RACKET_SPORT",
-  WINTER_SPORT: "WINTER_SPORT"
+  CARDIO: "Cardio",
+  YOGA: "Yoga",
+  STRENGTH: "Strength",
+  BALL_SPORT: "Ball sports",
+  MARTIAL_ARTS: "Martial arts",
+  WATER_SPORT: "Water sports",
+  CYCLE_SPORT: "Cycle sports",
+  RACKET_SPORT: "Racket sports",
+  WINTER_SPORT: "Winter sports"
 }
 
 export const TRACK_SYMPTOMS = {
