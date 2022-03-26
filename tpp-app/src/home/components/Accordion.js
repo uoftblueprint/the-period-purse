@@ -1,8 +1,9 @@
 
 import React, {Component, createElement} from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, LayoutAnimation, Image } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet, LayoutAnimation } from "react-native";
 import ExpandArrow from '../../../ios/tppapp/Images.xcassets/icons/arrow_accordion.svg';
 import SelectPicker from './SelectPicker';
+import TimeInput from './TimeInput';
 import { FLOW_LEVEL, CRAMP_LEVEL, MOOD_LEVEL } from "../../services/utils/constants";
 
 
@@ -40,7 +41,7 @@ const accordionData = {
     flow: {
         title: 'Flow',
         icon: FlowMedium,
-        content: [
+        options: [
             <FlowLight fill={'#000'} value={FLOW_LEVEL.LIGHT} />,
             <FlowMedium fill={'#000'} value={FLOW_LEVEL.MEDIUM} />,
             <FlowHeavy fill={'#000'} value={FLOW_LEVEL.HEAVY} />,
@@ -51,7 +52,7 @@ const accordionData = {
     mood: {
         title: 'Mood',
         icon: CrampsNeutral,
-        content: [
+        options: [
             <MoodHappy value={MOOD_LEVEL.HAPPY} />,
             <MoodNeutral value={MOOD_LEVEL.NEUTRAL} />,
             <MoodSad value={MOOD_LEVEL.SAD} />,
@@ -66,12 +67,12 @@ const accordionData = {
     sleep: {
         title: 'Sleep',
         icon: SleepIcon,
-        content: 'blahblah'
+        content: <TimeInput />
     },
     cramps: {
         title: 'Cramps',
         icon: CrampsTerrible,
-        content: [
+        options: [
             <CrampsNeutral fill={'#000'} value={CRAMP_LEVEL.NEUTRAL} />,
             <CrampsBad fill={'#000'} value={CRAMP_LEVEL.BAD} />,
             <CrampsTerrible fill={'#000'} value={CRAMP_LEVEL.TERRIBLE} />,
@@ -97,21 +98,13 @@ export default class Accordion extends Component{
         super(props);
 
         // set accordion data based on symptom type
-        let accordionType = accordionData[props.type];
-        this.title = accordionType.title;
-        this.content = accordionType.content;
-        this.icon = accordionType.icon;
-
-        this.isLastChild = props.isLastChild;
+        this.accordionType = accordionData[props.type];
+        this.title = this.accordionType.title;
+        this.icon = this.accordionType.icon;
 
         this.state = {
           expanded : false,
-          selectedValue: props.initialValue
         };
-    }
-
-    selectThis = (newValue) => {
-        this.setState({selectedValue : newValue});
     }
 
     toggleExpand = () => {
@@ -121,10 +114,23 @@ export default class Accordion extends Component{
 
     render() {
         // Change icon color depending on if there's a selected value
-        const iconFill = this.state.selectedValue ? '#72C6B7' : '#6D6E71';
+        const iconFill = this.props.value ? '#72C6B7' : '#6D6E71';
         const renderedIcon = createElement(this.icon, {
             fill: iconFill
         });
+
+        let accContent;
+        switch (this.props.type) {
+          case 'flow':
+          case 'mood':
+          case 'cramps':
+            accContent = <SelectPicker optionIcons={this.accordionType.options} selectThis={this.props.setState} curVal={this.props.value} />
+            break;
+          case 'sleep':
+            accContent = <TimeInput />
+          default: // do nothing
+            break;
+        }
 
         return (
           <View>
@@ -137,9 +143,10 @@ export default class Accordion extends Component{
                             style={[
                                 styles.title,
                                 this.icon && { position: 'absolute', marginLeft: 45 }, // if there's an icon, shift title left
-                                this.state.selectedValue && styles.selected // if there's a selected value, title is teal
+                                this.props.value && styles.selected // if there's a selected value, title is teal
                             ]}>
                               {this.title}
+                              {/* {this.props.value} */}
                         </Text>
                     </View>
                     <ExpandArrow style={this.state.expanded && { transform: [{ rotate: "180deg" }] }} />
@@ -147,7 +154,7 @@ export default class Accordion extends Component{
 
                 {/* ACCORDION HR */}
                 {
-                    !this.isLastChild &&
+                    !this.props.isLastChild &&
                     <View style={styles.parentHr} />
                 }
 
@@ -155,10 +162,7 @@ export default class Accordion extends Component{
                 {
                     this.state.expanded &&
                     (<View style={styles.content}>
-                        {(this.content.constructor === Array)
-                            ? <SelectPicker optionIcons={this.content} selectThis={this.selectThis} currVal={this.state.selectedValue} />
-                            : this.content
-                        }
+                        {accContent}
                     </View>)
                 }
 

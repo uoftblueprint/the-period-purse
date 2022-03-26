@@ -1,21 +1,12 @@
 
 import React, {Component} from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, LayoutAnimation, Image } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 
 
 export default class SelectPicker extends Component{
 
     constructor(props) {
         super(props);
-        this.state = {
-            currVal: props.currVal // child value to match parent Accordion value
-        };
-        this.optionIcons = props.optionIcons;
-        this.selectThis = props.selectThis;
-    }
-
-    updateChildVal = (newValue) => {
-        this.setState({ currVal : newValue })
     }
 
     Option = (value, icon, key) => {
@@ -23,13 +14,12 @@ export default class SelectPicker extends Component{
             <View style={styles.option} key={key}>
                 <TouchableOpacity
                     onPress={() => {
-                      let newVal = this.state.currVal === value ? null : value;
-                      this.selectThis(newVal);
-                      this.updateChildVal(newVal);
+                      let newVal = this.props.curVal === value ? null : value;
+                      this.props.selectThis(newVal);
                     }}
                     style={[
                       styles.iconButton,
-                      this.state.currVal === value ? styles.selected : styles.unselected
+                      this.props.curVal === value ? styles.selected : styles.unselected
                     ]}
                 >
                     {icon}
@@ -45,7 +35,7 @@ export default class SelectPicker extends Component{
       return (
         <View style={styles.container}>
             {
-                this.optionIcons.map((icon, i) => {
+                this.props.optionIcons.map((icon, i) => {
                     return this.Option(icon.props.value, icon, i)
                 })
             }

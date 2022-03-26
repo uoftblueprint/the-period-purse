@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, setState, createRef } from "react";
 import { Button, Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
 import { getDateString } from "../../services/utils/helpers";
 import Accordion from "../components/Accordion";
 import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils/helpers";
+import { ExerciseActivity, Symptoms } from "../../services/utils/models";
+import { CRAMP_LEVEL, EXERCISE_TYPE, FLOW_LEVEL, MOOD_LEVEL } from "../../services/utils/constants";
+import SymptomsForm from "../components/SymptomsForm";
 //import { GETAllTrackingPreferences } from '../../services/SettingsService.js';
 
 
@@ -17,6 +20,7 @@ const DateArrow = ({ onPress, isRight }) => {
     )
 }
 
+const symptoms = ['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes'];
 
 export default function LogSymptomsScreen({ navigation, route }) {
 
@@ -33,12 +37,49 @@ export default function LogSymptomsScreen({ navigation, route }) {
   const dateStr = getDateString(new Date(year, month - 1, day), 'MM DD, YYYY');
   const [selectedDate, changeDate] = useState(dateStr);
 
-  const symptoms = ['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes'];
   // TODO
   // const trackingPrefs = GETAllTrackingPreferences returns array of booleans for [flow, mood, sleep, cramps, exercise, notes]
+  const trackingPrefs = [true, true, true, true, false, true];
   // const cal = getCalendarByYear(year)
   // const currentSymptoms = await getSymptomsFromCalendar(cal, day, month, year);
+  const currentSymptoms = new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.GREAT, 2324, CRAMP_LEVEL.GOOD,
+    new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum');
 
+
+  const [flowStr, setFlow] = useState(currentSymptoms['flow']);
+  const [moodStr, setMood] = useState(currentSymptoms['mood']);
+  const [sleepMins, setSleep] = useState(currentSymptoms['sleep']);
+  const [crampsStr, setCramps] = useState(currentSymptoms['cramps']);
+  const [exerciseObj, setExercise] = useState(currentSymptoms['exercise']); // ExerciseActivity object
+  const [notesStr, setNotes] = useState(currentSymptoms['notes']);
+
+  // literally to quick access states in a dynamic way
+  const form = {
+    flow: {
+      state: flowStr,
+      setState: setFlow
+    },
+    mood: {
+      state: moodStr,
+      setState: setMood
+    },
+    sleep: {
+      state: sleepMins,
+      setState: setSleep
+    },
+    cramps: {
+      state: crampsStr,
+      setState: setCramps
+    },
+    exercise: {
+      state: exerciseObj,
+      setState: setExercise
+    },
+    notes: {
+      state: notesStr,
+      setState: setNotes
+    },
+  }
 
   return (
     <View style={styles.screen}>
@@ -65,16 +106,29 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
       {/* SYMPTOM ACCORDIONS */}
       {symptoms.map((symptom, i) => {
-        // TODO: if trackingPrefs[i]
-
-        return (
-          <Accordion
-              key={i}
-              type={symptom}
-              isLastChild={ (i === symptoms.length - 1) ? true : false }
-              initialValue={null} // TODO: change to currentSymptoms[acc.title]
-          />)
+        if (trackingPrefs[i])
+        { return (
+            <Accordion
+                key={i}
+                type={symptom}
+                isLastChild={ (i === symptoms.length - 1) ? true : false }
+                value={form[symptom].state}
+                setState={form[symptom].setState.bind(form)}
+            />
+        )}
       })}
+
+      <View style={[styles.centerText, {marginLeft: 28, marginRight: 28}]}>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={() => {
+            form.flow.setState(FLOW_LEVEL.SPOTTING)
+
+          }}
+        >
+          <Text style={{color: '#fff'}}>Save</Text>
+        </TouchableOpacity>
+      </View>
 
     </View>
   );
@@ -123,5 +177,14 @@ const styles = StyleSheet.create({
       fontSize: 14,
       fontWeight: '400',
       color: '#6D6E71'
+    },
+    saveButton: {
+      borderRadius: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#5A9F93',
+      width: '100%',
+      height: 39,
+      marginTop: 25
     }
 });
