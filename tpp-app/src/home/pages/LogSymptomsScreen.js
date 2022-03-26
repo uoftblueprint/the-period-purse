@@ -22,41 +22,40 @@ const DateArrow = ({ onPress, isRight }) => {
 const symptoms = ['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes'];
 
 export default function LogSymptomsScreen({ navigation, route }) {
+  const navYear = route.params.date.year;
+  const navMonth = route.params.date.month;
+  const navDay = route.params.date.day;
 
-  // this is how you access the params passed from the previous page
-  // const date = route.params.date
-  // console.log(date)
-  // {year: 2022, month: 2, day: 22 }
-  // TODO: MAKE SURE TO CONSOLE LOG THE DATE AND check that you're passing in the right indexed month for functions
-
-  const year = route.params.date.year;
-  const month = route.params.date.month;
-  const day = route.params.date.day;
-
-  const dateStr = getDateString(new Date(year, month - 1, day), 'MM DD, YYYY');
-  const [selectedDate, changeDate] = useState(dateStr);
+  const [selectedDate, changeDate] = useState(new Date(navYear, navMonth - 1, navDay));
 
   // TODO
   // const trackingPrefs = GETAllTrackingPreferences returns array of booleans for [flow, mood, sleep, cramps, exercise, notes]
   const trackingPrefs = [true, true, true, true, true, true];
-  // const cal = getCalendarByYear(year)
-  // const currentSymptoms = await getSymptomsFromCalendar(cal, day, month, year);
-  const currentSymptoms = new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.GREAT, 2324, CRAMP_LEVEL.GOOD,
+
+  const getStoredSymps = (day, month, year) => {
+    // const cal = getCalendarByYear(year);
+    // let symps = await getSymptomsFromCalendar(cal, day, month, year);
+    // return symps
+    const example = new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.GREAT, 2324, CRAMP_LEVEL.GOOD,
     new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum');
+    return example
+  }
 
 
-  // FORM STATES
-  const [flowStr, setFlow] = useState(currentSymptoms['flow']);
-  const [moodStr, setMood] = useState(currentSymptoms['mood']);
-  const [sleepMins, setSleep] = useState(currentSymptoms['sleep']);
-  const [crampsStr, setCramps] = useState(currentSymptoms['cramps']);
-  const [exerciseObj, setExercise] = useState(currentSymptoms['exercise']); // ExerciseActivity object
-  const [notesStr, setNotes] = useState(currentSymptoms['notes']);
+  const [stored, setStoredSymps] = useState(getStoredSymps(navDay, navMonth, navYear));
+
+  // SYMPTOM STATES
+  const [flowStr, setFlow] = useState(stored['flow']);
+  const [moodStr, setMood] = useState(stored['mood']);
+  const [sleepMins, setSleep] = useState(stored['sleep']);
+  const [crampsStr, setCramps] = useState(stored['cramps']);
+  const [exerciseObj, setExercise] = useState(stored['exercise']); // ExerciseActivity object
+  const [notesStr, setNotes] = useState(stored['notes']);
 
   const [submitting, setSubmitting] = useState(false);
   const [isDirty, setDirty] = useState(false); // if there are changes to submit
 
-  // literally to quick access states in a dynamic way
+  // literally to quick access symptom states in a dynamic way
   const form = {
     flow: {
       state: flowStr,
@@ -87,15 +86,14 @@ export default function LogSymptomsScreen({ navigation, route }) {
   // update isDirty every time a form state changes
   useEffect(() => {
     const newDirty = symptoms.some((symptom) => {
-        console.log(symptom);
         let newSymp = form[symptom].state;
         if (newSymp && newSymp.constructor.name === 'ExerciseActivity') {
-          return (currentSymptoms[symptom].exercise !== newSymp.exercise ||
-            currentSymptoms[symptom].exercise_minutes !== newSymp.exercise_minutes)
+          return (stored[symptom].exercise !== newSymp.exercise ||
+            stored[symptom].exercise_minutes !== newSymp.exercise_minutes)
         } else if (typeof newSymp === 'string') {
-          return currentSymptoms[symptom].trim() !== newSymp.trim();
+          return stored[symptom].trim() !== newSymp.trim();
         } else {
-          return currentSymptoms[symptom] !== newSymp;
+          return stored[symptom] !== newSymp;
         }
     })
     setDirty(newDirty);
@@ -140,6 +138,31 @@ export default function LogSymptomsScreen({ navigation, route }) {
     );
   })
 
+  const resetForm = (newDate) => {
+    changeDate(newDate);
+    // get stored symps from new date make sure use newDate not date state
+    let newDaySymps = getStoredSymps(newDate.getDate(), newDate.getMonth() + 1, newDate.getFullYear()) // TODO: i'm half asleep, delete +1 if getSymptomsFromCalendar is 0-indexing by month
+    setStoredSymps(newDaySymps);
+    // reset all symptom states
+    symptoms.map((symptom) => form[symptom].setState(newDaySymps[symptom]) )
+    setDirty(false);
+    setSubmitting(false);
+  }
+
+  const switchDate = (goFwd) => {
+    let newDate = selectedDate;
+    newDate.setDate(goFwd ? newDate.getDate() + 1 : newDate.getDate() - 1);
+
+    if (isDirty) {
+      unsavedChangesAlert()
+        .then(() => { // YES switch date
+          resetForm(newDate);
+        })
+        .catch() // CANCEL do nothing and close alert
+    } else {
+      resetForm(newDate);
+    }
+  }
 
 
   return (
@@ -156,6 +179,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
                   .then(() => { // YES discard changes
                     navigation.goBack();
                   })
+                  .catch() // CANCEL do nothing and close alert
               } else {
                 navigation.goBack();
               }
@@ -166,12 +190,18 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
           {/* SWITCH AND DISPLAY DATE */}
           <View style={styles.switchDate}>
-            <DateArrow onPress isRight={false} />
+            <DateArrow
+              onPress={() => switchDate(false)}
+              isRight={false}
+            />
             <View style={styles.centerText}>
               <Text style={styles.subtitle}>Log your symptoms for:</Text>
-              <Text style={styles.navbarTitle}>{selectedDate}</Text>
+              <Text style={styles.navbarTitle}>{getDateString(selectedDate, 'MM DD, YYYY')}</Text>
             </View>
-            <DateArrow onPress isRight={true} />
+            <DateArrow
+              onPress={() => switchDate(true)}
+              isRight={true}
+            />
           </View>
 
       </View>
