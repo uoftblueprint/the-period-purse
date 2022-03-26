@@ -4,6 +4,7 @@ import { View, TouchableOpacity, Text, StyleSheet, LayoutAnimation } from "react
 import ExpandArrow from '../../../ios/tppapp/Images.xcassets/icons/arrow_accordion.svg';
 import SelectPicker from './SelectPicker';
 import TimeInput from './TimeInput';
+import TextArea from './TextArea';
 import { FLOW_LEVEL, CRAMP_LEVEL, MOOD_LEVEL, EXERCISE_TYPE } from "../../services/utils/constants";
 import { ExerciseActivity } from '../../services/utils/models';
 
@@ -48,6 +49,7 @@ import WaterSports from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exer
 import CycleSports from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-cycle-sports.svg';
 import RacketSports from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-racket-sports.svg';
 import WinterSports from '../../../ios/tppapp/Images.xcassets/icons/symptoms/exercise/exercise-winter-sports.svg';
+
 
 
 const accordionData = {
@@ -171,6 +173,9 @@ export default class Accordion extends Component{
                 <SelectPicker optionIcons={this.accordionType.options} selectThis={this.updateExercise} curVal={this.props.value.exercise} />
               </View>
             );
+            break;
+          case 'notes':
+            accContent = <TextArea onInput={this.props.setState} curVal={this.props.value} />
             break;
           default: // render empty accordion
             break;
