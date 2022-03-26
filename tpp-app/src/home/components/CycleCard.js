@@ -26,7 +26,7 @@ import AnimatedProgressWheel from 'react-native-progress-wheel';
  function Cycle(){
    let [periodDays, setPeriodDays] = useState(0);
    let [daysSinceLastPeriod, setDaysSinceLastPeriod] = useState(0);
-   let [cycleDonutPercent, setCycleDonutPercent] = useState(0);
+   let [cycleDonutPercent, setCycleDonutPercent] = useState(60);
 
    useEffect(() =>
    {
@@ -35,7 +35,7 @@ import AnimatedProgressWheel from 'react-native-progress-wheel';
      });
 
      CycleService.GETCycleDonutPercent().then(percent => {
-       setCycleDonutPercent(percent);
+       //setCycleDonutPercent(percent * 100);
      });
 
      CycleService.GETDaysSinceLastPeriodEnd().then(days => {
