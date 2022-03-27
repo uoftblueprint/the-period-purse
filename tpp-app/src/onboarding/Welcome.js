@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, Image, ImageBackground, View } from 'react-native';
 import MNationIcon from '../../ios/tppapp/Images.xcassets/AppIcon.appiconset/1024.png'
-import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PeriodStart from './PeriodStart';
@@ -16,14 +16,18 @@ import Confirmation from './Confirmation';
 import { WideButton } from './components/ButtonComponents';
 import { STACK_SCREENS } from './Confirmation';
 
+let onboardingBg = require('../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background-light.png')
+
 // Get Start Page Component
 const GetStarted = ({ navigation }) => (
-  <ImageBackground source={OnboardingBackground} style={styles.container}>
-    <Image style={styles.appIcon} source={MNationIcon}/>
-    <Text style={styles.titleText}>Welcome!</Text>
-    <View style={{height: 80}}></View>
-    <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
-    <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS.REGISTRATION)}/>
+  <ImageBackground source={onboardingBg} style={styles.backgroundImg}>
+    <View style={styles.container}>
+      <Image style={styles.appIcon} source={MNationIcon}/>
+      <Text style={styles.titleText}>Welcome!</Text>
+      <View style={{height: 80}}></View>
+      <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
+      <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS.REGISTRATION)}/>
+    </View>
   </ImageBackground>
 );
 
@@ -83,10 +87,14 @@ export default function Welcome() {
 }
 
 const styles = StyleSheet.create({
+  backgroundImg: {
+    width: '100%', 
+    height: '100%',
+  },
   container: {
     flex: 1,
     alignItems: 'stretch',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   appIcon: {
     width: 182,
