@@ -37,7 +37,7 @@ export default class TextArea extends Component{
                   this.props.onInput(this.props.curVal.trim()); // trims notes on blur
                 } }
             />
-            <Text style={styles.charCount}>{`${this.props.curVal.length}/500`}</Text>
+            <Text style={styles.charCount}>{`${this.props.curVal ? this.props.curVal.length : 0}/500`}</Text>
         </View>
       )
     }

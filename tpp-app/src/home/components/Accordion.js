@@ -138,39 +138,57 @@ export default class Accordion extends Component{
 
     // Helper function to properly update ExerciseActivity state
     updateExercise = (updatedVal) => {
-      // only update if value type is ExerciseActivity
-      if (this.props.value.constructor.name === 'ExerciseActivity') {
-        // check type to update appropriate exercise info
-        let activity = (typeof updatedVal === 'number') // TODO: careful of 0 vs null mins
+      let activity;
+      if (this.props.value) { // existing exercise obj
+        activity = (typeof updatedVal === 'number')
           ? new ExerciseActivity(this.props.value.exercise, updatedVal)
           : new ExerciseActivity(updatedVal, this.props.value.exercise_minutes);
-        // set form state to new ExerciseActivity obj
-        this.props.setState(activity);
       }
+      else { // exercise symptom null
+        activity = (typeof updatedVal === 'number')
+          ? new ExerciseActivity(null, updatedVal)
+          : new ExerciseActivity(updatedVal, 0);
+      }
+      this.props.setState(activity);
     }
 
     render() {
+        // if symptom is exercise, check that either mins or exercise type is non-null
+        const isNonEmpty = (this.props.type === 'exercise' && this.props.value)
+          ? (this.props.value.exercise_minutes || this.props.value.exercise)
+          : this.props.value;
+
         // Change icon color depending on if there's a selected value
-        const iconFill = this.props.value ? '#72C6B7' : '#6D6E71';
+        const iconFill = isNonEmpty ? '#72C6B7' : '#6D6E71';
         const renderedIcon = createElement(this.icon, {
             fill: iconFill
         });
 
+        // set accordion content based on symptom type
         let accContent;
         switch (this.props.type) {
           case 'flow':
           case 'mood':
           case 'cramps':
-            accContent = <SelectPicker optionIcons={this.accordionType.options} selectThis={this.props.setState} curVal={this.props.value} />;
+            accContent = <SelectPicker
+              optionIcons={this.accordionType.options}
+              selectThis={this.props.setState}
+              curVal={this.props.value}
+            />;
             break;
           case 'sleep':
             accContent = <TimeInput selectMins={this.props.setState} currMins={this.props.value} />;
             break;
           case 'exercise':
+            let exercise = this.props.value;
             accContent = (
               <View>
-                <TimeInput selectMins={this.updateExercise} currMins={this.props.value.exercise_minutes} />
-                <SelectPicker optionIcons={this.accordionType.options} selectThis={this.updateExercise} curVal={this.props.value.exercise} />
+                <TimeInput selectMins={this.updateExercise} currMins={exercise ? exercise.exercise_minutes : 0} />
+                <SelectPicker
+                  optionIcons={this.accordionType.options}
+                  selectThis={this.updateExercise}
+                  curVal={exercise ? exercise.exercise : null}
+                />
               </View>
             );
             break;
@@ -192,7 +210,7 @@ export default class Accordion extends Component{
                             style={[
                                 styles.title,
                                 this.icon && { position: 'absolute', marginLeft: 45 }, // if there's an icon, shift title left
-                                this.props.value && styles.selected // if there's a selected value, title is teal
+                                isNonEmpty && styles.selected // if there's a selected value, title is teal
                             ]}>
                               {this.title}
                         </Text>

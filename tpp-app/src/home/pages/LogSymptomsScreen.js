@@ -7,7 +7,7 @@ import Accordion from "../components/Accordion";
 import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils/helpers";
 import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { CRAMP_LEVEL, EXERCISE_TYPE, FLOW_LEVEL, MOOD_LEVEL } from "../../services/utils/constants";
-//import { GETAllTrackingPreferences } from '../../services/SettingsService.js';
+import { GETAllTrackingPreferences } from "../../services/SettingsService";
 
 
 const DateArrow = ({ onPress, isRight }) => {
@@ -28,19 +28,17 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
   const [selectedDate, changeDate] = useState(new Date(navYear, navMonth - 1, navDay));
 
-  // TODO
-  // const trackingPrefs = GETAllTrackingPreferences returns array of booleans for [flow, mood, sleep, cramps, exercise, notes]
-  const trackingPrefs = [true, true, true, true, true, true];
+  const trackingPrefs = [true, true, true, true, true, true]; // TODO: remove
+  // const trackingPrefs = GETAllTrackingPreferences();
 
   const getStoredSymps = (day, month, year) => {
-    // const cal = getCalendarByYear(year);
-    // let symps = await getSymptomsFromCalendar(cal, day, month, year);
-    // return symps
+    const cal = getCalendarByYear(year);
+    let symps = getSymptomsFromCalendar(cal, day, month, year);
+    // TODO: remove
     const example = new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.GREAT, 2324, CRAMP_LEVEL.GOOD,
     new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum');
-    return example
+    return symps
   }
-
 
   const [stored, setStoredSymps] = useState(getStoredSymps(navDay, navMonth, navYear));
 
@@ -88,10 +86,12 @@ export default function LogSymptomsScreen({ navigation, route }) {
     const newDirty = symptoms.some((symptom) => {
         let newSymp = form[symptom].state;
         if (newSymp && newSymp.constructor.name === 'ExerciseActivity') {
-          return (stored[symptom].exercise !== newSymp.exercise ||
-            stored[symptom].exercise_minutes !== newSymp.exercise_minutes)
+          let original = stored[symptom] ?? new ExerciseActivity();
+          return (original.exercise !== newSymp.exercise ||
+            original.exercise_minutes !== newSymp.exercise_minutes)
         } else if (typeof newSymp === 'string') {
-          return stored[symptom].trim() !== newSymp.trim();
+          let original = stored[symptom] ?? '';
+          return original.trim() !== newSymp.trim();
         } else {
           return stored[symptom] !== newSymp;
         }
@@ -105,6 +105,8 @@ export default function LogSymptomsScreen({ navigation, route }) {
     if (!submitting) {
       return;
     }
+
+    // for exercise, if exercise doesn't exist and mins is 0 set value to null
 
     // service?.createTicket(ticket)
     //   .then((response: TicketData) => {
