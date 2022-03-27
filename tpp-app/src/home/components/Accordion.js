@@ -1,5 +1,5 @@
 
-import React, {Component, createElement} from 'react';
+import React, { Component, createElement } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, LayoutAnimation } from "react-native";
 import ExpandArrow from '../../../ios/tppapp/Images.xcassets/icons/arrow_accordion.svg';
 import SelectPicker from './SelectPicker';
@@ -185,6 +185,7 @@ export default class Accordion extends Component{
               <View>
                 <TimeInput selectMins={this.updateExercise} currMins={exercise ? exercise.exercise_minutes : 0} />
                 <SelectPicker
+                  style={{ marginTop: -25 }}
                   optionIcons={this.accordionType.options}
                   selectThis={this.updateExercise}
                   curVal={exercise ? exercise.exercise : null}

@@ -1,70 +1,58 @@
 
-import React, {Component, useMemo} from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, TextInput } from "react-native";
+import React, { Component } from 'react';
+import { View, Text, StyleSheet } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 
 
 export default class TimeInput extends Component{
 
     constructor(props) {
         super(props);
-        this.state = {
-            currHours: props.currVal,
-            currMins: props.currVal,
-            hourFocused: false,
-            minsFocused: false
-        };
-        this.optionIcons = props.optionIcons;
-        this._ismounted = false;
     }
 
-    componentDidMount() {
-        this._ismounted = true;
-    }
+    updateMins = (val, isHour) => {
+      let totalMins;
+      let curr = this.props.currMins ?? 0;
 
-    componentWillUnmount() {
-        this._ismounted = false;
-    }
+      if (isHour) {
+          totalMins = (val * 60) + (curr % 60) // calculate NEW hours + keep remaining mins
+      } else {
+          let keepHr = Math.floor(curr / 60) // calculate kept hours + NEW mins
+          totalMins = (keepHr * 60) + (val)
+      }
 
-    // MAKE SURE MINS IS < 60
-    // mounted = useIsMounted();
-    // minsError = useMemo(
-    //     () => this._ismounted && (this.state.currMins > 59)
-    //         ? 'Minutes must be between 0 and 59.' : '',
-    //     [this.state.currMins, mounted]); // add submitting
-    // formValid = useMemo(
-    //     () => ![emailError, messageError, subjectError, nameError, fileError].reduce((m, n) => m + n),
-    //     [emailError, messageError, subjectError, nameError, fileError]);
-
-    updateHours = (hours) => {
-        this.setState({ currHours : hours })
-    }
-
-    updateMins = (mins) => {
-        this.setState({ currMins : mins })
+      this.props.selectMins(totalMins)
     }
 
     render() {
+      let totalMins = this.props.currMins ?? 0;
+      let minsStr = (totalMins % 60).toString();
+      let hoursStr = Math.floor(totalMins / 60).toString();
+
       return (
         <View style={styles.container}>
-            <TextInput
-                style={[styles.input, this.state.hourFocused && styles.inputFocused]}
-                onChangeText={this.updateHours}
-                value={this.state.currHours}
-                placeholder="00"
-                keyboardType="numeric"
-                onFocus={ () => this.setState({ hourFocused: true }) }
-                onBlur={ () => this.setState({ hourFocused: false }) }
-            />
+            {/* HOUR INPUT */}
+            <Picker
+              selectedValue={hoursStr}
+              onValueChange={(value) => this.updateMins(parseInt(value), true)}
+              style={styles.picker}
+            >
+              {
+                [...Array(24)].map((_, i) => <Picker.Item color={'#5A9F93'} key={i} label={i.toString()} value={i.toString()} />)
+              }
+            </Picker>
             <Text style={[styles.text, { marginRight: 12 }]}>hours</Text>
-            <TextInput
-                style={[styles.input, this.state.minsFocused && styles.inputFocused]}
-                onChangeText={this.updateMins}
-                value={this.state.currMins}
-                placeholder="00"
-                keyboardType="numeric"
-                onFocus={ () => this.setState({ minsFocused: true }) }
-                onBlur={ () => this.setState({ minsFocused: false }) }
-            />
+
+            {/* MINUTE INPUT */}
+            <Picker
+              selectedValue={minsStr}
+              onValueChange={(value) => this.updateMins(parseInt(value), false)}
+              style={styles.picker}
+            >
+              {
+                [...Array(60)].map((_, i) => <Picker.Item color={'#5A9F93'} key={i} label={i.toString()} value={i.toString()} />)
+              }
+            </Picker>
             <Text style={styles.text}>mins</Text>
         </View>
       )
@@ -93,5 +81,8 @@ const styles = StyleSheet.create({
     inputFocused: {
         color: '#6D6E71',
         backgroundColor: '#E3F4F1'
-    }
+    },
+    picker: {
+      width: 100,
+    },
 });

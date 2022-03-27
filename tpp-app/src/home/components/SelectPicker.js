@@ -32,7 +32,7 @@ export default class SelectPicker extends Component{
 
     render() {
       return (
-        <View style={styles.container}>
+        <View style={[styles.container, this.props.style]}>
             {
                 this.props.optionIcons.map((icon, i) => {
                     return this.Option(icon.props.value, icon, i)

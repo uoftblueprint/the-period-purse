@@ -35,7 +35,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
     const cal = getCalendarByYear(year);
     let symps = getSymptomsFromCalendar(cal, day, month, year);
     // TODO: remove
-    const example = new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.GREAT, 2324, CRAMP_LEVEL.GOOD,
+    const example = new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.GREAT, 150, CRAMP_LEVEL.GOOD,
     new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum');
     return symps
   }
