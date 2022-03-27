@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking} from 'react-native';
+import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground} from 'react-native';
 import {Card} from 'react-native-elements';
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
@@ -9,6 +9,8 @@ import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { socialMediaIcons } from './icons';
 import { ScrollView } from 'react-native-gesture-handler';
+
+let onboardingBg = require('../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background-light.png')
 
 const Stats = (props) => {
 
@@ -167,22 +169,30 @@ export default function Settings () {
     
 
     return (
-        <ScrollView style={styles.container}>
-            <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
-            <Preferences/>
-            <Notifications
-                remindPeriodEnabled={remindPeriodEnabled}
-                remindSymptomsEnabled={remindSymptomsEnabled}
-                togglePeriodSwitch={togglePeriodSwitch}
-                toggleSymptomsSwitch={toggleSymptomsSwitch}
-            />
-            <Socials />
-            <TermsAndConditions />
-        </ScrollView>
+        <ImageBackground source={onboardingBg} style={styles.backgroundImg}>
+            <ScrollView>
+                <View style={styles.container}> 
+                    <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
+                    <Preferences/>
+                    <Notifications
+                        remindPeriodEnabled={remindPeriodEnabled}
+                        remindSymptomsEnabled={remindSymptomsEnabled}
+                        togglePeriodSwitch={togglePeriodSwitch}
+                        toggleSymptomsSwitch={toggleSymptomsSwitch}
+                    />
+                    <Socials />
+                    <TermsAndConditions />
+                </View>
+            </ScrollView>
+        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
+    backgroundImg: {
+        width: '100%', 
+        height: '100%',
+      },
     rowContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -206,6 +216,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
+        justifyContent: 'space-evenly',
         marginLeft: 24,
         marginRight: 38,
         marginTop: 85,
