@@ -1,8 +1,7 @@
 import AnimatedProgressWheel from 'react-native-progress-wheel';
- import React, { useState, useEffect } from 'react';
- import {View, Text, StyleSheet} from 'react-native';
- import CycleService from '../../services/cycle/CycleService';
- import {Card} from 'react-native-elements';
+import React, { useState, useEffect } from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import CycleService from '../../services/cycle/CycleService';
 
  function onPeriodText(periodDays){
    return (
@@ -54,17 +53,18 @@ import AnimatedProgressWheel from 'react-native-progress-wheel';
 
  export default function CycleCard({periodDays, daysSinceLastPeriod, cycleDonutPercent}){
    return (
-        <Card containerStyle={styles.card}>
+        <View style={styles.card}>
           <Cycle periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
-        </Card>
+        </View>
    );
 }
 
 const styles = StyleSheet.create({
   card:{
     borderRadius: 12,
-    width: 343,
-    height: 298
+    height: 298,
+    backgroundColor: "white",
+    marginHorizontal: 16
   },
   cycleText: {
     fontFamily: "Avenir",

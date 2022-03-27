@@ -212,7 +212,6 @@ const CycleService = {
       console.log(e);
       return null;
     }
-
   },
 
   /**
@@ -401,6 +400,22 @@ const CycleService = {
       console.log(e);
     }
     return intervals;
+  },
+
+  /**
+   * 
+   * @returns {Promise} resolves to the expected number of days till the next period
+   */
+  GETPredictedDaysTillPeriod: async function() {
+    let today = new Date();
+    let calendar = await getCalendarByYear(today.getFullYear());
+    let periods = await getPeriodsInYear(today.getFullYear(), calendar);
+    let prevPeriodStart = await getLastPeriodStart(today, periods, calendar);
+
+    let avgCycleLength = await this.GETAverageCycleLength(calendar);
+
+    let nextPeriodStart = addDays(prevPeriodStart, avgCycleLength);
+    return differenceInCalendarDays(today, nextPeriodStart);
   }
 }
 
