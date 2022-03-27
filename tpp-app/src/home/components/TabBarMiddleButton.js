@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import PlusSign from '../../../ios/tppapp/Images.xcassets/icons/plus_sign.svg';
 import CalendarIcon from '../../../ios/tppapp/Images.xcassets/icons/calendar_icon.svg';
+import {STACK_SCREENS} from "../../info/InfoNavigator";
 
 
 /** Recursive function to get the current active screen state through nested navigators */
@@ -26,7 +27,7 @@ export const TabBarMiddleButton = ({ style, inOverlay }) => {
 
   // check if the SelectLogOption overlay is visible
   const activeRoute = getActiveRouteState(navigation.getState());
-  let overlayVisible = activeRoute?.state?.routes?.some((screen) => screen["name"] === "SelectLogOption");
+  let overlayVisible = activeRoute?.state?.routes?.some((screen) => screen["name"] === STACK_SCREENS.SELECT_LOG_OPTION);
 
   return (
     <TouchableOpacity

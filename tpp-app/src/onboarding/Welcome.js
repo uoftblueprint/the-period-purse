@@ -22,8 +22,8 @@ const GetStarted = ({ navigation }) => (
     <Image style={styles.appIcon} source={MNationIcon}/>
     <Text style={styles.titleText}>Welcome!</Text>
     <View style={{height: 80}}></View>
-    <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Period Length"])}/>
-    <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
+    <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
+    <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS.REGISTRATION)}/>
   </ImageBackground>
 );
 
@@ -38,43 +38,43 @@ export default function Welcome() {
         }}
       >
       <Stack.Screen
-        name={STACK_SCREENS["Get Started"]}
+        name={STACK_SCREENS.GET_STARTED}
         component={GetStarted}
       />
       <Stack.Screen
-        name={STACK_SCREENS["Period Length"]}
+        name={STACK_SCREENS.PERIOD_LENGTH}
         component={PeriodLength}
       />
       <Stack.Screen
-        name={STACK_SCREENS["Period Start"]}
+        name={STACK_SCREENS.PERIOD_START}
         component={PeriodStart}
       />
       <Stack.Screen
-        name={STACK_SCREENS["Symptoms Choices"]}
+        name={STACK_SCREENS.SYMPTOMS_CHOICES}
         component={SymptomsChoices}
       />
       <Stack.Screen
-        name={STACK_SCREENS["Backup"]}
+        name={STACK_SCREENS.BACKUP}
         component={Backup}
       />
       <Stack.Screen
-        name={STACK_SCREENS["Main Page"]}
+        name={STACK_SCREENS.MAIN_PAGE}
         component={MainPage}
       />
       <Stack.Screen
-        name={STACK_SCREENS["Registration"]}
+        name={STACK_SCREENS.REGISTRATION}
         component={Registration}
       />
       <Stack.Screen
-        name={STACK_SCREENS["Password"]}
+        name={STACK_SCREENS.PASSWORD}
         component={Password}
       />
       <Stack.Screen
-        name={STACK_SCREENS["Success"]}
+        name={STACK_SCREENS.SUCCESS}
         component={Success}
       />
       <Stack.Screen
-        name={STACK_SCREENS["Confirmation"]}
+        name={STACK_SCREENS.CONFIRMATION}
         component={Confirmation}
       />
       </Stack.Navigator>

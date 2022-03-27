@@ -8,23 +8,23 @@ import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
 
 export const STACK_SCREENS = {
-  "Get Started" : "Get Started",
-  "Period Length" : "Period Length",
-  "Period Start":  "Period Start",
-  "Symptoms Choices" : "Symptoms Choices",
-  "Backup" : "Backup",
-  "Main Page": "Main Page",
-  "Registration": "Registration",
-  "Password": "Password",
-  "Success": "Success",
-  "Confirmation": "Confirmation"
+  GET_STARTED : "Get Started",
+  PERIOD_LENGTH : "Period Length",
+  PERIOD_START :  "Period Start",
+  SYMPTOMS_CHOICES : "Symptoms Choices",
+  BACKUP : "Backup",
+  MAIN_PAGE : "Main Page",
+  REGISTRATION : "Registration",
+  PASSWORD : "Password",
+  SUCCESS : "Success",
+  CONFIRMATION : "Confirmation"
 };
 
 export default function Confirmation ({ navigation }) {
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS["Main Page"])}}/>
+        <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS.MAIN_PAGE)}}/>
       </BackButtonContainer>
 
       <PaddyIcon style={{alignSelf: "center"}}/>
