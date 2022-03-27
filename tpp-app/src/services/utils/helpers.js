@@ -4,7 +4,7 @@ import {FLOW_LEVEL} from '../utils/constants';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
 // Backend helper functions used across app
-import { Symptoms } from './models'
+
 
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.
