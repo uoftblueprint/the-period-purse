@@ -28,37 +28,37 @@ export default function PeriodLength ({ navigation }) {
         <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.GET_STARTED)}}/>
       </BackButtonContainer>
 
-      <SafeAreaView pointerEvents="none" style={{ alignItems: 'center' }}>
-      <BackgroundShape style={{ top: 10 }}/>
-      <PeriodLengthIcon width='130' height='130' style={{ bottom: '38%' }}/>
-      <BarIcon style={{ bottom: '30%'}}/>
+      <SafeAreaView pointerEvents="box-none" style={{ alignItems: 'center' }}>
+        <BackgroundShape style={{ top: 10 }}/>
+        <PeriodLengthIcon width='130' height='130' style={{ bottom: '38%' }}/>
+        <BarIcon style={{ bottom: '30%'}}/>
 
-      <TitleText style={{ bottom: '28%' }}>
-        How long does your {'\n'} period usually last?
-      </TitleText>
-      <BodyText style={{ bottom: "28%" }}>
-        This will help us make our {'\n'} reminders more accurate
-      </BodyText>
+        <TitleText style={{ bottom: '28%' }}>
+          How long does your {'\n'} period usually last?
+        </TitleText>
+        <BodyText style={{ bottom: "28%" }}>
+          This will help us make our {'\n'} reminders more accurate
+        </BodyText>
 
-      <InputContainer style={{ bottom: '25%'}}>
-        <TextInput style={periodLength ? styles.output : styles.input} 
-        placeholder="Tap to input" 
-        keyboardType="number-pad" 
-        returnKeyType='done'
-        onChangeText={(periodLength) => setPeriodLength(periodLength)}
-        />
-        <KeyboardIconPref/>
-      </InputContainer>
+        <InputContainer style={{ bottom: "25%" }}>
+          <TextInput style={periodLength ? styles.output : styles.input} 
+          placeholder="Tap to input" 
+          keyboardType="number-pad" 
+          returnKeyType='done'
+          onChangeText={(periodLength) => setPeriodLength(periodLength)}
+          />
+          <KeyboardIconPref/>
+        </InputContainer>
       </SafeAreaView>
 
       <TwoButtonContainer>
-        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_START)}/>
+        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_START, {periodLength: 0})}/>
         <NextButton title="Next" onPress={() => 
           {
             PostInitialPeriodLength(parseInt(periodLength));
-            navigation.navigate(STACK_SCREENS.PERIOD_START);
+            navigation.navigate(STACK_SCREENS.PERIOD_START, {periodLength: periodLength});
           }}
-          disabled={periodLength ? false : true}/>
+          disabled={periodLength && periodLength > 0? false : true}/>
       </TwoButtonContainer>
     </ImageBackground>
   );
@@ -87,16 +87,17 @@ const styles = StyleSheet.create({
     fontFamily: "System",
     fontSize: 18,
     color: "#000000",
-    alignSelf: 'center',
-    left: '30%',
-    bottom: '40%'
+    left: '70%',
+    bottom: '70%'
   },
   output: {
     fontFamily: "System",
     fontSize: 36,
     fontWeight: '600',
-    alignSelf: 'center',
     color: "#000000",
-    top: '15%'
+    alignSelf: "center",
+    left: "40%",
+    width: "100%",
+    height: "100%"
   }
 });

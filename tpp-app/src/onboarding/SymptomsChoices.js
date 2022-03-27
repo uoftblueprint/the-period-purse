@@ -16,7 +16,9 @@ import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_s
 import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/symptoms_track_img.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
 
-export default function SymptomsChoices ({ navigation }) {
+export default function SymptomsChoices ({ route, navigation }) {
+  const { periodLength, periodStart, periodEnd } = route.params;
+
   const [flow, setFlow] = useState('#FFFFFF');
   const [sleep, setSleep] = useState('#FFFFFF');
   const [mood, setMood] = useState('#FFFFFF');
@@ -84,12 +86,24 @@ export default function SymptomsChoices ({ navigation }) {
 
       <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF'}}>
         <TwoButtonContainer style={{ top: 20 }}>
-          <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.BACKUP)}/>
+          <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.BACKUP, {
+            periodLength: periodLength,
+            periodStart: periodStart,
+            periodEnd: periodEnd,
+            trackingPreferences: [flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
+                                  cramp == '#73C7B7', exercise == '#73C7B7']
+          })}/>
           <NextButton title="Next" onPress={() => 
             {
               PostSymptomsToTrack(flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
                                   cramp == '#73C7B7', exercise == '#73C7B7');
-              navigation.navigate(STACK_SCREENS.BACKUP);
+              navigation.navigate(STACK_SCREENS.BACKUP, {
+                periodLength: periodLength,
+                periodStart: periodStart,
+                periodEnd: periodEnd,
+                trackingPreferences: [flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
+                                      cramp == '#73C7B7', exercise == '#73C7B7']
+              });
             }}
             disabled={[flow, mood, sleep, cramp, exercise].some((element) => element === '#73C7B7') ? false : true}/>
         </TwoButtonContainer>

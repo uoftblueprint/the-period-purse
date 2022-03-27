@@ -23,42 +23,54 @@ export const STACK_SCREENS = {
   CONFIRMATION : "Confirmation"
 };
 
-let trackingPreferences = [true, false, false, true, true]; 
-// GETAllTrackingPreferences().then((value) => {
-//   trackingPreferences = JSON.parse(value);
-// })
-function FlowPref() {
-  if(trackingPreferences[0])
-    return (<FlowIcon style={styles.icon}/>);
-  else
-    return (null);
-}
-function MoodPref() {
-  if(trackingPreferences[1])
-    return (<MoodIcon style={styles.icon}/>);
-  else
-    return (null);
-}
-function SleepPref() {
-  if(trackingPreferences[2])
-    return (<SleepIcon style={styles.icon}/>);
-  else
-    return (null);
-}
-function CrampsPref() {
-  if(trackingPreferences[3])
-    return (<CrampsIcon style={styles.icon}/>);
-  else
-    return (null);
-}
-function ExercisePref() {
-  if(trackingPreferences[4])
-    return (<ExerciseIcon style={styles.icon}/>);
-  else
-    return (null);
-}
+export default function Confirmation ({ route, navigation }) {
+  const { periodLength, periodStart, periodEnd, trackingPreferences } = route.params;
 
-export default function Confirmation ({ navigation }) {
+  function FlowPref() {
+    if(trackingPreferences[0])
+      return (<FlowIcon style={styles.icon}/>);
+    else
+      return (null);
+  }
+  function MoodPref() {
+    if(trackingPreferences[1])
+      return (<MoodIcon style={styles.icon}/>);
+    else
+      return (null);
+  }
+  function SleepPref() {
+    if(trackingPreferences[2])
+      return (<SleepIcon style={styles.icon}/>);
+    else
+      return (null);
+  }
+  function CrampsPref() {
+    if(trackingPreferences[3])
+      return (<CrampsIcon style={styles.icon}/>);
+    else
+      return (null);
+  }
+  function ExercisePref() {
+    if(trackingPreferences[4])
+      return (<ExerciseIcon style={styles.icon}/>);
+    else
+      return (null);
+  }
+
+  function DateRange() {
+    if(periodStart && periodEnd)
+      return (<Text style={styles.text}>{periodStart.toISOString().substring(0, 10)} to {periodEnd.toISOString().substring(0, 10)}</Text>)
+    else
+      return (null);
+  }
+
+  function Length() {
+    if(periodLength > 0) 
+      return (<Text style={styles.text}>{periodLength} days</Text>);
+    else
+      return (null);
+  }
+
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
@@ -70,13 +82,13 @@ export default function Confirmation ({ navigation }) {
 
       <View style={styles.row}>
         <Text style={styles.smallText}>Average period length</Text>
-        <Text style={styles.text}>5 days</Text>
+        <Length/>
       </View>
       <HorizontalLine></HorizontalLine>
 
       <View style={styles.row}>
         <Text style={styles.smallText}>Last period</Text>
-        <Text style={styles.text}>Nov 1-5, 2021</Text>
+        <DateRange/>
       </View>
       <HorizontalLine></HorizontalLine>
 

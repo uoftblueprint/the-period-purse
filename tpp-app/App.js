@@ -11,7 +11,7 @@ import CalendarNavigator from './src/home/CalendarNavigator';
 import { TabBarMiddleButton } from './src/home/components/TabBarMiddleButton';
 import Welcome from './src/onboarding/Welcome';
 import InfoNavigator from './src/info/InfoNavigator';
-import { GetInitialPeriodLength } from './src/services/OnboardingService';
+import { GETAllTrackingPreferences } from './src/services/SettingsService';
 
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
@@ -110,26 +110,23 @@ export function MainPage() {
   );
 }
 
-let trackingPreferences; 
+let trackingPreferences = null; 
+GETAllTrackingPreferences().then((value) => {
+  trackingPreferences = value
+})
 function App() {
-  GetInitialPeriodLength().then((value) => {
-    trackingPreferences = value;
-  })
-  // GETAllTrackingPreferences().then((value) => {
-  //   trackingPreferences = value;
-  // })
-  if(trackingPreferences)
+  if(trackingPreferences != null) {
     // tracking preferences have been set, skip onboarding
     return (
-      <Welcome></Welcome>
-      // <MainPage></MainPage>
-    );
-  else
-    // tracking preferences have not been set, go to onboarding
-    return (
-      // <Welcome></Welcome>
       <MainPage></MainPage>
     );
+  }
+  else {
+    // tracking preferences have not been set, go to onboarding
+    return (
+      <Welcome></Welcome>
+    );
+  }
 }
 
 export default Sentry.wrap(App);
