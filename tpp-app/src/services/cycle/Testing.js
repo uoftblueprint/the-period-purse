@@ -146,6 +146,7 @@ const Testing = {
   calendar[2][2] = symptoms;
   calendar[2][3] = symptoms;
   calendar[2][4] = symptoms;
+  calendar[2][29] = symptoms;
 
    try {
      return await AsyncStorage.setItem("2022", JSON.stringify(calendar));

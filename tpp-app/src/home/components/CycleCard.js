@@ -5,7 +5,7 @@ import CycleService from '../../services/cycle/CycleService';
 
  function onPeriodText(periodDays){
    return (
-     <View>
+     <View style={styles.periodTextContainer}>
        <Text style={styles.cycleText}>Period Day </Text>
        <Text style={styles.cycleNumber}> {periodDays} </Text>
      </View>
@@ -14,7 +14,7 @@ import CycleService from '../../services/cycle/CycleService';
 
  function offPeriodText(daysSinceLastPeriod){
    return (
-     <View>
+     <View style={styles.periodTextContainer}>
        <Text style={styles.cycleNumber}> {daysSinceLastPeriod} </Text>
        <Text style={styles.cycleText}> Days since </Text>
        <Text style={styles.cycleText}> last period </Text>
@@ -27,24 +27,24 @@ import CycleService from '../../services/cycle/CycleService';
   return (
   
       <View>
-                   <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',alignSelf:'center' }}>
-                       <View style={{flex: 1,flexDirection:'row',alignItems:'center',alignSelf:'flex-end',margin:10}}>
-                         <AnimatedProgressWheel
-                             size={200}
-                             width={25}
-                             color={'#B31F20'}
-                             fullColor={'#72C6B7'}
-                             progress={cycleDonutPercent}
-                             backgroundColor={'#F1F1F0'}
-                         >
-                         </AnimatedProgressWheel>
-                       </View>
-                   </View>
+            <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',alignSelf:'center' }}>
+                <View style={{flex: 1,flexDirection:'row',alignItems:'center',alignSelf:'flex-end',margin:10}}>
+                  <AnimatedProgressWheel
+                      size={200}
+                      width={25}
+                      color={'#B31F20'}
+                      fullColor={'#72C6B7'}
+                      progress={cycleDonutPercent}
+                      backgroundColor={'#F1F1F0'}
+                  >
+                  </AnimatedProgressWheel>
+                </View>
+            </View>
 
 
-                  <View style={{position: 'absolute', top: 0, left: 0 , right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-                     {periodDays > 0 ? onPeriodText(periodDays) : offPeriodText(daysSinceLastPeriod)}
-                  </View>
+          <View style={{position: 'absolute', top: 0, left: 0 , right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+              {periodDays > 0 ? onPeriodText(periodDays) : offPeriodText(daysSinceLastPeriod)}
+          </View>
       </View>
  )
  }
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     letterSpacing: -0.30000001192092896,
     color: "#6D6E71",
-    textAlign: "center"
   },
   cycleNumber: {
     fontFamily: "Avenir",
@@ -81,8 +80,10 @@ const styles = StyleSheet.create({
     lineHeight: 68,
     letterSpacing: -0.30000001192092896,
     color: "#B31F20",
-    textAlign: "center"
-    
+  },
+  periodTextContainer: {
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 
 

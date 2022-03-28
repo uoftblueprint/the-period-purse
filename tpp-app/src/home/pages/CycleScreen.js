@@ -1,5 +1,4 @@
 
-import AnimatedProgressWheel from 'react-native-progress-wheel';
 import React, { useEffect, useState } from 'react';
 import {StyleSheet, Text, ImageBackground, SafeAreaView, View} from 'react-native';
 import CycleCard from '../components/CycleCard';
@@ -28,6 +27,7 @@ function InfoCard(props){
 }
 
 function PeriodNotification(props){
+
   return (
     <View style={styles.periodNotifCard}>
       <Text style={styles.periodNotifText}> Your period might be coming within the next {props.daysTillPeriod} days.</Text>
@@ -45,15 +45,17 @@ export default function CycleScreen ({navigation}){
   let [cycleDonutPercent, setCycleDonutPercent] = useState(20);
   let [daysTillPeriod, setDaysTillPeriod] = useState(0);
   let [intervals, setIntervals] = useState([]);
-  let [showTip, setShowTip] = useState(false);
+  let [showTip, setShowTip] = useState(true);
   const tabBarHeight = useBottomTabBarHeight();
 
   useEffect(() => {
+     //TODO: delete this testing stuff
      Testing.ClearCalendar();
-    //  Testing.PostDummyCalendarOverYear();
+     Testing.PostDummyCalendarOnPeriod();
      Testing.PostAverageCycleLength();
      Testing.PostAveragePeriodLength();
      CycleService.POSTCycleDonutPercent(0.5);
+     //DELETE above
 
      CycleService.GETPeriodDay().then(days => {
        setPeriodDays(days);
@@ -72,7 +74,7 @@ export default function CycleScreen ({navigation}){
         setAvgPeriodLength(numDays);
        }
        else {
-         setAvgPeriodLength(-1);
+         setAvgPeriodLength(0);
        }
      });
      
@@ -81,17 +83,20 @@ export default function CycleScreen ({navigation}){
         setAvgCycleLength(numDays);
        }
        else {
-         setAvgCycleLength(-1);
+         setAvgCycleLength(0);
        }
      });
 
      CycleService.GETPredictedDaysTillPeriod().then(numDays => {
+       let toSet;
        if(numDays){
-         setDaysTillPeriod(numDays);
+         toSet = numDays;
        }
        else{
-         setDaysTillPeriod(-1);
+         toSet = -1;
+         setShowTip(false);
        }
+       setDaysTillPeriod(toSet);
      });
      
      CycleService.GETCycleHistoryByYear(new Date().getFullYear()).then(intervals =>{
@@ -99,6 +104,7 @@ export default function CycleScreen ({navigation}){
      })
 
   }, []);
+
 
   const tipInvisibleStyle = {
     marginBottom: tabBarHeight
@@ -109,7 +115,7 @@ export default function CycleScreen ({navigation}){
     <SafeAreaView style={styles.container}>
       <ImageBackground source={background} style={styles.container}>    
         <SafeAreaView style={cardContainerStyle}>
-          {showTip && (<PeriodNotification daysTillPeriod={daysTillPeriod}>
+          {showTip && (<PeriodNotification daysTillPeriod={daysTillPeriod} setShowTip={setShowTip}>
             <Paddy style={styles.paddyIcon}/>
           </PeriodNotification>)}
           <CycleCard periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>

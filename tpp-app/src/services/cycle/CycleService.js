@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
 import {initializeEmptyYear, getDateString, getCalendarByYear, getSymptomsFromCalendar, getDaysDiffInclusive, getPeriodsInYear}  from '../utils/helpers';
 import {Symptoms} from '../utils/models';
-import differenceInCalendarDays from 'date-fns/differenceInDays';
+import differenceInDays from 'date-fns/differenceInDays';
 import isSameDay from 'date-fns/isSameDay';
 import subDays from 'date-fns/subDays';
 import addDays from 'date-fns/addDays';
@@ -265,6 +265,7 @@ const CycleService = {
       days+=1;
     }
     if (isSameDay(furthest_date, curr)){
+      //return 0 in the case we have not found a period within our defined bounds
       return 0;
     }
     return days;
@@ -406,7 +407,7 @@ const CycleService = {
 
   /**
    * 
-   * @returns {Promise} resolves to the expected number of days till the next period
+   * @returns {Promise} resolves to the expected number of days till the next period. In case of error, returns -1
    */
   GETPredictedDaysTillPeriod: async function() {
     let today = new Date();
@@ -414,10 +415,20 @@ const CycleService = {
     let periods = await getPeriodsInYear(today.getFullYear(), calendar);
     let prevPeriodStart = await getLastPeriodStart(today, periods, calendar);
 
+    console.log("GETPredictedDaysTillPeriod prevPeriodStart " + prevPeriodStart);
+
     let avgCycleLength = await this.GETAverageCycleLength(calendar);
+    console.log("GETPredictedDaysTillPeriod avgCycleLength " + avgCycleLength);
 
     let nextPeriodStart = addDays(prevPeriodStart, avgCycleLength);
-    return differenceInCalendarDays(today, nextPeriodStart);
+    console.log("GETPredictedDaysTillPeriod nextPeriodStart " + nextPeriodStart);
+    if(avgCycleLength && prevPeriodStart){
+      return differenceInDays(today, nextPeriodStart);
+    }
+    else {
+      return -1;  
+    }
+
   }
 }
 

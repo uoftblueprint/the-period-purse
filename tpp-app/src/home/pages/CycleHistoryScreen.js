@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ImageBackground} from 'react-native';
 import {STACK_SCREENS} from '../CalendarNavigator'
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/Materi  alIcons';
 import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png';
 import {ExpandedHistoryCard} from '../components/CycleHistory';
 import CycleService from '../../services/cycle/CycleService';
@@ -55,6 +55,7 @@ export default function CycleHistoryScreen({navigation}){
             }
         )
     },[selectedYear]);
+
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={background} style={styles.container}>
