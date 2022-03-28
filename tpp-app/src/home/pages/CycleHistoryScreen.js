@@ -22,7 +22,6 @@ function Header({navigation}){
 }
 
 function YearButton({year, selectedYear, setSelectedYear}){
-    console.log()
 
     let backgroundColor = year == selectedYear ? "#B31F20" : "#FFFFFF";
     let textColor = year == selectedYear ? "#FFFFFF" : "#C4C4C4";

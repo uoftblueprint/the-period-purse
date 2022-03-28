@@ -7,6 +7,7 @@ import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackgrou
 import CycleService from '../../services/cycle/CycleService';
 import Testing from '../../services/cycle/Testing';
 import {MinimizedHistoryCard} from '../components/CycleHistory';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 import BloodDrop from '../../../ios/tppapp/Images.xcassets/icons/flow_with_heart.svg';
 import Calendar from '../../../ios/tppapp/Images.xcassets/icons/menstruation_calendar.svg';
@@ -44,21 +45,22 @@ export default function CycleScreen ({navigation}){
   let [cycleDonutPercent, setCycleDonutPercent] = useState(20);
   let [daysTillPeriod, setDaysTillPeriod] = useState(0);
   let [intervals, setIntervals] = useState([]);
-  let [showTip, setShowTip] = useState(true);
-
+  let [showTip, setShowTip] = useState(false);
+  const tabBarHeight = useBottomTabBarHeight();
 
   useEffect(() => {
      Testing.ClearCalendar();
-     Testing.PostDummyCalendarOverYear();
+    //  Testing.PostDummyCalendarOverYear();
      Testing.PostAverageCycleLength();
      Testing.PostAveragePeriodLength();
+     CycleService.POSTCycleDonutPercent(0.5);
 
      CycleService.GETPeriodDay().then(days => {
        setPeriodDays(days);
      });
 
      CycleService.GETCycleDonutPercent().then(percent => {
-       //setCycleDonutPercent(percent * 100);
+       setCycleDonutPercent(percent * 100);
      });
 
      CycleService.GETDaysSinceLastPeriodEnd().then(days => {
@@ -98,10 +100,15 @@ export default function CycleScreen ({navigation}){
 
   }, []);
 
+  const tipInvisibleStyle = {
+    marginBottom: tabBarHeight
+  }
+
+  const cardContainerStyle = showTip ? styles.cardContainer : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={background} style={styles.container}>    
-        <SafeAreaView style={styles.cardContainer}>
+        <SafeAreaView style={cardContainerStyle}>
           {showTip && (<PeriodNotification daysTillPeriod={daysTillPeriod}>
             <Paddy style={styles.paddyIcon}/>
           </PeriodNotification>)}
@@ -130,7 +137,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   cardContainer: {
-      marginHorizontal: 16
+      flex: 1,
+      marginHorizontal: 16,
+      justifyContent: 'space-evenly'
   },  
   rowContainer:{
     flexDirection: 'row',
@@ -179,7 +188,7 @@ const styles = StyleSheet.create({
 
   },
   daysRow: {
-    top:10,
+    top:20,
   },
   daysText: {
     fontFamily: "Avenir",

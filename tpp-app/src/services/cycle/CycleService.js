@@ -257,13 +257,15 @@ const CycleService = {
     // furthest back we will check for a last period
     let furthest_date = new Date(curr.getFullYear() - 1,10, 30);
 
-    //TODO: test on empty calendar with no periods
 
     while(!isSameDay(furthest_date, curr) && !hasFlow){
       curr = subDays(curr, 1);
       currSymptoms = await getSymptomsFromCalendar(calendar, curr.getDate(), curr.getMonth() + 1, curr.getFullYear());
       hasFlow = (currSymptoms.flow !== null && currSymptoms.flow !== FLOW_LEVEL.NONE);
       days+=1;
+    }
+    if (isSameDay(furthest_date, curr)){
+      return 0;
     }
     return days;
   },

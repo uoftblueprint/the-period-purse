@@ -24,8 +24,6 @@ import CycleService from '../../services/cycle/CycleService';
 
 
  function Cycle({periodDays, daysSinceLastPeriod, cycleDonutPercent}){
-   //TODO: ask someone for help with the CSS so addinig the text doesn't mess up alignment
-   //TODO: why is the text & the number not actually lined up, and also not centered within the card
   return (
   
       <View>
@@ -72,7 +70,8 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     lineHeight: 22,
     letterSpacing: -0.30000001192092896,
-    color: "#6D6E71"
+    color: "#6D6E71",
+    textAlign: "center"
   },
   cycleNumber: {
     fontFamily: "Avenir",
@@ -81,7 +80,9 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     lineHeight: 68,
     letterSpacing: -0.30000001192092896,
-    color: "#B31F20"
+    color: "#B31F20",
+    textAlign: "center"
+    
   }
 
 

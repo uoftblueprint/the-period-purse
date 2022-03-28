@@ -68,7 +68,7 @@ function ExpandedHistoryCard({intervals, renderedYear}){
     return(
         <View style={styles.card}>
             <View style={styles.historyContainer}>
-                <View style={[styles.rowContainer, styles.bottomBorder]}>
+                <View>
                     <Text style={ styles.title}> {renderedYear} </Text>
                 </View>
                 {intervals.map((interval, index) => {
@@ -122,8 +122,7 @@ const styles = StyleSheet.create({
     },
     bottomBorder: {
         borderBottomColor: "#C4C4C4",
-        borderBottomWidth: 1,
-        marginBottom: 13
+        borderBottomWidth: 1
     },
     title: {
         fontFamily: "Avenir",
