@@ -156,3 +156,21 @@ export const getPeriodsInYear = async (year, calendar=null) => {
   }
 
 }
+
+/**
+ * @returns {Promise} Promise that resolves into all the years that are stored. If none found, returns empty array
+ */
+export const GETStoredYears = async () => {
+    let currentYear = new Date().getFullYear();
+    let storedYears = [];
+    let yearToCheck = currentYear;
+
+    while(JSON.parse(await AsyncStorage.getItem(yearToCheck.toString()))){
+        console.log("pushing yearToCheck: " + yearToCheck);
+        storedYears.push(yearToCheck);
+        yearToCheck-=1;
+    }
+
+    console.log("getStoredYears is returning " + storedYears);
+    return storedYears;
+}

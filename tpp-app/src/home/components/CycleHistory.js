@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import {SafeAreaView, Text, StyleSheet, View} from 'react-native';
+import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 import addDays from 'date-fns/addDays';
+import { STACK_SCREENS } from '../CalendarNavigator';
+import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-function Interval({interval, index}){
-    console.log("Interval component from " + JSON.stringify(interval))  ;
+const ShowMore = ({navigation}) => {
+    return(
+        <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.CYCLE_HISTORY, {screen: STACK_SCREENS.CYCLE_HISTORY})}>
+            <View style={styles.showMoreButton}>
+                <Text style={styles.showMoreText}>
+                    Show More
+                </Text>
+                <Icon name="keyboard-arrow-right" size={24} color={"#2F7A6D"}/>
+            </View>
+        </TouchableOpacity>
+    );
+
+}
+
+function Interval({interval, isMostRecent}){
     let startDate = interval.start;
     const formattedStart = startDate.toLocaleString('default', { month: 'short', day: 'numeric' });
-    console.log("start date is " + formattedStart);
     let days = interval.periodDays;
     let endDate = addDays(startDate, days);
     let formattedEnd = endDate.toLocaleString('default', { month: 'short', day: 'numeric' });
@@ -16,43 +31,52 @@ function Interval({interval, index}){
         <Text style={styles.periodText}>{days}-day period</Text>
     </View>)
 
-    console.log("number of period days is " + days);
     let daysArray = Array.from(Array(days).keys());
-    console.log(daysArray);
     
     return (
-        <View style={{marginBottom: 19}}>
-            {index == 0 ? <Text style={[styles.intervalHeader, styles.initialHeader]}>Current cycle: Started {formattedStart}</Text> : header}
+        <View style={styles.interval}>
+            {isMostRecent ? <Text style={[styles.intervalHeader, styles.initialHeader]}>Current cycle: Started {formattedStart}</Text> : header}
             <View style={{flexDirection: "row"}}>
-                {daysArray.map(day => (
-                    <View style={styles.redDot}/>
+                {daysArray.map((day, index) => (
+                    <View style={styles.redDot} key={index}/>
                 ))}
             </View>
         </View >
     )
 }
-function MinimizedHistoryCard({intervals}){
-    console.log("from minimized history card");
-    console.log(intervals);
+function MinimizedHistoryCard({navigation, intervals}){
     return (
         <View style={styles.card}>            
-            <SafeAreaView style={[styles.rowContainer, styles.bottomBorder]}>
-                <Text style={styles.title}>Cycle History</Text>
-                <Text>Button Placeholder</Text>
-            </SafeAreaView>
-            {intervals.map((interval, index)=> {
-                if(index < 3){
-                    return  <Interval interval={interval} key={index} index={index}/>
-                }
-            })}
-        </View>
+            <View style={styles.historyContainer}>
+                <SafeAreaView style={[styles.rowContainer, styles.bottomBorder]}>
+                    <Text style={styles.title}>Cycle History</Text>
+                    <ShowMore navigation={navigation}/>
+                </SafeAreaView>
+                {intervals.map((interval, index)=> {
+                    if(index < 3){
+                        return  <Interval interval={interval} key={index} index={index} isMostRecent={index == 0}/>
+                    }
+                })}
 
+            </View>
+        </View>
     );
 }
-export {MinimizedHistoryCard};
-export default function CycleHistoryCard(header, isExpanded){
 
+function ExpandedHistoryCard({navigation, intervals, renderedYear}){
+    let currentYear = new Date().getFullYear();
+    return(
+        <View style={styles.card}>
+            <View style={styles.historyContainer}>
+                <Text style={[styles.bottomBorder, styles.title]}> {renderedYear} </Text>
+                {intervals.map((interval, index) => {
+                    return  <Interval interval={interval} key={index} index={index} isMostRecent={index == 0 & renderedYear== currentYear}/>
+                })}
+            </View>
+        </View>
+    )
 }
+export {MinimizedHistoryCard, ExpandedHistoryCard};
 
 
 const styles = StyleSheet.create({
@@ -67,12 +91,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginHorizontal: 28
     },
     card: {
         borderRadius: 12,
         backgroundColor: 'white',
-        marginHorizontal: 16
+        marginHorizontal: 16,
+        justifyContent: "center"
     },
     intervalHeader: {
         fontFamily: "Avenir",
@@ -108,5 +132,27 @@ const styles = StyleSheet.create({
         letterSpacing: -0.30000001192092896,
         textAlign: "left",
         color: "#6D6E71"
+    },
+    showMoreText: {
+        fontFamily: "Avenir",
+        fontSize: 14,
+        fontStyle: "normal",
+        fontWeight: "800",
+        lineHeight: 19,
+        letterSpacing: -0.4848649203777313,
+        textAlign: "center",
+        color: "#2F7A6D"
+    },
+    showMoreButton: {
+        flexDirection: "row",
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    historyContainer: {
+        marginHorizontal: 28,
+        marginTop: 19
+    },
+    interval: {
+        marginBottom: 19,
     }
 })

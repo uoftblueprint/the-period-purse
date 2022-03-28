@@ -27,7 +27,6 @@ function InfoCard(props){
 }
 
 function PeriodNotification(props){
-        //<SafeAreaView style={styles.rowContainer}>
   return (
     <View style={styles.periodNotifCard}>
       <Text style={styles.periodNotifText}> Your period might be coming within the next {props.daysTillPeriod} days.</Text>
@@ -36,7 +35,7 @@ function PeriodNotification(props){
   )
 }
 
-export default function CycleScreen (){
+export default function CycleScreen ({navigation}){
 
   let [avgPeriodLength, setAvgPeriodLength] = useState(0);
   let [avgCycleLength, setAvgCycleLength] = useState(0);
@@ -45,9 +44,12 @@ export default function CycleScreen (){
   let [cycleDonutPercent, setCycleDonutPercent] = useState(20);
   let [daysTillPeriod, setDaysTillPeriod] = useState(0);
   let [intervals, setIntervals] = useState([]);
+  let [showTip, setShowTip] = useState(true);
+
 
   useEffect(() => {
-     Testing.PostDummyCalendarOnPeriod();
+     Testing.ClearCalendar();
+     Testing.PostDummyCalendarOverYear();
      Testing.PostAverageCycleLength();
      Testing.PostAveragePeriodLength();
 
@@ -95,24 +97,26 @@ export default function CycleScreen (){
      })
 
   }, []);
-{periodDays, daysSinceLastPeriod, cycleDonutPercent}
 
+  //maybe if we put it into a safe area view???
   return (
-    <ImageBackground source={background} style={styles.container}>    
-      <PeriodNotification daysTillPeriod={daysTillPeriod}>
-        <Paddy style={[styles.paddyIcon, {width: 20, backgroundColor: 'green'}]}/>
-      </PeriodNotification>
-      <CycleCard periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
-        <SafeAreaView style={styles.rowContainer}>
-          <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
-            <BloodDrop fill="red" style={styles.icon}/>
-          </InfoCard>
-          <InfoCard header="Average cycle length" days={avgCycleLength} backgroundColor="#B9E0D8">
-            <Calendar fill="red" style={styles.icon}/>
-          </InfoCard>
-      </SafeAreaView>
-      <MinimizedHistoryCard intervals={intervals}/>
-    </ImageBackground>
+    <SafeAreaView style={styles.container}>
+      <ImageBackground source={background} style={styles.container}>    
+        {showTip && (<PeriodNotification daysTillPeriod={daysTillPeriod}>
+          <Paddy style={[styles.paddyIcon, {width: 20, backgroundColor: 'green'}]}/>
+        </PeriodNotification>)}
+        <CycleCard periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
+          <SafeAreaView style={styles.rowContainer}>
+            <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
+              <BloodDrop fill="red" style={styles.icon}/>
+            </InfoCard>
+            <InfoCard header="Average cycle length" days={avgCycleLength} backgroundColor="#B9E0D8">
+              <Calendar fill="red" style={styles.icon}/>
+            </InfoCard>
+        </SafeAreaView>
+        <MinimizedHistoryCard navigation={navigation} intervals={intervals}/>
+      </ImageBackground>
+    </SafeAreaView>
 
   )
 }
@@ -121,7 +125,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'stretch',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   rowContainer:{
     flexDirection: 'row',

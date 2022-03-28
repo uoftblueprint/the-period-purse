@@ -1,0 +1,99 @@
+import React, { useState, useEffect } from 'react';
+import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ImageBackground} from 'react-native';
+import {STACK_SCREENS} from '../CalendarNavigator'
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png';
+import {ExpandedHistoryCard} from '../components/CycleHistory';
+import CycleService from '../../services/cycle/CycleService';
+import {GETStoredYears} from '../../services/utils/helpers';
+
+function Header({navigation}){
+    return(
+    <View style={ styles.headerContainer}>
+        <TouchableOpacity 
+            onPress={() =>navigation.navigate(STACK_SCREENS.CYCLE_CALENDAR_TABS, {screen: STACK_SCREENS.CYCLE_CALENDAR_TABS})}
+            style={styles.headerComponent}
+        >
+            <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
+        </TouchableOpacity>
+        <Text style={[styles.headerComponent, styles.headerText]}> Cycle History </Text>
+    </View>
+    );
+}
+
+function YearButton({year, setSelectedYear}){
+    return (
+        <TouchableOpacity 
+            onPress={() => setSelectedYear(year)}
+        >
+            <Text>{year}</Text>
+        </TouchableOpacity>
+    )
+}
+export default function CycleHistoryScreen({navigation}){
+    let [currentIntervals, setCurrentIntervals] = useState([]);
+    let [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    let [storedYears, setStoredYears] = useState([]);
+    
+    useEffect(() => {
+        GETStoredYears().then(
+            years => {
+                setStoredYears(years);
+            }
+        )
+    }, []);
+
+    //update the cycles being rendered to reflect selected year
+    useEffect(() => {
+        CycleService.GETCycleHistoryByYear(selectedYear).then(
+            intervals => {
+                setCurrentIntervals(intervals);
+            }
+        )
+    },[selectedYear]);
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <ImageBackground source={background} style={styles.container}>
+                <Header navigation={navigation}/>
+                <View style={styles.buttonContainer}>
+                    {storedYears.map(year => <YearButton year={year} setSelectedYear={setSelectedYear}/>)}
+                </View>
+                <ExpandedHistoryCard 
+                    navigation={navigation} 
+                    intervals={currentIntervals} 
+                    renderedYear={selectedYear}
+                />
+            </ImageBackground>
+
+        </SafeAreaView>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'stretch',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+    },
+    headerContainer: {
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    headerComponent: {
+        flexGrow:1
+    },
+    headerText: { 
+        fontFamily: "Avenir",
+        fontSize: 20,
+        fontStyle: "normal",
+        fontWeight: "800",
+        lineHeight: 27,
+        letterSpacing: -0.4848649203777313,
+    }
+
+})
