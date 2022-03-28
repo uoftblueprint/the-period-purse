@@ -47,6 +47,34 @@ export const TRACK_SYMPTOMS = {
   EXERCISE: 'trackExercise'
 }
 
+export const FILTER_COLOURS = {
+  FLOW: {
+    HEAVY: '#89191A',
+    MEDIUM: '#B31F20',
+    LIGHT: '#E3797A',
+    SPOTTING: '#FFBEBF',
+  },
+  CRAMPS: {
+    NEUTRAL: "#DFA638",
+    BAD: "#DD8502",
+    TERRIBLE: "#B85A04",
+    GOOD: "#FFD363",
+    NONE: "#FFE6A6",  
+  },
+  EXERCISE: {
+    HEAVY: '#2F5B54',
+    MEDIUM: '#5A9F93',
+    LIGHT: '#7BCFC0',
+    LITTLE: '#B9E0D8'   
+  },
+  SLEEP: {
+    HEAVY: '#133364',
+    MEDIUM: '#1A50A0',
+    LIGHT: '#467CCD',
+    LITTLE: '#92B8F0',
+  }
+}
+
 export const KEYS = {
   AVERAGE_PERIOD_LENGTH: "averagePeriodLength",
   INITIAL_PERIOD_LENGTH: "initialPeriodLength",
