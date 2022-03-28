@@ -118,8 +118,10 @@ function App() {
      getPreferences();
   }, [])
   if(preferences && preferences[0] && preferences[0][1])
+    // tracking preferences have been set, go to main page
     return (<MainPage></MainPage>);
   else
+    // tracking preferences have not been set, go to onboarding
     return (<Welcome></Welcome>);
 }
 
