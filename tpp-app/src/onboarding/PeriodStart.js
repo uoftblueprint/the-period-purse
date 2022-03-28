@@ -78,11 +78,13 @@ export default function PeriodStart ({ route, navigation }) {
             visible={open}
             onDismiss={onDismiss}
             startDate={range.startDate}
+            // calculates endDate if user entered periodLength; asks user to pick endDate manually otherwise
             endDate={periodLength && range.startDate ? 
                     new Date(range.startDate.getTime() + ((periodLength-1)*MILLISECPERDAY)) : range.endDate}
             onConfirm={onConfirm}
             onChange={onChange} 
             validRange={{ 
+              // computes the latest possible endDate based on the value of periodLength
               endDate: periodLength ? new Date(new Date().getTime() - ((periodLength-1)*MILLISECPERDAY)) : new Date() 
             }}
             saveLabel="Done" 
@@ -102,14 +104,16 @@ export default function PeriodStart ({ route, navigation }) {
           <NextButton title="Next" onPress={() => 
             {
               if(periodLength == null) {
+                // user did not enter periodLength previously but manually selected a complete date range
                 newPeriodLength = Math.round((range.endDate.getTime() - range.startDate.getTime()) / MILLISECPERDAY);
                 PostInitialPeriodLength(newPeriodLength);
               }
               PostInitialPeriodStart(range.startDate);
               navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
                 periodLength: newPeriodLength,
-                periodStart: range.startDate,
-                periodEnd: range.endDate
+                // pass down the string version of the dates in the format "YYYY-MM-DD"
+                periodStart: range.startDate.toISOString().substring(0, 10),
+                periodEnd: range.endDate.toISOString().substring(0, 10)
               });
             }}
             disabled={range.endDate && range.startDate ? false : true}/>
@@ -119,6 +123,7 @@ export default function PeriodStart ({ route, navigation }) {
   );
 }
 
+// styling for the date picker package
 const theme = {
   ...DefaultTheme,
   fonts: configureFonts(fontConfig),

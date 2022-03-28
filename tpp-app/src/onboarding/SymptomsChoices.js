@@ -16,29 +16,32 @@ import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_s
 import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/symptoms_track_img.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
 
+let WHITE = "#FFFFFF"  // button is not selected
+let TEAL = "#73C7B7"  // button is selected
 export default function SymptomsChoices ({ route, navigation }) {
   const { periodLength, periodStart, periodEnd } = route.params;
 
-  const [flow, setFlow] = useState('#FFFFFF');
-  const [sleep, setSleep] = useState('#FFFFFF');
-  const [mood, setMood] = useState('#FFFFFF');
-  const [cramp, setCramp] = useState('#FFFFFF');
-  const [exercise, setExercise] = useState('#FFFFFF');
+  // checks for button selection are based on the background color 
+  const [flow, setFlow] = useState(WHITE);
+  const [sleep, setSleep] = useState(WHITE);
+  const [mood, setMood] = useState(WHITE);
+  const [cramp, setCramp] = useState(WHITE);
+  const [exercise, setExercise] = useState(WHITE);
 
   const handleFlow = () => { 
-    flow == '#FFFFFF' ? setFlow('#73C7B7') : setFlow('#FFFFFF');
+    flow == WHITE ? setFlow(TEAL) : setFlow(WHITE);
   }
   const handleSleep = () => { 
-    sleep == '#FFFFFF' ? setSleep('#73C7B7') : setSleep('#FFFFFF');
+    sleep == WHITE ? setSleep(TEAL) : setSleep(WHITE);
   }
   const handleMood = () => { 
-    mood == '#FFFFFF' ? setMood('#73C7B7') : setMood('#FFFFFF');
+    mood == WHITE ? setMood(TEAL) : setMood(WHITE);
   }
   const handleCramp = () => { 
-    cramp == '#FFFFFF' ? setCramp('#73C7B7') : setCramp('#FFFFFF');
+    cramp == WHITE ? setCramp(TEAL) : setCramp(WHITE);
   }
   const handleExercise = () => { 
-    exercise == '#FFFFFF' ? setExercise('#73C7B7') : setExercise('#FFFFFF');
+    exercise == WHITE ? setExercise(TEAL) : setExercise(WHITE);
   }
 
   return (
@@ -86,19 +89,18 @@ export default function SymptomsChoices ({ route, navigation }) {
         </SafeAreaView>
       </ScrollView>
 
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF'}}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
         <TwoButtonContainer style={{ top: 20 }}>
           <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.BACKUP, {
             periodLength: periodLength,
             periodStart: periodStart,
             periodEnd: periodEnd,
-            trackingPreferences: [flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
-                                  cramp == '#73C7B7', exercise == '#73C7B7']
-          })}/>
+            trackingPreferences: [flow == TEAL, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL]
+          })}
+          disabled={[flow, mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
           <NextButton title="Next" onPress={() => 
             {
-              trackingPreferences = [flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
-                                     cramp == '#73C7B7', exercise == '#73C7B7'];
+              trackingPreferences = [flow == TEAL, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL];
               PostSymptomsToTrack(trackingPreferences[0], trackingPreferences[1], trackingPreferences[2],
                                   trackingPreferences[3], trackingPreferences[4]);
               navigation.navigate(STACK_SCREENS.BACKUP, {
@@ -108,7 +110,7 @@ export default function SymptomsChoices ({ route, navigation }) {
                 trackingPreferences: trackingPreferences
               });
             }}
-            disabled={[flow, mood, sleep, cramp, exercise].some((element) => element === '#73C7B7') ? false : true}/>
+            disabled={[flow, mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
         </TwoButtonContainer>
       </SafeAreaView>
     </ImageBackground>

@@ -59,9 +59,7 @@ export default function Confirmation ({ route, navigation }) {
 
   function DateRange() {
     if(periodStart && periodEnd)
-      return (<Text style={styles.text}>
-                {periodStart.toISOString().substring(0, 10)} to {periodEnd.toISOString().substring(0, 10)}
-              </Text>)
+      return (<Text style={styles.text}>{periodStart} to {periodEnd}</Text>)
     else
       return (null);
   }

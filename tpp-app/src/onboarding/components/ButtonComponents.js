@@ -29,10 +29,11 @@ export const NextButton = ({ onPress, title, disabled }) => {
     </TouchableOpacity>);
 }
   
-export const SkipButton = ({ onPress, title }) => {
+export const SkipButton = ({ onPress, title, disabled }) => {
     return (
-    <TouchableOpacity onPress={onPress} style={styles.skipButtonContainer}>
-        <Text style={styles.skipButtonText}>{title}</Text>
+    <TouchableOpacity onPress={onPress} disabled={disabled} 
+      style={[styles.skipButtonContainer, { opacity: disabled ? 0.5 : 1.0 }]}>
+      <Text style={styles.skipButtonText}>{title}</Text>
     </TouchableOpacity>);
 }
   
