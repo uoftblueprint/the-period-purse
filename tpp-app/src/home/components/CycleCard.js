@@ -29,11 +29,11 @@ import CycleService from '../../services/cycle/CycleService';
   return (
   
       <View>
-                   <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',alignSelf:'center'}}>
+                   <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',alignSelf:'center' }}>
                        <View style={{flex: 1,flexDirection:'row',alignItems:'center',alignSelf:'flex-end',margin:10}}>
                          <AnimatedProgressWheel
                              size={200}
-                             width={30}
+                             width={25}
                              color={'#B31F20'}
                              fullColor={'#72C6B7'}
                              progress={cycleDonutPercent}
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     height: 298,
     backgroundColor: "white",
-    marginHorizontal: 16
   },
   cycleText: {
     fontFamily: "Avenir",
@@ -73,7 +72,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     lineHeight: 22,
     letterSpacing: -0.30000001192092896,
-    textAlign: "center",
     color: "#6D6E71"
   },
   cycleNumber: {
@@ -83,7 +81,6 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     lineHeight: 68,
     letterSpacing: -0.30000001192092896,
-    textAlign: "center",
     color: "#B31F20"
   }
 

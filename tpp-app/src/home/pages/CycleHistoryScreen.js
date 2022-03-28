@@ -59,8 +59,8 @@ export default function CycleHistoryScreen({navigation}){
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={background} style={styles.container}>
+                <Header navigation={navigation}/>
                 <SafeAreaView style={styles.cardContainer}>
-                    <Header navigation={navigation}/>
                     <View style={styles.buttonContainer}>
                         {storedYears.map(year => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>).reverse()}
                     </View>
@@ -83,10 +83,12 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: 'row',
+        marginBottom: 17,
+        marginTop: 18
     },
     cardContainer: {
         marginHorizontal: 16
-    },
+    },  
     button: {
         borderRadius: 10,
         width: 62,

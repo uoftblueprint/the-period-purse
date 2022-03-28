@@ -63,12 +63,14 @@ function MinimizedHistoryCard({navigation, intervals}){
     );
 }
 
-function ExpandedHistoryCard({navigation, intervals, renderedYear}){
+function ExpandedHistoryCard({intervals, renderedYear}){
     let currentYear = new Date().getFullYear();
     return(
         <View style={styles.card}>
             <View style={styles.historyContainer}>
-                <Text style={[styles.bottomBorder, styles.title]}> {renderedYear} </Text>
+                <View style={[styles.rowContainer, styles.bottomBorder]}>
+                    <Text style={ styles.title}> {renderedYear} </Text>
+                </View>
                 {intervals.map((interval, index) => {
                     return  <Interval interval={interval} key={index} index={index} isMostRecent={index == 0 & renderedYear== currentYear}/>
                 })}
@@ -120,7 +122,8 @@ const styles = StyleSheet.create({
     },
     bottomBorder: {
         borderBottomColor: "#C4C4C4",
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        marginBottom: 13
     },
     title: {
         fontFamily: "Avenir",

@@ -98,23 +98,25 @@ export default function CycleScreen ({navigation}){
 
   }, []);
 
-  //maybe if we put it into a safe area view???
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={background} style={styles.container}>    
-        {showTip && (<PeriodNotification daysTillPeriod={daysTillPeriod}>
-          <Paddy style={[styles.paddyIcon, {width: 20, backgroundColor: 'green'}]}/>
-        </PeriodNotification>)}
-        <CycleCard periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
-          <SafeAreaView style={styles.rowContainer}>
-            <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
-              <BloodDrop fill="red" style={styles.icon}/>
-            </InfoCard>
-            <InfoCard header="Average cycle length" days={avgCycleLength} backgroundColor="#B9E0D8">
-              <Calendar fill="red" style={styles.icon}/>
-            </InfoCard>
+        <SafeAreaView style={styles.cardContainer}>
+          {showTip && (<PeriodNotification daysTillPeriod={daysTillPeriod}>
+            <Paddy style={styles.paddyIcon}/>
+          </PeriodNotification>)}
+          <CycleCard periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
+            <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer]}>
+              <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
+                <BloodDrop fill="red" style={styles.icon}/>
+              </InfoCard>
+              <InfoCard header="Average cycle length" days={avgCycleLength} backgroundColor="#B9E0D8">
+                <Calendar fill="red" style={styles.icon}/>
+              </InfoCard>
+          </SafeAreaView>
+          <MinimizedHistoryCard navigation={navigation} intervals={intervals}/>
+
         </SafeAreaView>
-        <MinimizedHistoryCard navigation={navigation} intervals={intervals}/>
       </ImageBackground>
     </SafeAreaView>
 
@@ -127,10 +129,16 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'space-between',
   },
+  cardContainer: {
+      marginHorizontal: 16
+  },  
   rowContainer:{
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center'
+  },
+  infoCardContainer:{
+    justifyContent: 'space-between'
   },
   card:{
     borderRadius: 12,
@@ -153,7 +161,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#CFE4E0",
     borderRadius: 12,
     height: 100,
-    marginHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
