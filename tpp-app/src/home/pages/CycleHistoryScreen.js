@@ -21,12 +21,17 @@ function Header({navigation}){
     );
 }
 
-function YearButton({year, setSelectedYear}){
+function YearButton({year, selectedYear, setSelectedYear}){
+    console.log()
+
+    let backgroundColor = year == selectedYear ? "#B31F20" : "#FFFFFF";
+    let textColor = year == selectedYear ? "#FFFFFF" : "#C4C4C4";
     return (
         <TouchableOpacity 
             onPress={() => setSelectedYear(year)}
+            style= {[styles.button, {backgroundColor: backgroundColor}]}
         >
-            <Text>{year}</Text>
+            <Text style={{color: textColor}}>{year}</Text>
         </TouchableOpacity>
     )
 }
@@ -51,19 +56,20 @@ export default function CycleHistoryScreen({navigation}){
             }
         )
     },[selectedYear]);
-
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={background} style={styles.container}>
-                <Header navigation={navigation}/>
-                <View style={styles.buttonContainer}>
-                    {storedYears.map(year => <YearButton year={year} setSelectedYear={setSelectedYear}/>)}
-                </View>
-                <ExpandedHistoryCard 
-                    navigation={navigation} 
-                    intervals={currentIntervals} 
-                    renderedYear={selectedYear}
-                />
+                <SafeAreaView style={styles.cardContainer}>
+                    <Header navigation={navigation}/>
+                    <View style={styles.buttonContainer}>
+                        {storedYears.map(year => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>).reverse()}
+                    </View>
+                    <ExpandedHistoryCard 
+                        navigation={navigation} 
+                        intervals={currentIntervals} 
+                        renderedYear={selectedYear}
+                    />
+                </SafeAreaView>
             </ImageBackground>
 
         </SafeAreaView>
@@ -77,6 +83,19 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: 'row',
+    },
+    cardContainer: {
+        marginHorizontal: 16
+    },
+    button: {
+        borderRadius: 10,
+        width: 62,
+        height: 34,
+        borderColor: "#C4C4C4",
+        borderWidth: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginRight: 9
     },
     headerContainer: {
         backgroundColor: 'white',

@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 12,
         backgroundColor: 'white',
-        marginHorizontal: 16,
         justifyContent: "center"
     },
     intervalHeader: {
