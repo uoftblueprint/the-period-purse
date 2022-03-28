@@ -35,7 +35,7 @@ export const PostInitialPeriodLength = async (periodLength) => new Promise( asyn
  */
 export const PostInitialPeriodStart = async (periodStart) => new Promise ( async (resolve, reject) => {
     try {
-        const periodLength = await GetInitialPeriodLength();
+        const periodLength = await AsyncStorage.getItem(KEYS.INITIAL_PERIOD_LENGTH);
         if(periodLength && periodStart) {
             const periodStartTime = periodStart.getTime();
             let yearsSet = new Set(); 
