@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
@@ -12,7 +12,6 @@ import { TabBarMiddleButton } from './src/home/components/TabBarMiddleButton';
 import Welcome from './src/onboarding/Welcome';
 import InfoNavigator from './src/info/InfoNavigator';
 import { GETAllTrackingPreferences } from './src/services/SettingsService';
-
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
 
@@ -110,23 +109,18 @@ export function MainPage() {
   );
 }
 
-let trackingPreferences = null; 
-GETAllTrackingPreferences().then((value) => {
-  trackingPreferences = value
-})
 function App() {
-  if(trackingPreferences != null) {
-    // tracking preferences have been set, skip onboarding
-    return (
-      <MainPage></MainPage>
-    );
-  }
-  else {
-    // tracking preferences have not been set, go to onboarding
-    return (
-      <Welcome></Welcome>
-    );
-  }
+  const [preferences, setPreferences] = useState(null)
+  useEffect(() => {
+     async function getPreferences() {
+       setPreferences(await GETAllTrackingPreferences());
+     }
+     getPreferences();
+  }, [])
+  if(preferences && preferences[0] && preferences[0][1])
+    return (<MainPage></MainPage>);
+  else
+    return (<Welcome></Welcome>);
 }
 
 export default Sentry.wrap(App);
