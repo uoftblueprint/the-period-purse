@@ -153,18 +153,5 @@ export const getPeriodsInYear = async (year, calendar=null) => {
   } catch(e) {
     console.log(e);
     return periods;
-
   }
-
-}
-
-
-/**
- *
- * @param {Object} object the desired object to search through
- * @param {Object} value the value that is associated with a key
- * @return {Object} key associated
- */
-export const getKeyByValue = (object, value) => {
-  return Object.keys(object).find(key => object[key] === value);
 }
