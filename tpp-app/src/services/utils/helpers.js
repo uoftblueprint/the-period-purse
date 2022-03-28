@@ -4,7 +4,6 @@ import {FLOW_LEVEL} from '../utils/constants';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
 // Backend helper functions used across app
-import { Symptoms } from './models'
 
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.
@@ -157,4 +156,15 @@ export const getPeriodsInYear = async (year, calendar=null) => {
 
   }
 
+}
+
+
+/**
+ *
+ * @param {Object} object the desired object to search through
+ * @param {Object} value the value that is associated with a key
+ * @return {Object} key associated
+ */
+export const getKeyByValue = (object, value) => {
+  return Object.keys(object).find(key => object[key] === value);
 }

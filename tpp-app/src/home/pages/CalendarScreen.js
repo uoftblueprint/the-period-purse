@@ -1,141 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
-import { BackButton } from '../components/BackButtonComponent';
+import { DayComponent } from '../components/DayComponent'
 import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
 //import { GETYearData } from '../../services/CalendarService';
 import { Symptoms, ExerciseActivity } from '../../services/utils/models';
-import { FLOW_LEVEL, MOOD_LEVEL, EXERCISE_TYPE, CRAMP_LEVEL, FILTER_COLOURS, FILTER_TEXT_COLOURS } from '../../services/utils/constants';
-import { CrampsTerribleIcon, CrampsNeutralIcon, CrampsBadIcon, CrampsGoodIcon, CrampsNoneIcon } from '../../services/utils/calendaricons';
-import { FlowHeavyIcon, FlowMediumIcon, FlowLightIcon, FlowNoneIcon, FlowSpottingIcon } from '../../services/utils/calendaricons';
-import { MoodHappyIcon, MoodSadIcon, MoodNeutralIcon, MoodSickIcon, MoodAngryIcon, MoodLolIcon, MoodIdkIcon, MoodGreatIcon, MoodLovedIcon } from '../../services/utils/calendaricons';
-import { ExerciseBallSportIcon, ExerciseCardioIcon, ExerciseCycleSportIcon, ExerciseMartialArtsIcon, ExerciseRacketSportsIcon, ExerciseStrengthIcon, ExerciseWaterSportIcon, ExerciseWinterSportIcon, ExerciseYogaIcon} from '../../services/utils/calendaricons';
+import { FLOW_LEVEL, MOOD_LEVEL, EXERCISE_TYPE, CRAMP_LEVEL } from '../../services/utils/constants';
+import { VIEWS } from '../../services/utils/constants';
 
-const VIEWS = {
-    Flow: "Period Flow",
-    Nothing: "Select",
-    Mood: "Mood",
-    Exercise: "Exercise",
-    Cramps: "Cramps",
-    Sleep: "Sleep"
-}
-
-const ICON_TYPES = {
-    crampsterrible: CrampsTerribleIcon,
-    crampsbad: CrampsBadIcon,
-    crampsneutral: CrampsNeutralIcon,
-    crampsgood: CrampsGoodIcon,
-    crampsnone: CrampsNoneIcon,
-    flowheavy: FlowHeavyIcon,
-    flowmedium: FlowMediumIcon,
-    flowlight: FlowLightIcon,
-    flownone: FlowNoneIcon,
-    flowspotting: FlowSpottingIcon,
-    moodhappy: MoodHappyIcon,
-    moodsad: MoodSadIcon,
-    moodneutral: MoodNeutralIcon,
-    moodsick: MoodSickIcon,
-    moodangry: MoodAngryIcon,
-    moodlol: MoodLolIcon,
-    moodidk: MoodIdkIcon,
-    moodgreat: MoodGreatIcon,
-    moodloved: MoodLovedIcon,
-    exerciseball_sport: ExerciseBallSportIcon,
-    exercisecardio: ExerciseCardioIcon,
-    exercisecycle_sport: ExerciseCycleSportIcon,
-    exercisemartial_arts: ExerciseMartialArtsIcon,
-    exerciseracket_sport:ExerciseRacketSportsIcon,
-    exercisestrength: ExerciseStrengthIcon,
-    exercisewater_sport: ExerciseWaterSportIcon,
-    exercisewinter_sport: ExerciseWinterSportIcon,
-    exerciseyoga: ExerciseYogaIcon,
-    view: View
-};
 
 const sideComponentWidth = 120
-
-function getKeyByValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value);
-}
-
-// The component that is used by each day in the calendar
-const DayComponent = ({ date, state, marking, selectedView, navigation }) => {
-
-    let bgColor;
-    let textColor;
-    let iconName = 'view';
-
-    if (marking) {
-        let viewKey = getKeyByValue(VIEWS, selectedView).toLowerCase()
-        let symptomAttribute = marking.symptoms[viewKey]
-        
-        if (symptomAttribute) {
-            
-            let attribute = symptomAttribute
-                        
-            switch (viewKey) {
-                case 'sleep':
-                    let sleepScore = attribute / 60
-                    if (sleepScore >= 8) {
-                        attribute = 'HEAVY'
-                    } else if (sleepScore >= 6.5) {
-                        attribute = 'MEDIUM'
-                    } else if (sleepScore >= 5) {
-                        attribute = 'LIGHT'
-                    } else {
-                        attribute = 'LITTLE'
-                    }    
-                    break;
-                case 'exercise':
-                    if (symptomAttribute.exercise_minutes > 120) {
-                        attribute = 'HEAVY'
-                    } else if (symptomAttribute.exercise_minutes > 90) {
-                        attribute = 'MEDIUM'
-                    } else if (symptomAttribute.exercise_minutes > 60) {
-                        attribute = 'LIGHT'
-                    } else {
-                        attribute = 'LITTLE'
-                    }    
-
-                    iconName = viewKey + symptomAttribute.exercise.toLowerCase()
-
-                    break;
-            }
-            if (viewKey !== 'mood') {
-                bgColor = FILTER_COLOURS[viewKey.toUpperCase()][attribute]
-                textColor = FILTER_TEXT_COLOURS[viewKey.toUpperCase()][attribute]
-            }
-            // Get Icon
-            if (viewKey !== 'sleep' && viewKey !== 'exercise') {
-                iconName = viewKey + symptomAttribute.toLowerCase()
-            }            
-            
-            
-        }
-    }
-
-    return(
-        React.createElement(TouchableOpacity, {
-            // onPress: () => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {
-            //     "date": date
-            // })
-          }, 
-          React.createElement(View, {
-            style: styles.dayContainer,
-            backgroundColor: bgColor
-          }, React.createElement(Text, {
-            style: {
-              color: textColor
-            }
-          }, date.day), 
-          React.createElement(ICON_TYPES[iconName], {
-            style: styles.dayIcon,
-            fill: textColor
-          })))
-    )
-}
 
 export const Calendar = ({navigation, marked, yearData, setYearInView, selectedView}) => {
 
@@ -210,21 +86,17 @@ export default function CalendarScreen ({ navigation }) {
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
     const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
     const [yearInView, setYearInView] = useState([new Date().getFullYear()])
-    const [yearData, setYearData] = useState({'2021': 
-    
-        [
-            new Symptoms(),
-            new Symptoms(),
-            new Symptoms(),
-        ]
-    
-    })
 
-    const [marked, setMarked] = useState({
-        '2022-03-28': {
-            symptoms: new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.GREAT, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum'),
-        }
-    })
+    // Generate dummy initial year that just creates a blank symptom object for the year
+    const initialYear = {}
+    initialYear['0000'] = [new Symptoms()]
+    const [yearData, setYearData] = useState(initialYear)
+
+    const initialMarked = {};
+    initialMarked[new Date().toISOString().substring(0,10)] = {
+        symptoms: new Symptoms(),
+    }
+    const [marked, setMarked] = useState(initialMarked)
 
     useEffect(() => {
         // Whenever the user scrolls and changes what year is in view
@@ -238,12 +110,10 @@ export default function CalendarScreen ({ navigation }) {
                     [   
                         [
                             new Symptoms(FLOW_LEVEL.LIGHT, MOOD_LEVEL.ANGRY, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.BALL_SPORT, 230), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.LIGHT, MOOD_LEVEL.GREAT, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum'),
                             new Symptoms()
                         ],
                         [
                             new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.HAPPY, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.MARTIAL_ARTS, 230), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.IDK, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.RACKET_SPORT, 230), 'lorem ipsum'),
                         ],
                         [
                             new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.LOL, 800, CRAMP_LEVEL.TERRIBLE, new ExerciseActivity(EXERCISE_TYPE.CARDIO, 125), 'lorem ipsum'),
@@ -341,23 +211,4 @@ const styles = StyleSheet.create({
         lineHeight:20,
 
     },
-    dayContainer:{
-        borderColor: '#D1D3D4',
-        borderWidth: 1,
-        borderRadius: 8,
-        width: 50,
-        height: 50,
-        paddingLeft: 5,
-        paddingTop:3,
-        margin: 2,
-        color: '#FFF',
-    },
-    dayIcon: {
-        position: 'relative',
-        top: -4,
-        height: 20,
-        left: -2,
-        marginLeft: 'auto',
-        marginRight: 'auto'
-    }
 })

@@ -104,6 +104,15 @@ export const FILTER_TEXT_COLOURS = {
   }
 }
 
+export const VIEWS = {
+  Flow: "Period Flow",
+  Nothing: "Select",
+  Mood: "Mood",
+  Exercise: "Exercise",
+  Cramps: "Cramps",
+  Sleep: "Sleep"
+}
+
 export const KEYS = {
   AVERAGE_PERIOD_LENGTH: "averagePeriodLength",
   INITIAL_PERIOD_LENGTH: "initialPeriodLength",
