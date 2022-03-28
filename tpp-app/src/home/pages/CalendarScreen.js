@@ -7,9 +7,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
 //import { GETYearData } from '../../services/CalendarService';
 import { Symptoms, ExerciseActivity } from '../../services/utils/models';
-import { FLOW_LEVEL, MOOD_LEVEL, EXERCISE_TYPE, CRAMP_LEVEL, FILTER_COLOURS } from '../../services/utils/constants';
-import FlowIcon from "../../../ios/tppapp/Images.xcassets/icons/flow.svg";
-
+import { FLOW_LEVEL, MOOD_LEVEL, EXERCISE_TYPE, CRAMP_LEVEL, FILTER_COLOURS, FILTER_TEXT_COLOURS } from '../../services/utils/constants';
+import { CrampsTerribleIcon, CrampsNeutralIcon, CrampsBadIcon, CrampsGoodIcon, CrampsNoneIcon } from '../../services/utils/calendaricons';
+import { FlowHeavyIcon, FlowMediumIcon, FlowLightIcon, FlowNoneIcon, FlowSpottingIcon } from '../../services/utils/calendaricons';
+import { MoodHappyIcon, MoodSadIcon, MoodNeutralIcon, MoodSickIcon, MoodAngryIcon, MoodLolIcon, MoodIdkIcon, MoodGreatIcon, MoodLovedIcon } from '../../services/utils/calendaricons';
+import { ExerciseBallSportIcon, ExerciseCardioIcon, ExerciseCycleSportIcon, ExerciseMartialArtsIcon, ExerciseRacketSportsIcon, ExerciseStrengthIcon, ExerciseWaterSportIcon, ExerciseWinterSportIcon, ExerciseYogaIcon} from '../../services/utils/calendaricons';
 
 const VIEWS = {
     Flow: "Period Flow",
@@ -19,6 +21,39 @@ const VIEWS = {
     Cramps: "Cramps",
     Sleep: "Sleep"
 }
+
+const ICON_TYPES = {
+    crampsterrible: CrampsTerribleIcon,
+    crampsbad: CrampsBadIcon,
+    crampsneutral: CrampsNeutralIcon,
+    crampsgood: CrampsGoodIcon,
+    crampsnone: CrampsNoneIcon,
+    flowheavy: FlowHeavyIcon,
+    flowmedium: FlowMediumIcon,
+    flowlight: FlowLightIcon,
+    flownone: FlowNoneIcon,
+    flowspotting: FlowSpottingIcon,
+    moodhappy: MoodHappyIcon,
+    moodsad: MoodSadIcon,
+    moodneutral: MoodNeutralIcon,
+    moodsick: MoodSickIcon,
+    moodangry: MoodAngryIcon,
+    moodlol: MoodLolIcon,
+    moodidk: MoodIdkIcon,
+    moodgreat: MoodGreatIcon,
+    moodloved: MoodLovedIcon,
+    exerciseball_sport: ExerciseBallSportIcon,
+    exercisecardio: ExerciseCardioIcon,
+    exercisecycle_sport: ExerciseCycleSportIcon,
+    exercisemartial_arts: ExerciseMartialArtsIcon,
+    exerciseracket_sport:ExerciseRacketSportsIcon,
+    exercisestrength: ExerciseStrengthIcon,
+    exercisewater_sport: ExerciseWaterSportIcon,
+    exercisewinter_sport: ExerciseWinterSportIcon,
+    exerciseyoga: ExerciseYogaIcon,
+    view: View
+};
+
 const sideComponentWidth = 120
 
 function getKeyByValue(object, value) {
@@ -29,15 +64,17 @@ function getKeyByValue(object, value) {
 const DayComponent = ({ date, state, marking, selectedView, navigation }) => {
 
     let bgColor;
+    let textColor;
+    let iconName = 'view';
 
     if (marking) {
         let viewKey = getKeyByValue(VIEWS, selectedView).toLowerCase()
         let symptomAttribute = marking.symptoms[viewKey]
         
-        
         if (symptomAttribute) {
-            let attribute = symptomAttribute
             
+            let attribute = symptomAttribute
+                        
             switch (viewKey) {
                 case 'sleep':
                     let sleepScore = attribute / 60
@@ -62,24 +99,41 @@ const DayComponent = ({ date, state, marking, selectedView, navigation }) => {
                         attribute = 'LITTLE'
                     }    
 
+                    iconName = viewKey + symptomAttribute.exercise.toLowerCase()
+
                     break;
             }
-            bgColor = FILTER_COLOURS[viewKey.toUpperCase()][attribute]
+            if (viewKey !== 'mood') {
+                bgColor = FILTER_COLOURS[viewKey.toUpperCase()][attribute]
+                textColor = FILTER_TEXT_COLOURS[viewKey.toUpperCase()][attribute]
+            }
+            // Get Icon
+            if (viewKey !== 'sleep' && viewKey !== 'exercise') {
+                iconName = viewKey + symptomAttribute.toLowerCase()
+            }            
+            
+            
         }
     }
 
-
     return(
-        <TouchableOpacity onPress={() => {}}>
-            <View style={styles.dayContainer} backgroundColor={bgColor}>
-                <Text>
-                    {date.day}    
-                </Text>
-                {/* <View style={styles.dayIcon}>
-                    <Text>{icon}</Text>                
-                </View> */}
-            </View>
-        </TouchableOpacity>
+        React.createElement(TouchableOpacity, {
+            // onPress: () => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {
+            //     "date": date
+            // })
+          }, 
+          React.createElement(View, {
+            style: styles.dayContainer,
+            backgroundColor: bgColor
+          }, React.createElement(Text, {
+            style: {
+              color: textColor
+            }
+          }, date.day), 
+          React.createElement(ICON_TYPES[iconName], {
+            style: styles.dayIcon,
+            fill: textColor
+          })))
     )
 }
 
@@ -183,23 +237,22 @@ export default function CalendarScreen ({ navigation }) {
                     '2022':
                     [   
                         [
-                            new Symptoms(FLOW_LEVEL.LIGHT, MOOD_LEVEL.GREAT, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum'),
+                            new Symptoms(FLOW_LEVEL.LIGHT, MOOD_LEVEL.ANGRY, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.BALL_SPORT, 230), 'lorem ipsum'),
                             new Symptoms(FLOW_LEVEL.LIGHT, MOOD_LEVEL.GREAT, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum'),
                             new Symptoms()
                         ],
                         [
-                            new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.GREAT, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.GREAT, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum'),
+                            new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.HAPPY, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.MARTIAL_ARTS, 230), 'lorem ipsum'),
+                            new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.IDK, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.RACKET_SPORT, 230), 'lorem ipsum'),
                         ],
                         [
-                            new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.GREAT, 800, CRAMP_LEVEL.TERRIBLE, new ExerciseActivity(EXERCISE_TYPE.YOGA, 125), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.GREAT, 420, CRAMP_LEVEL.BAD, new ExerciseActivity(EXERCISE_TYPE.YOGA, 95), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.LIGHT, MOOD_LEVEL.GREAT, 300, CRAMP_LEVEL.NEUTRAL, new ExerciseActivity(EXERCISE_TYPE.YOGA, 65), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.SPOTTING, MOOD_LEVEL.GREAT, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.YOGA, 50), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.SPOTTING, MOOD_LEVEL.GREAT, 150, CRAMP_LEVEL.NONE, new ExerciseActivity(EXERCISE_TYPE.YOGA, 0), 'lorem ipsum'),
+                            new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.LOL, 800, CRAMP_LEVEL.TERRIBLE, new ExerciseActivity(EXERCISE_TYPE.CARDIO, 125), 'lorem ipsum'),
+                            new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.LOVED, 420, CRAMP_LEVEL.BAD, new ExerciseActivity(EXERCISE_TYPE.CYCLE_SPORT, 95), 'lorem ipsum'),
+                            new Symptoms(FLOW_LEVEL.LIGHT, MOOD_LEVEL.NEUTRAL, 300, CRAMP_LEVEL.NEUTRAL, new ExerciseActivity(EXERCISE_TYPE.STRENGTH, 65), 'lorem ipsum'),
+                            new Symptoms(FLOW_LEVEL.SPOTTING, MOOD_LEVEL.SAD, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.WATER_SPORT, 50), 'lorem ipsum'),
+                            new Symptoms(FLOW_LEVEL.NONE, MOOD_LEVEL.SICK, 150, CRAMP_LEVEL.NONE, new ExerciseActivity(EXERCISE_TYPE.WINTER_SPORT, 0), 'lorem ipsum'),
                         ],
-                    ]
-                    
+                    ]       
                 }
                 const newYear = {...yearData, ...newData};
                 setYearData(newYear)
@@ -297,10 +350,14 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         paddingTop:3,
         margin: 2,
+        color: '#FFF',
     },
     dayIcon: {
         position: 'relative',
-        fontSize: 100,
-        left: '25%',
+        top: -4,
+        height: 20,
+        left: -2,
+        marginLeft: 'auto',
+        marginRight: 'auto'
     }
 })

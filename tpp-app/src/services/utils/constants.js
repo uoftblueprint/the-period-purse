@@ -18,7 +18,6 @@ export const MOOD_LEVEL = {
   LOVED: "LOVED"
 }
 
-
 export const CRAMP_LEVEL = {
   NEUTRAL: "NEUTRAL",
   BAD: "BAD",
@@ -49,10 +48,11 @@ export const TRACK_SYMPTOMS = {
 
 export const FILTER_COLOURS = {
   FLOW: {
-    HEAVY: '#89191A',
-    MEDIUM: '#B31F20',
+    HEAVY: '#D42629',
+    MEDIUM: '#E44545',
     LIGHT: '#E3797A',
     SPOTTING: '#FFBEBF',
+    NONE: "#FFEBEB",
   },
   CRAMPS: {
     NEUTRAL: "#DFA638",
@@ -72,6 +72,35 @@ export const FILTER_COLOURS = {
     MEDIUM: '#1A50A0',
     LIGHT: '#467CCD',
     LITTLE: '#92B8F0',
+  }
+}
+
+export const FILTER_TEXT_COLOURS = {
+  FLOW: {
+    HEAVY: '#FFF',
+    MEDIUM: '#FFF',
+    LIGHT: '#FFF',
+    SPOTTING: '#000',
+    NONE: '#000',
+  },
+  CRAMPS: {
+    NEUTRAL: "#000",
+    BAD: "#000",
+    TERRIBLE: "#000",
+    GOOD: "#000",
+    NONE: "#000",  
+  },
+  EXERCISE: {
+    HEAVY: '#FFF',
+    MEDIUM: '#FFF',
+    LIGHT: '#FFF',
+    LITTLE: '#000',
+  },
+  SLEEP: {
+    HEAVY: '#FFF',
+    MEDIUM: '#FFF',
+    LIGHT: '#FFF',
+    LITTLE: '#000',
   }
 }
 
