@@ -65,7 +65,7 @@ export default function Confirmation ({ route, navigation }) {
   }
 
   function Length() {
-    if(periodLength > 0) 
+    if(periodLength) 
       return (<Text style={styles.text}>{periodLength} days</Text>);
     else
       return (null);

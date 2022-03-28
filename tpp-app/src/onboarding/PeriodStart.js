@@ -14,6 +14,7 @@ import PeriodStartIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
 import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_calendar.svg";
 
+const MILLISECPERDAY = 24*60*60*1000;
 export default function PeriodStart ({ route, navigation }) {
   const { periodLength } = route.params;
   let newPeriodLength = periodLength; 
@@ -77,20 +78,18 @@ export default function PeriodStart ({ route, navigation }) {
             visible={open}
             onDismiss={onDismiss}
             startDate={range.startDate}
-            endDate={periodLength && periodLength > 0 && range.startDate ? new Date(range.startDate.getTime() + ((periodLength-1)*24*60*60*1000)) : range.endDate}
+            endDate={periodLength && range.startDate ? 
+                    new Date(range.startDate.getTime() + ((periodLength-1)*MILLISECPERDAY)) : range.endDate}
             onConfirm={onConfirm}
             onChange={onChange} 
-            validRange={{
-              // startDate: new Date(2021, 1, 2),  // optional
-              endDate: periodLength ? new Date(new Date().getTime() - ((periodLength-1)*24*60*60*1000)) : new Date() // optional
-              // disabledDates: [new Date()] // optional
+            validRange={{ 
+              endDate: periodLength ? new Date(new Date().getTime() - ((periodLength-1)*MILLISECPERDAY)) : new Date() 
             }}
-            saveLabel="Done" // optional
-            uppercase={false} // optional, default is true
-            label="Select Start Date" // optional
-            startLabel="From" // optional
-            endLabel="To" // optional
-            animationType="slide" // optional, default is slide on ios/android and none on web
+            saveLabel="Done" 
+            uppercase={false}
+            label="Select Start Date"
+            startLabel="From"
+            endLabel="To"
           />
         </SafeAreaView>
  
@@ -102,8 +101,8 @@ export default function PeriodStart ({ route, navigation }) {
           })}/>
           <NextButton title="Next" onPress={() => 
             {
-              if(periodLength == 0) {
-                newPeriodLength = Math.round((range.endDate.getTime() - range.startDate.getTime()) / (1000*60*60*24));
+              if(periodLength == null) {
+                newPeriodLength = Math.round((range.endDate.getTime() - range.startDate.getTime()) / MILLISECPERDAY);
                 PostInitialPeriodLength(newPeriodLength);
               }
               PostInitialPeriodStart(range.startDate);
@@ -113,14 +112,13 @@ export default function PeriodStart ({ route, navigation }) {
                 periodEnd: range.endDate
               });
             }}
-            disabled={range.endDate ? false : true}/>
+            disabled={range.endDate && range.startDate ? false : true}/>
         </TwoButtonContainer>
       </ImageBackground>
     </PaperProvider>
   );
 }
 
-// https://callstack.github.io/react-native-paper/theming.html
 const theme = {
   ...DefaultTheme,
   fonts: configureFonts(fontConfig),
@@ -132,22 +130,22 @@ const theme = {
 
 const fontConfig = {
   default: {
-      regular: {
-          fontFamily: 'Avenir',
-          fontWeight: 'normal',
-      },
-      medium: {
-          fontFamily: 'Avenir',
-          fontWeight: 'normal',
-      },
-      light: {
-          fontFamily: 'Avenir',
-          fontWeight: 'normal',
-      },
-      thin: {
-          fontFamily: 'Avenir',
-          fontWeight: 'normal',
-      },
+    regular: {
+      fontFamily: 'Avenir',
+      fontWeight: 'normal',
+    },
+    medium: {
+      fontFamily: 'Avenir',
+      fontWeight: 'normal',
+    },
+    light: {
+      fontFamily: 'Avenir',
+      fontWeight: 'normal',
+    },
+    thin: {
+      fontFamily: 'Avenir',
+      fontWeight: 'normal',
+    },
   },
 };
 

@@ -11,7 +11,7 @@ export default function Registration ({ navigation }) {
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS.BACKUP)}}/>
+        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS.GET_STARTED)}}/>
         <PageTitleContainer>
           <PageTitle>Registration</PageTitle>
         </PageTitleContainer>

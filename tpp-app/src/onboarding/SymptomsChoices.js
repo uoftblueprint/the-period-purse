@@ -44,7 +44,9 @@ export default function SymptomsChoices ({ route, navigation }) {
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.PERIOD_START)}}/>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.PERIOD_START, {
+            periodLength: periodLength
+        })}}/>
       </BackButtonContainer>
       
       <SafeAreaView pointerEvents="none" style={{  alignItems: 'center', justifyContent: 'center', flex: 4 }}>
@@ -95,14 +97,15 @@ export default function SymptomsChoices ({ route, navigation }) {
           })}/>
           <NextButton title="Next" onPress={() => 
             {
-              PostSymptomsToTrack(flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
-                                  cramp == '#73C7B7', exercise == '#73C7B7');
+              trackingPreferences = [flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
+                                     cramp == '#73C7B7', exercise == '#73C7B7'];
+              PostSymptomsToTrack(trackingPreferences[0], trackingPreferences[1], trackingPreferences[2],
+                                  trackingPreferences[3], trackingPreferences[4]);
               navigation.navigate(STACK_SCREENS.BACKUP, {
                 periodLength: periodLength,
                 periodStart: periodStart,
                 periodEnd: periodEnd,
-                trackingPreferences: [flow == '#73C7B7', mood == '#73C7B7', sleep == '#73C7B7', 
-                                      cramp == '#73C7B7', exercise == '#73C7B7']
+                trackingPreferences: trackingPreferences
               });
             }}
             disabled={[flow, mood, sleep, cramp, exercise].some((element) => element === '#73C7B7') ? false : true}/>

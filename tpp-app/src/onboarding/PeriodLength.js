@@ -52,11 +52,11 @@ export default function PeriodLength ({ navigation }) {
       </SafeAreaView>
 
       <TwoButtonContainer>
-        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_START, {periodLength: 0})}/>
+        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: null })}/>
         <NextButton title="Next" onPress={() => 
           {
             PostInitialPeriodLength(parseInt(periodLength));
-            navigation.navigate(STACK_SCREENS.PERIOD_START, {periodLength: periodLength});
+            navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: periodLength });
           }}
           disabled={periodLength && periodLength > 0? false : true}/>
       </TwoButtonContainer>

@@ -15,7 +15,11 @@ export default function Backup ({ route, navigation }) {
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES)}}/>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
+            periodLength: periodLength,
+            periodStart: periodStart,
+            periodEnd: periodEnd
+        })}}/>
       </BackButtonContainer>
 
       <SafeAreaView pointerEvents="box-none" style={{ alignItems: 'center' }}>
