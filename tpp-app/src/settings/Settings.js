@@ -3,37 +3,17 @@ import {View, Switch, Text, StyleSheet, Image, TouchableOpacity} from 'react-nat
 import {Card} from 'react-native-elements';
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
-import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
+import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/flow.png';
 import MoodIcon from '../../ios/tppapp/Images.xcassets/icons/mood.png';
 import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const Notifications = (props) => {
-
-    return (
-        <View>
-            <Text style={styles.heading}>Notifications</Text>
-            <Card wrapperStyle={styles.rowContainer} containerStyle={[styles.dropShadow, styles.card]}>
-                    <Text>Remind me to log period</Text>
-                    <Switch
-                        onValueChange={props.togglePeriodSwitch}
-                        value={props.remindPeriodEnabled}
-                    />
-            </Card>
-            <Card containerStyle={[styles.dropShadow, styles.card]}>
-                <View style={styles.rowContainer}>
-                    <Text>Remind me to log symptoms</Text>
-                    <Switch
-                        onValueChange={props.toggleSymptomsSwitch}
-                        value={props.remindSymptomsEnabled}
-                    />
-                </View>
-                <View style={styles.rowContainer}>
-                    <Text style={styles.subheading}>Every day at 9:00 am</Text>
-                </View>
-            </Card>
-        </View>
-    )
+const AccountSettings = (props) => {
+    <View>
+        <Text style={styles.heading}>AccountSettings</Text>
+    </View>
 }
 
 const PreferenceButton = (props) => {
@@ -68,9 +48,45 @@ const Preferences = (props) => {
 
 }
 
-export default function Settings () {
-    const [cycleLength, setCycleLength] = useState(35);
-    const [periodLength, setPeriodLength] = useState(5);
+const SettingsStackButton = (props) => {
+    return (
+    <TouchableOpacity onPress={() => props.navigation.navigate(props.name)}>
+        <SafeAreaView style={styles.optionView} >
+
+        <Text style={styles.optionText}>{props.name}</Text>
+        <View>   
+            <Icon
+                    name="arrow-back-ios"
+                    size={24}
+                    color="#5A9F93"
+                    style={{transform: [{rotateY: '180deg'}],}}
+                    /></View>
+     
+       
+
+        </SafeAreaView>
+        <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
+    </TouchableOpacity>
+    );
+}
+
+
+const SettingOptions = ({navigation}) => {
+    return (
+        <View>
+        <SettingsStackButton name={"Profile Information"}  navigation={navigation} />
+        <SettingsStackButton name={"Notifications"} navigation={navigation} />
+        <SettingsStackButton name={"Privacy Policy"}  navigation={navigation}/>
+        <SettingsStackButton name={"Log Out"} navigation={navigation}/>
+        <SettingsStackButton name={"Delete Account"} navigation={navigation} />
+        </View>
+    )
+}
+export default function Settings ({ navigation }) {
     const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(true);
     const [remindSymptomsEnabled, setRemindSymptomsEnabled] = useState(false);
 
@@ -110,29 +126,21 @@ export default function Settings () {
     return (
         <View style={styles.container}>
             <Preferences/>
-            <Notifications
-                remindPeriodEnabled={remindPeriodEnabled}
-                remindSymptomsEnabled={remindSymptomsEnabled}
-                togglePeriodSwitch={togglePeriodSwitch}
-                toggleSymptomsSwitch={toggleSymptomsSwitch}
-            />
+            <SettingOptions navigation={navigation}/>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    rowContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
     preferences: {
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        alignItems: 'center',
+        padding: 10,
+        left: -20
     },
     preferenceButton: {
-        width: 75,
-        height: 75,
+        width: 50,
+        height: 50,
         backgroundColor: '#73C7B7',
         borderRadius: 16,
         alignItems: 'center',
@@ -147,15 +155,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         marginLeft: 24,
         marginRight: 38,
-        marginTop: 85,
+        marginTop: -20,
         marginBottom: 75
-    },
-  
-    dropShadow: {
-        shadowOffset: {width:0, height:1},
-        shadowRadius: 10,
-        shadowOpacity: 0.25,
-        shadowColor: "black"
     },
     card: {
         borderRadius: 12,
@@ -164,13 +165,14 @@ const styles = StyleSheet.create({
     heading: {
         fontFamily: "Avenir",
         fontWeight: "800",
-        fontSize: 15,
+        color: "#6D6E71",
+        fontSize: 16,
         letterSpacing: -0.3,
         marginBottom: 9,
         marginTop: 32,
-        lineHeight: 20
+        lineHeight: 20,
+        left: 0
     },
-
     subheading: {
         fontSize: 12,
         color: 'gray',
@@ -181,6 +183,19 @@ const styles = StyleSheet.create({
         fontWeight:"600",
         fontSize: 14,
         lineHeight: 22
-    }
+    },
+    optionText : {
+        fontSize: 16,
+        fontFamily: 'Avenir',
+        fontWeight: "800",
+        lineHeight: 34,
+        textAlign: 'left'
+    },
+    optionView:{
+        paddingTop: -20,
+        paddingBottom: -20,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
 
 });
