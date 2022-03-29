@@ -165,7 +165,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
         navigation.goBack();
       })
       .catch((e) => {
-        let errorInfo = submitError(JSON.stringify(e));
+        let errorInfo = submitError(typeof e === 'string' ? e : JSON.stringify(e));
         alertPopup(errorInfo)
           .then(() => { // YES close screen
             navigation.goBack();
