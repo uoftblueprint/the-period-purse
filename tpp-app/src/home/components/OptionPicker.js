@@ -8,6 +8,7 @@ export default class OptionPicker extends Component{
         super(props);
     }
 
+    // Child component representing each option
     Option = (value, icon, key) => {
         return (
             <View style={styles.option} key={key}>

@@ -34,7 +34,7 @@ export default class TimeInput extends Component{
             {/* HOUR INPUT */}
             <Picker
               selectedValue={hoursStr}
-              onValueChange={(value) => this.updateMins(parseInt(value), true)}
+              onValueChange={(value) => this.updateMins(parseInt(value), true)} // NOTE: Picker only stores string values
               style={styles.picker}
             >
               {

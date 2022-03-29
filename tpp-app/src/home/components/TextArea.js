@@ -8,10 +8,11 @@ export default class TextArea extends Component{
         super(props);
         this.state = {
           isFocused: false,
-          height: 124
+          height: 124 // initial height of box
         }
     }
 
+    // Update the textbox size as more text is written up to max of 368 units
     updateSize = (newVal) => {
       if (newVal <= 368) this.setState({ height: newVal });
     }

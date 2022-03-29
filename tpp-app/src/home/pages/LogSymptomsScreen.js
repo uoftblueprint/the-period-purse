@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, StatusBar, Alert } from "react-native";
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
-import { getDateString } from "../../services/utils/helpers";
 import Accordion from "../components/Accordion";
+import { getDateString } from "../../services/utils/helpers";
 import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils/helpers";
 import { ExerciseActivity, Symptoms } from "../../services/utils/models";
-import { CRAMP_LEVEL, EXERCISE_TYPE, FLOW_LEVEL, MOOD_LEVEL } from "../../services/utils/constants";
 import { GETAllTrackingPreferences } from "../../services/SettingsService";
 import { POSTsymptomsForDate } from "../../services/LogSymptomsService";
 
+
+// Alert popup constants
 const unsavedChanges = {
   title: "Unsaved changes",
   message: "Your changes have not been saved. Do you want to discard the changes and continue?",
@@ -26,7 +27,7 @@ const submitError = (error) => {
   }
 }
 
-
+// Arrow component to switch dates
 const DateArrow = ({ onPress, isRight }) => {
     const transform = { transform: [{ rotate: "180deg" }] };
     return (
@@ -38,30 +39,27 @@ const DateArrow = ({ onPress, isRight }) => {
 
 const symptoms = ['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes'];
 
+
 export default function LogSymptomsScreen({ navigation, route }) {
-  const navYear = route.params.date.year;
-  const navMonth = route.params.date.month;
-  const navDay = route.params.date.day;
-
-  const [selectedDate, changeDate] = useState(new Date(navYear, navMonth - 1, navDay));
-
-  // const trackingPrefs = [true, true, true, true, true, true]; TODO: remove
+  // const trackingPrefs = [true, true, true, true, true, true]; // TODO: remove
   const trackingPrefs = GETAllTrackingPreferences();
 
+  // function to get symptoms from async storage
   const getStoredSymps = async (day, month, year) => {
     const cal = await getCalendarByYear(year);
     let symps = await getSymptomsFromCalendar(cal, day, month, year);
     return symps
   }
 
-  const [stored, setStoredSymps] = useState(new Symptoms());
+  const [selectedDate, changeDate] = useState(new Date(route.params.date.year, route.params.date.month - 1, route.params.date.day));
+  const [stored, setStoredSymps] = useState(new Symptoms()); // original stored symptoms
 
   // SYMPTOM STATES
   const [flowStr, setFlow] = useState(null);
   const [moodStr, setMood] = useState(null);
   const [sleepMins, setSleep] = useState(null);
   const [crampsStr, setCramps] = useState(null);
-  const [exerciseObj, setExercise] = useState(null); // ExerciseActivity object
+  const [exerciseObj, setExercise] = useState(null);
   const [notesStr, setNotes] = useState(null);
 
   const [submitting, setSubmitting] = useState(false);
@@ -153,7 +151,6 @@ export default function LogSymptomsScreen({ navigation, route }) {
     }
   }, [flowStr, moodStr, sleepMins, crampsStr, exerciseObj, notesStr]);
 
-
   // POST symptoms and close screen when submitting is true
   useEffect(() => {
     if (!submitting) return
@@ -178,6 +175,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
       })
   }, [submitting])
 
+  // Returns an alert pop up in the form of a promise for user to resolve/reject
   const alertPopup = (info) => new Promise((resolve, reject) => {
     Alert.alert(
       info.title,
@@ -193,13 +191,15 @@ export default function LogSymptomsScreen({ navigation, route }) {
     );
   })
 
+  // Helper function to set form state back to default
   const resetForm = async (newDate) => {
     changeDate(newDate);
-    setFetching(true);
+    setFetching(true); // triggers useEffect to fetch symptoms of newDate
     setDirty(false);
     setSubmitting(false);
   }
 
+  // Change the selected date to log symptoms for
   const switchDate = async (goFwd) => {
     let newDate = selectedDate;
     newDate.setDate(goFwd ? newDate.getDate() + 1 : newDate.getDate() - 1);
@@ -265,8 +265,8 @@ export default function LogSymptomsScreen({ navigation, route }) {
                 key={i}
                 type={symptom}
                 isLastChild={ (i === symptoms.length - 1) ? true : false }
-                value={form[symptom].state}
-                setState={form[symptom].setState.bind(form)}
+                value={form[symptom].state} // pass in parent state
+                setState={form[symptom].setState.bind(form)} // pass in parent setState function
             />
         )}
       })}
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     screen: {
         backgroundColor: '#ffffff',
         flex: 1,
-        paddingTop: StatusBar.currentHeight,
+        paddingTop: StatusBar.currentHeight
     },
     navbarContainer: {
         paddingTop: 98,
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         fontSize: 20,
         paddingLeft: 30,
-        paddingRight: 30,
+        paddingRight: 30
     },
     close: {
       height: 30,
