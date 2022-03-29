@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Symptoms} from '../utils/models';
-import {FLOW_LEVEL} from './constants';
+import {FLOW_LEVEL} from '../utils/constants';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
 // Backend helper functions used across app
@@ -130,29 +130,31 @@ export const getDaysDiffInclusive = (earlierDate, laterDate) => {
  * @return {Array} List of period Dates in this year, in chronological order
  */
 export const getPeriodsInYear = async (year, calendar=null) => {
-  let startOfYear = new Date(year, 0, 1);
+  let startOfYear = new Date(year, 0,1);
   let periods = []
 
 
-  if (!calendar) {
+
+  if(!calendar){
     calendar = await getCalendarByYear(year);
   }
 
   let current = startOfYear;
 
-  try {
-    while (current.getFullYear() === year) {
+  try{
+    while(current.getFullYear() === year){
       let currentSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
-      if (currentSymptoms.flow !== null && currentSymptoms.flow !== FLOW_LEVEL.NONE) {
+      if (currentSymptoms.flow !== null && currentSymptoms.flow !== FLOW_LEVEL.NONE){
         periods.push(current);
       }
-      current = addDays(current, 1);
+      current = addDays(current,1);
     }
     return periods;
 
-  } catch (e) {
+  } catch(e) {
     console.log(e);
     return periods;
 
   }
+
 }
