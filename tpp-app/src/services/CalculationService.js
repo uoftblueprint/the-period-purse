@@ -16,7 +16,8 @@ const GETLastThreeDaysSymptoms = async () => {
     const yesterday = subDays(today, 1);
     const twoDaysEarlier = subDays(today, 2);
 
-    var calendar = await getCalendarByYear(today.getFullYear());
+    const calendar = await getCalendarByYear(today.getFullYear());
+
     const todaySymptoms = await getSymptomsFromCalendar(
         calendar,
         today.getDay(),
@@ -24,9 +25,6 @@ const GETLastThreeDaysSymptoms = async () => {
         today.getFullYear()
     );
 
-    if (today.getFullYear() !== yesterday.getFullYear()) {
-        calendar = await getCalendarByYear(yesterday.getFullYear());
-    }
     const yesterdaySymptoms = await getSymptomsFromCalendar(
         calendar,
         yesterday.getDay(),
@@ -34,9 +32,6 @@ const GETLastThreeDaysSymptoms = async () => {
         yesterday.getFullYear()
     );
 
-    if (yesterday.getFullYear() !== twoDaysEarlier.getFullYear()) {
-        calendar = await getCalendarByYear(twoDaysEarlier.getFullYear());
-    }
     const twoDaysEarlierSymptoms = await getSymptomsFromCalendar(
         calendar,
         twoDaysEarlier.getDay(),
@@ -57,8 +52,8 @@ export const isPeriodOver = async () => {
     const yesterdaySymptoms = lastThreeDaysSymptoms[1];
     const todaySymptoms = lastThreeDaysSymptoms[2];
 
-    const todayPeriod = (todaySymptoms.flow == null && todaySymptoms.flow === FLOW_LEVEL.NONE);
-    const yesterdayNoPeriod = (yesterdaySymptoms.flow == null && yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
+    const todayPeriod = (todaySymptoms.flow == null || todaySymptoms.flow === FLOW_LEVEL.NONE);
+    const yesterdayNoPeriod = (yesterdaySymptoms.flow == null || yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
     const twoDaysEarlierNoPeriod = (twoDaysEarlierSymptoms.flow != null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE);
     return todayPeriod && yesterdayNoPeriod && twoDaysEarlierNoPeriod;
 };
@@ -74,8 +69,8 @@ export const isPeriodStarting = async () => {
     const todaySymptoms = lastThreeDaysSymptoms[2];
 
     const todayPeriod = (todaySymptoms.flow != null && todaySymptoms.flow !== FLOW_LEVEL.NONE);
-    const yesterdayNoPeriod = (yesterdaySymptoms.flow == null && yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
-    const twoDaysEarlierNoPeriod = (twoDaysEarlierSymptoms.flow == null && twoDaysEarlierSymptoms.flow === FLOW_LEVEL.NONE);
+    const yesterdayNoPeriod = (yesterdaySymptoms.flow == null || yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
+    const twoDaysEarlierNoPeriod = (twoDaysEarlierSymptoms.flow == null || twoDaysEarlierSymptoms.flow === FLOW_LEVEL.NONE);
     return todayPeriod && yesterdayNoPeriod && twoDaysEarlierNoPeriod;
 }
 
@@ -92,7 +87,7 @@ export const calculateAveragePeriodLength = async () => new Promise( async (reso
         GETStoredYears()
             .then((years) => {
                 years.forEach(async (year) => {
-                    completeHistory.push.apply(await CycleService.GETCycleHistoryByYear(year));
+                    completeHistory.push.apply(completeHistory, await CycleService.GETCycleHistoryByYear(year));
                 });
             })
             .catch((e) => {
@@ -131,7 +126,7 @@ export const calculateAverageCycleLength = async () => new Promise( async (resol
         GETStoredYears()
             .then((years) => {
                 years.forEach(async (year) => {
-                    completeHistory.push.apply(await CycleService.GETCycleHistoryByYear(year));
+                    completeHistory.push.apply(completeHistory, await CycleService.GETCycleHistoryByYear(year));
                 });
             })
             .catch((e) => {
