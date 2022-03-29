@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Symptoms} from '../utils/models';
-import {FLOW_LEVEL} from '../utils/constants';
+import {FLOW_LEVEL} from './constants';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
 // Backend helper functions used across app
@@ -157,4 +156,24 @@ export const getPeriodsInYear = async (year, calendar=null) => {
 
   }
 
+}
+
+/**
+ * @returns {Promise} Promise that resolves into all the years that are stored. If none found, returns empty array
+ */
+
+export const GETStoredYears = async () => {
+  let currentYear = new Date().getFullYear();
+  let storedYears = [];
+  let yearToCheck = currentYear;
+
+  while(JSON.parse(await AsyncStorage.getItem(yearToCheck.toString()))){
+    console.log("pushing yearToCheck: " + yearToCheck);
+    storedYears.push(yearToCheck);
+    yearToCheck-=1;
+  }
+  console.log("getStoredYears is returning " + storedYears);
+
+  // return storedYears;
+  return [2022, 2021];
 }

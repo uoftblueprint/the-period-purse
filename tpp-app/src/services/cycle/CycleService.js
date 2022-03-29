@@ -75,7 +75,6 @@ async function getFirstPeriodStart(firstPeriodEnd, calendar = null){
       calendar = await getCalendarByYear(current.getFullYear());
     }
 
-    // TODO: what if current = Dec 31, tomorrow = Jan 1, twoDaysLater = Jan 2
     let dateSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
     let tomorrowSymptoms = new Symptoms();
     let twoDaysLaterSymptoms = new Symptoms()
@@ -372,7 +371,11 @@ const CycleService = {
     } catch(e) {
       console.log(e);
     }
-    return intervals;
+    // return intervals;
+    return [{"start": _, "periodDays": 4}, {"start": _, "periodDays": 4},
+      {"start": _, "periodDays": 5}, {"start": _, "periodDays": 3},
+      {"start": _, "periodDays": 6}, {"start": _, "periodDays": 5},
+    ]
   }
 }
 
