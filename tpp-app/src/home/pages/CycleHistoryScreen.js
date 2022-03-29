@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ImageBackground} from 'react-native';
-import {STACK_SCREENS} from '../CalendarNavigator'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png';
 import {ExpandedHistoryCard} from '../components/CycleHistory';
@@ -11,7 +10,7 @@ function Header({navigation}){
     return(
     <View style={ styles.headerContainer}>
         <TouchableOpacity 
-            onPress={() =>navigation.navigate(STACK_SCREENS.CYCLE_CALENDAR_TABS, {screen: STACK_SCREENS.CYCLE_CALENDAR_TABS})}
+            onPress={() =>navigation.goBack()}
             style={styles.headerComponent}
         >
             <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
@@ -34,6 +33,7 @@ function YearButton({year, selectedYear, setSelectedYear}){
         </TouchableOpacity>
     )
 }
+
 export default function CycleHistoryScreen({navigation}){
     let [currentIntervals, setCurrentIntervals] = useState([]);
     let [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -47,7 +47,7 @@ export default function CycleHistoryScreen({navigation}){
         )
     }, []);
 
-    //update the cycles being rendered to reflect selected year
+    //update the cycles being rendered to reflect newly selected year.
     useEffect(() => {
         CycleService.GETCycleHistoryByYear(selectedYear).then(
             intervals => {

@@ -2,7 +2,8 @@ import AnimatedProgressWheel from 'react-native-progress-wheel';
 import React, { useState, useEffect } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
- function onPeriodText(periodDays){
+
+ function OnPeriodText({periodDays}){
    return (
      <View style={styles.periodTextContainer}>
        <Text style={styles.cycleText}>Period Day </Text>
@@ -11,7 +12,7 @@ import {View, Text, StyleSheet} from 'react-native';
    )
  }
 
- function offPeriodText(daysSinceLastPeriod){
+ function OffPeriodText({daysSinceLastPeriod}){
    return (
      <View style={styles.periodTextContainer}>
        <Text style={styles.cycleNumber}> {daysSinceLastPeriod} </Text>
@@ -25,6 +26,7 @@ import {View, Text, StyleSheet} from 'react-native';
  function Cycle({periodDays, daysSinceLastPeriod, cycleDonutPercent}){
   return (
   
+      // Cycle Centering code
       <View>
             <View style={styles.centeredColumn}>
                 <View style={styles.centeredRow}>
@@ -40,9 +42,9 @@ import {View, Text, StyleSheet} from 'react-native';
                 </View>
             </View>
 
-
+          {/* centering the text within the cycle */}
           <View style={styles.absoluteCentered}>
-              {periodDays > 0 ? onPeriodText(periodDays) : offPeriodText(daysSinceLastPeriod)}
+              {periodDays > 0 ? <OnPeriodText periodDays={periodDays}/> : <OffPeriodText daysSinceLastPeriod={daysSinceLastPeriod}/>}
           </View>
       </View>
  )

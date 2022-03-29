@@ -115,10 +115,15 @@ export default function CycleScreen ({navigation}){
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={background} style={styles.container}>    
+        {/* View that contains all the relevant cards */}
         <SafeAreaView style={cardContainerStyle}>
-          {showTip && (<PeriodNotification daysTillPeriod={daysTillPeriod}>
+          {/* Period Notification (Period in X days) */}
+          {showTip && (
+          <PeriodNotification daysTillPeriod={daysTillPeriod}>
             <Paddy style={styles.paddyIcon}/>
-          </PeriodNotification>)}
+          </PeriodNotification>
+          )}
+
           <CycleCard periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
             <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer]}>
               <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">

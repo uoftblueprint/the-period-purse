@@ -19,6 +19,10 @@ const ShowMore = ({navigation}) => {
 
 }
 
+/**
+ * 
+ * @returns Component that renders 1 continuous period, and lists the start and end
+ */
 function Interval({interval, isMostRecent}){
     let startDate = interval.start;
     const formattedStart = startDate.toLocaleString('default', { month: 'short', day: 'numeric' });
@@ -44,6 +48,10 @@ function Interval({interval, isMostRecent}){
         </View >
     )
 }
+/**
+ * 
+ * @returns Component that only renders the 3 most recent periods & their dates in the current year
+ */
 function MinimizedHistoryCard({navigation, intervals}){
     return (
         <View style={styles.card}>            
@@ -63,6 +71,10 @@ function MinimizedHistoryCard({navigation, intervals}){
     );
 }
 
+/**
+ * 
+ * @returns Component that renders all the periods and their dates for the renderedYear
+ */
 function ExpandedHistoryCard({intervals, renderedYear}){
     let currentYear = new Date().getFullYear();
     return(
