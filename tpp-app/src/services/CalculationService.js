@@ -52,10 +52,10 @@ export const isPeriodOver = async () => {
     const yesterdaySymptoms = lastThreeDaysSymptoms[1];
     const todaySymptoms = lastThreeDaysSymptoms[2];
 
-    const todayPeriod = (todaySymptoms.flow == null || todaySymptoms.flow === FLOW_LEVEL.NONE);
+    const todayNoPeriod = (todaySymptoms.flow == null || todaySymptoms.flow === FLOW_LEVEL.NONE);
     const yesterdayNoPeriod = (yesterdaySymptoms.flow == null || yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
-    const twoDaysEarlierNoPeriod = (twoDaysEarlierSymptoms.flow != null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE);
-    return todayPeriod && yesterdayNoPeriod && twoDaysEarlierNoPeriod;
+    const twoDaysEarlierPeriod = (twoDaysEarlierSymptoms.flow != null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE);
+    return todayNoPeriod && yesterdayNoPeriod && twoDaysEarlierPeriod;
 };
 
 /**
