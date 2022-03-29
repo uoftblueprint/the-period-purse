@@ -45,6 +45,14 @@ export default function PeriodStart ({ route, navigation }) {
       return (<CalendarIcon style={styles.icon}/>);
   }
 
+  function getEndDate() {
+    let endDate = new Date(range.startDate.getTime() + ((periodLength-1)*MILLISECPERDAY))
+    if(endDate > new Date())  // the calculated endDate goes beyond the current date 
+      return new Date()
+    else
+      return endDate
+  }
+
   return (
     <PaperProvider theme={theme}>
       <ImageBackground source={OnboardingBackground} style={styles.container}>
@@ -79,14 +87,10 @@ export default function PeriodStart ({ route, navigation }) {
             onDismiss={onDismiss}
             startDate={range.startDate}
             // calculates endDate if user entered periodLength; asks user to pick endDate manually otherwise
-            endDate={periodLength && range.startDate ? 
-                    new Date(range.startDate.getTime() + ((periodLength-1)*MILLISECPERDAY)) : range.endDate}
+            endDate={periodLength && range.startDate ? getEndDate() : range.endDate}
             onConfirm={onConfirm}
-            onChange={onChange} 
-            validRange={{ 
-              // computes the latest possible endDate based on the value of periodLength
-              endDate: periodLength ? new Date(new Date().getTime() - ((periodLength-1)*MILLISECPERDAY)) : new Date() 
-            }}
+            onChange={onChange}
+            validRange={{ endDate: new Date() }}
             saveLabel="Done" 
             uppercase={false}
             label="Select Start Date"
@@ -108,7 +112,7 @@ export default function PeriodStart ({ route, navigation }) {
                 newPeriodLength = Math.round((range.endDate.getTime() - range.startDate.getTime()) / MILLISECPERDAY);
                 PostInitialPeriodLength(newPeriodLength);
               }
-              PostInitialPeriodStart(range.startDate);
+              PostInitialPeriodStart(range.startDate, range.endDate);
               navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
                 periodLength: newPeriodLength,
                 // pass down the string version of the dates in the format "YYYY-MM-DD"

@@ -28,23 +28,24 @@ export const PostInitialPeriodLength = async (periodLength) => new Promise( asyn
 
 /**
  * Initializes entries for the user's last period.  
- * This only happens when the user has given inputs for both their 
- * initial period length and the start date of their last period. 
+ * This only happens when the user has given inputs 
+ * for both the start and end date of their last period. 
  * @param periodStart date representing the start date of their last period 
+ * @param periodEnd date representing the end date of their last period
  * @returns a promise resolving when the multiset operation is complete 
  */
-export const PostInitialPeriodStart = async (periodStart) => new Promise ( async (resolve, reject) => {
+export const PostInitialPeriodStart = async (periodStart, periodEnd) => new Promise ( async (resolve, reject) => {
     try {
-        const periodLength = await AsyncStorage.getItem(KEYS.INITIAL_PERIOD_LENGTH);
-        if(periodLength && periodStart) {
+        if(periodStart && periodEnd) {
             const periodStartTime = periodStart.getTime();
+            const periodEndTime = periodEnd.getTime()
             let yearsSet = new Set(); 
             let dates = [];
 
             // Use timestamps to populate the list of dates to avoid 
             // messing up when dealing with last day of a month and/or year
-            for(let i = 0; i < periodLength; i++) {
-                const currentDate = new Date(periodStartTime + (1000 * 60 * 60 * 24 * i));
+            for(let i = periodStartTime; i <= periodEndTime; i = i + (1000 * 60 * 60 * 24)) {
+                const currentDate = new Date(i);
                 yearsSet.add(currentDate.getFullYear());
                 dates.push(currentDate);
             }
