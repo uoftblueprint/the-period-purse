@@ -8,6 +8,23 @@ import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils
 import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { CRAMP_LEVEL, EXERCISE_TYPE, FLOW_LEVEL, MOOD_LEVEL } from "../../services/utils/constants";
 import { GETAllTrackingPreferences } from "../../services/SettingsService";
+import { POSTsymptomsForDate } from "../../services/LogSymptomsService";
+
+const unsavedChanges = {
+  title: "Unsaved changes",
+  message: "Your changes have not been saved. Do you want to discard the changes and continue?",
+  cancelTitle: "Cancel",
+  acceptTitle: "Yes"
+}
+
+const submitError = (error) => {
+  return {
+    title: "Whoops",
+    message: error,
+    cancelTitle: "Cancel",
+    acceptTitle: "OK"
+  }
+}
 
 
 const DateArrow = ({ onPress, isRight }) => {
@@ -28,30 +45,28 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
   const [selectedDate, changeDate] = useState(new Date(navYear, navMonth - 1, navDay));
 
-  const trackingPrefs = [true, true, true, true, true, true]; // TODO: remove
-  // const trackingPrefs = GETAllTrackingPreferences();
+  // const trackingPrefs = [true, true, true, true, true, true]; TODO: remove
+  const trackingPrefs = GETAllTrackingPreferences();
 
-  const getStoredSymps = (day, month, year) => {
-    const cal = getCalendarByYear(year);
-    let symps = getSymptomsFromCalendar(cal, day, month, year);
-    // TODO: remove
-    const example = new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.GREAT, 150, CRAMP_LEVEL.GOOD,
-    new ExerciseActivity(EXERCISE_TYPE.YOGA, 230), 'lorem ipsum');
+  const getStoredSymps = async (day, month, year) => {
+    const cal = await getCalendarByYear(year);
+    let symps = await getSymptomsFromCalendar(cal, day, month, year);
     return symps
   }
 
-  const [stored, setStoredSymps] = useState(getStoredSymps(navDay, navMonth, navYear));
+  const [stored, setStoredSymps] = useState(new Symptoms());
 
   // SYMPTOM STATES
-  const [flowStr, setFlow] = useState(stored['flow']);
-  const [moodStr, setMood] = useState(stored['mood']);
-  const [sleepMins, setSleep] = useState(stored['sleep']);
-  const [crampsStr, setCramps] = useState(stored['cramps']);
-  const [exerciseObj, setExercise] = useState(stored['exercise']); // ExerciseActivity object
-  const [notesStr, setNotes] = useState(stored['notes']);
+  const [flowStr, setFlow] = useState(null);
+  const [moodStr, setMood] = useState(null);
+  const [sleepMins, setSleep] = useState(null);
+  const [crampsStr, setCramps] = useState(null);
+  const [exerciseObj, setExercise] = useState(null); // ExerciseActivity object
+  const [notesStr, setNotes] = useState(null);
 
   const [submitting, setSubmitting] = useState(false);
   const [isDirty, setDirty] = useState(false); // if there are changes to submit
+  const [fetchingSymps, setFetching] = useState(true); // if need to fetch symptoms from storage
 
   // literally to quick access symptom states in a dynamic way
   const form = {
@@ -81,14 +96,39 @@ export default function LogSymptomsScreen({ navigation, route }) {
     },
   }
 
-  // update isDirty every time a form state changes
+  // Fetch symptom data from async storage.
+  // Activated when component first mounts or fetchingSymps = true when switching dates.
   useEffect(() => {
+    if (fetchingSymps) {
+      async function fetchData() {
+        let initSymps = await getStoredSymps(selectedDate.getDate(), selectedDate.getMonth() + 1, selectedDate.getFullYear());
+        setStoredSymps(initSymps);
+
+        // set symptom states
+        setFlow(initSymps.flow);
+        setMood(initSymps.mood);
+        setSleep(initSymps.sleep);
+        setCramps(initSymps.cramps);
+        setExercise(initSymps.exercise);
+        setNotes(initSymps.notes);
+
+        setFetching(false);
+      }
+      fetchData()
+    }
+  }, [fetchingSymps])
+
+  // Activated when a symptom state changes
+  useEffect(() => {
+    // Stop changes if currently submitting
+    if (submitting) return;
+
+    // update isDirty every time a form state changes
     const newDirty = symptoms.some((symptom) => {
         let newSymp = form[symptom].state;
         if (newSymp && newSymp.constructor.name === 'ExerciseActivity') {
           let original = stored[symptom] ?? new ExerciseActivity();
-          return (original.exercise !== newSymp.exercise ||
-            original.exercise_minutes !== newSymp.exercise_minutes)
+          return (original.exercise !== newSymp.exercise || original.exercise_minutes !== newSymp.exercise_minutes)
         } else if (typeof newSymp === 'string') {
           let original = stored[symptom] ?? '';
           return original.trim() !== newSymp.trim();
@@ -97,72 +137,81 @@ export default function LogSymptomsScreen({ navigation, route }) {
         }
     })
     setDirty(newDirty);
-  }, [flowStr, moodStr, sleepMins, crampsStr, exerciseObj, notesStr])
 
-  // POST symptoms when errors are gone and submitting is true
-  useEffect(() => {
-
-    if (!submitting) {
-      return;
+    // For sleep, exercise, and notes: convert 0 or user-defined-empty states to null
+    if (typeof sleepMins === 'number' && sleepMins <= 0) {
+      setSleep(null);
     }
 
-    // for exercise, if exercise doesn't exist and mins is 0 set value to null
+    // For exerciseObj, if exercise doesn't exist and mins is 0 or null, then set value to null
+    if (exerciseObj && !(exerciseObj.exercise) && exerciseObj.exercise_minutes <= 0) {
+      setExercise(null);
+    }
 
-    // service?.createTicket(ticket)
-    //   .then((response: TicketData) => {
-    //       if (response.error) {
-    //           console.log(`ticket error: ${response.error}`);
-    //           setServerError(`Something went wrong: ${response.error}.`);
-    //       } else {
-    //           console.log(`ticket #${response.number} creation succesful!`)
-    //           router.setRoute('/issuethankyou');
-    //       }
-    //   })
-    //   .catch((e: AxiosResponse) => {
-    //       console.log(`error: ${e}`);
-    //       setServerError(`Something went wrong: ${e}.`);
-    //   })
-    //   .finally(() => setSubmitting(false));
+    if (typeof notesStr === 'string' && notesStr.length <= 0) {
+      setNotes(null);
+    }
+  }, [flowStr, moodStr, sleepMins, crampsStr, exerciseObj, notesStr]);
+
+
+  // POST symptoms and close screen when submitting is true
+  useEffect(() => {
+    if (!submitting) return
+
+    let finalSymps = new Symptoms(flowStr, moodStr, sleepMins, crampsStr, exerciseObj, notesStr);
+    // If all symptoms are null, POST null instead of an empty Symptom object
+    let notEmpty = Object.values(finalSymps).some((symptom) => symptom !== null);
+    let submitSymp = notEmpty ? finalSymps : null;
+
+    POSTsymptomsForDate(selectedDate.getDate(), selectedDate.getMonth() + 1, selectedDate.getFullYear(), submitSymp)
+      .then(() => {
+        navigation.goBack();
+      })
+      .catch((e) => {
+        let errorInfo = submitError(JSON.stringify(e));
+        alertPopup(errorInfo)
+          .then(() => { // YES close screen
+            navigation.goBack();
+          })
+          .catch() // CANCEL do nothing and close alert
+        setSubmitting(false);
+      })
   }, [submitting])
 
-  const unsavedChangesAlert = () => new Promise((resolve, reject) => {
+  const alertPopup = (info) => new Promise((resolve, reject) => {
     Alert.alert(
-      "Unsaved changes",
-      "Your changes have not been saved. Do you want to discard the changes and continue?",
+      info.title,
+      info.message,
       [
         {
-          text: "Cancel",
+          text: info.cancelTitle,
           onPress: () => reject(),
           style: "cancel"
         },
-        { text: "Yes", onPress: () => resolve() }
+        { text: info.acceptTitle, onPress: () => resolve() }
       ]
     );
   })
 
-  const resetForm = (newDate) => {
+  const resetForm = async (newDate) => {
     changeDate(newDate);
-    // get stored symps from new date make sure use newDate not date state
-    let newDaySymps = getStoredSymps(newDate.getDate(), newDate.getMonth() + 1, newDate.getFullYear()) // TODO: i'm half asleep, delete +1 if getSymptomsFromCalendar is 0-indexing by month
-    setStoredSymps(newDaySymps);
-    // reset all symptom states
-    symptoms.map((symptom) => form[symptom].setState(newDaySymps[symptom]) )
+    setFetching(true);
     setDirty(false);
     setSubmitting(false);
   }
 
-  const switchDate = (goFwd) => {
+  const switchDate = async (goFwd) => {
     let newDate = selectedDate;
     newDate.setDate(goFwd ? newDate.getDate() + 1 : newDate.getDate() - 1);
 
     if (isDirty) {
-      unsavedChangesAlert()
-        .then(() => { // YES switch date
-          resetForm(newDate);
+      alertPopup(unsavedChanges)
+        .then(async () => { // YES switch date
+          await resetForm(newDate);
         })
         .catch() // CANCEL do nothing and close alert
     } else {
-      resetForm(newDate);
+      await resetForm(newDate);
     }
   }
 
@@ -177,7 +226,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
           <TouchableOpacity
             onPress={() => {
               if (isDirty) {
-                unsavedChangesAlert()
+                alertPopup(unsavedChanges)
                   .then(() => { // YES discard changes
                     navigation.goBack();
                   })
@@ -193,7 +242,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
           {/* SWITCH AND DISPLAY DATE */}
           <View style={styles.switchDate}>
             <DateArrow
-              onPress={() => switchDate(false)}
+              onPress={async () => await switchDate(false)}
               isRight={false}
             />
             <View style={styles.centerText}>
@@ -201,7 +250,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
               <Text style={styles.navbarTitle}>{getDateString(selectedDate, 'MM DD, YYYY')}</Text>
             </View>
             <DateArrow
-              onPress={() => switchDate(true)}
+              onPress={async () => await switchDate(true)}
               isRight={true}
             />
           </View>
@@ -222,12 +271,10 @@ export default function LogSymptomsScreen({ navigation, route }) {
         )}
       })}
 
-      <View style={[styles.centerText, {marginLeft: 28, marginRight: 28}]}>
+      <View style={[styles.centerText, {marginHorizontal: 28}]}>
         <TouchableOpacity
           style={styles.saveButton}
-          onPress={() => {
-            //setSubmitting(true);
-          }}
+          onPress={() => setSubmitting(true) }
         >
           <Text style={{color: '#fff'}}>Save</Text>
         </TouchableOpacity>

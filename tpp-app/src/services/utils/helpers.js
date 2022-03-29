@@ -47,9 +47,8 @@ export const getDateString = (date, format = 'YYYY-MM-DD') => {
  * @return {boolean} if date is valid and not in the future
  */
  export const isValidDate = (day, month, year) => {
-  // COPIED FROM EMILY. TODO: delete this for original when merge
   // Check the ranges of month and year
-  if (year < 1000 || year > 3000 || month == 0 || month > 12)
+  if (year < 1000 || year > 3000 || month <= 0 || month > 12)
       return false;
 
   let monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
@@ -60,7 +59,7 @@ export const getDateString = (date, format = 'YYYY-MM-DD') => {
 
   // Check the range of the day
   if (!(day > 0 && day <= monthLength[month - 1]))
-      return false
+      return false;
 
   // Check that date isn't in the future
   const today = new Date();
@@ -107,8 +106,8 @@ export const getCalendarByYear = async (year) => {
  */
 export const getSymptomsFromCalendar = async (calendar, day, month, year) => {
   if (year in calendar && isValidDate(day,month, year)){
-    let rawSymptoms = calendar[year][month - 1][day-1];
-    return rawSymptoms ? new Symptoms(rawSymptoms.Flow, rawSymptoms.Mood, rawSymptoms.Sleep, rawSymptoms.Cramps, rawSymptoms.Exercise,rawSymptoms.Notes) : new Symptoms();
+    let rawSymptoms = JSON.parse(calendar[year][month - 1][day-1]);
+    return rawSymptoms ? new Symptoms(rawSymptoms.flow, rawSymptoms.mood, rawSymptoms.sleep, rawSymptoms.cramps, rawSymptoms.exercise, rawSymptoms.notes) : new Symptoms();
   }
   else {
     return new Symptoms();

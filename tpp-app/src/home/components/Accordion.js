@@ -2,7 +2,7 @@
 import React, { Component, createElement } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, LayoutAnimation } from "react-native";
 import ExpandArrow from '../../../ios/tppapp/Images.xcassets/icons/arrow_accordion.svg';
-import SelectPicker from './SelectPicker';
+import OptionPicker from './OptionPicker';
 import TimeInput from './TimeInput';
 import TextArea from './TextArea';
 import { FLOW_LEVEL, CRAMP_LEVEL, MOOD_LEVEL, EXERCISE_TYPE } from "../../services/utils/constants";
@@ -170,7 +170,7 @@ export default class Accordion extends Component{
           case 'flow':
           case 'mood':
           case 'cramps':
-            accContent = <SelectPicker
+            accContent = <OptionPicker
               optionIcons={this.accordionType.options}
               selectThis={this.props.setState}
               curVal={this.props.value}
@@ -184,7 +184,7 @@ export default class Accordion extends Component{
             accContent = (
               <View>
                 <TimeInput selectMins={this.updateExercise} currMins={exercise ? exercise.exercise_minutes : 0} />
-                <SelectPicker
+                <OptionPicker
                   style={{ marginTop: -25 }}
                   optionIcons={this.accordionType.options}
                   selectThis={this.updateExercise}
