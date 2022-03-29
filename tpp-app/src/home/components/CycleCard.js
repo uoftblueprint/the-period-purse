@@ -1,7 +1,6 @@
 import AnimatedProgressWheel from 'react-native-progress-wheel';
 import React, { useState, useEffect } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import CycleService from '../../services/cycle/CycleService';
 
  function onPeriodText(periodDays){
    return (
@@ -27,8 +26,8 @@ import CycleService from '../../services/cycle/CycleService';
   return (
   
       <View>
-            <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',alignSelf:'center' }}>
-                <View style={{flex: 1,flexDirection:'row',alignItems:'center',alignSelf:'flex-end',margin:10}}>
+            <View style={styles.centeredColumn}>
+                <View style={styles.centeredRow}>
                   <AnimatedProgressWheel
                       size={200}
                       width={25}
@@ -42,7 +41,7 @@ import CycleService from '../../services/cycle/CycleService';
             </View>
 
 
-          <View style={{position: 'absolute', top: 0, left: 0 , right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={styles.absoluteCentered}>
               {periodDays > 0 ? onPeriodText(periodDays) : offPeriodText(daysSinceLastPeriod)}
           </View>
       </View>
@@ -84,7 +83,27 @@ const styles = StyleSheet.create({
   periodTextContainer: {
     justifyContent: 'center',
     alignItems: 'center'
-  }
-
+  },
+  centeredColumn: {
+    flexDirection:'column',
+    justifyContent:'center',
+    alignItems:'center',
+    alignSelf:'center' 
+  }, 
+  centeredRow: {
+    flex: 1,
+    flexDirection:'row',
+    alignItems:'center',
+    alignSelf:'flex-end',
+    margin:10
+  },
+  absoluteCentered: {
+    position: 'absolute', 
+    top: 0, 
+    left: 0, 
+    right: 0, 
+    bottom: 0, 
+    justifyContent: 'center',
+    alignItems: 'center'}
 
 });

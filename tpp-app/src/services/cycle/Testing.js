@@ -327,6 +327,7 @@ const Testing = {
   // target is march 4th
   // march 4th, periodDays: 1
   currentYear[2][3] = target;
+  currentYear[2][27] = target;
 
   // dec 27, periodDays: 8
   currentYear[11][26] = symptoms;
@@ -336,7 +337,6 @@ const Testing = {
 
   // 2023
 
-  //TODO: test with dec 31, Jan 2 -> jan 3rd as well
   nextYear[0][0] = symptoms;
   nextYear[0][1] = symptoms;
   nextYear[0][2] = symptoms;

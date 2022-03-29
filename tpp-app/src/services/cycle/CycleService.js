@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
-import {initializeEmptyYear, getDateString, getCalendarByYear, getSymptomsFromCalendar, getDaysDiffInclusive, getPeriodsInYear}  from '../utils/helpers';
+import {getDateString, getCalendarByYear, getSymptomsFromCalendar, getDaysDiffInclusive, getPeriodsInYear}  from '../utils/helpers';
 import {Symptoms} from '../utils/models';
 import differenceInDays from 'date-fns/differenceInDays';
 import isSameDay from 'date-fns/isSameDay';
@@ -410,10 +410,17 @@ const CycleService = {
    * @returns {Promise} resolves to the expected number of days till the next period. In case of error, returns -1
    */
   GETPredictedDaysTillPeriod: async function() {
+    //formula is last period start + cycle length is predicted next period day
     let today = new Date();
     let calendar = await getCalendarByYear(today.getFullYear());
     let periods = await getPeriodsInYear(today.getFullYear(), calendar);
-    let prevPeriodStart = await getLastPeriodStart(today, periods, calendar);
+    let prevPeriodStart;
+    if (isPeriodStart(today, calendar)){
+      prevPeriodStart = today;
+    }
+    else{
+      prevPeriodStart = await getLastPeriodStart(today, periods, calendar);
+    }
 
     console.log("GETPredictedDaysTillPeriod prevPeriodStart " + prevPeriodStart);
 
@@ -423,7 +430,7 @@ const CycleService = {
     let nextPeriodStart = addDays(prevPeriodStart, avgCycleLength);
     console.log("GETPredictedDaysTillPeriod nextPeriodStart " + nextPeriodStart);
     if(avgCycleLength && prevPeriodStart){
-      return differenceInDays(today, nextPeriodStart);
+      return differenceInDays(nextPeriodStart, today);
     }
     else {
       return -1;  

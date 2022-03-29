@@ -50,11 +50,11 @@ export default function CycleScreen ({navigation}){
 
   useEffect(() => {
      //TODO: delete this testing stuff
-     Testing.ClearCalendar();
-     Testing.PostDummyCalendarOnPeriod();
-     Testing.PostAverageCycleLength();
-     Testing.PostAveragePeriodLength();
-     CycleService.POSTCycleDonutPercent(0.5);
+    //  Testing.ClearCalendar();
+    //  Testing.PostDummyCalendarOverYear();
+    //  Testing.PostAverageCycleLength();
+    //  Testing.PostAveragePeriodLength();
+    //  CycleService.POSTCycleDonutPercent(0.5);
      //DELETE above
 
      CycleService.GETPeriodDay().then(days => {
@@ -94,6 +94,7 @@ export default function CycleScreen ({navigation}){
        }
        else{
          toSet = -1;
+         //if the prediction is invalid, don't show the tooltip
          setShowTip(false);
        }
        setDaysTillPeriod(toSet);
@@ -115,7 +116,7 @@ export default function CycleScreen ({navigation}){
     <SafeAreaView style={styles.container}>
       <ImageBackground source={background} style={styles.container}>    
         <SafeAreaView style={cardContainerStyle}>
-          {showTip && (<PeriodNotification daysTillPeriod={daysTillPeriod} setShowTip={setShowTip}>
+          {showTip && (<PeriodNotification daysTillPeriod={daysTillPeriod}>
             <Paddy style={styles.paddyIcon}/>
           </PeriodNotification>)}
           <CycleCard periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
