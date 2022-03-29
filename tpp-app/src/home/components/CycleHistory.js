@@ -68,8 +68,8 @@ function ExpandedHistoryCard({intervals, renderedYear}){
     return(
         <View style={styles.card}>
             <View style={styles.historyContainer}>
-                <View>
-                    <Text style={ styles.title}> {renderedYear} </Text>
+                <View style={styles.bottomBorder}>
+                    <Text style={styles.title}> {renderedYear} </Text>
                 </View>
                 {intervals.map((interval, index) => {
                     return  <Interval interval={interval} key={index} index={index} isMostRecent={index == 0 & renderedYear== currentYear}/>

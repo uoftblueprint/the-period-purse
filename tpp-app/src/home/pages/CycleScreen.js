@@ -42,7 +42,7 @@ export default function CycleScreen ({navigation}){
   let [avgCycleLength, setAvgCycleLength] = useState(0);
   let [periodDays, setPeriodDays] = useState(0);
   let [daysSinceLastPeriod, setDaysSinceLastPeriod] = useState(0);
-  let [cycleDonutPercent, setCycleDonutPercent] = useState(20);
+  let [cycleDonutPercent, setCycleDonutPercent] = useState(0);
   let [daysTillPeriod, setDaysTillPeriod] = useState(0);
   let [intervals, setIntervals] = useState([]);
   let [showTip, setShowTip] = useState(true);
@@ -54,7 +54,7 @@ export default function CycleScreen ({navigation}){
     //  Testing.PostDummyCalendarOverYear();
     //  Testing.PostAverageCycleLength();
     //  Testing.PostAveragePeriodLength();
-    //  CycleService.POSTCycleDonutPercent(0.5);
+    // CycleService.POSTCycleDonutPercent(0.1);
      //DELETE above
 
      CycleService.GETPeriodDay().then(days => {
