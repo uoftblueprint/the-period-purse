@@ -371,11 +371,7 @@ const CycleService = {
     } catch(e) {
       console.log(e);
     }
-    // return intervals;
-    return [{"start": _, "periodDays": 4}, {"start": _, "periodDays": 4},
-      {"start": _, "periodDays": 5}, {"start": _, "periodDays": 3},
-      {"start": _, "periodDays": 6}, {"start": _, "periodDays": 5},
-    ]
+    return intervals;
   }
 }
 
