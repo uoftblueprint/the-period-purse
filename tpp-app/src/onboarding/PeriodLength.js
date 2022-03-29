@@ -9,7 +9,7 @@ import { TwoButtonContainer, BackButtonContainer, InputContainer } from './compo
 import { PostInitialPeriodLength } from '../services/OnboardingService';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import PeriodLengthIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_length.svg";
-import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
+import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar1.svg";
 import KeyboardIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_keyboard.svg";
 
 export default function PeriodLength ({ navigation }) {

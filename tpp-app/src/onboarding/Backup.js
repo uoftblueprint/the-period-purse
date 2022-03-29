@@ -7,7 +7,7 @@ import { WideButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { BackButtonContainer } from './components/ContainerComponents';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
-import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
+import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar3.svg";
 
 export default function Backup ({ route, navigation }) {
   const { periodLength, periodStart, periodEnd, trackingPreferences } = route.params;

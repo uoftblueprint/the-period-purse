@@ -11,7 +11,7 @@ import { PostInitialPeriodStart, PostInitialPeriodLength } from '../services/Onb
 import { DatePickerModal } from 'react-native-paper-dates';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import PeriodStartIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_date.svg";
-import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
+import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar2.svg";
 import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_calendar.svg";
 
 const MILLISECPERDAY = 24*60*60*1000;

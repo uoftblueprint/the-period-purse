@@ -3,7 +3,7 @@ import { StyleSheet, ImageBackground, ScrollView, SafeAreaView } from 'react-nat
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
-import { NextButton, SkipButton, SymptomsChoicesButton } from './components/ButtonComponents';
+import { NextButton, SymptomsChoicesButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
 import { PostSymptomsToTrack } from '../services/OnboardingService';
@@ -14,7 +14,7 @@ import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/symptoms_track_img.svg";
-import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar.svg";
+import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar3.svg";
 
 let WHITE = "#FFFFFF"  // button is not selected
 let TEAL = "#73C7B7"  // button is selected
@@ -52,21 +52,21 @@ export default function SymptomsChoices ({ route, navigation }) {
         })}}/>
       </BackButtonContainer>
       
-      <SafeAreaView pointerEvents="none" style={{  alignItems: 'center', justifyContent: 'center', flex: 4 }}>
+      <SafeAreaView pointerEvents="none" style={{  alignItems: 'center', justifyContent: 'center', flex: 3.5 }}>
         <SafeAreaView style={{ alignItems: 'center'}}>
         <BackgroundShape style={{ top: 150 }}/>
         <CalendarIcon width='250' height='250' style={{ bottom: "28%" }}/>
-        <BarIcon style={{ bottom: "27%" }}/>
-        <TitleText style={{ bottom: "25%" }}>
+        <BarIcon style={{ bottom: "26%" }}/>
+        <TitleText style={{ bottom: "23%" }}>
           What symptoms do you {'\n'} want to track?
         </TitleText>
-        <BodyText style={{ bottom: "25%" }}>
+        <BodyText style={{ bottom: "23%" }}>
           You can change these later in {'\n'} your settings
         </BodyText>
         </SafeAreaView>
       </SafeAreaView>
 
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1.5, bottom: 40 }}>
         <SafeAreaView style={[styles.symptoms, { backgroundColor: flow }]}>
           <SymptomsChoicesButton onPress={handleFlow} title="Flow"></SymptomsChoicesButton>
           <FlowIcon style={styles.icon}/>
@@ -89,15 +89,8 @@ export default function SymptomsChoices ({ route, navigation }) {
         </SafeAreaView>
       </ScrollView>
 
-      <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
+      <SafeAreaView style={{ flex: 0.5 }}>
         <TwoButtonContainer style={{ top: 20 }}>
-          <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.BACKUP, {
-            periodLength: periodLength,
-            periodStart: periodStart,
-            periodEnd: periodEnd,
-            trackingPreferences: [flow == TEAL, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL]
-          })}
-          disabled={[flow, mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
           <NextButton title="Next" onPress={() => 
             {
               trackingPreferences = [flow == TEAL, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL];
