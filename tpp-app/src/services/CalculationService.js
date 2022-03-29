@@ -81,7 +81,6 @@ export const isPeriodStarting = async () => {
 
 /**
  * Calculates the average period length of the user.
- * @return {Promise}
  */
 export const calculateAveragePeriodLength = async () => new Promise( async (resolve, reject) => {
     // Only calculate Average Period Length once period is over
@@ -122,7 +121,6 @@ export const calculateAveragePeriodLength = async () => new Promise( async (reso
 
 /**
  * Calculates the average cycle length of the user.
- * @return {Promise}
  */
 export const calculateAverageCycleLength = async () => new Promise( async (resolve, reject) => {
     // Only calculate Average Cycle Length once period is starting and cycle is over
