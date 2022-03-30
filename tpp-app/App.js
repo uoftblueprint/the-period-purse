@@ -15,6 +15,7 @@ import InfoNavigator from './src/info/InfoNavigator';
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
 import CycleCalendarTabs from './src/home/components/CycleCalendarTabs';
+import ScrollTest from './ScrollTest';
 
 
 // Initialize Sentry's SDK
@@ -115,6 +116,7 @@ function App() {
   return (
     // <Welcome></Welcome>
        <MainPage></MainPage>
+      // <ScrollTest/>
   );
 }
 

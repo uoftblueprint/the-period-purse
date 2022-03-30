@@ -53,7 +53,7 @@ import {View, Text, StyleSheet} from 'react-native';
 
  export default function CycleCard({periodDays, daysSinceLastPeriod, cycleDonutPercent}){
    return (
-        <View style={styles.card}>
+        <View style={[styles.card]}>
           <Cycle periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
         </View>
    );

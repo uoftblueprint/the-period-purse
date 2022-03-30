@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ScrollView} from 'react-native';
 import addDays from 'date-fns/addDays';
 import { STACK_SCREENS } from '../CalendarNavigator';
 import { useNavigation } from '@react-navigation/native';
@@ -55,7 +55,7 @@ function Interval({interval, isMostRecent}){
 function MinimizedHistoryCard({navigation, intervals}){
     return (
         <View style={styles.card}>            
-            <View style={styles.historyContainer}>
+            <ScrollView style={styles.historyContainer}>
                 <SafeAreaView style={[styles.rowContainer, styles.bottomBorder]}>
                     <Text style={styles.title}>Cycle History</Text>
                     <ShowMore navigation={navigation}/>
@@ -66,7 +66,7 @@ function MinimizedHistoryCard({navigation, intervals}){
                     }
                 })}
 
-            </View>
+            </ScrollView>
         </View>
     );
 }
@@ -79,14 +79,14 @@ function ExpandedHistoryCard({intervals, renderedYear}){
     let currentYear = new Date().getFullYear();
     return(
         <View style={styles.card}>
-            <View style={styles.historyContainer}>
+            <ScrollView style={styles.historyContainer}>
                 <View style={styles.bottomBorder}>
                     <Text style={styles.title}> {renderedYear} </Text>
                 </View>
                 {intervals.map((interval, index) => {
                     return  <Interval interval={interval} key={index} index={index} isMostRecent={index == 0 & renderedYear== currentYear}/>
                 })}
-            </View>
+            </ScrollView>
         </View>
     )
 }

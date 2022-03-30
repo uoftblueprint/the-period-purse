@@ -9,13 +9,17 @@ import {GETStoredYears} from '../../services/utils/helpers';
 function Header({navigation}){
     return(
     <View style={ styles.headerContainer}>
-        <TouchableOpacity 
-            onPress={() =>navigation.goBack()}
-            style={styles.headerComponent}
+        <View
+        style={[styles.nonCenterComponent]}
         >
-            <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
-        </TouchableOpacity>
-        <Text style={[styles.headerComponent, styles.headerText]}> Cycle History </Text>
+            <TouchableOpacity 
+                onPress={() =>navigation.goBack()}
+            >
+                <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
+            </TouchableOpacity>
+        </View>
+        <Text style={styles.headerText}> Cycle History </Text>
+        <View style={styles.nonCenterComponent}><Text></Text></View>
     </View>
     );
 }
@@ -24,10 +28,11 @@ function YearButton({year, selectedYear, setSelectedYear}){
 
     let backgroundColor = year == selectedYear ? "#B31F20" : "#FFFFFF";
     let textColor = year == selectedYear ? "#FFFFFF" : "#C4C4C4";
+    let border = year == selectedYear ? null : styles.buttonBorder;
     return (
         <TouchableOpacity 
             onPress={() => setSelectedYear(year)}
-            style= {[styles.button, {backgroundColor: backgroundColor}]}
+            style= {[styles.button, border, {backgroundColor: backgroundColor}]}
         >
             <Text style={{color: textColor}}>{year}</Text>
         </TouchableOpacity>
@@ -92,21 +97,24 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 62,
         height: 34,
-        borderColor: "#C4C4C4",
-        borderWidth: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginRight: 9
+        marginRight: 9,
+        borderWidth: 0
+    },
+    buttonBorder: {
+        borderColor: "#C4C4C4",
+        borderWidth: 1,
     },
     headerContainer: {
         backgroundColor: 'white',
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         height: "7%"
     },
-    headerComponent: {
-        flexGrow:1
+    nonCenterComponent: {
+        flex: 1,
     },
     headerText: { 
         fontFamily: "Avenir",

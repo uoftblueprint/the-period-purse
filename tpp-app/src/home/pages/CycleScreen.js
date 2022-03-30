@@ -14,7 +14,7 @@ import Paddy from '../../../ios/tppapp/Images.xcassets/icons/paddy.svg';
 
 function InfoCard(props){
   return (
-    <View style={[styles.card, {backgroundColor: props.backgroundColor}]}>
+    <View style={[styles.card, styles.element, {backgroundColor: props.backgroundColor}]}>
       <View style={styles.infoCardInternal}>
         <Text style={styles.header}>{props.header}</Text>
         <SafeAreaView style={[styles.rowContainer, styles.daysRow, {justifyContent: "space-between"}]}>
@@ -29,9 +29,8 @@ function InfoCard(props){
 }
 
 function PeriodNotification(props){
-
   return (
-    <View style={styles.periodNotifCard}>
+    <View style={[styles.periodNotifCard, styles.element]}>
       <Text style={styles.periodNotifText}> Your period might be coming within the next {props.daysTillPeriod} days.</Text>
         {props.children}
     </View>
@@ -118,14 +117,13 @@ export default function CycleScreen ({navigation}){
     <SafeAreaView style={styles.container}>
       <ImageBackground source={background} style={styles.container}>    
         {/* View that contains all the relevant cards */}
-        <ScrollView style={cardContainerStyle}>
+        <ScrollView contentContainerStyle={cardContainerStyle}>
           {/* Period Notification (Period in X days) */}
           {showTip && (
           <PeriodNotification daysTillPeriod={daysTillPeriod}>
             <Paddy style={styles.paddyIcon}/>
           </PeriodNotification>
           )}
-
           <CycleCard periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
             <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer]}>
               <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
@@ -147,12 +145,12 @@ export default function CycleScreen ({navigation}){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'space-between',
   },
   cardContainer: {
       flex: 1,
       marginHorizontal: 16,
+      alignItems: 'stretch',
+      justifyContent: 'space-evenly',
   },  
   rowContainer:{
     flexDirection: 'row',
@@ -186,7 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderColor: 'black',
-    borderWidth: 1
+    borderWidth: 1,
   },
   periodNotifText: {
     fontFamily: "Avenir",
@@ -226,6 +224,9 @@ const styles = StyleSheet.create({
     transform: [{scale:0.4}]
   },
   infoCardInternal: {
-    marginLeft: 10,
+    marginHorizontal: 10,
+  },
+  element: {
+    marginVertical: "15%"
   }
 })

@@ -14,10 +14,21 @@ export default function HomeNavigator() {
         screenOptions={{
           tabBarIndicatorStyle: {
             height: 3,
-            backgroundColor: "#5A9F93"
+            backgroundColor: "#5A9F93",
+          },
+          tabBarLabelStyle: {
+            textTransform:'capitalize',
+            fontFamily: "Avenir",
+            fontSize: 20,
+            fontStyle: "normal",
+            fontWeight: "800",
+            lineHeight: 27,
+            letterSpacing: -0.02,
+            textAlign: "left",
           },
           tabBarStyle: {
-            height: "7%"
+            height: "7%",
+            justifyContent: 'center'
           }
         }}
       >
