@@ -28,13 +28,14 @@ import {View, Text, StyleSheet} from 'react-native';
   
       // Cycle Centering code
       <View>
+            <Text style={styles.header}> Current Cycle</Text>
             <View style={styles.centeredColumn}>
                 <View style={styles.centeredRow}>
                   <AnimatedProgressWheel
                       size={200}
                       width={25}
-                      color={'#B31F20'}
-                      fullColor={'#72C6B7'}
+                      color={'#FFDBDB'}
+                      fullColor={'#B31F20'}
                       progress={cycleDonutPercent}
                       backgroundColor={'#F1F1F0'}
                   >
@@ -97,7 +98,8 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     alignSelf:'flex-end',
-    margin:10
+    margin:10,
+    transform: [{rotate: "270deg"}]
   },
   absoluteCentered: {
     position: 'absolute', 
@@ -106,6 +108,20 @@ const styles = StyleSheet.create({
     right: 0, 
     bottom: 0, 
     justifyContent: 'center',
-    alignItems: 'center'}
+    alignItems: 'center'
+  },
+  header: {
+    fontFamily: "Avenir",
+    fontSize: 18,
+    fontStyle: "normal",
+    fontWeight: "800",
+    lineHeight: 25,
+    letterSpacing: -0.30000001192092896,
+    textAlign: "left",
+    position: 'absolute', 
+    marginLeft: "2.5%",
+    marginTop:"2.5%",
+    color: "#B31F20"
+  }
 
 });

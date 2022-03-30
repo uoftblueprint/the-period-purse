@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
     },
     bottomBorder: {
         borderBottomColor: "#C4C4C4",
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        marginBottom: 10
     },
     title: {
         fontFamily: "Avenir",

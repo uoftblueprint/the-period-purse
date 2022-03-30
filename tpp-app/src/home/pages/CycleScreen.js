@@ -54,7 +54,7 @@ export default function CycleScreen ({navigation}){
     //  Testing.PostDummyCalendarOverYear();
     //  Testing.PostAverageCycleLength();
     //  Testing.PostAveragePeriodLength();
-    // CycleService.POSTCycleDonutPercent(0.1);
+    // CycleService.POSTCycleDonutPercent(1);
      //DELETE above
 
      CycleService.GETPeriodDay().then(days => {
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   card:{
     borderRadius: 12,
-    width: 170,
+    width: "48%",
     height: 101
   },
   header: {

@@ -242,7 +242,7 @@ const CycleService = {
 
  /**
     * Get the days since the last period has ended.
-    * @return {Promise} Reolves into 0 if user on their period, and an integer of the days they have been on their period otherwise
+    * @return {Promise} Resolves into 0 if user on their period, and an integer of the days they have been on their period otherwise
     */
   GETDaysSinceLastPeriodEnd: async function (){
     //TODO: add this to the wiki
