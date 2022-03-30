@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import {StyleSheet, Text, ImageBackground, SafeAreaView, View} from 'react-native';
+import {StyleSheet, Text, ImageBackground, SafeAreaView, View, ScrollView} from 'react-native';
 import CycleCard from '../components/CycleCard';
 import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png';
 import CycleService from '../../services/cycle/CycleService';
@@ -15,13 +15,15 @@ import Paddy from '../../../ios/tppapp/Images.xcassets/icons/paddy.svg';
 function InfoCard(props){
   return (
     <View style={[styles.card, {backgroundColor: props.backgroundColor}]}>
-      <Text style={styles.header}>{props.header}</Text>
-      <SafeAreaView style={[styles.rowContainer, styles.daysRow]}>
-        <Text style={styles.daysText}>{props.days} Days</Text>
-        <SafeAreaView style={styles.whiteBackground}>
-          {props.children}
+      <View style={styles.infoCardInternal}>
+        <Text style={styles.header}>{props.header}</Text>
+        <SafeAreaView style={[styles.rowContainer, styles.daysRow, {justifyContent: "space-between"}]}>
+          <Text style={styles.daysText}>{props.days} Days</Text>
+          <SafeAreaView style={styles.whiteBackground}>
+            {props.children}
+          </SafeAreaView>
         </SafeAreaView>
-      </SafeAreaView>
+      </View>
     </View>
   )
 }
@@ -116,7 +118,7 @@ export default function CycleScreen ({navigation}){
     <SafeAreaView style={styles.container}>
       <ImageBackground source={background} style={styles.container}>    
         {/* View that contains all the relevant cards */}
-        <SafeAreaView style={cardContainerStyle}>
+        <ScrollView style={cardContainerStyle}>
           {/* Period Notification (Period in X days) */}
           {showTip && (
           <PeriodNotification daysTillPeriod={daysTillPeriod}>
@@ -135,7 +137,7 @@ export default function CycleScreen ({navigation}){
           </SafeAreaView>
           <MinimizedHistoryCard navigation={navigation} intervals={intervals}/>
 
-        </SafeAreaView>
+        </ScrollView>
       </ImageBackground>
     </SafeAreaView>
 
@@ -151,7 +153,6 @@ const styles = StyleSheet.create({
   cardContainer: {
       flex: 1,
       marginHorizontal: 16,
-      justifyContent: 'space-evenly'
   },  
   rowContainer:{
     flexDirection: 'row',
@@ -176,7 +177,6 @@ const styles = StyleSheet.create({
     letterSpacing: -0.30000001192092896,
     textAlign: "left",
     top: 10,
-    left: 5
   },
   periodNotifCard: {
     backgroundColor: "#CFE4E0",
@@ -224,5 +224,8 @@ const styles = StyleSheet.create({
   },
   paddyIcon: {
     transform: [{scale:0.4}]
+  },
+  infoCardInternal: {
+    marginLeft: 10,
   }
 })
