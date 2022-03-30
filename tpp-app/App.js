@@ -9,7 +9,7 @@ import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
 import { TabBarMiddleButton } from './src/home/components/TabBarMiddleButton';
-//import Welcome from './src/onboarding/Welcome';
+// import Welcome from './src/onboarding/Welcome';
 import InfoNavigator from './src/info/InfoNavigator';
 
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
@@ -112,8 +112,7 @@ export function MainPage() {
 function App() {
   return (
     // <Welcome></Welcome>
-      <MainPage></MainPage>
-
+    <MainPage></MainPage>
   );
 }
 

@@ -10,6 +10,8 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { socialMediaIcons } from './icons';
 import { ScrollView } from 'react-native-gesture-handler';
 
+
+
 const Stats = (props) => {
 
     return (
