@@ -6,6 +6,14 @@ import Keys from '../utils/keys';
 
 const Testing = {
 
+  clearCycleDonut: async function() { 
+    try {
+      return await AsyncStorage.removeItem(Keys.AVERAGE_CYCLE_LENGTH);
+    } catch (e) {
+      console.log(e);
+    }
+
+  },
   // TODO: delete this
   PostAveragePeriodLength: async function() {
     try {
@@ -18,7 +26,7 @@ const Testing = {
   // TODO: delete this
   PostAverageCycleLength: async function() {
     try {
-      return await AsyncStorage.setItem(Keys.AVERAGE_CYCLE_LENGTH, "6" );
+      return await AsyncStorage.setItem(Keys.AVERAGE_CYCLE_LENGTH, "30" );
     } catch (e) {
       console.log(e);
     }
@@ -333,7 +341,6 @@ const Testing = {
   currentYear[11][26] = symptoms;
   currentYear[11][27] = symptoms;
   currentYear[11][28] = symptoms;
-  currentYear[11][30] = symptoms
 
   // 2023
 
@@ -341,7 +348,6 @@ const Testing = {
   nextYear[0][1] = symptoms;
   nextYear[0][2] = symptoms;
 
-  console.log(JSON.stringify(currentYear));
    try {
      await AsyncStorage.setItem("2021", JSON.stringify(lastYear));
      await AsyncStorage.setItem("2023", JSON.stringify(nextYear));

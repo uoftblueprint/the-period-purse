@@ -222,13 +222,13 @@ const CycleService = {
    */
   GETPeriodDay: async function (calendar = null){
 
-    let periodDays = 0;
     var date = new Date()
     if (!calendar){
       calendar = await getCalendarByYear(date.getFullYear());
     }
     let dateSymptoms = await getSymptomsFromCalendar(calendar, date.getDate(), date.getMonth()+1, date.getFullYear());
     if (dateSymptoms.flow === null || dateSymptoms.flow === FLOW_LEVEL.NONE){
+      console.log("no flow for today");
       return 0;
     }
     else {
@@ -236,7 +236,6 @@ const CycleService = {
       return getDaysDiffInclusive(startDate, date);
     }
 
-    return periodDays;
 
   },
 
@@ -313,7 +312,9 @@ const CycleService = {
         let avgCycleLength = await this.GETAverageCycleLength(calendar);
         if (mostRecentPeriodStart && avgCycleLength){
           let daysSincePeriodStart = getDaysDiffInclusive(mostRecentPeriodStart, today);
+          console.log("GETCycleDonutPercent daysSincePeriodStart: " + daysSincePeriodStart);
           let cycleDonutPercent = daysSincePeriodStart / avgCycleLength;
+          console.log("GETCycleDonutPercent cycleDonutPercent: " + cycleDonutPercent);
           this.POSTCycleDonutPercent(cycleDonutPercent);
           return cycleDonutPercent;
         }

@@ -14,7 +14,7 @@ import Paddy from '../../../ios/tppapp/Images.xcassets/icons/paddy.svg';
 
 function InfoCard(props){
   return (
-    <View style={[styles.card, styles.element, {backgroundColor: props.backgroundColor}]}>
+    <View style={[styles.card, {backgroundColor: props.backgroundColor}]}>
       <View style={styles.infoCardInternal}>
         <Text style={styles.header}>{props.header}</Text>
         <SafeAreaView style={[styles.rowContainer, styles.daysRow, {justifyContent: "space-between"}]}>
@@ -51,11 +51,11 @@ export default function CycleScreen ({navigation}){
 
   useEffect(() => {
      //TODO: delete this testing stuff
+    //  Testing.clearCycleDonut();
     //  Testing.ClearCalendar();
     //  Testing.PostDummyCalendarOverYear();
     //  Testing.PostAverageCycleLength();
     //  Testing.PostAveragePeriodLength();
-    // CycleService.POSTCycleDonutPercent(1);
      //DELETE above
 
      CycleService.GETPeriodDay().then(days => {
@@ -90,7 +90,7 @@ export default function CycleScreen ({navigation}){
 
      CycleService.GETPredictedDaysTillPeriod().then(numDays => {
        let toSet;
-       if(numDays){
+       if(numDays && numDays != -1){
          toSet = numDays;
        }
        else{
@@ -125,7 +125,7 @@ export default function CycleScreen ({navigation}){
           </PeriodNotification>
           )}
           <CycleCard periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
-            <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer]}>
+            <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
               <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
                 <BloodDrop fill="red" style={styles.icon}/>
               </InfoCard>

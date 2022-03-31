@@ -152,7 +152,6 @@ export const getPeriodsInYear = async (year, calendar=null) => {
   } catch(e) {
     console.log(e);
     return periods;
-
   }
 
 }

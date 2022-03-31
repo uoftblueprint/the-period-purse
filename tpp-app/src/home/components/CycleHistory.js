@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     historyContainer: {
-        marginHorizontal: 28,
-        marginTop: 19
+        marginHorizontal: "6%",
+        marginTop: "4%"
     },
     interval: {
         marginBottom: 19,
