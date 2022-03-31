@@ -31,7 +31,7 @@ export const PostInitialPeriodLength = async (periodLength) => new Promise( asyn
  * This only happens when the user has given inputs 
  * for both the start and end date of their last period. 
  * @param periodStart date representing the start date of their last period 
- * @param periodEnd date representing the end date of their last period
+ * @param periodEnd date representing the end date of their last period (periodEnd <= today's date)
  * @returns a promise resolving when the multiset operation is complete 
  */
 export const PostInitialPeriodStart = async (periodStart, periodEnd) => new Promise ( async (resolve, reject) => {
