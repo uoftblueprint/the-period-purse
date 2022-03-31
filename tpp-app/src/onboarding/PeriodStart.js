@@ -45,12 +45,28 @@ export default function PeriodStart ({ route, navigation }) {
       return (<CalendarIcon style={styles.icon}/>);
   }
 
+  /**
+   * Computes the end date based on the period length user entered previously 
+   * and the range.startDate that user chose in the date picker modal. 
+   * @returns computed end date or today's date, whichever is earlier in time
+   */
   function getEndDate() {
     let endDate = new Date(range.startDate.getTime() + ((periodLength-1)*MILLISECPERDAY))
     if(endDate > new Date())  // the calculated endDate goes beyond the current date 
       return new Date()
     else
       return endDate
+  }
+
+  /**
+   * Returns the date paramater as a string. 
+   * @param {Date} date date object to be translated into a string
+   * @returns string version of date, formatted as "YYYY-MM-DD"
+   */
+  function getCustomDateString(date) {
+    var month = date.getMonth() + 1  // month starts at 0
+    var day = date.getDate()
+    return [date.getFullYear(), (month > 9 ? '' : '0') + month, (day > 9 ? '' : '0') + day].join('-') 
   }
 
   return (
@@ -74,7 +90,7 @@ export default function PeriodStart ({ route, navigation }) {
 
           <InputContainer style={{ bottom: "25%" }}>
             <DatePickerButton 
-              title={range.startDate ? range.startDate.toISOString().split('T')[0] : "Choose date"} 
+              title={range.startDate ? getCustomDateString(range.startDate) : "Choose date"} 
               onPress={() => setOpen(true)}
               inputted={range.startDate}>
             </DatePickerButton>
@@ -115,9 +131,9 @@ export default function PeriodStart ({ route, navigation }) {
               PostInitialPeriodStart(range.startDate, range.endDate);
               navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
                 periodLength: newPeriodLength,
-                // pass down the string version of the dates in the format "YYYY-MM-DD"
-                periodStart: range.startDate.toISOString().substring(0, 10),
-                periodEnd: range.endDate.toISOString().substring(0, 10)
+                // pass down the custom string version of the dates
+                periodStart: getCustomDateString(range.startDate),
+                periodEnd: getCustomDateString(range.endDate)
               });
             }}
             disabled={range.endDate && range.startDate ? false : true}/>
