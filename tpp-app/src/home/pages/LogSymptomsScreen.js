@@ -72,7 +72,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
                   symptom = 'flow'
                   break;
               }
-              setPrefs(trackingPrefs.push(symptom));
+              if (!trackingPrefs.includes(symptom)) setPrefs(trackingPrefs.push(symptom));
           }
         }
       }
