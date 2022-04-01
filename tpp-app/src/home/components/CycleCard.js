@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.30000001192092896,
     textAlign: "left",
     position: 'absolute', 
-    marginLeft: "6%",
+    marginLeft: "5%",
     marginTop:"2.5%",
     color: "#B31F20"
   }

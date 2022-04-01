@@ -137,7 +137,11 @@ export default function CycleScreen ({navigation}){
               <Calendar fill="red" style={styles.icon}/>
             </InfoCard>
           </SafeAreaView>
-          <MinimizedHistoryCard navigation={navigation} intervals={intervals}/>
+          <MinimizedHistoryCard 
+            navigation={navigation} 
+            intervals={intervals}
+            onPeriod={periodDays !=0}
+          />
 
         </ScrollView>
       </ImageBackground>

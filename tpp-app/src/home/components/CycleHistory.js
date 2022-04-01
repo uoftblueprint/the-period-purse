@@ -23,7 +23,7 @@ const ShowMore = ({navigation}) => {
  * 
  * @returns Component that renders 1 continuous period, and lists the start and end
  */
-function Interval({interval, isMostRecent}){
+function Interval({interval, isMostRecent, onPeriod}){
     let startDate = interval.start;
     const formattedStart = startDate.toLocaleString('default', { month: 'short', day: 'numeric' });
     let days = interval.periodDays;
@@ -35,11 +35,19 @@ function Interval({interval, isMostRecent}){
         <Text style={styles.periodText}>{days}-day period</Text>
     </View>)
 
+    let mostRecentText = onPeriod ? "Current Period" : "Most Recent Period";
+
+    let mostRecentHeader =(
+        <Text style={[styles.intervalHeader, styles.initialHeader]}>
+            {mostRecentText}: Started {formattedStart}
+        </Text>
+    );
+
     let daysArray = Array.from(Array(days).keys());
     
     return (
         <View style={styles.interval}>
-            {isMostRecent ? <Text style={[styles.intervalHeader, styles.initialHeader]}>Current cycle: Started {formattedStart}</Text> : header}
+            {isMostRecent ? mostRecentHeader : header}
             <View style={{flexDirection: "row"}}>
                 {daysArray.map((day, index) => (
                     <View style={styles.redDot} key={index}/>
@@ -52,17 +60,22 @@ function Interval({interval, isMostRecent}){
  * 
  * @returns Component that only renders the 3 most recent periods & their dates in the current year
  */
-function MinimizedHistoryCard({navigation, intervals}){
+function MinimizedHistoryCard({navigation, intervals, onPeriod}){
     return (
         <View style={styles.card}>            
             <ScrollView style={styles.historyContainer}>
                 <SafeAreaView style={[styles.rowContainer, styles.bottomBorder]}>
-                    <Text style={styles.title}>Cycle History</Text>
+                    <Text style={styles.title}>Period History</Text>
                     <ShowMore navigation={navigation}/>
                 </SafeAreaView>
                 {intervals.map((interval, index)=> {
                     if(index < 3){
-                        return  <Interval interval={interval} key={index} index={index} isMostRecent={index == 0}/>
+                        return  <Interval 
+                                    interval={interval} 
+                                    key={index} index={index} 
+                                    isMostRecent={index == 0} 
+                                    onPeriod={onPeriod}
+                                />
                     }
                 })}
 
@@ -75,7 +88,7 @@ function MinimizedHistoryCard({navigation, intervals}){
  * 
  * @returns Component that renders all the periods and their dates for the renderedYear
  */
-function ExpandedHistoryCard({intervals, renderedYear}){
+function ExpandedHistoryCard({intervals, renderedYear, onPeriod}){
     let currentYear = new Date().getFullYear();
     return(
         <View style={styles.card}>
@@ -84,7 +97,13 @@ function ExpandedHistoryCard({intervals, renderedYear}){
                     <Text style={styles.title}> {renderedYear} </Text>
                 </View>
                 {intervals.map((interval, index) => {
-                    return  <Interval interval={interval} key={index} index={index} isMostRecent={index == 0 & renderedYear== currentYear}/>
+                    return  <Interval 
+                                interval={interval} 
+                                key={index} 
+                                index={index} 
+                                isMostRecent={index == 0 & renderedYear== currentYear}
+                                onPeriod={onPeriod}
+                            />
                 })}
             </ScrollView>
         </View>

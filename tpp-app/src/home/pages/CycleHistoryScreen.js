@@ -18,7 +18,7 @@ function Header({navigation}){
                 <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
             </TouchableOpacity>
         </View>
-        <Text style={styles.headerText}> Cycle History </Text>
+        <Text style={styles.headerText}> Period History </Text>
         <View style={styles.nonCenterComponent}><Text></Text></View>
     </View>
     );
@@ -43,6 +43,7 @@ export default function CycleHistoryScreen({navigation}){
     let [currentIntervals, setCurrentIntervals] = useState([]);
     let [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     let [storedYears, setStoredYears] = useState([]);
+    let [onPeriod, setOnPeriod] = useState(false);
     
     useEffect(() => {
         GETStoredYears().then(
@@ -50,6 +51,9 @@ export default function CycleHistoryScreen({navigation}){
                 setStoredYears(years);
             }
         )
+        CycleService.GETPeriodDay().then(days => {
+            setOnPeriod(days != 0 );
+        })
     }, []);
 
     //update the cycles being rendered to reflect newly selected year.
@@ -73,6 +77,7 @@ export default function CycleHistoryScreen({navigation}){
                         navigation={navigation} 
                         intervals={currentIntervals} 
                         renderedYear={selectedYear}
+                        onPeriod={onPeriod}
                     />
                 </SafeAreaView>
             </ImageBackground>

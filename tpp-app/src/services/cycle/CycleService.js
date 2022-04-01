@@ -228,7 +228,6 @@ const CycleService = {
     }
     let dateSymptoms = await getSymptomsFromCalendar(calendar, date.getDate(), date.getMonth()+1, date.getFullYear());
     if (dateSymptoms.flow === null || dateSymptoms.flow === FLOW_LEVEL.NONE){
-      console.log("no flow for today");
       return 0;
     }
     else {
@@ -279,7 +278,6 @@ const CycleService = {
   GETMostRecentPeriodStartDate: async function (calendar = null) {
     var date = new Date()
 
-    console.log("GETMostRecentPeriodStartDate has value of " + date.getFullYear());
 
     if (!calendar){
       calendar = await getCalendarByYear(date.getFullYear());
@@ -312,9 +310,7 @@ const CycleService = {
         let avgCycleLength = await this.GETAverageCycleLength(calendar);
         if (mostRecentPeriodStart && avgCycleLength){
           let daysSincePeriodStart = getDaysDiffInclusive(mostRecentPeriodStart, today);
-          console.log("GETCycleDonutPercent daysSincePeriodStart: " + daysSincePeriodStart);
           let cycleDonutPercent = daysSincePeriodStart / avgCycleLength;
-          console.log("GETCycleDonutPercent cycleDonutPercent: " + cycleDonutPercent);
           this.POSTCycleDonutPercent(cycleDonutPercent);
           return cycleDonutPercent;
         }
@@ -423,13 +419,10 @@ const CycleService = {
       prevPeriodStart = await getLastPeriodStart(today, periods, calendar);
     }
 
-    console.log("GETPredictedDaysTillPeriod prevPeriodStart " + prevPeriodStart);
 
     let avgCycleLength = await this.GETAverageCycleLength(calendar);
-    console.log("GETPredictedDaysTillPeriod avgCycleLength " + avgCycleLength);
 
     let nextPeriodStart = addDays(prevPeriodStart, avgCycleLength);
-    console.log("GETPredictedDaysTillPeriod nextPeriodStart " + nextPeriodStart);
     if(avgCycleLength && prevPeriodStart){
       return differenceInDays(nextPeriodStart, today);
     }
