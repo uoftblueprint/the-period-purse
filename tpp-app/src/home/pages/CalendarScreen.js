@@ -26,27 +26,11 @@ const sideComponentWidth = 120
 // The component that is used by each day in the calendar
 const DayComponent = ({ date, state, marking, navigation, calendarData }) => {
 
-    const [symptoms, setSymptoms] = useState(new Symptoms);
-    const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
 
-    useEffect(() => {
-        getSymptoms();
-    }, [])
     
-    useEffect(() => {
-        setBackgroundColor(symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE ? "#FFFFFF" : "#B31F20");
-    }, [symptoms])
-
-    const getSymptoms = async () => {
-        const data = await getSymptomsFromCalendar(calendarData, date.day, date.month, date.year);
-        setSymptoms(data);
-    }
-
-    // const backgroundColor = symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE ? "#FFFFFF" : "#B31F20";    
-
     return(
         <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
-            <View style={{...styles.dayContainer, backgroundColor: backgroundColor}}>
+            <View style={{...styles.dayContainer}}>
                 <Text>
                     {date.day}
                 </Text>
@@ -57,10 +41,6 @@ const DayComponent = ({ date, state, marking, navigation, calendarData }) => {
 
 export const Calendar = ({navigation}) => {
     const [calendarData, setCalendarData] = useState({});
-
-    // useEffect(() => {
-    //     getCalendarData()
-    // },[navigation])
 
     //updates the data when you come back to the calendar screen
     useEffect(() => {
@@ -79,12 +59,6 @@ export const Calendar = ({navigation}) => {
             
     }
 
-    // AsyncStorage.setItem("2022", JSON.stringify(initializeEmptyYear(2022)));
-    // console.log("Calendar stuff:",calendarData);
-    // let symptomtest = new Symptoms();
-    // symptomtest.flow = FLOW_LEVEL.MEDIUM;
-    // POSTsymptomsForDate(10, 3, 2022, symptomtest);
-    // console.log(GETsymptomsForDate(10, 3, 2022));
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50

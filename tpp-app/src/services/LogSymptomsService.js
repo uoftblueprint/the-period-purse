@@ -79,33 +79,36 @@ export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve,
 
             })
 
-            console.log(curYear, calendarData[curYear]);
-            console.log(curYear.toString());
+            if(calendarData[curYear]){
 
-            // await AsyncStorage.getItem(curYear.toString());
+                await AsyncStorage.setItem(curYear.toString(), JSON.stringify(calendarData[curYear]))
+                .then(() => resolve())
+                .catch((e) => {
+                    console.log(JSON.stringify(e));
+                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
+                });
+                
+            }
+            
+            if(calendarData[curYear - 1]){
+                await AsyncStorage.setItem((curYear - 1).toString(), JSON.stringify(calendarData[curYear - 1]))
+                .then(() => resolve())
+                .catch((e) => {
+                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
+                    console.log(JSON.stringify(e));
+                });
+            }
 
-            await AsyncStorage.setItem(curYear.toString(), JSON.stringify(calendarData[curYear]))
-            .then(() => resolve())
-            .catch((e) => {
-                console.log(JSON.stringify(e));
-                reject(`Unable to mergeItem and post symptoms for multiselect.`);
-            });
+            // a bit unneccessary since you can't log symptoms for the future.
+            if(calendarData[curYear + 1]){
+                await AsyncStorage.setItem((curYear + 1).toString(), JSON.stringify(calendarData[curYear + 1]))
+                .then(() => resolve())
+                .catch((e) => {
+                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
+                    console.log(JSON.stringify(e));
+                });
+            }
 
-            // await AsyncStorage.setItem((curYear - 1).toString(), JSON.stringify(calendarData[curYear - 1]))
-            // .then(() => resolve())
-            // .catch((e) => {
-            //     reject(`Unable to mergeItem and post symptoms for multiselect.`);
-            //     console.log(JSON.stringify(e));
-            // });
-
-            // await AsyncStorage.setItem((curYear + 1).toString(), JSON.stringify(calendarData[curYear + 1]))
-            // .then(() => resolve())
-            // .catch((e) => {
-            //     reject(`Unable to mergeItem and post symptoms for multiselect.`);
-            //     console.log(JSON.stringify(e));
-            // });
-
-            // calendarData[curYear]
         } catch (error) {
             console.log("error with multiselect:",error);
         }

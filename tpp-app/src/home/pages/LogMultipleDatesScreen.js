@@ -5,23 +5,13 @@ import { CalendarList } from 'react-native-calendars';
 import { STACK_SCREENS } from '../CalendarNavigator';
 import { getCalendarByYear, getSymptomsFromCalendar, initializeEmptyYear } from '../../services/utils/helpers';
 import { Symptoms } from '../../services/utils/models';
-import { FLOW_LEVEL } from '../../services/utils/constants';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
-
+import Checkmark from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 
 const DayComponent = ({ date, navigation, calendarData, addDate, removeDate }) => {
 
-    const [symptoms, setSymptoms] = useState(new Symptoms);
     const [backgroundColor, setBackgroundColor] = useState("#FFFFFF")
 
-    // useEffect(() => {
-    //     getSymptoms()
-    // }, [])
-
-    // const getSymptoms = async () => {
-    //     const data = await getSymptomsFromCalendar(calendarData, date.day, date.month, date.year);
-    //     setSymptoms(data);
-    // }
 
     const multiSelect = () => {
         if(backgroundColor == "#FFFFFF"){
@@ -32,8 +22,6 @@ const DayComponent = ({ date, navigation, calendarData, addDate, removeDate }) =
             removeDate(date);
         }
     }
-
-    // const backgroundColor = symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE ? "#FFFFFF" : "#5A9F93";    
 
     return(
         // onpress should select the dates for multi select
@@ -59,11 +47,6 @@ export const Calendar = ({navigation, addDate, removeDate}) => {
         setCalendarData(data);
     }
     
-    console.log(calendarData);
-    // let symptomtest = new Symptoms();
-    // symptomtest.flow = FLOW_LEVEL.MEDIUM;
-    // POSTsymptomsForDate(10, 3, 2022, symptomtest);
-    // console.log(GETsymptomsForDate(10, 3, 2022));
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -134,12 +117,14 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     }
 
     const onSubmit = async() => {
-        try {
-            await LogMultipleDayPeriod(selectedDates);
-        } catch (error) {
-            console.log(error);
+        if(selectedDates.length > 0){
+            try {
+                await LogMultipleDayPeriod(selectedDates);
+            } catch (error) {
+                console.log(error);
+            }
         }
-        
+        navigation.navigate(STACK_SCREENS.CALENDAR);
     }
 
 
@@ -147,7 +132,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Calendar')} style={styles.close}>
+                <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.CALENDAR)} style={styles.close}>
                   <CloseIcon fill={'#181818'}/>
                 </TouchableOpacity>
                 <Text style={styles.navbarTitle}>Tap date to log period</Text>
@@ -156,7 +141,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             
             <Calendar navigation={navigation} addDate={addDate} removeDate={removeDate}/>
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
-                <CloseIcon fill={'#181818'}/>
+                <Checkmark fill={'#181818'}/>
             </TouchableOpacity>
         </View>
     )
