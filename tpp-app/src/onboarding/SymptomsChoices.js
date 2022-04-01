@@ -5,7 +5,7 @@ import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SymptomsChoicesButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
-import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
+import { TwoButtonContainer, BackButtonContainer, SymptomsButtonContainer } from './components/ContainerComponents';
 import { PostSymptomsToTrack } from '../services/OnboardingService';
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
@@ -52,60 +52,52 @@ export default function SymptomsChoices ({ route, navigation }) {
         })}}/>
       </BackButtonContainer>
       
-      <SafeAreaView pointerEvents="none" style={{  alignItems: 'center', justifyContent: 'center', flex: 3.5 }}>
-        <SafeAreaView style={{ alignItems: 'center'}}>
-        <BackgroundShape style={{ top: 150 }}/>
-        <CalendarIcon width='250' height='250' style={{ bottom: "28%" }}/>
-        <BarIcon style={{ bottom: "26%" }}/>
-        <TitleText style={{ bottom: "23%" }}>
+      <SafeAreaView pointerEvents="none" style={{ alignItems: 'center' }}>
+        <BackgroundShape style={{ top: 65 }}/>
+        <CalendarIcon width='250' height='250' style={{ bottom: "38%" }}/>
+        <BarIcon style={{ bottom: "36%" }}/>
+        <TitleText style={{ bottom: "33%" }}>
           What symptoms do you {'\n'} want to track?
         </TitleText>
-        <BodyText style={{ bottom: "23%" }}>
-          You can change these later in {'\n'} your settings
+        <BodyText style={{ bottom: "33%" }}>
+          You can change these later in your settings. {'\n'}
+          Select at least one to proceed. 
         </BodyText>
-        </SafeAreaView>
       </SafeAreaView>
 
-      <ScrollView style={{ flex: 1.5, bottom: 40 }}>
+      <SymptomsButtonContainer>
         <SafeAreaView style={[styles.symptoms, { backgroundColor: flow }]}>
-          <SymptomsChoicesButton onPress={handleFlow} title="Flow"></SymptomsChoicesButton>
-          <FlowIcon style={styles.icon}/>
+          <SymptomsChoicesButton onPress={handleFlow} title="Flow" icon={<FlowIcon style={styles.icon}/>}/>
         </SafeAreaView>
         <SafeAreaView style={[styles.symptoms, { backgroundColor: mood }]}>
-          <SymptomsChoicesButton onPress={handleMood} title="Mood"></SymptomsChoicesButton>
-          <MoodIcon style={styles.icon}/>
-        </SafeAreaView>
-        <SafeAreaView style={[styles.symptoms, { backgroundColor: sleep }]}>
-          <SymptomsChoicesButton onPress={handleSleep} title="Sleep"></SymptomsChoicesButton>
-          <SleepIcon style={styles.icon}/>
-        </SafeAreaView>
-        <SafeAreaView style={[styles.symptoms, { backgroundColor: cramp }]}>
-          <SymptomsChoicesButton onPress={handleCramp} title="Cramps"></SymptomsChoicesButton>
-          <CrampsIcon style={styles.icon}/>
+          <SymptomsChoicesButton onPress={handleMood} title="Mood" icon={<MoodIcon style={styles.icon}/>}/>
         </SafeAreaView>
         <SafeAreaView style={[styles.symptoms, { backgroundColor: exercise }]}>
-          <SymptomsChoicesButton onPress={handleExercise} title="Exercise"></SymptomsChoicesButton>
-          <ExerciseIcon style={styles.icon}/>
+          <SymptomsChoicesButton onPress={handleExercise} title="Exercise" icon={<ExerciseIcon style={styles.icon}/>}/>
         </SafeAreaView>
-      </ScrollView>
+        <SafeAreaView style={[styles.symptoms, { backgroundColor: cramp }]}>
+          <SymptomsChoicesButton onPress={handleCramp} title="Cramps" icon={<CrampsIcon style={styles.icon}/>}/>
+        </SafeAreaView>
+        <SafeAreaView style={[styles.symptoms, { backgroundColor: sleep }]}>
+          <SymptomsChoicesButton onPress={handleSleep} title="Sleep" icon={<SleepIcon style={styles.icon}/>}/>
+        </SafeAreaView>
+      </SymptomsButtonContainer>
 
-      <SafeAreaView style={{ flex: 0.5 }}>
-        <TwoButtonContainer style={{ top: 20 }}>
-          <NextButton title="Next" onPress={() => 
-            {
-              trackingPreferences = [flow == TEAL, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL];
-              PostSymptomsToTrack(trackingPreferences[0], trackingPreferences[1], trackingPreferences[2],
-                                  trackingPreferences[3], trackingPreferences[4]);
-              navigation.navigate(STACK_SCREENS.BACKUP, {
-                periodLength: periodLength,
-                periodStart: periodStart,
-                periodEnd: periodEnd,
-                trackingPreferences: trackingPreferences
-              });
-            }}
-            disabled={[flow, mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
-        </TwoButtonContainer>
-      </SafeAreaView>
+      <TwoButtonContainer>
+        <NextButton title="Next" onPress={() => 
+          {
+            trackingPreferences = [flow == TEAL, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL];
+            PostSymptomsToTrack(trackingPreferences[0], trackingPreferences[1], trackingPreferences[2],
+                                trackingPreferences[3], trackingPreferences[4]);
+            navigation.navigate(STACK_SCREENS.BACKUP, {
+              periodLength: periodLength,
+              periodStart: periodStart,
+              periodEnd: periodEnd,
+              trackingPreferences: trackingPreferences
+            });
+          }}
+          disabled={[flow, mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
+      </TwoButtonContainer>
     </ImageBackground>
   );
 }
@@ -120,12 +112,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'center',
     borderRadius: 16,
-    width: 227,
-    height: 70,
-    marginBottom: 13
+    width: 55,
+    height: 55
   },
   icon: {
-    right: 60, 
-    top: 25
+    alignSelf: "center",
+    top: "30%"
   }
 });

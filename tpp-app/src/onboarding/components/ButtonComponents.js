@@ -58,11 +58,11 @@ export const DatePickerButton = ({ onPress, title, inputted }) => {
   </TouchableOpacity>);
 }
 
-export const SymptomsChoicesButton = ({ onPress, title, color }) => {
+export const SymptomsChoicesButton = ({ onPress, title, color, icon }) => {
   return (
-    <TouchableOpacity 
-      onPress={onPress} 
-      style={{ width: 227, height: 70, borderRadius: 16, backgroundColor: color }}>
+    <TouchableOpacity onPress={onPress} 
+      style={{ width: "100%", height: "100%", borderRadius: 16, backgroundColor: color }}>
+      {icon}
       <Text style={styles.symptomsChoicesButtonText}>{title}</Text>
     </TouchableOpacity>);
 }
@@ -132,10 +132,10 @@ const styles = StyleSheet.create({
   },
   symptomsChoicesButtonText: {
     color: "#000000",
-    fontFamily: "System",
-    fontWeight: '600',
-    fontSize: 17, 
-    marginLeft: 41,
-    marginTop: 24,
+    fontFamily: "Avenir",
+    fontWeight: '500',
+    fontSize: 14, 
+    top: "75%",
+    textAlign: "center"
   }
 });
