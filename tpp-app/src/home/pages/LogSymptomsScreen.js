@@ -3,7 +3,7 @@ import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, Sta
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
 import Accordion from "../components/Accordion";
-import { getDateString } from "../../services/utils/helpers";
+import { getDateString, isValidDate } from "../../services/utils/helpers";
 import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils/helpers";
 import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { GETAllTrackingPreferences } from "../../services/SettingsService";
@@ -199,6 +199,15 @@ export default function LogSymptomsScreen({ navigation, route }) {
     setSubmitting(false);
   }
 
+  // Helper function to determine whether to display arrow to switch dates
+  const isNextDayValid = (goFwd, today) => {
+    today.setDate(goFwd ? today.getDate() + 1 : today.getDate() - 1);
+    let day = today.getDate();
+    let month = today.getMonth() + 1;
+    let year = today.getFullYear();
+    return isValidDate(day, month, year);
+  }
+
   // Change the selected date to log symptoms for
   const switchDate = async (goFwd) => {
     let newDate = selectedDate;
@@ -241,18 +250,22 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
           {/* SWITCH AND DISPLAY DATE */}
           <View style={styles.switchDate}>
-            <DateArrow
-              onPress={async () => await switchDate(false)}
-              isRight={false}
-            />
+            {isNextDayValid(false, selectedDate) &&
+              <DateArrow
+                onPress={async () => await switchDate(false)}
+                isRight={false}
+              />
+            }
             <View style={styles.centerText}>
               <Text style={styles.subtitle}>Log your symptoms for:</Text>
               <Text style={styles.navbarTitle}>{getDateString(selectedDate, 'MM DD, YYYY')}</Text>
             </View>
-            <DateArrow
-              onPress={async () => await switchDate(true)}
-              isRight={true}
-            />
+            {isNextDayValid(true, selectedDate) &&
+              <DateArrow
+                onPress={async () => await switchDate(true)}
+                isRight={true}
+              />
+            }
           </View>
 
       </View>
