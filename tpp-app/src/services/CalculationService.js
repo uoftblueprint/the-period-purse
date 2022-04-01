@@ -52,9 +52,9 @@ export const isPeriodOver = async () => {
     const yesterdaySymptoms = lastThreeDaysSymptoms[1];
     const todaySymptoms = lastThreeDaysSymptoms[2];
 
-    const todayNoPeriod = (todaySymptoms.flow == null || todaySymptoms.flow === FLOW_LEVEL.NONE);
-    const yesterdayNoPeriod = (yesterdaySymptoms.flow == null || yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
-    const twoDaysEarlierPeriod = (twoDaysEarlierSymptoms.flow != null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE);
+    const todayNoPeriod = (!todaySymptoms.flow || todaySymptoms.flow === FLOW_LEVEL.NONE);
+    const yesterdayNoPeriod = (!yesterdaySymptoms.flow || yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
+    const twoDaysEarlierPeriod = (twoDaysEarlierSymptoms.flow && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE);
     return todayNoPeriod && yesterdayNoPeriod && twoDaysEarlierPeriod;
 };
 
@@ -68,9 +68,9 @@ export const isPeriodStarting = async () => {
     const yesterdaySymptoms = lastThreeDaysSymptoms[1];
     const todaySymptoms = lastThreeDaysSymptoms[2];
 
-    const todayPeriod = (todaySymptoms.flow != null && todaySymptoms.flow !== FLOW_LEVEL.NONE);
-    const yesterdayNoPeriod = (yesterdaySymptoms.flow == null || yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
-    const twoDaysEarlierNoPeriod = (twoDaysEarlierSymptoms.flow == null || twoDaysEarlierSymptoms.flow === FLOW_LEVEL.NONE);
+    const todayPeriod = (todaySymptoms.flow && todaySymptoms.flow !== FLOW_LEVEL.NONE);
+    const yesterdayNoPeriod = (!yesterdaySymptoms.flow || yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
+    const twoDaysEarlierNoPeriod = (!twoDaysEarlierSymptoms.flow || twoDaysEarlierSymptoms.flow === FLOW_LEVEL.NONE);
     return todayPeriod && yesterdayNoPeriod && twoDaysEarlierNoPeriod;
 }
 
@@ -79,7 +79,7 @@ export const isPeriodStarting = async () => {
  */
 export const calculateAveragePeriodLength = async () => new Promise( async (resolve, reject) => {
     // Only calculate Average Period Length once period is over
-    if (isPeriodOver()) {
+    if (await isPeriodOver()) {
         // Record all period intervals
         let completeHistory = [];
 
@@ -111,7 +111,8 @@ export const calculateAveragePeriodLength = async () => new Promise( async (reso
         });
     }
 
-    // Else don't calculate, do nothing
+    // Else don't calculate, resolve without doing anything
+    resolve();
 });
 
 /**
@@ -158,5 +159,6 @@ export const calculateAverageCycleLength = async () => new Promise( async (resol
         });
     }
 
-    // Else don't calculate, do nothing
+    // Else don't calculate, resolve without doing anything
+    resolve();
 });
