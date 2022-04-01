@@ -124,14 +124,18 @@ export default function CycleScreen ({navigation}){
             <Paddy style={styles.paddyIcon}/>
           </PeriodNotification>
           )}
-          <CycleCard periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
-            <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
-              <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
-                <BloodDrop fill="red" style={styles.icon}/>
-              </InfoCard>
-              <InfoCard header="Average cycle length" days={avgCycleLength} backgroundColor="#B9E0D8">
-                <Calendar fill="red" style={styles.icon}/>
-              </InfoCard>
+          <CycleCard 
+            periodDays={periodDays} 
+            daysSinceLastPeriod={daysSinceLastPeriod} 
+            cycleDonutPercent={cycleDonutPercent}
+          />
+          <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
+            <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
+              <BloodDrop fill="red" style={styles.icon}/>
+            </InfoCard>
+            <InfoCard header="Average cycle length" days={avgCycleLength} backgroundColor="#B9E0D8">
+              <Calendar fill="red" style={styles.icon}/>
+            </InfoCard>
           </SafeAreaView>
           <MinimizedHistoryCard navigation={navigation} intervals={intervals}/>
 
