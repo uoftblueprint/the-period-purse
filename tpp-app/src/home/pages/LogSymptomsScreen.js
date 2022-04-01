@@ -8,6 +8,7 @@ import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils
 import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { GETAllTrackingPreferences } from "../../services/SettingsService";
 import { POSTsymptomsForDate } from "../../services/LogSymptomsService";
+import { TRACK_SYMPTOMS } from "../../services/utils/constants";
 
 
 // Alert popup constants
@@ -37,12 +38,46 @@ const DateArrow = ({ onPress, isRight }) => {
     )
 }
 
-const symptoms = ['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes'];
+const symptoms = ['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes']; // order of symptom accordions
 
 
 export default function LogSymptomsScreen({ navigation, route }) {
-  // const trackingPrefs = [true, true, true, true, true, true]; // TODO: remove
-  const trackingPrefs = GETAllTrackingPreferences();
+  const [trackingPrefs, setPrefs] = useState(['notes']); // list of symptoms to track, default is always 'notes'
+  //const [trackingPrefs, setPrefs] = useState(['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes']); // TODO: remove
+
+  // Set trackingPrefs when component mounts
+  useEffect(() => {
+      async function fetchPreferences() {
+        let allPrefs = await GETAllTrackingPreferences();
+        // set trackingPrefs somewhere
+        for (let pref of allPrefs) {
+          let toTrack = pref[1]
+          // if tracking that symptom is set to true, append it to trackingPrefs
+          if (toTrack) {
+              let title = pref[0];
+              let symptom;
+              switch(title) {
+                case TRACK_SYMPTOMS.MOOD:
+                  symptom = 'mood'
+                case TRACK_SYMPTOMS.SLEEP:
+                  symptom = 'sleep'
+                  break;
+                case TRACK_SYMPTOMS.CRAMPS:
+                  symptom = 'cramps'
+                  break;
+                case TRACK_SYMPTOMS.EXERCISE:
+                  symptom = 'exercise'
+                  break;
+                default:
+                  symptom = 'flow'
+                  break;
+              }
+              setPrefs(trackingPrefs.push(symptom));
+          }
+        }
+      }
+      fetchPreferences();
+  }, [])
 
   // function to get symptoms from async storage
   const getStoredSymps = async (day, month, year) => {
@@ -51,7 +86,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
     return symps
   }
 
-  const [selectedDate, changeDate] = useState(new Date(route.params.date.year, route.params.date.month - 1, route.params.date.day));
+  const [selectedDate, changeDate] = useState(new Date(route.params.date.year, route.params.date.month - 1, route.params.date.day + 1));
   const [stored, setStoredSymps] = useState(new Symptoms()); // original stored symptoms
 
   // SYMPTOM STATES
@@ -272,7 +307,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
       {/* SYMPTOM ACCORDIONS */}
       {symptoms.map((symptom, i) => {
-        if (trackingPrefs[i])
+        if (trackingPrefs.includes(symptom))
         { return (
             <Accordion
                 key={i}
