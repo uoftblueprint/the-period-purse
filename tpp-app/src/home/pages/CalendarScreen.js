@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
-import { BackButton } from '../components/BackButtonComponent';
 import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getCalendarByYear, getSymptomsFromCalendar, initializeEmptyYear } from '../../services/utils/helpers';
-import { FLOW_LEVEL } from '../../services/utils/constants';
-import { POSTsymptomsForDate } from '../../services/LogSymptomsService';
-import { Symptoms } from '../../services/utils/models';
 import { STACK_SCREENS } from '../CalendarNavigator';
 
 const VIEWS = {

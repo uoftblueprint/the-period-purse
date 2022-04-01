@@ -4,7 +4,6 @@ import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 import { CalendarList } from 'react-native-calendars';
 import { STACK_SCREENS } from '../CalendarNavigator';
 import { getCalendarByYear, getSymptomsFromCalendar, initializeEmptyYear } from '../../services/utils/helpers';
-import { Symptoms } from '../../services/utils/models';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import Checkmark from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 
