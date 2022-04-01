@@ -35,7 +35,8 @@ export default class TextArea extends Component{
                 onFocus={ () => this.setState({ isFocused: true }) }
                 onBlur={ () => {
                   this.setState({ isFocused: false });
-                  this.props.onInput(this.props.curVal.trim()); // trims notes on blur
+                  let newText = this.props.curVal ? this.props.curVal.trim() : this.props.curVal; // trims notes on blur
+                  this.props.onInput(newText);
                 } }
             />
             <Text style={styles.charCount}>{`${this.props.curVal ? this.props.curVal.length : 0}/500`}</Text>
