@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createElement } from 'react';
+import React, { createElement } from 'react';
 import { View, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { CrampsTerribleIcon, CrampsNeutralIcon, CrampsBadIcon, CrampsGoodIcon, CrampsNoneIcon } from '../../services/utils/calendaricons';
 import { FlowHeavyIcon, FlowMediumIcon, FlowLightIcon, FlowNoneIcon, FlowSpottingIcon } from '../../services/utils/calendaricons';
@@ -65,7 +65,7 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
     }
 
     return(
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
             <View style={styles.dayContainer} backgroundColor={bgColor}>
                 <Text style={{ color: textColor }}>
                     {date.day}    
