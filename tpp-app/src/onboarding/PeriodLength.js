@@ -6,7 +6,7 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer, InputContainer } from './components/ContainerComponents';
-import { PostInitialPeriodLength } from '../services/OnboardingService';
+import { POSTInitialPeriodLength } from '../services/OnboardingService';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import PeriodLengthIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_length.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar1.svg";
@@ -55,7 +55,7 @@ export default function PeriodLength ({ navigation }) {
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: null })}/>
         <NextButton title="Next" onPress={() => 
           {
-            PostInitialPeriodLength(parseInt(periodLength));
+            POSTInitialPeriodLength(parseInt(periodLength));
             navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: periodLength });
           }}
           disabled={periodLength && periodLength > 0? false : true}/>

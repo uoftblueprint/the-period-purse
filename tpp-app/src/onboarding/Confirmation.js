@@ -26,35 +26,19 @@ export const STACK_SCREENS = {
 export default function Confirmation ({ route, navigation }) {
   const { periodLength, periodStart, periodEnd, trackingPreferences } = route.params;
 
-  function FlowPref() {
-    if(trackingPreferences[0])
-      return (<FlowIcon style={styles.icon}/>);
-    else
-      return (null);
-  }
-  function MoodPref() {
-    if(trackingPreferences[1])
-      return (<MoodIcon style={styles.icon}/>);
-    else
-      return (null);
-  }
-  function SleepPref() {
-    if(trackingPreferences[2])
-      return (<SleepIcon style={styles.icon}/>);
-    else
-      return (null);
-  }
-  function CrampsPref() {
-    if(trackingPreferences[3])
-      return (<CrampsIcon style={styles.icon}/>);
-    else
-      return (null);
-  }
-  function ExercisePref() {
-    if(trackingPreferences[4])
-      return (<ExerciseIcon style={styles.icon}/>);
-    else
-      return (null);
+  function IconPref() {
+    let iconComponents = []
+    if(trackingPreferences[0])  // flow
+      iconComponents.push(<FlowIcon key="flow" style={styles.icon}/>);
+    if(trackingPreferences[1])  // mood
+      iconComponents.push(<MoodIcon key="mood" style={styles.icon}/>);
+    if(trackingPreferences[2])  // sleep
+      iconComponents.push(<SleepIcon key="sleep" style={styles.icon}/>);
+    if(trackingPreferences[3])  // cramps
+      iconComponents.push(<CrampsIcon key="cramps" style={styles.icon}/>);
+    if(trackingPreferences[4])  // exercise 
+      iconComponents.push(<ExerciseIcon key="exercise" style={styles.icon}/>);
+    return (<SymptomIconContainer>{iconComponents}</SymptomIconContainer>);
   }
 
   function DateRange() {
@@ -94,13 +78,7 @@ export default function Confirmation ({ route, navigation }) {
 
       <View style={styles.row}>
         <Text style={styles.smallText}>Symptoms to log</Text>
-        <SymptomIconContainer>
-          <FlowPref/>
-          <MoodPref/>
-          <SleepPref/>
-          <CrampsPref/>
-          <ExercisePref/>
-        </SymptomIconContainer>
+        <IconPref/>
       </View>
       <HorizontalLine></HorizontalLine>
     </ImageBackground>

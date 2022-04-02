@@ -8,7 +8,7 @@ import { Symptoms } from './utils/models.js';
  * @param periodLength a number representing the period length
  * @returns a promise resolving when the multiset operation is complete 
  */
-export const PostInitialPeriodLength = async (periodLength) => new Promise( async (resolve, reject) => {
+export const POSTInitialPeriodLength = async (periodLength) => new Promise( async (resolve, reject) => {
     try {
         if(periodLength) {
             periodLength = JSON.stringify(periodLength);
@@ -34,7 +34,7 @@ export const PostInitialPeriodLength = async (periodLength) => new Promise( asyn
  * @param periodEnd date representing the end date of their last period (periodEnd <= today's date)
  * @returns a promise resolving when the multiset operation is complete 
  */
-export const PostInitialPeriodStart = async (periodStart, periodEnd) => new Promise ( async (resolve, reject) => {
+export const POSTInitialPeriodStart = async (periodStart, periodEnd) => new Promise ( async (resolve, reject) => {
     try {
         if(periodStart && periodEnd) {
             const periodStartTime = periodStart.getTime();
@@ -87,7 +87,7 @@ export const PostInitialPeriodStart = async (periodStart, periodEnd) => new Prom
  * @param exercise boolean representing whether to track exercise 
  * @returns a promise resolving when the multiset operation is complete 
  */
-export const PostSymptomsToTrack = async (flow, mood, sleep, cramps, exercise) => new Promise( async (resolve, reject) => {
+export const POSTSymptomsToTrack = async (flow, mood, sleep, cramps, exercise) => new Promise( async (resolve, reject) => {
     try {
         if([flow, mood, sleep, cramps, exercise].some((bool) => bool)) {
             await AsyncStorage.multiSet([

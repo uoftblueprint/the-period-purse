@@ -7,7 +7,7 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton, DatePickerButton } from './components/ButtonComponents';
 import { TitleText, BodyText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer, InputContainer } from './components/ContainerComponents';
-import { PostInitialPeriodStart, PostInitialPeriodLength } from '../services/OnboardingService';
+import { POSTInitialPeriodStart, POSTInitialPeriodLength } from '../services/OnboardingService';
 import { DatePickerModal } from 'react-native-paper-dates';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import PeriodStartIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_date.svg";
@@ -126,9 +126,9 @@ export default function PeriodStart ({ route, navigation }) {
               if(periodLength == null) {
                 // user did not enter periodLength previously but manually selected a complete date range
                 newPeriodLength = Math.round((range.endDate.getTime() - range.startDate.getTime()) / MILLISECPERDAY);
-                PostInitialPeriodLength(newPeriodLength);
+                POSTInitialPeriodLength(newPeriodLength);
               }
-              PostInitialPeriodStart(range.startDate, range.endDate);
+              POSTInitialPeriodStart(range.startDate, range.endDate);
               navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
                 periodLength: newPeriodLength,
                 // pass down the custom string version of the dates

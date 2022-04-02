@@ -6,7 +6,7 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SymptomsChoicesButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer, SymptomsButtonContainer } from './components/ContainerComponents';
-import { PostSymptomsToTrack } from '../services/OnboardingService';
+import { POSTSymptomsToTrack } from '../services/OnboardingService';
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
@@ -87,7 +87,7 @@ export default function SymptomsChoices ({ route, navigation }) {
         <NextButton title="Next" onPress={() => 
           {
             trackingPreferences = [flow == TEAL, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL];
-            PostSymptomsToTrack(trackingPreferences[0], trackingPreferences[1], trackingPreferences[2],
+            POSTSymptomsToTrack(trackingPreferences[0], trackingPreferences[1], trackingPreferences[2],
                                 trackingPreferences[3], trackingPreferences[4]);
             navigation.navigate(STACK_SCREENS.BACKUP, {
               periodLength: periodLength,
