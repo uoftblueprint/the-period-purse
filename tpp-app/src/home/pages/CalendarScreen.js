@@ -98,25 +98,6 @@ export default function CalendarScreen ({ navigation }) {
             // If the data for that year doesn't already exist
             if (yearData[yearNumber] === undefined) {
                 newData = GETYearData(year)
-                let newData = {
-                    '2022':
-                    [   
-                        [
-                            new Symptoms(FLOW_LEVEL.LIGHT, MOOD_LEVEL.ANGRY, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.BALL_SPORT, 230), 'lorem ipsum'),
-                            new Symptoms()
-                        ],
-                        [
-                            new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.HAPPY, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.MARTIAL_ARTS, 230), 'lorem ipsum'),
-                        ],
-                        [
-                            new Symptoms(FLOW_LEVEL.HEAVY, MOOD_LEVEL.LOL, 800, CRAMP_LEVEL.TERRIBLE, new ExerciseActivity(EXERCISE_TYPE.CARDIO, 125), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.MEDIUM, MOOD_LEVEL.LOVED, 420, CRAMP_LEVEL.BAD, new ExerciseActivity(EXERCISE_TYPE.CYCLE_SPORT, 95), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.LIGHT, MOOD_LEVEL.NEUTRAL, 300, CRAMP_LEVEL.NEUTRAL, new ExerciseActivity(EXERCISE_TYPE.STRENGTH, 65), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.SPOTTING, MOOD_LEVEL.SAD, 150, CRAMP_LEVEL.GOOD, new ExerciseActivity(EXERCISE_TYPE.WATER_SPORT, 50), 'lorem ipsum'),
-                            new Symptoms(FLOW_LEVEL.NONE, MOOD_LEVEL.SICK, 150, CRAMP_LEVEL.NONE, new ExerciseActivity(EXERCISE_TYPE.WINTER_SPORT, 0), 'lorem ipsum'),
-                        ],
-                    ]       
-                }
                 
                 const newYear = {...yearData, ...newData};
                 setYearData(newYear)
