@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {View, Switch, Text, StyleSheet, Image, TouchableOpacity} from 'react-native'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BackButton } from '../home/components/BackButtonComponent';
-import {Card} from 'react-native-elements';
-import DropDownPicker from 'react-native-dropdown-picker';
+import {Picker} from '@react-native-picker/picker';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const NotificationsButton = (props) => {
     const [periodAdvanceOpen, periodAdvanceSetOpen] = useState(false);
@@ -29,8 +29,11 @@ const NotificationsButton = (props) => {
   {label: '6 days', value: '6 days'},
   {label: '7 days', value: '7 days'}
 ]);
+
+const [selectedLanguage, setSelectedLanguage] = useState();
     return (
         <View style={{top: -40}}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>  
             <View style={styles.reminderTextBox}>
                     <Text style={styles.remindText}>Remind me to log period</Text>
                     <Switch
@@ -46,21 +49,30 @@ const NotificationsButton = (props) => {
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
                 }}/>
-                          <View style={styles.dropDownTextBox}>
-                
-            <DropDownPicker
-            labelProps={"How many days in advance"}
-            open={periodAdvanceOpen}
-            value={periodAdvanceValue}
-            items={periodAdvanceItems}
-            setOpen={periodAdvanceSetOpen}
-            setValue={setPeriodAdvanceValue}
-            setItems={setPeriodAdvanceItems}
-             />
 
-                </View>
+        <DropDownTab leftText={"How many days in advance"} rightText={"2 days"}/>
+        <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
+
+        <DropDownTab leftText={"Reminder time"} rightText={"10:00"}/>
+        <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
+{/* <Picker
+  selectedValue={selectedLanguage}
+  onValueChange={(itemValue, itemIndex) =>
+    setSelectedLanguage(itemValue)
+  }>
+  <Picker.Item label="Java" value="java" />
+  <Picker.Item label="JavaScript" value="js" />
+</Picker> */}
+                          
             <View style={styles.reminderTextBox}>
- 
                     <Text style={styles.remindText}>Remind me to log symptoms</Text>
                     <Switch
                         onValueChange={props.toggleSymptomsSwitch}
@@ -73,16 +85,28 @@ const NotificationsButton = (props) => {
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
                 }}/>
-                 <View style={styles.dropDownTextBox}>
-                <DropDownPicker
-                open={symptomsAdvanceOpen}
-                value={symptomsAdvanceValues}
-                items={symptomsAdvanceTtems}
-                setOpen={setSymptomsAdvanceOpen}
-                setValue={setSymptomsAdvanceValues}
-                setItems={setSymptomsAdvanceItems}/>
-                </View>
+              <DropDownTab leftText={"Repeat"} rightText={"Only during period"}/>
+              <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
 
+        <DropDownTab leftText={"ReminderTime"} rightText={"10:00"}/>
+        <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
+                {/* <Picker
+  selectedValue={selectedLanguage}
+  onValueChange={(itemValue, itemIndex) =>
+    setSelectedLanguage(itemValue)
+  }>
+  <Picker.Item label="Java" value="java" />
+  <Picker.Item label="JavaScript" value="js" />
+</Picker> */}
+    </ScrollView>
         </View>
     )
 }
@@ -97,6 +121,21 @@ const remindSwitch = (props) => {
          />
     </View>
     )}
+
+const DropDownTab = (props) => {
+    return (
+    <View style={styles.dropDownTextBox}>
+        <Text style={styles.dropDownLeftText}>{props.leftText}</Text>
+        <Text style={styles.dropDownRightText}>{props.rightText}</Text>
+        <Icon
+            name="arrow-back-ios"
+            size={24}
+            color="#5A9F93"
+            style={{transform: [{rotateY: '180deg'}],}}
+            />     
+        </View>
+        )
+}
 
 export default function Notifications () {
     const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(true);
@@ -163,7 +202,7 @@ const NotificationStack = (props) => {
             name="arrow-back-ios"
             size={24}
             color="#5A9F93"
-            style={{transform: [{rotateY: '180deg'}],}}
+            style={{transform: [{rotateY: '90deg'}],}}
             /></View>
 
 
@@ -210,7 +249,8 @@ const styles = StyleSheet.create({
         paddingTop: 16,
         paddingRight: 16,
         paddingLeft: 16,
-        height: 62
+        height: 62,
+        backgroundColor: 'rgba(255, 255, 255, 0.5)'
     },
     dropDownLeftText : {
         fontFamily: 'Avenir',
@@ -218,5 +258,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         height: 34,
         lineHeight: 34
+    },
+    dropDownRightText : {
+        fontFamily: 'Avenir',
+        fontWeight: '800',
+        fontSize: 16,
+        lineHeight: 34,   
+        color: "#5A9F93",
+        right: -50
     }
 });
