@@ -6,6 +6,7 @@ import { MoodHappyIcon, MoodSadIcon, MoodNeutralIcon, MoodSickIcon, MoodAngryIco
 import { ExerciseBallSportIcon, ExerciseCardioIcon, ExerciseCycleSportIcon, ExerciseMartialArtsIcon, ExerciseRacketSportsIcon, ExerciseStrengthIcon, ExerciseWaterSportIcon, ExerciseWinterSportIcon, ExerciseYogaIcon} from '../../services/utils/calendaricons';
 import { VIEWS } from '../../services/utils/constants';
 import { FILTER_COLOURS, FILTER_TEXT_COLOURS } from '../../services/utils/constants';
+import { STACK_SCREENS } from '../CalendarNavigator';
 
 // The component that is used by each day in the calendar
 export const DayComponent = ({ date, state, marking, selectedView, navigation }) => {

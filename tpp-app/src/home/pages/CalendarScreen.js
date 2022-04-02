@@ -6,7 +6,6 @@ import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
 import { GETYearData } from '../../services/CalendarService';
-import { Symptoms } from '../../services/utils/models';
 import { VIEWS } from '../../services/utils/constants';
 
 
@@ -86,16 +85,8 @@ export default function CalendarScreen ({ navigation }) {
     const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
     const [yearInView, setYearInView] = useState([new Date().getFullYear()])
 
-    // Generate dummy initial year that just creates a blank symptom object for the year
-    const initialYear = {}
-    initialYear['0000'] = [new Symptoms()]
-    const [yearData, setYearData] = useState(initialYear)
-
-    const initialMarked = {};
-    initialMarked[new Date().toISOString().substring(0,10)] = {
-        symptoms: new Symptoms(),
-    }
-    const [marked, setMarked] = useState(initialMarked)
+    const [yearData, setYearData] = useState({})
+    const [marked, setMarked] = useState({})
 
     useEffect(() => {
         // Whenever the user scrolls and changes what year is in view
