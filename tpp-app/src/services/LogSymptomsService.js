@@ -60,13 +60,15 @@ export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve,
             const calendarData = await getCalendarByYear(curYear);
         
 
-            dates.map((date)=>{
+            dates.map((date) => {
                 const year = date.year;
                 const month = date.month;
                 const day = date.day;
                 try {
                     
                     let symptoms = getSymptomsFromCalendar(calendarData, day, month, year);
+
+                    console.log(symptoms);
 
                     if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
                         symptoms.flow = FLOW_LEVEL.MEDIUM;

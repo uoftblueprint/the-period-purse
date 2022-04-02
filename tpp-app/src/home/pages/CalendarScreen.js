@@ -37,6 +37,8 @@ const DayComponent = ({ date, state, marking, navigation, calendarData }) => {
 export const Calendar = ({navigation}) => {
     const [calendarData, setCalendarData] = useState({});
 
+    console.log(calendarData);
+
     //updates the data when you come back to the calendar screen
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {

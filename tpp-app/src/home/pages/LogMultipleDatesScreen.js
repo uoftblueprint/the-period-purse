@@ -1,50 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 import { CalendarList } from 'react-native-calendars';
 import { STACK_SCREENS } from '../CalendarNavigator';
 import { getCalendarByYear, getSymptomsFromCalendar, initializeEmptyYear } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
-import Checkmark from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
+import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
+import SelectedIcon from '../../../ios/tppapp/Images.xcassets/icons/selected_icon';
 
-const DayComponent = ({ date, navigation, calendarData, addDate, removeDate }) => {
+const DayComponent = ({props}) => {
+    const {onPress, date, marking} = props;
+    // console.log(selectedDates);
+    
+    // const [backgroundColor, setBackgroundColor] = useState("#FFFFFF")
 
-    const [backgroundColor, setBackgroundColor] = useState("#FFFFFF")
-
-
-    const multiSelect = () => {
-        if(backgroundColor == "#FFFFFF"){
-            setBackgroundColor("#73C7B7");
-            addDate(date);
-        } else {
-            setBackgroundColor("#FFFFFF");
-            removeDate(date);
-        }
-    }
+    // const multiSelect = () => {
+    //     if (handleSelect(date)){
+    //         setBackgroundColor("#72C6B7");
+    //     }else{
+    //         setBackgroundColor("#FFFFFF");
+    //     }
+    // }
 
     return(
         // onpress should select the dates for multi select
-        <TouchableOpacity onPress={() => multiSelect()}>
-            <View style={{...styles.dayContainer, backgroundColor: backgroundColor}}>
+        <TouchableOpacity onPress={() => onPress(date)}>
+            <View style={{
+                ...styles.dayContainer,
+                backgroundColor: marking && marking['customStyles'].backgroundColor,
+            }}>
                 <Text>
                     {date.day}
                 </Text>
+                {/* {backgroundColor == "#72C6B7" && <SelectedIcon style={styles.selectedIcon}/>} */}
             </View>
         </TouchableOpacity>
     )
 }
 
-export const Calendar = ({navigation, addDate, removeDate}) => {
-    const [calendarData, setCalendarData] = useState({});
-    useEffect(() => {
-        getCalendarData()
-    },[])
-
-    const getCalendarData = async () => {
-        // will need to choose the correct year depending on which year the user is looking at
-        const data = await getCalendarByYear(2022);
-        setCalendarData(data);
-    }
+export const Calendar = ({ navigation, setSelectedDates, markedDates}) => {
+    
     
     return (
         <CalendarList
@@ -59,7 +54,10 @@ export const Calendar = ({navigation, addDate, removeDate}) => {
 
         // Enable or disable vertical scroll indicator. Default = false
         showScrollIndicator={true}
-        dayComponent={({date}) => <DayComponent date={date}  navigation={navigation} calendarData={calendarData} addDate={addDate} removeDate={removeDate}/>}
+        onDayPress={setSelectedDates}
+        markingType={'custom'}
+        dayComponent={props => <DayComponent props={props}/>}
+        markedDates={markedDates}
 
         theme={{
             calendarBackground: '#ffffff',
@@ -100,22 +98,80 @@ export const Calendar = ({navigation, addDate, removeDate}) => {
 
 
 export default function LogMultipleDatesScreen ({ navigation }) {
-    const [selectedDates, setSelectedDates] = useState([])
+    // const [selectedDates, setSelectedDates] = useState([]);
+    const [numSelected, setNumSelected] = useState(0);
+    const [markedDates, setMarkedDates] = useState({});
 
-    const addDate = date => {
-        if (!selectedDates.includes(date)){
-            selectedDates.push(date);
-        }
-    }
+    const unsavedChanges = {
+        title: "Unsaved changes",
+        message: "Your changes have not been saved. Do you want to discard the changes and continue?",
+        cancelTitle: "Cancel",
+        acceptTitle: "Yes"
+      }
 
-    const removeDate = date => {
-        const index = selectedDates.indexOf(date);
-        if (index != -1){
-            selectedDates.splice(index, 1);
+    const setSelectedDates = date => {
+        if (markedDates[date.dateString]) {
+          const isMarked = !markedDates[date.dateString].marked;
+          setMarkedDates({
+            ...markedDates,
+            [date.dateString]: {
+              marked: isMarked,
+              customStyles: {
+                backgroundColor: isMarked ? '#72C6B7' : '#FFFFFF',
+              },
+            },
+          });
+    
+          isMarked
+            ? setNumSelected(numSelected + 1)
+            : setNumSelected(numSelected - 1);
+        } else {
+          setMarkedDates({
+            ...markedDates,
+            [date.dateString]: {
+              marked: true,
+              customStyles: {
+                backgroundColor: '#72C6b7',
+              },
+            },
+          });
+    
+          setNumSelected(numSelected + 1);
         }
-    }
+    };
+        
+    //     setSubtitle(selectedDates.length.toString() + text);
+    // }, [selectedDates])
+
+    // const handleSelect = date => {
+    //     if(selectedDates.some(elem => date.dateString == elem.dateString)){
+    //     // if(false){
+    //         //removing
+    //         setSelectedDates(selectedDates.filter(data => date.dateString !== data.dateString))
+    //         return false
+    //     } else {
+    //         //adding
+    //         setSelectedDates([...selectedDates, date])
+    //         // selectedDates.push(date)
+    //         // console.log(selectedDates);
+    //         return true
+    //     }
+    // }
 
     const onSubmit = async() => {
+        const selectedDates = [];
+
+        Object.keys(markedDates).map(date => {
+            if(markedDates[date].marked){
+                const processed = date.split("-");
+                const data = {year: processed[0], month: processed[1], day: processed[2]};
+                
+                selectedDates.push(data);
+            }
+        })
+
+        // console.log(selectedDates);
+
         if(selectedDates.length > 0){
             try {
                 await LogMultipleDayPeriod(selectedDates);
@@ -126,21 +182,60 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         navigation.navigate(STACK_SCREENS.CALENDAR);
     }
 
+    const alertPopup = (info) =>  {
+        Alert.alert(
+          info.title,
+          info.message,
+          [
+            {
+              text: info.cancelTitle,
+              style: "cancel"
+            },
+            { text: info.acceptTitle, onPress: () => navigation.navigate(STACK_SCREENS.CALENDAR) }
+          ]
+        );
+      }
+
+    const onClose = () => {
+        if(Object.keys(markedDates).some(key => markedDates[key].marked)){
+
+            alertPopup(unsavedChanges);
+          
+        }else{
+            navigation.navigate(STACK_SCREENS.CALENDAR);
+        }
+    }
+
 
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
 
-                <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.CALENDAR)} style={styles.close}>
+                <TouchableOpacity onPress={() => onClose()} style={styles.close}>
                   <CloseIcon fill={'#181818'}/>
                 </TouchableOpacity>
-                <Text style={styles.navbarTitle}>Tap date to log period</Text>
+                <View style={styles.navbarTextContainer}>
+                    
+                    <Text style={styles.navbarTitle}>Tap date to log period</Text>
+                    <Text style={styles.navbarSubTitle}>
+                        {numSelected !== 1
+                        ? `${numSelected} days selected`
+                        : `${numSelected} day selected`}
+                    </Text>
 
+                </View>
             </View>
             
-            <Calendar navigation={navigation} addDate={addDate} removeDate={removeDate}/>
+            <Calendar 
+                numSelected={numSelected}
+                setNumSelected={setNumSelected}
+                navigation={navigation}
+                setSelectedDates={setSelectedDates}
+                markedDates={markedDates}
+            />
+            {/* {Cal} */}
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
-                <Checkmark fill={'#181818'}/>
+                <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>
         </View>
     )
@@ -149,14 +244,20 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1
+        
     },
     navbarContainer: {
         paddingTop: 98,
         paddingBottom: 30,
         position: 'relative',
         flexDirection: 'row',
-        backgroundColor: '#72C6B7',
+        backgroundColor: '#FFFFFF',
         width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    navbarTextContainer:{
+        height: 30,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -164,6 +265,11 @@ const styles = StyleSheet.create({
         color: '#181818',
         fontWeight: "600",
         fontSize: 20,
+    },
+    navbarSubTitle: {
+        color: '#181818',
+        fontWeight: "400",
+        fontSize: 13,
     },
     close: {
       height: 30,
@@ -198,6 +304,16 @@ const styles = StyleSheet.create({
         width: 60,  
         height: 60,   
         borderRadius: 30,            
-        backgroundColor: '#73C7B7', 
-    }
+        backgroundColor: '#5A9F93', 
+    },
+    selectedIcon: {
+        position: 'relative',
+        top: -4,
+        height: 20,
+        left: -2,
+        marginLeft: 'auto',
+        marginRight: 'auto'
+        
+    },
+
 })
