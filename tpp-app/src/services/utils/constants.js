@@ -77,9 +77,9 @@ export const FILTER_COLOURS = {
 
 export const FILTER_TEXT_COLOURS = {
   FLOW: {
-    HEAVY: '#FFF',
-    MEDIUM: '#FFF',
-    LIGHT: '#FFF',
+    HEAVY: '#000',
+    MEDIUM: '#000',
+    LIGHT: '#000',
     SPOTTING: '#000',
     NONE: '#000',
   },

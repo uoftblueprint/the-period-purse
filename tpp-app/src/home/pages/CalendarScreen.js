@@ -5,6 +5,8 @@ import { DayComponent } from '../components/DayComponent'
 import Selector from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
+import { Symptoms, ExerciseActivity } from '../../services/utils/models';
+import { FLOW_LEVEL, MOOD_LEVEL, CRAMP_LEVEL, EXERCISE_TYPE } from '../../services/utils/constants';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 
@@ -95,7 +97,7 @@ export default function CalendarScreen ({ navigation }) {
             // If the data for that year doesn't already exist
             if (yearData[yearNumber] === undefined) {
                 newData = GETYearData(year)
-
+                
                 const newYear = {...yearData, ...newData};
                 setYearData(newYear)
 

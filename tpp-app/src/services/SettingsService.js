@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TRACK_SYMPTOMS, REMINDERS} from './utils/constantscs'
+import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants'
 
     /**
      * Clears all of the user's account data
