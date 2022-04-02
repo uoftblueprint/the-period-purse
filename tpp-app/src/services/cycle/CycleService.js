@@ -337,7 +337,7 @@ const CycleService = {
     let calendar = await getCalendarByYear(year);
     let periods = await getPeriodsInYear(year, calendar);
 
-    if(periods.length == 0){
+    if(periods.length === 0){
       return intervals;
     }
 

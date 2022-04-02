@@ -72,8 +72,8 @@ function MinimizedHistoryCard({navigation, intervals, onPeriod}){
                     if(index < 3){
                         return  <Interval 
                                     interval={interval} 
-                                    key={index} index={index} 
-                                    isMostRecent={index == 0} 
+                                    key={index}  
+                                    isMostRecent={index === 0} 
                                     onPeriod={onPeriod}
                                 />
                     }
@@ -100,8 +100,7 @@ function ExpandedHistoryCard({intervals, renderedYear, onPeriod}){
                     return  <Interval 
                                 interval={interval} 
                                 key={index} 
-                                index={index} 
-                                isMostRecent={index == 0 & renderedYear== currentYear}
+                                isMostRecent={index === 0 & renderedYear === currentYear}
                                 onPeriod={onPeriod}
                             />
                 })}

@@ -26,9 +26,9 @@ function Header({navigation}){
 
 function YearButton({year, selectedYear, setSelectedYear}){
 
-    let backgroundColor = year == selectedYear ? "#B31F20" : "#FFFFFF";
-    let textColor = year == selectedYear ? "#FFFFFF" : "#C4C4C4";
-    let border = year == selectedYear ? null : styles.buttonBorder;
+    let backgroundColor = year === selectedYear ? "#B31F20" : "#FFFFFF";
+    let textColor = year === selectedYear ? "#FFFFFF" : "#C4C4C4";
+    let border = year === selectedYear ? null : styles.buttonBorder;
     return (
         <TouchableOpacity 
             onPress={() => setSelectedYear(year)}
@@ -40,10 +40,16 @@ function YearButton({year, selectedYear, setSelectedYear}){
 }
 
 export default function CycleHistoryScreen({navigation}){
-    let [currentIntervals, setCurrentIntervals] = useState([]);
+    const DEFAULTS = {
+        CURRENT_INTERVALS: [],
+        STORED_YEARS: [],
+        ON_PERIOD: false
+    }
+
+    let [currentIntervals, setCurrentIntervals] = useState(DEFAULTS.CURRENT_INTERVALS);
     let [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-    let [storedYears, setStoredYears] = useState([]);
-    let [onPeriod, setOnPeriod] = useState(false);
+    let [storedYears, setStoredYears] = useState(DEFAULTS.STORED_YEARS);
+    let [onPeriod, setOnPeriod] = useState(DEFAULTS.ON_PERIOD);
     
     useEffect(() => {
         GETStoredYears().then(
@@ -51,9 +57,11 @@ export default function CycleHistoryScreen({navigation}){
                 setStoredYears(years);
             }
         )
+        .catch(() => setStoredYears(DEFAULTS.STORED_YEARS)) 
         CycleService.GETPeriodDay().then(days => {
-            setOnPeriod(days != 0 );
+            setOnPeriod(days !== 0 );
         })
+        .catch(() => setOnPeriod(DEFAULTS.ON_PERIOD))
     }, []);
 
     //update the cycles being rendered to reflect newly selected year.
@@ -63,6 +71,7 @@ export default function CycleHistoryScreen({navigation}){
                 setCurrentIntervals(intervals);
             }
         )
+        .catch(() => setCurrentIntervals(DEFAULTS.CURRENT_INTERVALS)) //error case, render empty card
     },[selectedYear]);
 
     return (

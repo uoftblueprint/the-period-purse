@@ -16,7 +16,9 @@ export const STACK_SCREENS = {
     SELECT_LOG_OPTION: "SelectLogOption",
     LOG_SYMPTOMS: "LogSymptoms",
     LOG_MULTIPLE_DATES: "LogMultipleDates",
-    CYCLE_HISTORY: "CycleHistoryScreen"
+    CYCLE_HISTORY: "CycleHistoryScreen",
+    CYCLE_PAGE: "Cycle",
+    CALENDAR_PAGE: "Calendar"
 };
 
 export default function CalendarNavigator() {

@@ -38,15 +38,27 @@ function PeriodNotification(props){
 }
 
 export default function CycleScreen ({navigation}){
+  const DEFAULTS = {
+    AVG_PERIOD_LENGTH: 0,
+    AVG_CYCLE_LENGTH: 0,
+    PERIOD_DAYS : 0,
+    DAYS_SINCE_LAST_PERIOD: 0,
+    CYCLE_DONUT_PERCENT: 0,
+    DAYS_TILL_PERIOD: 0,
+    INTERVALS: [],
+    SHOW_TIP: true
+  };
 
-  let [avgPeriodLength, setAvgPeriodLength] = useState(0);
-  let [avgCycleLength, setAvgCycleLength] = useState(0);
-  let [periodDays, setPeriodDays] = useState(0);
-  let [daysSinceLastPeriod, setDaysSinceLastPeriod] = useState(0);
-  let [cycleDonutPercent, setCycleDonutPercent] = useState(0);
-  let [daysTillPeriod, setDaysTillPeriod] = useState(0);
-  let [intervals, setIntervals] = useState([]);
-  let [showTip, setShowTip] = useState(true);
+
+  let [avgPeriodLength, setAvgPeriodLength] = useState(DEFAULTS.AVG_PERIOD_LENGTH);
+  let [avgCycleLength, setAvgCycleLength] = useState(DEFAULTS.AVG_CYCLE_LENGTH);
+  let [periodDays, setPeriodDays] = useState(DEFAULTS.PERIOD_DAYS);
+  let [daysSinceLastPeriod, setDaysSinceLastPeriod] = useState(DEFAULTS.DAYS_SINCE_LAST_PERIOD);
+  let [cycleDonutPercent, setCycleDonutPercent] = useState(DEFAULTS.CYCLE_DONUT_PERCENT);
+  let [daysTillPeriod, setDaysTillPeriod] = useState(DEFAULTS.DAYS_TILL_PERIOD);
+  let [intervals, setIntervals] = useState(DEFAULTS.INTERVALS);
+  let [showTip, setShowTip] = useState(DEFAULTS.SHOW_TIP);
+
   const tabBarHeight = useBottomTabBarHeight();
 
   useEffect(() => {
@@ -60,33 +72,38 @@ export default function CycleScreen ({navigation}){
 
      CycleService.GETPeriodDay().then(days => {
        setPeriodDays(days);
-     });
+     })
+     .catch(() => {setPeriodDays(DEFAULTS.PERIOD_DAYS)});
 
      CycleService.GETCycleDonutPercent().then(percent => {
        setCycleDonutPercent(percent * 100);
-     });
+     })
+     .catch(() => setCycleDonutPercent(DEFAULTS.CYCLE_DONUT_PERCENT));
 
      CycleService.GETDaysSinceLastPeriodEnd().then(days => {
        setDaysSinceLastPeriod(days);
-     });
+     })
+     .catch(setDaysSinceLastPeriod(DEFAULTS.DAYS_SINCE_LAST_PERIOD));
 
      CycleService.GETAveragePeriodLength().then(numDays => {
        if(numDays){
         setAvgPeriodLength(numDays);
        }
        else {
-         setAvgPeriodLength(0);
+         setAvgPeriodLength(DEFAULTS.AVG_PERIOD_LENGTH);
        }
-     });
+     })
+     .catch(() => setAvgPeriodLength(DEFAULTS.AVG_PERIOD_LENGTH));
      
      CycleService.GETAverageCycleLength().then(numDays => {
        if(numDays){
         setAvgCycleLength(numDays);
        }
        else {
-         setAvgCycleLength(0);
+         setAvgCycleLength(DEFAULTS.AVG_CYCLE_LENGTH);
        }
-     });
+     })
+     .catch(() => setAvgCycleLength(DEFAULTS.AVG_CYCLE_LENGTH));
 
      CycleService.GETPredictedDaysTillPeriod().then(numDays => {
        let toSet;
@@ -94,15 +111,22 @@ export default function CycleScreen ({navigation}){
          toSet = numDays;
        }
        else{
-         toSet = -1;
+         toSet = DEFAULTS.DAYS_TILL_PERIOD;
          //if the prediction is invalid, don't show the tooltip
          setShowTip(false);
        }
        setDaysTillPeriod(toSet);
+     })
+     .catch(() => {
+       setDaysTillPeriod(DEFAULTS.DAYS_TILL_PERIOD);
+       setShowTip(false);
      });
      
      CycleService.GETCycleHistoryByYear(new Date().getFullYear()).then(intervals =>{
        setIntervals(intervals);
+     })
+     .catch(()=> {
+       setIntervals(DEFAULTS.INTERVALS);
      })
 
   }, []);
