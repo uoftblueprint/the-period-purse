@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, createElement } from 'react';
+import { View, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { CrampsTerribleIcon, CrampsNeutralIcon, CrampsBadIcon, CrampsGoodIcon, CrampsNoneIcon } from '../../services/utils/calendaricons';
 import { FlowHeavyIcon, FlowMediumIcon, FlowLightIcon, FlowNoneIcon, FlowSpottingIcon } from '../../services/utils/calendaricons';
 import { MoodHappyIcon, MoodSadIcon, MoodNeutralIcon, MoodSickIcon, MoodAngryIcon, MoodLolIcon, MoodIdkIcon, MoodGreatIcon, MoodLovedIcon } from '../../services/utils/calendaricons';
@@ -14,6 +14,7 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
     let bgColor;
     let textColor;
     let iconName = 'view';
+    let renderedIcon;
 
     // If this specific date has been marked
     if (marking) {
@@ -47,30 +48,24 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
             // Get Icon
             if (viewKey !== 'sleep' && viewKey !== 'exercise') {
                 iconName = viewKey + symptomAttribute.toLowerCase()
+                renderedIcon = createElement(ICON_TYPES[iconName], {
+                    style: styles.dayIcon,
+                    fill: textColor
+                })
             }            
             
         }
     }
 
     return(
-        React.createElement(TouchableOpacity, {
-            onPress: () => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {
-                "date": date
-            })
-          }, 
-          React.createElement(View, {
-            style: styles.dayContainer,
-            backgroundColor: bgColor
-          }, React.createElement(Text, {
-            style: {
-              color: textColor
-            }
-          }, date.day), 
-          // Working solution for dynamically updating the icon
-          React.createElement(ICON_TYPES[iconName], {
-            style: styles.dayIcon,
-            fill: textColor
-          })))
+        <TouchableOpacity onPress={() => {}}>
+            <View style={styles.dayContainer} backgroundColor={bgColor}>
+                <Text style={{ color: textColor }}>
+                    {date.day}    
+                </Text>
+                {renderedIcon}
+            </View>
+        </TouchableOpacity>
     )
 }
 
@@ -91,6 +86,7 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
  */
 function filterSleep(minutes) {
     let sleepScore = minutes / 60
+    let attribute;
 
     if (sleepScore >= 8) {
         attribute = 'HEAVY'
@@ -111,6 +107,9 @@ function filterSleep(minutes) {
  * @return {string} returns a key for accessing colour data
  */
 function filterExercise(minutes) {
+
+    let attribute;
+
     if (minutes > 120) {
         attribute = 'HEAVY'
     } else if (minutes > 90) {
@@ -175,5 +174,5 @@ const ICON_TYPES = {
     exercisewater_sport: ExerciseWaterSportIcon,
     exercisewinter_sport: ExerciseWinterSportIcon,
     exerciseyoga: ExerciseYogaIcon,
-    view: View
+    view: SafeAreaView
 };

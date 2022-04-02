@@ -121,6 +121,15 @@ export const getDaysDiffInclusive = (earlierDate, laterDate) => {
   return Math.abs(differenceInCalendarDays(earlierDate, laterDate)) + 1;
 }
 
+/**
+* Returns a string in the format of 'yyyy-MM-dd' from a date object and removes the time
+* @param {Date} date object to be processed
+* @return {string} a string in the format of 'yyyy-MM-dd' without the time
+*/
+export const getISODate = (date) => {
+   return date.toISOString().substring(0,10)
+}
+
 
 /**
  *
