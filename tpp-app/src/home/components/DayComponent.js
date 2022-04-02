@@ -8,6 +8,7 @@ import { VIEWS } from '../../services/utils/constants';
 import { FILTER_COLOURS, FILTER_TEXT_COLOURS } from '../../services/utils/constants';
 import { STACK_SCREENS } from '../CalendarNavigator';
 
+
 // The component that is used by each day in the calendar
 export const DayComponent = ({ date, state, marking, selectedView, navigation }) => {
 
@@ -40,19 +41,25 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
                     iconName = viewKey + symptomAttribute.exercise.toLowerCase()
                     break;
             }
+
+            
             // Mood is the only one that does not modify the background colour
             if (viewKey !== 'mood') {
                 bgColor = FILTER_COLOURS[viewKey.toUpperCase()][attribute]
                 textColor = FILTER_TEXT_COLOURS[viewKey.toUpperCase()][attribute]
             }
+
             // Get Icon
             if (viewKey !== 'sleep' && viewKey !== 'exercise') {
                 iconName = viewKey + symptomAttribute.toLowerCase()
-                renderedIcon = createElement(ICON_TYPES[iconName], {
-                    style: styles.dayIcon,
-                    fill: textColor
-                })
             }            
+
+            renderedIcon = createElement(ICON_TYPES[iconName], {
+                style: styles.dayIcon,
+                width: ICON_SIZE.height,
+                height: ICON_SIZE.width,
+                fill: textColor
+            })
             
         }
     }
@@ -144,6 +151,11 @@ const styles = StyleSheet.create({
         marginRight: 'auto'
     }
 })
+
+const ICON_SIZE = {
+    height: 25,
+    width: 25,
+}
 
 const ICON_TYPES = {
     crampsterrible: CrampsTerribleIcon,
