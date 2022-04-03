@@ -44,12 +44,12 @@ const symptoms = ['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes']; // or
 
 export default function LogSymptomsScreen({ navigation, route }) {
   const [trackingPrefs, setPrefs] = useState(['notes']); // list of symptoms to track, default is always 'notes'
-  //const [trackingPrefs, setPrefs] = useState(['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes']); // TODO: remove
 
   // Set trackingPrefs when component mounts
   useEffect(() => {
       async function fetchPreferences() {
         let allPrefs = await GETAllTrackingPreferences();
+        let prefArr = trackingPrefs;
         // set trackingPrefs somewhere
         for (let pref of allPrefs) {
           let toTrack = pref[1]
@@ -73,9 +73,10 @@ export default function LogSymptomsScreen({ navigation, route }) {
                   symptom = 'flow'
                   break;
               }
-              if (!trackingPrefs.includes(symptom)) setPrefs(trackingPrefs.push(symptom));
+              if (!prefArr.includes(symptom)) prefArr.push(symptom);
           }
         }
+        setPrefs(prefArr);
       }
       fetchPreferences();
   }, [])
@@ -87,9 +88,9 @@ export default function LogSymptomsScreen({ navigation, route }) {
     return symps
   }
 
-  const [selectedDate, changeDate] = useState(
-    new Date(route.params.date.year, route.params.date.month - 1, route.params.date.day, 0, 0, 0)
-  );
+  let initialDate = new Date(route.params.date.year, route.params.date.month - 1, route.params.date.day, 0, 0, 0);
+  const [selectedDate, changeDate] = useState(initialDate);
+  const [dateStr, setDateStr] = useState(getDateString(initialDate, 'MM DD, YYYY')) // date in MM DD, YYYY format
   const [stored, setStoredSymps] = useState(new Symptoms()); // original stored symptoms
 
   // SYMPTOM STATES
@@ -102,7 +103,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
   const [submitting, setSubmitting] = useState(false);
   const [isDirty, setDirty] = useState(false); // if there are changes to submit
-  const [fetchingSymps, setFetching] = useState(true); // if need to fetch symptoms from storage
+  const [fetchingSymps, setSympFetch] = useState(true); // if need to fetch symptoms from storage
 
   // literally to quick access symptom states in a dynamic way
   const form = {
@@ -148,9 +149,9 @@ export default function LogSymptomsScreen({ navigation, route }) {
         setExercise(initSymps.exercise);
         setNotes(initSymps.notes);
 
-        setFetching(false);
+        setSympFetch(false);
       }
-      fetchData()
+      fetchData().catch(e => console.log(e))
     }
   }, [fetchingSymps])
 
@@ -232,7 +233,8 @@ export default function LogSymptomsScreen({ navigation, route }) {
   // Helper function to set form state back to default
   const resetForm = async (newDate) => {
     changeDate(newDate);
-    setFetching(true); // triggers useEffect to fetch symptoms of newDate
+    setDateStr(getDateString(newDate, 'MM DD, YYYY'));
+    setSympFetch(true); // triggers useEffect to fetch symptoms of newDate
     setDirty(false);
     setSubmitting(false);
   }
@@ -260,7 +262,6 @@ export default function LogSymptomsScreen({ navigation, route }) {
     }
   }
 
-  let dateStr = getDateString(selectedDate, 'MM DD, YYYY'); // date in MM DD, YYYY format
 
   return (
     <SafeAreaView style={styles.screen}><ScrollView>
