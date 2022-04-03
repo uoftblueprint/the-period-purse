@@ -8,6 +8,7 @@ import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 const PreferenceButton = (props) => {
@@ -133,8 +134,8 @@ const NotificationSettings = ({navigation}) => {
         return date;
     };
 return (
-    <SafeAreaView>
-        <Text style={styles.heading}>Account settings </Text>
+    <SafeAreaView style={{top: -50}}>
+        <Text style={styles.heading}>Notification Settings</Text>
         <NotificationsButton 
             text={"Remind me to log period"} 
             subtext={"2 days before at 9:00 am"} 
@@ -153,13 +154,13 @@ return (
 
 const SettingOptions = ({navigation}) => {
     return (
-        <View>
+        <SafeAreaView style={{top: -150}}>
             <Text style={styles.heading}>Account settings </Text>
         <SettingsStackButton name={"Profile Information"}  navigation={navigation} />
         <SettingsStackButton name={"Privacy Policy"}  navigation={navigation}/>
         <SettingsStackButton name={"Log Out"} navigation={navigation}/>
         <SettingsStackButton name={"Delete Account"} navigation={navigation} />
-        </View>
+        </SafeAreaView>
     )
 }
 export default function Settings ({ navigation }) {
@@ -200,11 +201,13 @@ export default function Settings ({ navigation }) {
     
 
     return (
+        <ScrollView>  
         <View style={styles.container}>
-            <Preferences/>
-            <NotificationSettings navigation={navigation}/>
-            <SettingOptions navigation={navigation}/>
-        </View>
+        <Preferences/>
+        <NotificationSettings navigation={navigation}/>
+        <SettingOptions navigation={navigation}/>
+    </View></ScrollView>
+      
     )
 }
 
@@ -292,7 +295,9 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         fontSize: 12,
         lineHeight: 34,
-        top: -20
+        top: -20,
+        color: '#6D6E71',
+        left: 10
     },
 
 });
