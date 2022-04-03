@@ -49,7 +49,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
   useEffect(() => {
       async function fetchPreferences() {
         let allPrefs = await GETAllTrackingPreferences();
-        let prefArr = trackingPrefs;
+        let prefArr = [...trackingPrefs];
         // set trackingPrefs somewhere
         for (let pref of allPrefs) {
           let toTrack = pref[1]
@@ -60,6 +60,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
               switch(title) {
                 case TRACK_SYMPTOMS.MOOD:
                   symptom = 'mood'
+                  break;
                 case TRACK_SYMPTOMS.SLEEP:
                   symptom = 'sleep'
                   break;

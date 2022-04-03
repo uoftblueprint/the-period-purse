@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         maxWidth: 327,
-        paddingBottom: 5
+        paddingBottom: 10
     },
     option: {
         flexDirection: 'column',
