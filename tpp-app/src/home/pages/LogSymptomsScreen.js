@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, StatusBar, Alert } from "react-native";
+import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
+import Constants from 'expo-constants';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
 import Accordion from "../components/Accordion";
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
     screen: {
         backgroundColor: '#ffffff',
         flex: 1,
-        paddingTop: StatusBar.currentHeight
+        paddingTop: Constants.statusBarHeight
     },
     navbarContainer: {
         paddingTop: 98,
