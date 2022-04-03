@@ -145,7 +145,7 @@ return (
             subtext={"Every day at 10:00 pm"} 
             toggle={toggleSymptomsSwitch}
             enabled={remindSymptomsEnabled}/>
-        <SettingsStackButton name={"Customize Notifications"} navigation={navigation} />
+        <SettingsStackButton name={"Notifications"} navigation={navigation} />
 
     </SafeAreaView>
 )
@@ -202,7 +202,7 @@ export default function Settings ({ navigation }) {
     return (
         <View style={styles.container}>
             <Preferences/>
-            <NotificationSettings/>
+            <NotificationSettings navigation={navigation}/>
             <SettingOptions navigation={navigation}/>
         </View>
     )

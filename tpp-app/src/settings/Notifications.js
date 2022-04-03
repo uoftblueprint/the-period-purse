@@ -34,22 +34,13 @@ const [selectedLanguage, setSelectedLanguage] = useState();
     return (
         <View style={{top: -40}}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>  
-            <View style={styles.reminderTextBox}>
-                    <Text style={styles.remindText}>Remind me to log period</Text>
-                    <Switch
-                        onValueChange={props.togglePeriodSwitch}
-                        value={props.remindPeriodEnabled}
-                    />
-            </View>
-            <View>
-
-            </View>
+      
+            <NotificationStack text={"Remind me to log period"}/>
             <View
             style={{
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
                 }}/>
-
         <DropDownTab leftText={"How many days in advance"} rightText={"2 days"}/>
         <View
             style={{
@@ -71,20 +62,12 @@ const [selectedLanguage, setSelectedLanguage] = useState();
   <Picker.Item label="Java" value="java" />
   <Picker.Item label="JavaScript" value="js" />
 </Picker> */}
-                          
-            <View style={styles.reminderTextBox}>
-                    <Text style={styles.remindText}>Remind me to log symptoms</Text>
-                    <Switch
-                        onValueChange={props.toggleSymptomsSwitch}
-                        value={props.remindSymptomsEnabled}
-                    />
-                
-                </View>
-                <View
+            <NotificationStack text={"Remind me to log period"}/>
+            <View
             style={{
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
-                }}/>
+                }}/>     
               <DropDownTab leftText={"Repeat"} rightText={"Only during period"}/>
               <View
             style={{
@@ -138,49 +121,12 @@ const DropDownTab = (props) => {
 }
 
 export default function Notifications () {
-    const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(true);
-    const [remindSymptomsEnabled, setRemindSymptomsEnabled] = useState(false);
-
-    const togglePeriodSwitch = () => setRemindPeriodEnabled(!remindPeriodEnabled);
-    const toggleSymptomsSwitch = () => {
-
-        setRemindSymptomsEnabled(!remindSymptomsEnabled);    
-        
-        if (remindPeriodEnabled) {
-            // Schedule a reoccuring notification 
-            PushNotificationIOS.addNotificationRequest({
-                id: 'remindsymptoms',
-                title: 'Daily Log Reminder',
-                body: 'Daily reminder to log your symptoms!',
-                badge: 1,
-                fireDate: getCorrectDate(),
-                repeats: true,
-                repeatsComponent: {
-                    hour: true,
-                    minute: true,
-                },
-            });
-        } else {
-            PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms'])
-        }
-    }
-
-    const getCorrectDate = () => {
-        const date = new Date();
-        date.setDate(date.getDate() + 1);
-        date.setHours(9);
-        date.setMinutes(0);
-        return date;
-    };
     
     return (
         
         <SafeAreaView>
+
         <NotificationsButton
-                remindPeriodEnabled={remindPeriodEnabled}
-                remindSymptomsEnabled={remindSymptomsEnabled}
-                togglePeriodSwitch={togglePeriodSwitch}
-                toggleSymptomsSwitch={toggleSymptomsSwitch}
             />
         </SafeAreaView>
     )
@@ -189,32 +135,16 @@ export default function Notifications () {
 const NotificationStack = (props) => {
     return (
         <SafeAreaView>
-             <SafeAreaView style={styles.optionView} >
-
-<Text style={styles.optionText}>{props.name}</Text>
-<View style={
-    {
-        right: -200,
-        top: 5
-    }
-}>   
-    <Icon
-            name="arrow-back-ios"
-            size={24}
-            color="#5A9F93"
-            style={{transform: [{rotateY: '90deg'}],}}
-            /></View>
-
-
-
-</SafeAreaView>
-<View
-    style={{
-        borderBottomColor: '#CFCFCF',
-        borderBottomWidth: 1,
-        }}/>
+        <SafeAreaView style={styles.optionView} >
+        <Text style={styles.optionText}>{props.name}</Text>
+    
         </SafeAreaView>
-       
+        <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
+    </SafeAreaView>
     )
 }
 
@@ -229,19 +159,6 @@ const styles = StyleSheet.create({
         shadowOffset: { height: 0, width: 0 },
         shadowOpacity: 0, //default is 1
         shadowRadius: 0//default is 1
-    },
-    remindText: {
-        fontFamily: 'Avenir',
-        fontWeight: '800',
-        fontSize: 16,
-        height: 34,
-        lineHeight: 34
-    },
-    reminderTextBox : {
-        flexDirection: 'row',
-        justifyContent: 'space-between', 
-        padding: 16,
-        height: 72
     },
     dropDownTextBox: {
         flexDirection: 'row',
@@ -266,5 +183,18 @@ const styles = StyleSheet.create({
         lineHeight: 34,   
         color: "#5A9F93",
         right: -50
-    }
+    },
+    optionText : {
+        fontSize: 16,
+        fontFamily: 'Avenir',
+        fontWeight: "800",
+        lineHeight: 34,
+        textAlign: 'left'
+    },
+    optionView:{
+        paddingTop: -25,
+        paddingBottom: -25,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
 });
