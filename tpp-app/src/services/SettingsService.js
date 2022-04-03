@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TRACK_SYMPTOMS, REMINDERS } from './utils/constants.js'
 
+
     /**
      * Clears all of the user's account data
      * @returns a promise resolving when the clear operation is complete

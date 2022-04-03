@@ -68,7 +68,7 @@ The `.svgrrc` file, found at the root of the project. The version of it at the t
   }
 }
 ```
-Essentially, we are telling `svg-react-native-transformer` to replace the color "black" in a .svg file we import with the `fill` property of the React Component that corresponds to the .svg file. As far as I can tell, this only allows you to alter the highest level of `fill` (i.e. the one defined in the `<svg>` tag).
+Essentially, we are telling `svg-react-native-transformer` to replace the color "black" in a .svg file we import with the `fill` property of the React Component that corresponds to the .svg file. You need to have the line `fill="black"` in the `path` tag.
 
 This means you must set `fill` to `"black"` for any .svg file for which you want to change colours programatically.
 
