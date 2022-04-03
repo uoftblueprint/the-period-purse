@@ -86,7 +86,9 @@ export default function LogSymptomsScreen({ navigation, route }) {
     return symps
   }
 
-  const [selectedDate, changeDate] = useState(new Date(route.params.date.year, route.params.date.month - 1, route.params.date.day + 1));
+  const [selectedDate, changeDate] = useState(
+    new Date(route.params.date.year, route.params.date.month - 1, route.params.date.day, 0, 0, 0)
+  );
   const [stored, setStoredSymps] = useState(new Symptoms()); // original stored symptoms
 
   // SYMPTOM STATES
@@ -235,12 +237,10 @@ export default function LogSymptomsScreen({ navigation, route }) {
   }
 
   // Helper function to determine whether to display arrow to switch dates
-  const isNextDayValid = (goFwd, today) => {
-    today.setDate(goFwd ? today.getDate() + 1 : today.getDate() - 1);
-    let day = today.getDate();
-    let month = today.getMonth() + 1;
-    let year = today.getFullYear();
-    return isValidDate(day, month, year);
+  const isNewDayValid = (goFwd, today) => {
+    const day = goFwd ? today.getDate() + 1 : today.getDate() - 1;
+    const newDate = new Date(today.getFullYear(), today.getMonth(), day, 0, 0, 0)
+    return isValidDate(newDate.getDate(), newDate.getMonth() + 1, newDate.getFullYear());
   }
 
   // Change the selected date to log symptoms for
@@ -259,6 +259,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
     }
   }
 
+  let dateStr = getDateString(selectedDate, 'MM DD, YYYY'); // date in MM DD, YYYY format
 
   return (
     <SafeAreaView style={styles.screen}><ScrollView>
@@ -285,7 +286,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
           {/* SWITCH AND DISPLAY DATE */}
           <View style={styles.switchDate}>
-            {isNextDayValid(false, selectedDate) &&
+            {isNewDayValid(false, selectedDate) &&
               <DateArrow
                 onPress={async () => await switchDate(false)}
                 isRight={false}
@@ -293,9 +294,9 @@ export default function LogSymptomsScreen({ navigation, route }) {
             }
             <View style={styles.centerText}>
               <Text style={styles.subtitle}>Log your symptoms for:</Text>
-              <Text style={styles.navbarTitle}>{getDateString(selectedDate, 'MM DD, YYYY')}</Text>
+              <Text style={styles.navbarTitle}>{dateStr}</Text>
             </View>
-            {isNextDayValid(true, selectedDate) &&
+            {isNewDayValid(true, selectedDate) &&
               <DateArrow
                 onPress={async () => await switchDate(true)}
                 isRight={true}
