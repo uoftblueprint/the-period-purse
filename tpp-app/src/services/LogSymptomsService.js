@@ -13,34 +13,36 @@ import { Symptoms } from './utils/models';
  * @param {Symptoms} symptoms
  */
 export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Promise(async (resolve, reject) => {
-    // Check that symptoms object is not all null or not empty
-    let notEmpty = Object.values(symptoms).some((symptom) => symptom !== null)
-    if (!symptoms || notEmpty) {
-        reject("No symptoms to record");
-    }
-
     // Check that date, month, year combo is valid
     if (!isValidDate(day, month, year)) {
-        reject("Not a valid date");
+        reject("Sorry, this isn't a valid date to log symptoms for!");
+        return;
     }
 
     // Try to POST new symptoms in async storage
     try {
-        // Get the year's data or set to empty year
-        const yearData = JSON.parse(await AsyncStorage.getItem(year.toString())) ?? initializeEmptyYear(year);
+        //Get the year's data or set to empty year
+        const fetchYear = await AsyncStorage.getItem(year.toString());
+        const yearData = JSON.parse(fetchYear) ?? initializeEmptyYear(year);
 
-        yearData[month-1][day-1] = symptoms
+        yearData[month-1][day-1] = JSON.stringify(symptoms);
+        let yearStr = JSON.stringify(yearData);
 
         // post symptoms to storage
-        await AsyncStorage.setItem(year.toString(), JSON.stringify(yearData))
-            .then(() => resolve())
+        await AsyncStorage.setItem(year.toString(), yearStr)
+            .then(() => {
+              resolve();
+              return;
+            })
             .catch((e) => {
-                console.log(JSON.stringify(e));
-                reject(`Unable to mergeItem and post symptoms for this day, month, year: ${day, month, year}`);
+                console.log(`Unable to mergeItem and post symptoms for this day, month, year: ${day, month, year}. Error: ${JSON.stringify(e)}`);
+                reject(`Something went wrong. Please try again later.`);
+                return;
             });
     } catch (e) {
         console.log(`POSTsymptomsForDate error: ${JSON.stringify(e)}`);
-        reject("Something went wrong");
+        reject("Something went wrong. Please try again later.");
+        return;
     }
 })
 

@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
+import { TRACK_SYMPTOMS, REMINDERS } from './utils/constants.js'
+
 
     /**
      * Clears all of the user's account data
@@ -10,9 +11,9 @@ import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
         try {
             await AsyncStorage.clear().then(() => {
                 console.log("Deleted user account data");
-                resolve(); 
+                resolve();
             })
-            
+
         } catch (e) {
             console.log(`DELETEAccountData error: ${JSON.stringify(e)}`);
             reject();
@@ -46,10 +47,10 @@ import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
 
 
     /**
-     * Posts any changes in symptom tracking preferences 
+     * Posts any changes in symptom tracking preferences
      * @param {boolean} flow representing whether to track flow
-     * @param {boolean} mood representing whether to track mood 
-     * @param {boolean} sleep representing whether to track sleep 
+     * @param {boolean} mood representing whether to track mood
+     * @param {boolean} sleep representing whether to track sleep
      * @param {boolean} cramps representing whether to track cramps
      * @param {boolean} exercise representing whether to track exercise
      * @returns a promise resolving when the post operation is complete
@@ -78,7 +79,7 @@ import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
     /**
      * Posts whether the user wants a reminder to log period
      * @param {boolean} enableRemind representing whether the user wants to a reminder to log period
-     * @returns a promise resolving when the post operation is complete 
+     * @returns a promise resolving when the post operation is complete
      */
 
     export const POSTRemindLogPeriod = async (enableRemind) => new Promise(async (resolve, reject) => {
@@ -99,7 +100,7 @@ import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
     /**
     * Posts whether the user wants a reminder to log period symptoms
     * @param {boolean} enableRemind representing whether the user wants to a remind to log period symptoms
-    * @returns a promise resolving when the post operation is complete 
+    * @returns a promise resolving when the post operation is complete
     */
     export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (resolve, reject) => {
         try {
@@ -130,15 +131,15 @@ import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
                 console.log(JSON.stringify(e));
                 reject("Unable to post number of days in advance to send log period reminder ");
             })
-            
+
         } catch (e) {
     console.log(`POSTRemindLogPeriodFreq error: ${JSON.stringify(e)}`)
-            reject();        
+            reject();
         }
     });
 
     /**
-     * Retrieves the frequency to send log period reminders 
+     * Retrieves the frequency to send log period reminders
      * @returns a promise resolving in a string representing the number of days
      */
     export const GETRemindLogPeriodFreq= async () => new Promise(async (resolve, reject) => {
@@ -158,7 +159,7 @@ import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
 
 
     /**
-     * Posts the time (exp: 1 am, 2 am) to send reminder to log period 
+     * Posts the time (exp: 1 am, 2 am) to send reminder to log period
      * @param {string} time string representing the time
      * @returns a promise resolving when the post method is complete
      */
@@ -178,7 +179,7 @@ import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
     });
 
     /**
-     * Retrieves the time (exp: 1 am, 2 am) to send reminder to log period 
+     * Retrieves the time (exp: 1 am, 2 am) to send reminder to log period
      * @returns a promise resolving in a string representing the time
      */
     export const GETRemindLogPeriodTime = async () => new Promise(async (resolve, reject) => {
@@ -237,7 +238,7 @@ import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
 
 
     /**
-     * Posts the time (exp: 1 am, 2 am) to send reminder to log symptoms 
+     * Posts the time (exp: 1 am, 2 am) to send reminder to log symptoms
      * @param {string} time string representing the time
      * @returns a promise resolving when the post method is complete
      */
@@ -258,7 +259,7 @@ import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
     });
 
     /**
-     * Retrieves the time (exp: 1 am, 2 am) to send reminder to log symptoms 
+     * Retrieves the time (exp: 1 am, 2 am) to send reminder to log symptoms
      * @returns a promise resolving in a string representing the time
      */
     export const GETRemindLogSymptomsTime = async () => new Promise(async (resolve, reject) => {
@@ -276,7 +277,3 @@ import { TRACK_SYMPTOMS, REMINDERS} from './utils/constants.js'
             reject();
         }
     });
-
-
-    
-
