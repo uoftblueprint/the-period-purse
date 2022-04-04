@@ -9,6 +9,14 @@ import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 
+const VIEWS = {
+    Flow: "Period Flow",
+    Nothing: "Select",
+    Mood: "Mood",
+    Exercise: "Exercise",
+    Cramps: "Cramps",
+    Sleep: "Sleep"
+}
 const sideComponentWidth = 120
 
 
