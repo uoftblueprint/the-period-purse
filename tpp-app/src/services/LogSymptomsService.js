@@ -68,7 +68,7 @@ export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve,
                     
                     let symptoms = getSymptomsFromCalendar(calendarData, day, month, year);
 
-                    console.log(symptoms);
+                    // console.log(symptoms);
 
                     if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
                         symptoms.flow = FLOW_LEVEL.MEDIUM;
@@ -82,8 +82,7 @@ export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve,
             })
 
             if(calendarData[curYear]){
-
-                await AsyncStorage.setItem(curYear.toString(), JSON.stringify(calendarData[curYear]))
+                AsyncStorage.setItem(curYear.toString(), JSON.stringify(calendarData[curYear]))
                 .then(() => resolve())
                 .catch((e) => {
                     console.log(JSON.stringify(e));
@@ -93,7 +92,7 @@ export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve,
             }
             
             if(calendarData[curYear - 1]){
-                await AsyncStorage.setItem((curYear - 1).toString(), JSON.stringify(calendarData[curYear - 1]))
+                AsyncStorage.setItem((curYear - 1).toString(), JSON.stringify(calendarData[curYear - 1]))
                 .then(() => resolve())
                 .catch((e) => {
                     reject(`Unable to mergeItem and post symptoms for multiselect.`);
@@ -103,7 +102,7 @@ export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve,
 
             // a bit unneccessary since you can't log symptoms for the future.
             if(calendarData[curYear + 1]){
-                await AsyncStorage.setItem((curYear + 1).toString(), JSON.stringify(calendarData[curYear + 1]))
+                AsyncStorage.setItem((curYear + 1).toString(), JSON.stringify(calendarData[curYear + 1]))
                 .then(() => resolve())
                 .catch((e) => {
                     reject(`Unable to mergeItem and post symptoms for multiselect.`);
@@ -117,3 +116,17 @@ export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve,
     }
 
 })
+
+// TODO implement helper function
+const postSymptomsForYear = async (calendarData, year) => {
+    if(calendarData[year]){
+
+        await AsyncStorage.setItem(year.toString(), JSON.stringify(calendarData[year]))
+        // .then(() => resolve())
+        // .catch((e) => {
+        //     console.log(JSON.stringify(e));
+        //     reject(`Unable to mergeItem and post symptoms for multiselect.`);
+        // });
+        
+    }
+}

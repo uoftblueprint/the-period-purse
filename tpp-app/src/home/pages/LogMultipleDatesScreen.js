@@ -6,21 +6,9 @@ import { STACK_SCREENS } from '../CalendarNavigator';
 import { getCalendarByYear, getSymptomsFromCalendar, initializeEmptyYear } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
-import SelectedIcon from '../../../ios/tppapp/Images.xcassets/icons/selected_icon';
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
-    // console.log(selectedDates);
-    
-    // const [backgroundColor, setBackgroundColor] = useState("#FFFFFF")
-
-    // const multiSelect = () => {
-    //     if (handleSelect(date)){
-    //         setBackgroundColor("#72C6B7");
-    //     }else{
-    //         setBackgroundColor("#FFFFFF");
-    //     }
-    // }
 
     return(
         // onpress should select the dates for multi select
@@ -32,14 +20,12 @@ const DayComponent = ({props}) => {
                 <Text>
                     {date.day}
                 </Text>
-                {/* {backgroundColor == "#72C6B7" && <SelectedIcon style={styles.selectedIcon}/>} */}
             </View>
         </TouchableOpacity>
     )
 }
 
 export const Calendar = ({ navigation, setSelectedDates, markedDates}) => {
-    
     
     return (
         <CalendarList
@@ -140,23 +126,6 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         }
     };
         
-    //     setSubtitle(selectedDates.length.toString() + text);
-    // }, [selectedDates])
-
-    // const handleSelect = date => {
-    //     if(selectedDates.some(elem => date.dateString == elem.dateString)){
-    //     // if(false){
-    //         //removing
-    //         setSelectedDates(selectedDates.filter(data => date.dateString !== data.dateString))
-    //         return false
-    //     } else {
-    //         //adding
-    //         setSelectedDates([...selectedDates, date])
-    //         // selectedDates.push(date)
-    //         // console.log(selectedDates);
-    //         return true
-    //     }
-    // }
 
     const onSubmit = async() => {
         const selectedDates = [];
@@ -169,8 +138,6 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 selectedDates.push(data);
             }
         })
-
-        // console.log(selectedDates);
 
         if(selectedDates.length > 0){
             try {

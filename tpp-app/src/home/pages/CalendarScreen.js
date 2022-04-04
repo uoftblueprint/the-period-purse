@@ -25,7 +25,7 @@ const DayComponent = ({ date, state, marking, navigation, calendarData }) => {
     
     return(
         <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
-            <View style={{...styles.dayContainer}}>
+            <View style={styles.dayContainer}>
                 <Text>
                     {date.day}
                 </Text>
@@ -36,8 +36,6 @@ const DayComponent = ({ date, state, marking, navigation, calendarData }) => {
 
 export const Calendar = ({navigation}) => {
     const [calendarData, setCalendarData] = useState({});
-
-    console.log(calendarData);
 
     //updates the data when you come back to the calendar screen
     useEffect(() => {
@@ -50,10 +48,7 @@ export const Calendar = ({navigation}) => {
     const getCalendarData = async () => {
         // will need to choose the correct year depending on which year the user is looking at
         const data = await getCalendarByYear(2022);
-        if(data != calendarData){
-            setCalendarData(data);
-        }
-            
+        setCalendarData(data);
     }
 
     return (
