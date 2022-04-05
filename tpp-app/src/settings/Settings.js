@@ -10,6 +10,8 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { socialMediaIcons } from './icons';
 import { ScrollView } from 'react-native-gesture-handler';
 
+
+
 const Stats = (props) => {
 
     return (
@@ -99,8 +101,8 @@ const Socials = () => {
     return (
         <View style={styles.iconsContainer}>
             {
-                socialMediaIcons.map(socialMedia => {
-                    return <SocialMediaButton icon={socialMedia.component} url={socialMedia.url} />
+                socialMediaIcons.map((socialMedia, i) => {
+                    return <SocialMediaButton key={i} icon={socialMedia.component} url={socialMedia.url} />
                 })
             }
         </View>
@@ -114,7 +116,7 @@ const TermsAndConditions = () => {
 
     return (
         <View styles={styles.termsAndConditionsContainer}>
-            <View style={styles.copyright}> 
+            <View style={styles.copyright}>
                 <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
             </View>
             <View style={styles.terms}>
@@ -136,10 +138,10 @@ export default function Settings () {
     const togglePeriodSwitch = () => setRemindPeriodEnabled(!remindPeriodEnabled);
     const toggleSymptomsSwitch = () => {
 
-        setRemindSymptomsEnabled(!remindSymptomsEnabled);    
-        
+        setRemindSymptomsEnabled(!remindSymptomsEnabled);
+
         if (remindPeriodEnabled) {
-            // Schedule a reoccuring notification 
+            // Schedule a reoccuring notification
             PushNotificationIOS.addNotificationRequest({
                 id: 'remindsymptoms',
                 title: 'Daily Log Reminder',
@@ -164,7 +166,7 @@ export default function Settings () {
         date.setMinutes(0);
         return date;
     };
-    
+
 
     return (
         <ScrollView style={styles.container}>
@@ -211,7 +213,7 @@ const styles = StyleSheet.create({
         marginTop: 85,
         marginBottom: 75
     },
-  
+
     dropShadow: {
         shadowOffset: {width:0, height:1},
         shadowRadius: 10,

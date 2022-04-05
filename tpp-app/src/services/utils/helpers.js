@@ -1,9 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
+import { Symptoms } from './models';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
-// Backend helper functions used across app
-import { Symptoms } from './models'
 
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.
@@ -26,12 +25,17 @@ export const initializeEmptyYear = (yearNumber) => {
 /**
  * Convert a Date object into a date string, encoding year, month and day. Note it encodes months as 1 indexed, and days as 0 indexed
  * @param {Date} date Object to convert to string
- * @return {String} String encoding year, month and day in YYYY-MM-DD format
+ * @param {string | undefined} format String format to convert date to. If none is specified, uses 'YYYY-MM-DD'.
+ * @return {string} String encoding year, month and day in specified format
  */
-export const getDateString = (date) => {
-  var date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-  return date;
-
+export const getDateString = (date, format = 'YYYY-MM-DD') => {
+  switch (format) {
+    case 'MM DD, YYYY':
+      let options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleString('default', options)
+    default: // YYYY-MM-DD
+      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+  }
 }
 
 
@@ -44,7 +48,7 @@ export const getDateString = (date) => {
  */
  export const isValidDate = (day, month, year) => {
   // Check the ranges of month and year
-  if (year < 1000 || year > 3000 || month == 0 || month > 12)
+  if (year < 1000 || year > 3000 || month <= 0 || month > 12)
       return false;
 
   let monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
@@ -55,13 +59,14 @@ export const getDateString = (date) => {
 
   // Check the range of the day
   if (!(day > 0 && day <= monthLength[month - 1]))
-      return false
+      return false;
 
   // Check that date isn't in the future
   const today = new Date();
   today.setHours(0,0,0,0);
   return new Date(year, month-1, day) <= today
 };
+
 
 /**
  * @param {number} year The year for which to get calendars
@@ -91,6 +96,7 @@ export const getCalendarByYear = async (year) => {
   return calendars;
 }
 
+
 /**
  * Retrieves the user's symptom data for the given date from the calendar.
 * @param {Object} calendar The object containing the symptoms for this year, last year, and next year.
@@ -100,13 +106,14 @@ export const getCalendarByYear = async (year) => {
  */
 export const getSymptomsFromCalendar = (calendar, day, month, year) => {
   if (year in calendar && isValidDate(day,month, year)){
-    let rawSymptoms = calendar[year][month - 1][day-1];
-    return rawSymptoms ? new Symptoms(rawSymptoms.Flow, rawSymptoms.Mood, rawSymptoms.Sleep, rawSymptoms.Cramps, rawSymptoms.Exercise,rawSymptoms.Notes) : new Symptoms();
+    let rawSymptoms = JSON.parse(calendar[year][month - 1][day-1]);
+    return rawSymptoms ? new Symptoms(rawSymptoms.flow, rawSymptoms.mood, rawSymptoms.sleep, rawSymptoms.cramps, rawSymptoms.exercise, rawSymptoms.notes) : new Symptoms();
   }
   else {
     return new Symptoms();
   }
 }
+
 
 /**
  * Computes the number of days between the two dates provided, including the two dates. If earlierDate and laterDate are equal, returns 1.
