@@ -94,11 +94,11 @@ export const getCalendarByYear = async (year) => {
 /**
  * Retrieves the user's symptom data for the given date from the calendar.
 * @param {Object} calendar The object containing the symptoms for this year, last year, and next year.
- * @param {Number} day number (First day = 0)
+ * @param {Number} day number (First day = 1)
  * @param {Number} month number (January = 1)
  * @param {Number} year number
  */
-export const getSymptomsFromCalendar = async (calendar, day, month, year) => {
+export const getSymptomsFromCalendar = (calendar, day, month, year) => {
   if (year in calendar && isValidDate(day,month, year)){
     let rawSymptoms = calendar[year][month - 1][day-1];
     return rawSymptoms ? new Symptoms(rawSymptoms.Flow, rawSymptoms.Mood, rawSymptoms.Sleep, rawSymptoms.Cramps, rawSymptoms.Exercise,rawSymptoms.Notes) : new Symptoms();

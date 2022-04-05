@@ -63,11 +63,11 @@ export default function CycleScreen ({navigation}){
 
   useEffect(() => {
      //TODO: delete this testing stuff
-    //  Testing.clearCycleDonut();
-    //  Testing.ClearCalendar();
-    //  Testing.PostDummyCalendarOverYear();
-    //  Testing.PostAverageCycleLength();
-    //  Testing.PostAveragePeriodLength();
+     Testing.clearCycleDonut();
+     Testing.ClearCalendar();
+     Testing.PostDummyCalendarOverYear();
+     Testing.PostAverageCycleLength();
+     Testing.PostAveragePeriodLength();
      //DELETE above
 
      CycleService.GETPeriodDay().then(days => {
