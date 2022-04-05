@@ -104,7 +104,7 @@ export default function CalendarScreen ({ navigation }) {
                 setYearData(newYear)
 
                 
-                newMarkedData = {}
+               let newMarkedData = {}
                 // We know that this data is now in the variable, so now attempt
                 // to convert it into the appropriate key and value data
                 let monthArray = newYear[yearNumber]
