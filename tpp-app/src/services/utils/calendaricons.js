@@ -7,7 +7,7 @@ import CrampsTerribleIcon from "../../../ios/tppapp/Images.xcassets/icons/sympto
 import CrampsNeutralIcon from "../../../ios/tppapp/Images.xcassets/icons/symptoms/cramps/cramps-neutral.svg";
 import CrampsBadIcon from "../../../ios/tppapp/Images.xcassets/icons/symptoms/cramps/cramps-bad.svg";
 import CrampsGoodIcon from "../../../ios/tppapp/Images.xcassets/icons/symptoms/cramps/cramps-good.svg";
-import CrampsNoneIcon from "../../../ios/tppapp/Images.xcassets/icons/symptoms/cramps/cramps-none.svg";
+import CrampsNoneIcon from "../../../ios/tppapp/Images.xcassets/icons/symptoms/cramps/cramps-nocramps.svg";
 import MoodHappyIcon from "../../../ios/tppapp/Images.xcassets/icons/symptoms/mood/mood-happy.svg";
 import MoodSadIcon from "../../../ios/tppapp/Images.xcassets/icons/symptoms/mood/mood-sad.svg";
 import MoodNeutralIcon from "../../../ios/tppapp/Images.xcassets/icons/symptoms/mood/mood-neutral.svg";

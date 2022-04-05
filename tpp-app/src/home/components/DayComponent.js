@@ -8,7 +8,6 @@ import { VIEWS } from '../../services/utils/constants';
 import { FILTER_COLOURS, FILTER_TEXT_COLOURS } from '../../services/utils/constants';
 import { STACK_SCREENS } from '../CalendarNavigator';
 
-
 // The component that is used by each day in the calendar
 export const DayComponent = ({ date, state, marking, selectedView, navigation }) => {
 
@@ -25,7 +24,7 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
         // i.e. for flow it would be HEAVY/MEDIUM/LIGHT
         // for sleep it will be a number etc.
         let symptomAttribute = marking.symptoms[viewKey]
-        
+
         // If it contains a working attribute
         if (symptomAttribute) {
             
@@ -39,16 +38,18 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
                 case 'exercise':
                     attribute = filterExercise(symptomAttribute.exercise_minutes)
                     iconName = viewKey + symptomAttribute.exercise.toLowerCase()
+                    iconName = iconName.replace(/\s+/g, '')
+
                     break;
             }
 
             
             // Mood is the only one that does not modify the background colour
             if (viewKey !== 'mood') {
-                bgColor = FILTER_COLOURS[viewKey.toUpperCase()][attribute]
-                textColor = FILTER_TEXT_COLOURS[viewKey.toUpperCase()][attribute]
+                bgColor = FILTER_COLOURS[viewKey.toUpperCase()][attribute.toUpperCase()]
+                textColor = FILTER_TEXT_COLOURS[viewKey.toUpperCase()][attribute.toUpperCase()]
             }
-
+            
             // Get Icon
             if (viewKey !== 'sleep' && viewKey !== 'exercise') {
                 iconName = viewKey + symptomAttribute.toLowerCase()
@@ -153,8 +154,8 @@ const styles = StyleSheet.create({
 })
 
 const ICON_SIZE = {
-    height: 25,
-    width: 25,
+    height: 23,
+    width: 23,
 }
 
 const ICON_TYPES = {
@@ -177,14 +178,14 @@ const ICON_TYPES = {
     moodidk: MoodIdkIcon,
     moodgreat: MoodGreatIcon,
     moodloved: MoodLovedIcon,
-    exerciseball_sport: ExerciseBallSportIcon,
+    exerciseballsports: ExerciseBallSportIcon,
     exercisecardio: ExerciseCardioIcon,
-    exercisecycle_sport: ExerciseCycleSportIcon,
-    exercisemartial_arts: ExerciseMartialArtsIcon,
-    exerciseracket_sport:ExerciseRacketSportsIcon,
+    exercisecyclesports: ExerciseCycleSportIcon,
+    exercisemartialarts: ExerciseMartialArtsIcon,
+    exerciseracketsports:ExerciseRacketSportsIcon,
     exercisestrength: ExerciseStrengthIcon,
-    exercisewater_sport: ExerciseWaterSportIcon,
-    exercisewinter_sport: ExerciseWinterSportIcon,
+    exercisewatersports: ExerciseWaterSportIcon,
+    exercisewintersports: ExerciseWinterSportIcon,
     exerciseyoga: ExerciseYogaIcon,
     view: SafeAreaView
 };

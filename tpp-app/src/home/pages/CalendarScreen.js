@@ -9,16 +9,10 @@ import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 
-const VIEWS = {
-    Flow: "Period Flow",
-    Nothing: "Select",
-    Mood: "Mood",
-    Exercise: "Exercise",
-    Cramps: "Cramps",
-    Sleep: "Sleep"
-}
-const sideComponentWidth = 120
+import { Symptoms, ExerciseActivity } from '../../services/utils/models';
+import { FLOW_LEVEL, MOOD_LEVEL, CRAMP_LEVEL, EXERCISE_TYPE } from '../../services/utils/constants';
 
+const sideComponentWidth = 120
 
 export const Calendar = ({navigation, marked, yearData, setYearInView, selectedView}) => {
 
@@ -103,11 +97,13 @@ export default function CalendarScreen ({ navigation }) {
             let yearNumber = year.toString()
             // If the data for that year doesn't already exist
             if (yearData[yearNumber] === undefined) {
-                newData = GETYearData(year)
-                
+                let newData = GETYearData(year)
+
                 const newYear = {...yearData, ...newData};
+
                 setYearData(newYear)
 
+                
                 newMarkedData = {}
                 // We know that this data is now in the variable, so now attempt
                 // to convert it into the appropriate key and value data
