@@ -106,11 +106,13 @@ export const getCalendarByYear = async (year) => {
  */
 export const getSymptomsFromCalendar = (calendar, day, month, year) => {
   if (year in calendar && isValidDate(day,month, year)){
+    console.log({calendar});
+    console.log("accessing calendar at year: " + year + " month: " + (month-1) + " day: " + (day-1));
     let rawSymptoms = calendar[year][month - 1][day-1];
-    return rawSymptoms ? new Symptoms(rawSymptoms.Flow, rawSymptoms.Mood, rawSymptoms.Sleep, rawSymptoms.Cramps, rawSymptoms.Exercise,rawSymptoms.Notes) : new Symptoms();
+    console.log(rawSymptoms);
+    return rawSymptoms ? new Symptoms(rawSymptoms.flow, rawSymptoms.mood, rawSymptoms.sleep, rawSymptoms.cramps, rawSymptoms.exercise,rawSymptoms.notes) : new Symptoms();
   }
   else {
-    let yearInCalendar = year in calendar;
     return new Symptoms();
   }
 }

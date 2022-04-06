@@ -85,7 +85,9 @@ export default function LogSymptomsScreen({ navigation, route }) {
   // function to get symptoms from async storage
   const getStoredSymps = async (day, month, year) => {
     const cal = await getCalendarByYear(year);
+    console.log("trying to acces day: " + day + " month: " + month + " year: " + year)
     let symps = getSymptomsFromCalendar(cal, day, month, year);
+    console.log("got " + JSON.stringify(symps));
     return symps
   }
 
@@ -199,6 +201,8 @@ export default function LogSymptomsScreen({ navigation, route }) {
     // If all symptoms are null, POST null instead of an empty Symptom object
     let notEmpty = Object.values(finalSymps).some((symptom) => symptom !== null);
     let submitSymp = notEmpty ? finalSymps : null;
+    console.log("submitting following symptoms");
+    console.log(submitSymp);
 
     POSTsymptomsForDate(selectedDate.getDate(), selectedDate.getMonth() + 1, selectedDate.getFullYear(), submitSymp)
       .then(() => {

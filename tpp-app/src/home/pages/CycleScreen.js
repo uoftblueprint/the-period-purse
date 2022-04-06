@@ -63,12 +63,10 @@ export default function CycleScreen ({navigation}){
 
   useEffect(() => {
      //TODO: delete this testing stuff
-    /* Testing.clearCycleDonut();
-     Testing.ClearCalendar();
-     Testing.PostDummyCalendarOverYear();
-     Testing.PostAverageCycleLength();
-     Testing.PostAveragePeriodLength(); */
-     Testing.ClearCalendar();
+    //  Testing.clearCycleDonut();
+    //  Testing.PostDummyCalendarOverYear();
+    //  Testing.PostAverageCycleLength();
+    //  Testing.PostAveragePeriodLength(); */
      //DELETE above
 
      CycleService.GETPeriodDay().then(days => {
@@ -125,8 +123,6 @@ export default function CycleScreen ({navigation}){
      });
      
      CycleService.GETCycleHistoryByYear(new Date().getFullYear()).then(intervals =>{
-       console.log("getting intervals that are: ");
-       console.log(intervals);
        setIntervals(intervals);
      })
      .catch(()=> {
