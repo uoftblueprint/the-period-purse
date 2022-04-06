@@ -117,7 +117,6 @@ export default function CycleScreen ({navigation}){
        setDaysTillPeriod(toSet);
      })
      .catch(() => {
-       console.log("Error: Days till period");
        setDaysTillPeriod(DEFAULTS.DAYS_TILL_PERIOD);
        setShowTip(false);
      });
@@ -126,7 +125,6 @@ export default function CycleScreen ({navigation}){
        setIntervals(intervals);
      })
      .catch(()=> {
-       console.log("Error: Cycle history by year");
        setIntervals(DEFAULTS.INTERVALS);
      })
 

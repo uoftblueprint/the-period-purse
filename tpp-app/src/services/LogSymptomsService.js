@@ -32,8 +32,6 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
         // post symptoms to storage
         await AsyncStorage.setItem(year.toString(), yearStr)
             .then(() => {
-                console.log("writing symptoms which are:")
-                console.log(yearData[month-1][day-1])
               resolve();
               return;
             })

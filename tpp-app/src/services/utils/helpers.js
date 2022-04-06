@@ -106,10 +106,7 @@ export const getCalendarByYear = async (year) => {
  */
 export const getSymptomsFromCalendar = (calendar, day, month, year) => {
   if (year in calendar && isValidDate(day,month, year)){
-    console.log({calendar});
-    console.log("accessing calendar at year: " + year + " month: " + (month-1) + " day: " + (day-1));
     let rawSymptoms = calendar[year][month - 1][day-1];
-    console.log(rawSymptoms);
     return rawSymptoms ? new Symptoms(rawSymptoms.flow, rawSymptoms.mood, rawSymptoms.sleep, rawSymptoms.cramps, rawSymptoms.exercise,rawSymptoms.notes) : new Symptoms();
   }
   else {
@@ -175,11 +172,9 @@ export const GETStoredYears = async () => {
     let yearToCheck = currentYear;
 
     while(JSON.parse(await AsyncStorage.getItem(yearToCheck.toString()))){
-        console.log("pushing yearToCheck: " + yearToCheck);
         storedYears.push(yearToCheck);
         yearToCheck-=1;
     }
 
-    console.log("getStoredYears is returning " + storedYears);
     return storedYears;
 }
