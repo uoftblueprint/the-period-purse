@@ -107,9 +107,10 @@ export const getCalendarByYear = async (year) => {
 export const getSymptomsFromCalendar = (calendar, day, month, year) => {
   if (year in calendar && isValidDate(day,month, year)){
     let rawSymptoms = calendar[year][month - 1][day-1];
-    return rawSymptoms ? new Symptoms(rawSymptoms.flow, rawSymptoms.mood, rawSymptoms.sleep, rawSymptoms.cramps, rawSymptoms.exercise, rawSymptoms.notes) : new Symptoms();
+    return rawSymptoms ? new Symptoms(rawSymptoms.Flow, rawSymptoms.Mood, rawSymptoms.Sleep, rawSymptoms.Cramps, rawSymptoms.Exercise,rawSymptoms.Notes) : new Symptoms();
   }
   else {
+    let yearInCalendar = year in calendar;
     return new Symptoms();
   }
 }
@@ -148,7 +149,7 @@ export const getPeriodsInYear = async (year, calendar=null) => {
 
   try{
     while(current.getFullYear() === year){
-      let currentSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
+      let currentSymptoms = getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
       if (currentSymptoms.flow !== null && currentSymptoms.flow !== FLOW_LEVEL.NONE){
         periods.push(current);
       }
