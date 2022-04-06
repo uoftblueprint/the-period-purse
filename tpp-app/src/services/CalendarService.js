@@ -9,7 +9,8 @@ import { GETAllTrackingPreferences } from './SettingsService.js';
  * @returns: {Object} if data for that year exists
  */
 export const GETYearData = async (year) => {
-    const yearData = JSON.parse(await AsyncStorage.getItem(year.toString()));
+
+    let yearData = JSON.parse(await AsyncStorage.getItem(year.toString()));
 
     // yearData could be null
     if (yearData) {
