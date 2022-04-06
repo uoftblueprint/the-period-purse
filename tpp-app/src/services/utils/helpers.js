@@ -3,6 +3,7 @@ import {FLOW_LEVEL} from '../utils/constants';
 import { Symptoms } from './models';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
+// Backend helper functions used across app
 
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.
@@ -127,6 +128,15 @@ export const getDaysDiffInclusive = (earlierDate, laterDate) => {
   return Math.abs(differenceInCalendarDays(earlierDate, laterDate)) + 1;
 }
 
+/**
+* Returns a string in the format of 'yyyy-MM-dd' from a date object and removes the time
+* @param {Date} date object to be processed
+* @return {string} a string in the format of 'yyyy-MM-dd' without the time
+*/
+export const getISODate = (date) => {
+   return date.toISOString().substring(0,10)
+}
+
 
 /**
  *
@@ -159,7 +169,5 @@ export const getPeriodsInYear = async (year, calendar=null) => {
   } catch(e) {
     console.log(e);
     return periods;
-
   }
-
 }
