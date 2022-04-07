@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import * as Sentry from "@sentry/react-native";
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
 import SettingsNavigator from './src/settings/SettingsNavigator';
 import { TabBarMiddleButton } from './src/home/components/TabBarMiddleButton';
-//import Welcome from './src/onboarding/Welcome';
+import Welcome from './src/onboarding/Welcome';
 import InfoNavigator from './src/info/InfoNavigator';
-
+import { GETAllTrackingPreferences } from './src/services/SettingsService';
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
+
+// Initialize Sentry's SDK
+Sentry.init({
+  dsn: "https://35946e620f1a4559b9abd70d044e6ca0@o1164205.ingest.sentry.io/6253138",
+  // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+  // We recommend adjusting this value in production.
+  tracesSampleRate: 1.0,
+  enableNative: false
+});
 
 const Tab = createBottomTabNavigator();
 
@@ -100,10 +110,20 @@ export function MainPage() {
   );
 }
 
-export default function App() {
-  return (
-    // <Welcome></Welcome>
-      <MainPage></MainPage>
-
-  );
+function App() {
+  const [preferences, setPreferences] = useState(null)
+  useEffect(() => {
+     async function getPreferences() {
+       setPreferences(await GETAllTrackingPreferences());
+     }
+     getPreferences();
+  }, [])
+  if(preferences && preferences[0] && preferences[0][1])
+    // tracking preferences have been set, go to main page
+    return (<MainPage></MainPage>);
+  else
+    // tracking preferences have not been set, go to onboarding
+    return (<Welcome></Welcome>);
 }
+
+export default Sentry.wrap(App);

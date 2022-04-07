@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
+import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 
 
 export default function LogMultipleDatesScreen ({ navigation }) {

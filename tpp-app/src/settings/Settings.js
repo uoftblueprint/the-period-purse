@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {View, Switch, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking} from 'react-native';
+
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
 import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/flow.png';
@@ -8,10 +9,14 @@ import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { socialMediaIcons } from './icons';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
+
+
 const PreferenceButton = (props) => {
+
     return (
     <View style = {styles.horizontalCenteredColumn}>
         <TouchableOpacity style={[styles.dropShadow, styles.preferenceButton]} onPress={props.onPress}>
@@ -21,7 +26,19 @@ const PreferenceButton = (props) => {
         </TouchableOpacity>
         <Text>{props.cardName}</Text>
 
-    </View>
+        </View>
+    );
+}
+
+const SocialMediaButton = (props) => {
+    const openLink = () => Linking.canOpenURL(props.url).then(() => {
+        Linking.openURL(props.url);
+    });
+
+    return (
+        <TouchableOpacity onPress={openLink} style={styles.icon}>
+            {props.icon}
+        </TouchableOpacity>
     );
 }
 
@@ -44,11 +61,40 @@ const Preferences = (props) => {
                 <PreferenceButton source={CrampsIcon} cardName="Cramps"/>
                 <PreferenceButton source={ExerciseIcon} cardName="Exercise"/>
             </View>
-
         </View>
-
     );
+}
 
+const Socials = () => {
+    return (
+        <View style={styles.iconsContainer}>
+            {
+                socialMediaIcons.map((socialMedia, i) => {
+                    return <SocialMediaButton key={i} icon={socialMedia.component} url={socialMedia.url} />
+                })
+            }
+        </View>
+    );
+}
+
+const TermsAndConditions = () => {
+    const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
+        Linking.openURL("https://www.google.com/");
+    });
+
+    return (
+        <View styles={styles.termsAndConditionsContainer}>
+            <View style={styles.copyright}>
+                <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
+            </View>
+            <View style={styles.terms}>
+                <TouchableOpacity onPress={openLink} style={styles.icon} >
+                    <Text style={styles.termsText}> Terms and Privacy Policy. </Text>
+                    <Text style={styles.lineText}> ______________________ </Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
 }
 
 const SettingsStackButton = (props) => {
@@ -171,10 +217,10 @@ export default function Settings ({ navigation }) {
     const togglePeriodSwitch = () => setRemindPeriodEnabled(!remindPeriodEnabled);
     const toggleSymptomsSwitch = () => {
 
-        setRemindSymptomsEnabled(!remindSymptomsEnabled);    
-        
+        setRemindSymptomsEnabled(!remindSymptomsEnabled);
+
         if (remindPeriodEnabled) {
-            // Schedule a reoccuring notification 
+            // Schedule a reoccuring notification
             PushNotificationIOS.addNotificationRequest({
                 id: 'remindsymptoms',
                 title: 'Daily Log Reminder',
@@ -199,16 +245,17 @@ export default function Settings ({ navigation }) {
         date.setMinutes(0);
         return date;
     };
-    
+
 
     return (
-        <ScrollView>  
-        <View style={styles.container}>
-        <Preferences/>
-        <NotificationSettings navigation={navigation}/>
-        <SettingOptions navigation={navigation}/>
-    </View></ScrollView>
-      
+        <ScrollView style={styles.container}>
+            <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
+            <Preferences/>
+            <NotificationSettings navigation={navigation}/>
+            <SettingOptions navigation={navigation}/>
+            <Socials />
+            <TermsAndConditions />
+        </ScrollView>
     )
 }
 
@@ -233,11 +280,16 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
-        justifyContent: 'space-evenly',
         marginLeft: 24,
         marginRight: 38,
         marginTop: -20,
         marginBottom: 75
+    },
+    dropShadow: {
+        shadowOffset: {width:0, height:1},
+        shadowRadius: 10,
+        shadowOpacity: 0.25,
+        shadowColor: "black"
     },
     card: {
         borderRadius: 12,
@@ -301,4 +353,38 @@ const styles = StyleSheet.create({
         left: 16
     },
 
+    iconsContainer: {
+        marginTop: 50,
+        justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 10,
+    },
+    icon: {
+        margin: 10,
+    },
+    termsAndConditionsContainer: {
+        marginTop: 10,
+    },
+    copyright: {
+        justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+        color: "red"
+    },
+    copyrightText: {
+        color: "#6D6E71"
+    },
+    terms: {
+        justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    lineText: {
+        marginTop: -10,
+        color: "#5A9F93",
+    },
+    termsText: {
+        color: "#5A9F93",
+    }
 });

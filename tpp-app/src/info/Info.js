@@ -5,6 +5,7 @@ import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png
 import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon.png';
 import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
 import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png'
+import { STACK_SCREENS } from './InfoNavigator';
 
 const LearnMoreCard = () => {
     return(
@@ -37,27 +38,27 @@ const cardData = [
     {
         name: "Period" + "\n" + "Underwears",
         image: underwearIcon,
-        screen: "Period Underwears"
+        screen: STACK_SCREENS.PERIOD_UNDERWEARS
     },
     {
         name: "Menstrual Cups",
         image: cupIcon,
-        screen: "Menstrual Cups"
+        screen: STACK_SCREENS.MENSTRUAL_CUPS
     },
     {
         name: "Pads",
         image: padIcon,
-        screen: "Pads"
+        screen: STACK_SCREENS.PADS
     },
     {
         name: "Cloth Pads",
         image: clothPadIcon,
-        screen: "Cloth Pads"
+        screen: STACK_SCREENS.CLOTH_PADS
     },
     {
         name: "Tampons",
         image: tamponsIcon,
-        screen: "Tampons"
+        screen: STACK_SCREENS.TAMPONS
     }
 ]
 

@@ -1,30 +1,64 @@
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
-import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { CrossButton } from './components/ButtonComponents';
 import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
+import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
+import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
+import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 
 export const STACK_SCREENS = {
-  "Get Started" : "Get Started",
-  "Period Length" : "Period Length",
-  "Period Start":  "Period Start",
-  "Symptoms Choices" : "Symptoms Choices",
-  "Backup" : "Backup",
-  "Main Page": "Main Page",
-  "Registration": "Registration",
-  "Password": "Password",
-  "Success": "Success",
-  "Confirmation": "Confirmation"
+  GET_STARTED : "Get Started",
+  PERIOD_LENGTH : "Period Length",
+  PERIOD_START :  "Period Start",
+  SYMPTOMS_CHOICES : "Symptoms Choices",
+  BACKUP : "Backup",
+  MAIN_PAGE : "Main Page",
+  REGISTRATION : "Registration",
+  PASSWORD : "Password",
+  SUCCESS : "Success",
+  CONFIRMATION : "Confirmation"
 };
 
-export default function Confirmation ({ navigation }) {
+export default function Confirmation ({ route, navigation }) {
+  const { periodLength, periodStart, periodEnd, trackingPreferences } = route.params;
+
+  function IconPref() {
+    let iconComponents = []
+    if(trackingPreferences[0])  // flow
+      iconComponents.push(<FlowIcon key="flow" style={styles.icon}/>);
+    if(trackingPreferences[1])  // mood
+      iconComponents.push(<MoodIcon key="mood" style={styles.icon}/>);
+    if(trackingPreferences[2])  // sleep
+      iconComponents.push(<SleepIcon key="sleep" style={styles.icon}/>);
+    if(trackingPreferences[3])  // cramps
+      iconComponents.push(<CrampsIcon key="cramps" style={styles.icon}/>);
+    if(trackingPreferences[4])  // exercise 
+      iconComponents.push(<ExerciseIcon key="exercise" style={styles.icon}/>);
+    return (<SymptomIconContainer>{iconComponents}</SymptomIconContainer>);
+  }
+
+  function DateRange() {
+    if(periodStart && periodEnd)
+      return (<Text style={styles.text}>{periodStart} to {periodEnd}</Text>)
+    else
+      return (null);
+  }
+
+  function Length() {
+    if(periodLength) 
+      return (<Text style={styles.text}>{periodLength} days</Text>);
+    else
+      return (null);
+  }
+
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS["Main Page"])}}/>
+        <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS.MAIN_PAGE)}}/>
       </BackButtonContainer>
 
       <PaddyIcon style={{alignSelf: "center"}}/>
@@ -32,22 +66,19 @@ export default function Confirmation ({ navigation }) {
 
       <View style={styles.row}>
         <Text style={styles.smallText}>Average period length</Text>
-        <Text style={styles.text}>5 days</Text>
+        <Length/>
       </View>
       <HorizontalLine></HorizontalLine>
 
       <View style={styles.row}>
         <Text style={styles.smallText}>Last period</Text>
-        <Text style={styles.text}>Nov 1-5, 2021</Text>
+        <DateRange/>
       </View>
       <HorizontalLine></HorizontalLine>
 
       <View style={styles.row}>
         <Text style={styles.smallText}>Symptoms to log</Text>
-        <SymptomIconContainer>
-            <FlowIcon style={styles.icon}/>
-            <SleepIcon style={styles.icon}/>
-        </SymptomIconContainer>
+        <IconPref/>
       </View>
       <HorizontalLine></HorizontalLine>
     </ImageBackground>
