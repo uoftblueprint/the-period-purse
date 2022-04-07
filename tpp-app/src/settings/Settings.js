@@ -146,7 +146,7 @@ return (
             subtext={"Every day at 10:00 pm"} 
             toggle={toggleSymptomsSwitch}
             enabled={remindSymptomsEnabled}/>
-        <SettingsStackButton name={"Notifications"} navigation={navigation} />
+   
 
     </SafeAreaView>
 )
@@ -156,6 +156,7 @@ const SettingOptions = ({navigation}) => {
     return (
         <SafeAreaView style={{top: -150}}>
             <Text style={styles.heading}>Account settings </Text>
+            <SettingsStackButton name={"Notifications"} navigation={navigation} />
         <SettingsStackButton name={"Profile Information"}  navigation={navigation} />
         <SettingsStackButton name={"Privacy Policy"}  navigation={navigation}/>
         <SettingsStackButton name={"Log Out"} navigation={navigation}/>
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
         lineHeight: 34,
         top: -20,
         color: '#6D6E71',
-        left: 10
+        left: 16
     },
 
 });
