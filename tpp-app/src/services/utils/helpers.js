@@ -148,8 +148,6 @@ export const getPeriodsInYear = async (year, calendar=null) => {
   let startOfYear = new Date(year, 0,1);
   let periods = []
 
-
-
   if(!calendar){
     calendar = await getCalendarByYear(year);
   }

@@ -9,12 +9,17 @@ import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 
-import { Symptoms, ExerciseActivity } from '../../services/utils/models';
-import { FLOW_LEVEL, MOOD_LEVEL, CRAMP_LEVEL, EXERCISE_TYPE } from '../../services/utils/constants';
 
 const sideComponentWidth = 120
 
 export const Calendar = ({navigation, marked, yearData, setYearInView, selectedView}) => {
+    //updates the data when you come back to the calendar screen, might not need this
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         getCalendarData();
+    //     });
+    //     return unsubscribe;
+    // }, [navigation]);
 
     return (
         <CalendarList
