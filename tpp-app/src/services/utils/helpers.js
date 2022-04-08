@@ -3,10 +3,7 @@ import {FLOW_LEVEL} from '../utils/constants';
 import { Symptoms } from './models';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
-<<<<<<< HEAD
-=======
 // Backend helper functions used across app
->>>>>>> develop
 
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.
@@ -110,13 +107,8 @@ export const getCalendarByYear = async (year) => {
  */
 export const getSymptomsFromCalendar = (calendar, day, month, year) => {
   if (year in calendar && isValidDate(day,month, year)){
-<<<<<<< HEAD
-    let rawSymptoms = calendar[year][month - 1][day-1];
-    return rawSymptoms ? new Symptoms(rawSymptoms.flow, rawSymptoms.mood, rawSymptoms.sleep, rawSymptoms.cramps, rawSymptoms.exercise,rawSymptoms.notes) : new Symptoms();
-=======
     let rawSymptoms = JSON.parse(calendar[year][month - 1][day-1]);
     return rawSymptoms ? new Symptoms(rawSymptoms.flow, rawSymptoms.mood, rawSymptoms.sleep, rawSymptoms.cramps, rawSymptoms.exercise, rawSymptoms.notes) : new Symptoms();
->>>>>>> develop
   }
   else {
     return new Symptoms();
