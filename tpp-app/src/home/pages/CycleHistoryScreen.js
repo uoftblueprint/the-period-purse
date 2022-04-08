@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ImageBackground} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png';
 import {ExpandedHistoryCard} from '../components/CycleHistory';
 import CycleService from '../../services/cycle/CycleService';
 import {GETStoredYears} from '../../services/utils/helpers';
+import {useFocusEffect} from '@react-navigation/native';
 
 function Header({navigation}){
     return(
@@ -51,7 +52,9 @@ export default function CycleHistoryScreen({navigation}){
     let [storedYears, setStoredYears] = useState(DEFAULTS.STORED_YEARS);
     let [onPeriod, setOnPeriod] = useState(DEFAULTS.ON_PERIOD);
     
-    useEffect(() => {
+    useFocusEffect(
+        React.useCallback(() => {
+        console.log("on focus for startup")
         GETStoredYears().then(
             years => {
                 setStoredYears(years);
@@ -62,17 +65,20 @@ export default function CycleHistoryScreen({navigation}){
             setOnPeriod(days !== 0 );
         })
         .catch(() => setOnPeriod(DEFAULTS.ON_PERIOD))
-    }, []);
+    }, []));
 
     //update the cycles being rendered to reflect newly selected year.
-    useEffect(() => {
-        CycleService.GETCycleHistoryByYear(selectedYear).then(
-            intervals => {
-                setCurrentIntervals(intervals);
-            }
-        )
-        .catch(() => setCurrentIntervals(DEFAULTS.CURRENT_INTERVALS)) //error case, render empty card
-    },[selectedYear]);
+    useFocusEffect(
+        React.useCallback(() => {
+            console.log("on focus for intervalss")
+            CycleService.GETCycleHistoryByYear(selectedYear).then(
+                intervals => {
+                    setCurrentIntervals(intervals);
+                }
+            )
+            .catch(() => setCurrentIntervals(DEFAULTS.CURRENT_INTERVALS)) //error case, render empty card
+        }
+    ,[selectedYear]));
 
     return (
         <SafeAreaView style={styles.container}>

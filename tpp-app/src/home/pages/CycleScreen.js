@@ -1,12 +1,12 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {StyleSheet, Text, ImageBackground, SafeAreaView, View, ScrollView} from 'react-native';
 import CycleCard from '../components/CycleCard';
 import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png';
 import CycleService from '../../services/cycle/CycleService';
-import Testing from '../../services/cycle/Testing';
 import {MinimizedHistoryCard} from '../components/CycleHistory';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import {useFocusEffect} from '@react-navigation/native';
 
 import BloodDrop from '../../../ios/tppapp/Images.xcassets/icons/flow_with_heart.svg';
 import Calendar from '../../../ios/tppapp/Images.xcassets/icons/menstruation_calendar.svg';
@@ -61,13 +61,7 @@ export default function CycleScreen ({navigation}){
 
   const tabBarHeight = useBottomTabBarHeight();
 
-  useEffect(() => {
-     //TODO: delete this testing stuff
-    //  Testing.clearCycleDonut();
-    //  Testing.PostDummyCalendarOverYear();
-    //  Testing.PostAverageCycleLength();
-    //  Testing.PostAveragePeriodLength(); */
-     //DELETE above
+  useFocusEffect(React.useCallback(() => {
 
      CycleService.GETPeriodDay().then(days => {
        setPeriodDays(days);
@@ -99,6 +93,7 @@ export default function CycleScreen ({navigation}){
         setAvgCycleLength(numDays);
        }
        else {
+         console.log("defaulting average cycle length");
          setAvgCycleLength(DEFAULTS.AVG_CYCLE_LENGTH);
        }
      })
@@ -128,7 +123,7 @@ export default function CycleScreen ({navigation}){
        setIntervals(DEFAULTS.INTERVALS);
      })
 
-  }, []);
+  }, []));
 
 
   const tipInvisibleStyle = {

@@ -126,4 +126,5 @@ function App() {
     return (<Welcome></Welcome>);
 }
 
+
 export default Sentry.wrap(App);
