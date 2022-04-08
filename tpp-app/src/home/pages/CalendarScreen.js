@@ -93,14 +93,16 @@ export default function CalendarScreen ({ navigation }) {
 
     useEffect(() => {
         // Whenever the user scrolls and changes what year is in view
-        yearInView.forEach(year => {
+        yearInView.forEach(async(year) => {
             let yearNumber = year.toString()
             // If the data for that year doesn't already exist
             if (yearData[yearNumber] === undefined) {
-                let newData = GETYearData(year)
+                let newData = {}
+                newData[year] = await GETYearData(year)
 
                 const newYear = {...yearData, ...newData};
-
+                
+                console.log(newYear)
                 setYearData(newYear)
 
                 

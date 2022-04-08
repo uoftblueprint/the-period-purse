@@ -10,16 +10,21 @@ import { GETAllTrackingPreferences } from './SettingsService.js';
  */
 export const GETYearData = async (year) => {
 
-    let yearData = JSON.parse(await AsyncStorage.getItem(year.toString()));
+    let yearObject = JSON.parse(await AsyncStorage.getItem(year.toString()));
 
-    // yearData could be null
-    if (yearData) {
-        yearData.map((month) => {
-            month.map((day) => {
-                return day ? new Symptoms(day) : new Symptoms();
+    // yearObject could be null
+    if (yearObject) {
+        let parsedYear = yearObject.map((month) => {
+            let parsedMonth = month.map((day) => {
+                let parsedDay = JSON.parse(day)
+                return day ? new Symptoms(parsedDay['flow'], parsedDay['mood'], parsedDay['sleep'], parsedDay['cramps'], parsedDay['exercise'], parsedDay['notes']) : new Symptoms();
             })
+
+            return parsedMonth
         })
-        return yearData;
+        
+        console.log(parsedYear)
+        return parsedYear
     }
 
     return null;
