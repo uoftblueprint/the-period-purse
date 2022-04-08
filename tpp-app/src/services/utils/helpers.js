@@ -107,8 +107,8 @@ export const getCalendarByYear = async (year) => {
  */
 export const getSymptomsFromCalendar = (calendar, day, month, year) => {
   if (year in calendar && isValidDate(day,month, year)){
-    let rawSymptoms = JSON.parse(calendar[year][month - 1][day-1]);
-    return rawSymptoms ? new Symptoms(rawSymptoms.flow, rawSymptoms.mood, rawSymptoms.sleep, rawSymptoms.cramps, rawSymptoms.exercise, rawSymptoms.notes) : new Symptoms();
+    let rawSymptoms = calendar[year][month - 1][day-1];
+    return rawSymptoms ? new Symptoms(rawSymptoms.flow, rawSymptoms.mood, rawSymptoms.sleep, rawSymptoms.cramps, rawSymptoms.exercise,rawSymptoms.notes) : new Symptoms();
   }
   else {
     return new Symptoms();
