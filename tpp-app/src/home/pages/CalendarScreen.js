@@ -106,13 +106,13 @@ export default function CalendarScreen ({ navigation }) {
                 setYearData(newYear)
 
                 
-               let newMarkedData = {}
+                let newMarkedData = {}
                 // We know that this data is now in the variable, so now attempt
                 // to convert it into the appropriate key and value data
                 let monthArray = newYear[yearNumber]
                 if (monthArray) {
-                    for (var i = 0; i < monthArray.length; i++) {
-                        for (var j = 0; j < monthArray[i].length; j++) {
+                    for (let i = 0; i < monthArray.length; i++) {
+                        for (let j = 0; j < monthArray[i].length; j++) {
                             let date = new Date(year, i, j + 1)
                             let isoDate = getISODate(date);
                             let symptomData = monthArray[i][j]
@@ -123,7 +123,6 @@ export default function CalendarScreen ({ navigation }) {
                             }
                         }
                     }
-    
                 }
                 setMarked(markedState => ({...markedState, ...newMarkedData}))
             }  
