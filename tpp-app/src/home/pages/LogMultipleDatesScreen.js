@@ -146,7 +146,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 console.log(error);
             }
         }
-        navigation.navigate(STACK_SCREENS.CALENDAR);
+        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE);
     }
 
     const alertPopup = (info) =>  {
@@ -158,7 +158,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
               text: info.cancelTitle,
               style: "cancel"
             },
-            { text: info.acceptTitle, onPress: () => navigation.navigate(STACK_SCREENS.CALENDAR) }
+            { text: info.acceptTitle, onPress: () => navigation.navigate(STACK_SCREENS.CALENDAR_PAGE) }
           ]
         );
       }
@@ -169,7 +169,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             alertPopup(unsavedChanges);
           
         }else{
-            navigation.navigate(STACK_SCREENS.CALENDAR);
+            navigation.navigate(STACK_SCREENS.CALENDAR_PAGE);
         }
     }
 
