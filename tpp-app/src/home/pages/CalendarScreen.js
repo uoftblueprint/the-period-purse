@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
 import Selector, {SelectedIcon} from '../components/Selector';
@@ -145,19 +145,14 @@ export default function CalendarScreen ({ navigation }) {
             setSelectedView(targetView);
         }
     }
-    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
+    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (
         <View style={styles.container}>
-            <View style={styles.navbarContainer}>
-                <Button
-                    title={selectedView}
-                    titleStyle={styles.dropdownText}
-                        type="clear"
-                    onPress={() => setDropdownExpanded(!dropdownExpanded)}
-                    />
-                <SelectedIcon selectedView={selectedView}/>
+            <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
+                <Text style={styles.dropdownText}>{selectedView}</Text>
+                <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
                 {renderedArrow}
-            </View>
+            </TouchableOpacity>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
             <Calendar navigation={navigation} marked={marked} yearData={yearData} setYearInView={setYearInView} selectedView={selectedView}/>
         </View>
@@ -178,6 +173,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#FFFFFF'
     },
+    selectorItem:{
+        marginHorizontal: 10
+    },
     horizContainer: {
         flex:1,
         alignSelf:'stretch',
@@ -185,11 +183,16 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     dropdownText:{
-        fontStyle: 'normal',
-        fontWeight: "700",
-        color: "#000",
-        alignItems: 'center',
-        lineHeight:20,
+
+
+        fontFamily: "Avenir",
+        fontSize: 20,
+        fontWeight: "800",
+        lineHeight: 27,
+        letterSpacing: -0.4848649203777313,
+        textAlign: "center",
+
+
 
     },
 })

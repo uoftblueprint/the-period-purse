@@ -9,22 +9,22 @@ import SleepIcon from "../../../ios/tppapp/Images.xcassets/icons/sleep.svg";
 import {VIEWS} from '../../services/utils/constants';
 
 //write function that takes props & renders the corresponding icon
-export const SelectedIcon = ({selectedView}) => {
+export const SelectedIcon = ({selectedView, style}) => {
     switch(selectedView) {
         case VIEWS.Cramps:
-            return (<CrampsIcon />)
+            return (<CrampsIcon style={style}/>)
             break;
         case VIEWS.Exercise:
-            return (<ExerciseIcon />);
+            return (<ExerciseIcon style={style}/>);
             break;
         case VIEWS.Flow:
-            return (<FlowIcon />);
+            return (<FlowIcon style={style}/>);
             break;
         case VIEWS.Mood:
-            return (<MoodIcon />);
+            return (<MoodIcon style={style}/>);
             break;
         case VIEWS.Sleep:
-            return (<SleepIcon/>);
+            return (<SleepIcon style={style}/>);
             break;
         case VIEWS.Nothing:
             // need to return something? Maybe just check before calling so we don't get this case
