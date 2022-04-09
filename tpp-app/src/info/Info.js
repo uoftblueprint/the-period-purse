@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity, ImageBackground} from 'react-native';
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import padIcon from '../../ios/tppapp/Images.xcassets/icons/pad_icon.png';
 import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png';
 import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon.png';
@@ -7,8 +8,6 @@ import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
 import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png'
 import discIcon from '../../ios/tppapp/Images.xcassets/icons/disc_icon.png'
 import { STACK_SCREENS } from './InfoNavigator';
-
-let onboardingBg = require('../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background-light.png')
 
 const LearnMoreCard = () => {
     return(
@@ -72,7 +71,7 @@ const cardData = [
 
 export default function Info ({ navigation }) {
     return (
-        <ImageBackground source={onboardingBg} style={styles.backgroundImg}>
+        <ImageBackground source={OnboardingBackground} style={styles.container}>
             <ScrollView>
                 <View style={styles.cardContainer}>
                     <Text style={{
@@ -103,9 +102,10 @@ export default function Info ({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    backgroundImg: {
-        width: '100%', 
-        height: '100%',
+    container: {
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'center'
       },
     productCard: {
         backgroundColor: '#FFA3A4',

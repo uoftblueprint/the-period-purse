@@ -2,12 +2,11 @@ import React from 'react';
 import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
 import { BackButton } from '../home/components/BackButtonComponent';
 import DiscImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/disc_image.png';
-
-let onboardingBg = require('../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background-light.png')
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 
 export default function MenstrualDiscInfo({ navigation }) {
     return (
-        <ImageBackground source={onboardingBg} style={styles.backgroundImg}>
+        <ImageBackground source={OnboardingBackground} style={styles.container}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
                     <Image 
@@ -35,9 +34,10 @@ export default function MenstrualDiscInfo({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    backgroundImg: {
-        width: '100%', 
-        height: '100%',
+    container: {
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'center'
       },
     image: {
         position: 'absolute', 
