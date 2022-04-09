@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking} from 'react-native';
-
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
 import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/flow.png';
@@ -11,15 +10,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { socialMediaIcons } from './icons';
 import { ScrollView } from 'react-native-gesture-handler';
-
-
-
+import { GETAllTrackingPreferences, POSTUpdateOnePreference } from '../services/SettingsService';
+import { TRACK_SYMPTOMS } from '../services/utils/constants'
 
 const PreferenceButton = (props) => {
 
     return (
     <View style = {styles.horizontalCenteredColumn}>
-        <TouchableOpacity style={[styles.dropShadow, styles.preferenceButton]} onPress={props.onPress}>
+        <TouchableOpacity style={[styles.preferenceButton, {backgroundColor: props.set }]} onPress={props.onPress}>
                 <Image
                     source={props.source}
                 />
@@ -51,15 +49,77 @@ const Preferences = (props) => {
     const [sleep, trackSleep] = useState('#FFFFFF');
     const [cramps, trackCramps] = useState('#FFFFFF');
     const [exercise, trackExercise] = useState('#FFFFFF');
+    const [trackingPrefs, setPrefs] = useState([]); // preferences that are currently tracked, default is empty
+
+    // useEffect(() => {
+    //     async function fetchPreferences() {
+    //         // get tracking references
+    //         let stored = await GETAllTrackingPreferences();
+    //         let prefArr = [...trackingPrefs];
+    //         // set trackingPrefs somewhere
+    //         for (let pref of stored) {
+    //           let toTrack = pref[1]
+    //           // if tracking that symptom is set to true, append it to trackingPrefs
+    //           if (toTrack) {
+    //               let title = pref[0];
+    //               let symptom;
+    //               switch(title) {
+    //                 case TRACK_SYMPTOMS.MOOD:
+    //                   symptom = 'mood'
+    //                   break;
+    //                 case TRACK_SYMPTOMS.SLEEP:
+    //                   symptom = 'sleep'
+    //                   break;
+    //                 case TRACK_SYMPTOMS.CRAMPS:
+    //                   symptom = 'cramps'
+    //                   break;
+    //                 case TRACK_SYMPTOMS.EXERCISE:
+    //                   symptom = 'exercise'
+    //                   break;
+    //                 default:
+    //                   symptom = 'flow'
+    //                   break;
+    //               }
+    //               if (!prefArr.includes(symptom)) prefArr.push(symptom);
+    //           }
+    //         }
+    //         setPrefs(prefArr);
+    //       }
+    //       fetchPreferences();
+    //   }, [])
+   
+    const handleFlow = () => { 
+        flow == WHITE ? trackFlow(TEAL) : trackExercise(WHITE);
+
+        POSTUpdateOnePreference(TRACK_SYMPTOMS.FLOW, flow == TEAL);
+      }
+      const handleSleep = () => { 
+        sleep == WHITE ? trackSleep(TEAL) : trackSleep(WHITE);
+
+        POSTUpdateOnePreference(TRACK_SYMPTOMS.SLEEP, sleep == TEAL);
+      }
+      const handleMood = () => { 
+        mood == WHITE ? trackMood(TEAL) : trackMood(WHITE);
+
+        POSTUpdateOnePreference(TRACK_SYMPTOMS.MOOD, mood == TEAL);
+      }
+      const handleCramp = () => { 
+        cramps == WHITE ? trackCramps(TEAL) : trackCramps(WHITE);
+        POSTUpdateOnePreference(TRACK_SYMPTOMS.CRAMPS, cramps == TEAL);
+      }
+      const handleExercise = () => { 
+        exercise == WHITE ? trackExercise(TEAL) : trackExercise(WHITE);
+        POSTUpdateOnePreference(TRACK_SYMPTOMS.EXERCISE, exercise == TEAL);
+      }
     return (
         <View>
             <Text style={styles.heading}>Tracking Preferences </Text>
             <View style={styles.preferences}>
-                <PreferenceButton source={FlowIcon} cardName="Flow"/>
-                <PreferenceButton source={MoodIcon} cardName="Mood"/>
-                <PreferenceButton source={SleepIcon} cardName="Sleep"/>
-                <PreferenceButton source={CrampsIcon} cardName="Cramps"/>
-                <PreferenceButton source={ExerciseIcon} cardName="Exercise"/>
+                <PreferenceButton source={FlowIcon} cardName="Flow" set={flow} onPress={handleFlow}/>
+                <PreferenceButton source={MoodIcon} cardName="Mood" set={mood} onPress={handleMood}/>
+                <PreferenceButton source={SleepIcon} cardName="Sleep" set={sleep} onPress={handleSleep}/>
+                <PreferenceButton source={CrampsIcon} cardName="Cramps" set={cramps} onPress={handleCramp}/>
+                <PreferenceButton source={ExerciseIcon} cardName="Exercise" set={exercise} onPress={handleExercise}/>
             </View>
         </View>
     );
@@ -249,7 +309,6 @@ export default function Settings ({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-            <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
             <Preferences/>
             <NotificationSettings navigation={navigation}/>
             <SettingOptions navigation={navigation}/>
@@ -281,7 +340,7 @@ const styles = StyleSheet.create({
     },
     container: {
         marginLeft: 24,
-        marginRight: 38,
+        marginRight: 20,
         marginTop: -20,
         marginBottom: 75
     },

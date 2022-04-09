@@ -83,7 +83,7 @@ export const POSTUpdatePreferences = async (flow, mood, sleep, cramps, exercise)
  */
 export const POSTUpdateOnePreference = async (key, value) => new Promise(async(resolve, reject) => {
     try {
-        await AsyncStorage.setItem(key, value
+        await AsyncStorage.setItem(key, JSON.stringify(value)
             ).then(() => {
             console.log(`Updated symptom: ${JSON.stringify(key)}`);
             resolve();
