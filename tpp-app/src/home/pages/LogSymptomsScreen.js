@@ -85,7 +85,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
   // function to get symptoms from async storage
   const getStoredSymps = async (day, month, year) => {
     const cal = await getCalendarByYear(year);
-    let symps = await getSymptomsFromCalendar(cal, day, month, year);
+    let symps = getSymptomsFromCalendar(cal, day, month, year);
     return symps
   }
 

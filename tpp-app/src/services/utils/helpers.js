@@ -156,7 +156,7 @@ export const getPeriodsInYear = async (year, calendar=null) => {
 
   try{
     while(current.getFullYear() === year){
-      let currentSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
+      let currentSymptoms = getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
       if (currentSymptoms.flow !== null && currentSymptoms.flow !== FLOW_LEVEL.NONE){
         periods.push(current);
       }
@@ -168,4 +168,21 @@ export const getPeriodsInYear = async (year, calendar=null) => {
     console.log(e);
     return periods;
   }
+
+}
+
+/**
+ * @returns {Promise} Promise that resolves into all the years that are stored. If none found, returns empty array
+ */
+export const GETStoredYears = async () => {
+    let currentYear = new Date().getFullYear();
+    let storedYears = [];
+    let yearToCheck = currentYear;
+
+    while(JSON.parse(await AsyncStorage.getItem(yearToCheck.toString()))){
+        storedYears.push(yearToCheck);
+        yearToCheck-=1;
+    }
+
+    return storedYears;
 }
