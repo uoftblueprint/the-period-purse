@@ -107,6 +107,7 @@ export default function CycleScreen ({navigation}){
        else{
          toSet = DEFAULTS.DAYS_TILL_PERIOD;
          //if the prediction is invalid, don't show the tooltip
+         //will not show tip until average cycle is computed
          setShowTip(false);
        }
        setDaysTillPeriod(toSet);
@@ -129,7 +130,7 @@ export default function CycleScreen ({navigation}){
   const tipInvisibleStyle = {
     marginBottom: tabBarHeight
   }
-
+  console.log(showTip)
   const cardContainerStyle = showTip ? styles.cardContainer : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
   return (
     <SafeAreaView style={styles.container}>
@@ -146,6 +147,7 @@ export default function CycleScreen ({navigation}){
             periodDays={periodDays} 
             daysSinceLastPeriod={daysSinceLastPeriod} 
             cycleDonutPercent={cycleDonutPercent}
+            showTip={showTip}
           />
           <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
             <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
