@@ -9,7 +9,6 @@ export default class NotficationAccordion extends Component {
         super(props);
         this.type = props.type;
         this.state = { 
-           
             expanded : false,
           };
     }
@@ -43,18 +42,146 @@ export default class NotficationAccordion extends Component {
 
 
 const PickerTab = (props) => {
-    const [selectedValue, setSelectedValue] = useState();
-    const [selectedMeridian, setMeridian] = useState();
     let picker;
-    
 
     switch (props.pickerType) {
-        case 'days':
-           picker = 
+        case "time":
+            picker = <TimePicker/>
+            break;
+
+        case "days":
+            picker = <SchedulingPicker/>
+            break;
+        
+        case "howOften":
+            picker = <FrequencyPicker/>
+            break;
+    
+        default:
+            break;
+    }
+    
+    return (
+        picker
+    )
+
+}
+
+const FrequencyPicker = () => {
+    const [selectedValue, setSelectedValue] = useState();
+    const [selectedMeridian, setMeridian] = useState();
+    return (
+        <View>
+        <Picker
+         selectedValue={selectedValue}
+         onValueChange={(itemValue) =>
+         setSelectedValue(itemValue)}>
+        <Picker.Item 
+    label={"Every day"}
+    value={"Every day"} 
+    />
+    <Picker.Item 
+    label={"Every week"}
+    value={"Every week"} 
+    />
+    <Picker.Item 
+    label={"Every month"}
+    value={"Every month"} 
+    />
+    <Picker.Item 
+    label={"Only during period"}
+    value={"Only during period"} 
+    />
+        </Picker>
+    </View>
+    );
+}
+
+const TimePicker = () => {
+    const [selectedValue, setSelectedValue] = useState();
+    const [selectedMeridian, setMeridian] = useState();
+return(
+    <View>
+    <Picker  
+    selectedValue={selectedValue}
+    onValueChange={(itemValue) =>
+    setSelectedValue(itemValue)
+    }>
+     <Picker.Item 
+    label={"1"}
+    value={"1"} 
+    />
+    <Picker.Item 
+    label={"2"}
+    value={"2"} 
+    />
+    <Picker.Item 
+    label={"3"}
+    value={"3"} 
+    />
+    <Picker.Item 
+    label={"4"}
+    value={"4"} 
+    />
+    <Picker.Item 
+    label={"5"}
+    value={"5"} 
+    />
+    <Picker.Item 
+    label={"6"}
+    value={"6"} 
+    />
+    <Picker.Item 
+    label={"7"}
+    value={"7"} 
+    />
+    <Picker.Item 
+    label={"8"}
+    value={"8"} 
+    />
+    <Picker.Item 
+    label={"9"}
+    value={"9"} 
+    />
+    <Picker.Item 
+    label={"10"}
+    value={"10"} 
+    />
+    <Picker.Item 
+    label={"11"}
+    value={"11"} 
+    />
+    <Picker.Item 
+    label={"12"}
+    value={"12"} 
+    />
+    </Picker>
+    <Picker  
+            selectedValue={selectedMeridian}
+            onValueChange={(itemValue) =>
+            setMeridian(itemValue)
+            }>
+            <Picker.Item 
+            label={"AM"}
+            value={"AM"} 
+            />
+            <Picker.Item 
+            label={"PM"}
+            value={"PM"} 
+            />
+            </Picker>
+    </View>
+)
+}
+
+const SchedulingPicker = () => {
+    const [selectedValue, setSelectedValue] = useState();
+
+    return (
         <View>
         <Picker  
         selectedValue={selectedValue}
-        onValueChange={(itemValue, itemIndex) =>
+        onValueChange={(itemValue) =>
         setSelectedValue(itemValue)
         }>
              <Picker.Item 
@@ -87,111 +214,8 @@ const PickerTab = (props) => {
                 />
         </Picker>
         </View>
-           
-        case 'times':
-            picker =
-            <View>
-            <Picker  
-            selectedValue={selectedValue}
-            onValueChange={(itemValue) =>
-            setSelectedValue(itemValue)
-            }>
-             <Picker.Item 
-            label={"1"}
-            value={"1"} 
-            />
-            <Picker.Item 
-            label={"2"}
-            value={"2"} 
-            />
-            <Picker.Item 
-            label={"3"}
-            value={"3"} 
-            />
-            <Picker.Item 
-            label={"4"}
-            value={"4"} 
-            />
-            <Picker.Item 
-            label={"5"}
-            value={"5"} 
-            />
-            <Picker.Item 
-            label={"6"}
-            value={"6"} 
-            />
-            <Picker.Item 
-            label={"7"}
-            value={"7"} 
-            />
-            <Picker.Item 
-            label={"8"}
-            value={"8"} 
-            />
-            <Picker.Item 
-            label={"9"}
-            value={"9"} 
-            />
-            <Picker.Item 
-            label={"10"}
-            value={"10"} 
-            />
-            <Picker.Item 
-            label={"11"}
-            value={"11"} 
-            />
-            <Picker.Item 
-            label={"12"}
-            value={"12"} 
-            />
-            </Picker>
-
-           <Picker  
-            selectedValue={selectedMeridian}
-            onValueChange={(itemValue) =>
-            setMeridian(itemValue)
-            }>
-            <Picker.Item 
-            label={"AM"}
-            value={"AM"} 
-            />
-            <Picker.Item 
-            label={"PM"}
-            value={"PM"} 
-            />
-            </Picker>
-            </View>
-        case 'howOften':
-            picker =
-            <View>
-                <Picker
-                 selectedValue={selectedValue}
-                 onValueChange={(itemValue) =>
-                 setSelectedValue(itemValue)}>
-                <Picker.Item 
-            label={"Every day"}
-            value={"Every day"} 
-            />
-            <Picker.Item 
-            label={"Every week"}
-            value={"Every week"} 
-            />
-            <Picker.Item 
-            label={"Every month"}
-            value={"Every month"} 
-            />
-            <Picker.Item 
-            label={"Only during period"}
-            value={"Only during period"} 
-            />
-                </Picker>
-            </View>
-    }
-    
-    return (
-        picker
-       
     );
+
 }
 
 const styles =  StyleSheet.create({
