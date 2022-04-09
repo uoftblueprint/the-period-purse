@@ -6,6 +6,7 @@ import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon
 import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
 import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png'
 import { STACK_SCREENS } from './InfoNavigator';
+import { Footer } from '../services/utils/footer';
 
 const LearnMoreCard = () => {
     return(
@@ -87,6 +88,7 @@ export default function Info ({ navigation }) {
                 </View>
 
                 <LearnMoreCard/>
+                <Footer/>
             </View>
         </ScrollView>
     )
