@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
@@ -8,13 +8,11 @@ import {Button} from 'react-native-elements';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
-
-import { Symptoms, ExerciseActivity } from '../../services/utils/models';
-import { FLOW_LEVEL, MOOD_LEVEL, CRAMP_LEVEL, EXERCISE_TYPE } from '../../services/utils/constants';
+import { useFocusEffect } from '@react-navigation/native';
 
 const sideComponentWidth = 120
 
-export const Calendar = ({navigation, marked, yearData, setYearInView, selectedView}) => {
+export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 
     return (
         <CalendarList
@@ -83,33 +81,32 @@ export const Calendar = ({navigation, marked, yearData, setYearInView, selectedV
 }
 
 // Calendar Screen component that can be accessed by other functions
-export default function CalendarScreen ({ navigation }) {
+export default function CalendarScreen ({ route, navigation }) {
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
     const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
     const [yearInView, setYearInView] = useState([new Date().getFullYear()])
 
-    const [yearData, setYearData] = useState({})
+    const [cachedYears, setCachedYears] = useState({})
     const [marked, setMarked] = useState({})
 
     useEffect(() => {
+
         // Whenever the user scrolls and changes what year is in view
         yearInView.forEach(async(year) => {
             let yearNumber = year.toString()
             // If the data for that year doesn't already exist
-            if (yearData[yearNumber] === undefined) {
-                let newData = {}
-                newData[year] = await GETYearData(year)
-
-                const newYear = {...yearData, ...newData};
+            if (cachedYears[yearNumber] === undefined) {
+                let currentYearData = {}
+                currentYearData[year] = await GETYearData(year)
                 
-                console.log(newYear)
-                setYearData(newYear)
-
+                let newCachedYears = {}
+                newCachedYears[yearNumber] = true
+                setCachedYears(cachedState => ({...cachedState, ...newCachedYears}))
                 
                 let newMarkedData = {}
                 // We know that this data is now in the variable, so now attempt
                 // to convert it into the appropriate key and value data
-                let monthArray = newYear[yearNumber]
+                let monthArray = currentYearData[yearNumber]
                 if (monthArray) {
                     for (let i = 0; i < monthArray.length; i++) {
                         for (let j = 0; j < monthArray[i].length; j++) {
@@ -126,9 +123,20 @@ export default function CalendarScreen ({ navigation }) {
                 }
                 setMarked(markedState => ({...markedState, ...newMarkedData}))
             }  
-
+            
         })
-    }, [yearInView, selectedView]) 
+    }, [yearInView]) 
+
+    useFocusEffect(
+        useCallback(() => {
+            let newMarkedData = route.params?.inputData
+            console.log(newMarkedData)
+            if (newMarkedData) {
+                setMarked(markedState => ({...markedState, ...newMarkedData}))
+            }
+
+        }, [route.params?.inputData])
+    )
 
 
     const toggleSelectedView = (targetView) => {
@@ -157,7 +165,7 @@ export default function CalendarScreen ({ navigation }) {
                 </View>
             </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
-            <Calendar navigation={navigation} marked={marked} yearData={yearData} setYearInView={setYearInView} selectedView={selectedView}/>
+            <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
         </View>
     )
 }

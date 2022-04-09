@@ -204,9 +204,11 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
     POSTsymptomsForDate(selectedDate.getDate(), selectedDate.getMonth() + 1, selectedDate.getFullYear(), submitSymp)
       .then(() => {
-        let params = {}
-        params[getISODate(selectedDate)] = submitSymp
-        navigation.navigate(STACK_SCREENS.CALENDAR, params)
+        let inputData = {}
+        inputData[getISODate(selectedDate)] = {
+          symptoms: submitSymp
+        }
+        navigation.navigate(STACK_SCREENS.CALENDAR, {inputData: inputData})
         // navigation.goBack(isDirty);
       })
       .catch((e) => {
