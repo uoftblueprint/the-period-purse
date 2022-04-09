@@ -16,14 +16,13 @@ export const GETYearData = async (year) => {
     if (yearObject) {
         let parsedYear = yearObject.map((month) => {
             let parsedMonth = month.map((day) => {
-                let parsedDay = JSON.parse(day)
-                return day ? new Symptoms(parsedDay['flow'], parsedDay['mood'], parsedDay['sleep'], parsedDay['cramps'], parsedDay['exercise'], parsedDay['notes']) : new Symptoms();
+                return day ? new Symptoms(day['flow'], day['mood'], day['sleep'], day['cramps'], day['exercise'], day['notes']) : new Symptoms();
             })
+
 
             return parsedMonth
         })
         
-        console.log(parsedYear)
         return parsedYear
     }
 

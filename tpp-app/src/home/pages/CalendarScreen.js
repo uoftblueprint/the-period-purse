@@ -84,47 +84,50 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 export default function CalendarScreen ({ route, navigation }) {
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
     const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
-    const [yearInView, setYearInView] = useState([new Date().getFullYear()])
+    const [yearInView, setYearInView] = useState([])
 
     const [cachedYears, setCachedYears] = useState({})
     const [marked, setMarked] = useState({})
 
     useEffect(() => {
+        async function fetchYearData() {
+            // Whenever the user scrolls and changes what year is in view
+            for(let year of yearInView) {
 
-        // Whenever the user scrolls and changes what year is in view
-        yearInView.forEach(async(year) => {
-            let yearNumber = year.toString()
-            // If the data for that year doesn't already exist
-            if (cachedYears[yearNumber] === undefined) {
-                let currentYearData = {}
-                currentYearData[year] = await GETYearData(year)
-                
-                let newCachedYears = {}
-                newCachedYears[yearNumber] = true
-                setCachedYears(cachedState => ({...cachedState, ...newCachedYears}))
-                
-                let newMarkedData = {}
-                // We know that this data is now in the variable, so now attempt
-                // to convert it into the appropriate key and value data
-                let monthArray = currentYearData[yearNumber]
-                if (monthArray) {
-                    for (let i = 0; i < monthArray.length; i++) {
-                        for (let j = 0; j < monthArray[i].length; j++) {
-                            let date = new Date(year, i, j + 1)
-                            let isoDate = getISODate(date);
-                            let symptomData = monthArray[i][j]
-    
-                            // Add it into the marked state, which then updates the calendar
-                            newMarkedData[isoDate] = {
-                                symptoms: symptomData
+                // If the data for that year doesn't already exist
+                if (cachedYears[year] === undefined) {
+
+                    let currentYearData = {}
+                    currentYearData[year] = await GETYearData(year)
+
+                    let newCachedYears = {}
+                    newCachedYears[year] = true
+                    setCachedYears(cachedState => ({...cachedState, ...newCachedYears}))
+
+                    let newMarkedData = {}
+                    // We know that this data is now in the variable, so now attempt
+                    // to convert it into the appropriate key and value data
+                    let monthArray = currentYearData[year]
+                    if (monthArray) {
+                        for (let i = 0; i < monthArray.length; i++) {
+                            for (let j = 0; j < monthArray[i].length; j++) {
+                                let date = new Date(year, i, j + 1)
+                                let isoDate = getISODate(date);
+                                let symptomData = monthArray[i][j]
+        
+                                // Add it into the marked state, which then updates the calendar
+                                newMarkedData[isoDate] = {
+                                    symptoms: symptomData
+                                }
                             }
                         }
                     }
-                }
-                setMarked(markedState => ({...markedState, ...newMarkedData}))
-            }  
-            
-        })
+                    setMarked(markedState => ({...markedState, ...newMarkedData}))
+                } 
+            }
+        }
+
+        fetchYearData()
     }, [yearInView]) 
 
     useFocusEffect(
@@ -137,7 +140,6 @@ export default function CalendarScreen ({ route, navigation }) {
 
         }, [route.params?.inputData])
     )
-
 
     const toggleSelectedView = (targetView) => {
         
