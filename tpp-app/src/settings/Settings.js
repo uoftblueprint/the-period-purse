@@ -51,42 +51,49 @@ const Preferences = (props) => {
     const [exercise, trackExercise] = useState('#FFFFFF');
     const [trackingPrefs, setPrefs] = useState([]); // preferences that are currently tracked, default is empty
 
-    // useEffect(() => {
-    //     async function fetchPreferences() {
-    //         // get tracking references
-    //         let stored = await GETAllTrackingPreferences();
-    //         let prefArr = [...trackingPrefs];
-    //         // set trackingPrefs somewhere
-    //         for (let pref of stored) {
-    //           let toTrack = pref[1]
-    //           // if tracking that symptom is set to true, append it to trackingPrefs
-    //           if (toTrack) {
-    //               let title = pref[0];
-    //               let symptom;
-    //               switch(title) {
-    //                 case TRACK_SYMPTOMS.MOOD:
-    //                   symptom = 'mood'
-    //                   break;
-    //                 case TRACK_SYMPTOMS.SLEEP:
-    //                   symptom = 'sleep'
-    //                   break;
-    //                 case TRACK_SYMPTOMS.CRAMPS:
-    //                   symptom = 'cramps'
-    //                   break;
-    //                 case TRACK_SYMPTOMS.EXERCISE:
-    //                   symptom = 'exercise'
-    //                   break;
-    //                 default:
-    //                   symptom = 'flow'
-    //                   break;
-    //               }
-    //               if (!prefArr.includes(symptom)) prefArr.push(symptom);
-    //           }
-    //         }
-    //         setPrefs(prefArr);
-    //       }
-    //       fetchPreferences();
-    //   }, [])
+    useEffect(() => {
+        async function fetchPreferences() {
+            // get tracking references
+            let stored = await GETAllTrackingPreferences();
+            let prefArr = [...trackingPrefs];
+            // set trackingPrefs somewhere
+            for (let pref of stored) {
+              let toTrack = pref[1]
+              // if tracking that symptom is set to true, append it to trackingPrefs
+              if (toTrack) {
+                  let title = pref[0];
+                  let symptom;
+                  switch(title) {
+                    case TRACK_SYMPTOMS.MOOD:
+                      symptom = 'mood'
+                      trackMood(TEAL);
+                      break;
+                    case TRACK_SYMPTOMS.SLEEP:
+                      symptom = 'sleep'
+                      trackSleep(TEAL);
+                      break;
+                    case TRACK_SYMPTOMS.CRAMPS:
+                      symptom = 'cramps'
+                      trackCramps(TEAL);
+                      break;
+                    case TRACK_SYMPTOMS.EXERCISE:
+                      symptom = 'exercise'
+                      trackExercise(TEAL);
+                      break;
+                    case TRACK_SYMPTOMS.FLOW:
+                      symptom = 'flow'
+                      trackFlow(TEAL);
+                      break;
+                    default:
+                        break;
+                  }
+                  if (!prefArr.includes(symptom)) prefArr.push(symptom);
+              }
+            }
+            setPrefs(prefArr);
+          }
+          fetchPreferences();
+      }, [])
    
     const handleFlow = () => { 
         flow == WHITE ? trackFlow(TEAL) : trackExercise(WHITE);
