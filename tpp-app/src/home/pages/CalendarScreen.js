@@ -160,9 +160,6 @@ export default function CalendarScreen ({ route, navigation }) {
                         type="clear"
                     onPress={() => setDropdownExpanded(!dropdownExpanded)}
                     />
-                <View style={{width:sideComponentWidth}}>
-                    {/* This is a placeholder for the help button on final. Needed it for spacing*/}
-                </View>
             </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
             <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
@@ -178,9 +175,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF'
     },
     navbarContainer: {
-        marginTop: 98,
+        marginTop: 0,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         backgroundColor: '#FFFFFF'
     },
     horizContainer: {
