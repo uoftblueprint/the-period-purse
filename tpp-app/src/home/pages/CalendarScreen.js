@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
-import Selector from '../components/Selector';
+import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
 import { GETYearData } from '../../services/CalendarService';
@@ -149,13 +149,14 @@ export default function CalendarScreen ({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.navbarContainer}>
-                <Button icon={renderedArrow}
-                    iconRight={true}
+                <Button
                     title={selectedView}
                     titleStyle={styles.dropdownText}
                         type="clear"
                     onPress={() => setDropdownExpanded(!dropdownExpanded)}
                     />
+                <SelectedIcon selectedView={selectedView}/>
+                {renderedArrow}
             </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
             <Calendar navigation={navigation} marked={marked} yearData={yearData} setYearInView={setYearInView} selectedView={selectedView}/>
@@ -174,6 +175,7 @@ const styles = StyleSheet.create({
         marginTop: 0,
         flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#FFFFFF'
     },
     horizContainer: {
