@@ -76,6 +76,28 @@ export const POSTUpdatePreferences = async (flow, mood, sleep, cramps, exercise)
 })
 
 /**
+ * Post a single tracking preference update
+ * @param {string} key representing one of the tracking options
+ * @param {boolean} value true or false representing if this option is being tracked
+ * @returns 
+ */
+export const POSTUpdateOnePreference = async (key, value) => new Promise(async(resolve, reject) => {
+    try {
+        await AsyncStorage.setItem(key, value
+            ).then(() => {
+            console.log(`Updated symptom: ${JSON.stringify(key)}`);
+            resolve();
+        }).catch((e) => {
+            console.log(JSON.stringify(e));
+            reject("Unable to update symptom");
+        })
+    } catch (e) {
+        console.log(`POSTUpdateOnePreference error: ${JSON.stringify(e)}`);
+        reject();
+    }
+}) 
+
+/**
  * Posts whether the user wants a reminder to log period
  * @param {boolean} enableRemind representing whether the user wants to a reminder to log period
  * @returns a promise resolving when the post operation is complete
