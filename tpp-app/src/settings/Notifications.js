@@ -14,12 +14,12 @@ const NotificationsButton = (props) => {
           
             <View>
             <Accordion title={"How many days in advance"} selectedText={"2 days"}  type={"days"}/> 
-            <Accordion title={"Reminder time"} selectedText={"10:00"} type={"times"}/>
+            <Accordion title={"Reminder time"} selectedText={"10:00"} type={"time"}/>
 
                 </View>   
             <NotificationStack name={"Remind me to log symptoms"}/>
             <Accordion title={"Repeat"} selectedText={"Only During Period"}  type={"howOften"}/> 
-            <Accordion title={"Reminder time"} selectedText={"10:00"} type={"times"}/>   
+            <Accordion title={"Reminder time"} selectedText={"10:00"} type={"time"}/>   
     </ScrollView>
         </View>
     )
