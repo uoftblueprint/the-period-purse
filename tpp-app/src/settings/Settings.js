@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'space-evenly',
         marginLeft: 24,
-        marginRight: 38,
+        marginRight: 10,
         marginTop: 85,
         marginBottom: 75
     },
