@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { socialMediaIcons } from './icons';
 import { ScrollView } from 'react-native-gesture-handler';
-import { GETAllTrackingPreferences, POSTUpdateOnePreference } from '../services/SettingsService';
+import { GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, POSTRemindLogPeriod, POSTRemindLogSymptoms, POSTUpdateOnePreference } from '../services/SettingsService';
 import { TRACK_SYMPTOMS } from '../services/utils/constants'
 
 const PreferenceButton = (props) => {
@@ -55,7 +55,6 @@ const Preferences = (props) => {
         async function fetchPreferences() {
             // get tracking references
             let stored = await GETAllTrackingPreferences();
-            let prefArr = [...trackingPrefs];
             // set trackingPrefs somewhere
             for (let pref of stored) {
               let toTrack = pref[1]
@@ -87,10 +86,8 @@ const Preferences = (props) => {
                     default:
                         break;
                   }
-                  if (!prefArr.includes(symptom)) prefArr.push(symptom);
               }
             }
-            setPrefs(prefArr);
           }
           fetchPreferences();
       }, [])
@@ -212,14 +209,34 @@ return(
 )}
 
 const NotificationSettings = ({navigation}) => {
-    const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(true);
+    const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(false);
     const [remindSymptomsEnabled, setRemindSymptomsEnabled] = useState(false);
 
-    const togglePeriodSwitch = () => setRemindPeriodEnabled(!remindPeriodEnabled);
-    const toggleSymptomsSwitch = () => {
+
+// get here 
+useEffect(() => {
+    async function getRemindPeriodEnabled () {
+        let remindPeriod = await GETRemindLogPeriod()
+        setRemindPeriodEnabled(remindPeriod != null ? remindPeriod : false);
+    }
+    getRemindPeriodEnabled();
+}, []);
+
+useEffect(() => {
+    async function getRemindSymptomsEnabled () {
+        let remindSymptoms = await GETRemindLogSymptoms()
+        setRemindSymptomsEnabled(remindSymptoms != null ? remindSymptoms : false);
+    }
+    getRemindSymptomsEnabled();
+}, [])
+
+    const togglePeriodSwitch = () => {
+        setRemindPeriodEnabled(!remindPeriodEnabled)
+        POSTRemindLogPeriod(remindPeriodEnabled);}; // post here 
+    const toggleSymptomsSwitch = () => { // post here 
 
         setRemindSymptomsEnabled(!remindSymptomsEnabled);    
-        
+        POSTRemindLogSymptoms(remindSymptomsEnabled);
         if (remindPeriodEnabled) {
             // Schedule a reoccuring notification 
             PushNotificationIOS.addNotificationRequest({
