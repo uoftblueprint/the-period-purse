@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking} from 'react-native';
+import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground} from 'react-native';
 import {Card} from 'react-native-elements';
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
 import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
@@ -169,23 +170,30 @@ export default function Settings () {
 
 
     return (
-        <ScrollView style={styles.container}>
-            <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
-            <Preferences/>
-            <Notifications
-                remindPeriodEnabled={remindPeriodEnabled}
-                remindSymptomsEnabled={remindSymptomsEnabled}
-                togglePeriodSwitch={togglePeriodSwitch}
-                toggleSymptomsSwitch={toggleSymptomsSwitch}
-            />
-            <Footer/>
-            {/* <Socials/>
-            <TermsAndConditions/> */}
-        </ScrollView>
+        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+            <ScrollView>
+                <View style={styles.container}>
+                <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
+                <Preferences/>
+                <Notifications
+                    remindPeriodEnabled={remindPeriodEnabled}
+                    remindSymptomsEnabled={remindSymptomsEnabled}
+                    togglePeriodSwitch={togglePeriodSwitch}
+                    toggleSymptomsSwitch={toggleSymptomsSwitch}
+                />
+                <Footer/>
+                </View>
+            </ScrollView>
+        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
+    bgImage: {
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'center'
+      },
     rowContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -209,8 +217,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
+        justifyContent: 'space-evenly',
         marginLeft: 24,
-        marginRight: 38,
+        marginRight: 10,
         marginTop: 85,
         marginBottom: 75
     },

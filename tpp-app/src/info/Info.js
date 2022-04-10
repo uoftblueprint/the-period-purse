@@ -1,10 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity, ImageBackground} from 'react-native';
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import padIcon from '../../ios/tppapp/Images.xcassets/icons/pad_icon.png';
 import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png';
 import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon.png';
 import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
 import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png'
+import discIcon from '../../ios/tppapp/Images.xcassets/icons/disc_icon.png'
 import { STACK_SCREENS } from './InfoNavigator';
 import { Footer } from '../services/utils/footer';
 
@@ -60,41 +62,53 @@ const cardData = [
         name: "Tampons",
         image: tamponsIcon,
         screen: STACK_SCREENS.TAMPONS
+    },
+    {
+        name: "Menstrual Disc",
+        image: discIcon,
+        screen: STACK_SCREENS.DISC
     }
 ]
 
 export default function Info ({ navigation }) {
     return (
-        <ScrollView>
-            <View style={styles.cardContainer}>
-                <Text style={{
-                    ...styles.productText,
-                    textAlign: 'left',
-                    color: "#6D6E71",
-                    margin: 15
-                }}>
-                    Learn more about period products
-                </Text>
+        <ImageBackground source={OnboardingBackground} style={styles.container}>
+            <ScrollView>
+                <View style={styles.cardContainer}>
+                    <Text style={{
+                        ...styles.productText,
+                        textAlign: 'left',
+                        color: "#6D6E71",
+                        margin: 15
+                    }}>
+                        Learn more about period products
+                    </Text>
 
-                <View style={styles.containerRow}>
-                    {cardData.map((card, i) => { return (
-                        <MenstrualProductCard
-                            key={i}
-                            name={card.name}
-                            image={card.image}
-                            onPress={() => navigation.navigate(card.screen)}
-                        />
-                    )})}
+                    <View style={styles.containerRow}>
+                        {cardData.map((card, i) => { return (
+                            <MenstrualProductCard
+                                key={i}
+                                name={card.name}
+                                image={card.image}
+                                onPress={() => navigation.navigate(card.screen)}
+                            />
+                        )})}
+                    </View>
+
+                    <LearnMoreCard/>
+                    <Footer/>
                 </View>
-
-                <LearnMoreCard/>
-                <Footer/>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'center'
+      },
     productCard: {
         backgroundColor: '#FFA3A4',
         alignItems: 'center',
