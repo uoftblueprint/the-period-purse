@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import {StyleSheet, Text, ImageBackground, SafeAreaView, View, ScrollView} from 'react-native';
 import CycleCard from '../components/CycleCard';
-import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png';
+import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png';
 import CycleService from '../../services/cycle/CycleService';
 import {MinimizedHistoryCard} from '../components/CycleHistory';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -171,6 +171,8 @@ export default function CycleScreen ({navigation}){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center'
   },
   cardContainer: {
       flex: 1,
