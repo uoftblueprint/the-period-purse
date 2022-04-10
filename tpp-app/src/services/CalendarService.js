@@ -19,7 +19,6 @@ export const GETYearData = async (year) => {
                 return day ? new Symptoms(day['flow'], day['mood'], day['sleep'], day['cramps'], day['exercise'], day['notes']) : new Symptoms();
             })
 
-
             return parsedMonth
         })
         

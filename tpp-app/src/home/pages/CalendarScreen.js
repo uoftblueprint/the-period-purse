@@ -133,7 +133,6 @@ export default function CalendarScreen ({ route, navigation }) {
     useFocusEffect(
         useCallback(() => {
             let newMarkedData = route.params?.inputData
-            console.log(newMarkedData)
             if (newMarkedData) {
                 setMarked(markedState => ({...markedState, ...newMarkedData}))
             }
