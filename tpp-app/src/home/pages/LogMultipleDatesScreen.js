@@ -151,7 +151,6 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                     inputData[getISODate(dateObject)] = {
                       symptoms: submitSymp
                     }
-                    console.log(inputData)
             
                 }
             } catch (error) {
