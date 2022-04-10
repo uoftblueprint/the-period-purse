@@ -29,7 +29,7 @@ const Tab = createBottomTabNavigator();
 
 const InfoIconStyled = ({tintColor}) => (
     <View style={{top: 3}}>
-        <InfoIcon/>
+        <InfoIcon />
     </View>
 );
 
@@ -91,7 +91,9 @@ export function MainPage() {
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
               <InfoIconStyled {...tintColor} />
-            )
+            ),
+            tabBarActiveTintColor: "#5A9F93",
+            tabBarInactiveTintColor: "#6D6E71",
           }}/>
           <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
             headerShown: false,
@@ -103,7 +105,9 @@ export function MainPage() {
             headerShown: false,
             tabBarIcon: (props) => (
               <SettingsIconStyled {...props} />
-          )
+          ),
+            tabBarActiveTintColor: "#5A9F93",
+            tabBarInactiveTintColor: "#6D6E71",
           }}/>
         </Tab.Navigator>
       </NavigationContainer>

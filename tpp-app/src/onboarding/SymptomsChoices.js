@@ -89,7 +89,7 @@ export default function SymptomsChoices ({ route, navigation }) {
             trackingPreferences = [flow == TEAL, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL];
             POSTSymptomsToTrack(trackingPreferences[0], trackingPreferences[1], trackingPreferences[2],
                                 trackingPreferences[3], trackingPreferences[4]);
-            navigation.navigate(STACK_SCREENS.BACKUP, {
+            navigation.navigate(STACK_SCREENS.CONFIRMATION, {
               periodLength: periodLength,
               periodStart: periodStart,
               periodEnd: periodEnd,
