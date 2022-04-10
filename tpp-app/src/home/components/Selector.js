@@ -21,7 +21,7 @@ export const SelectedIcon = ({selectedView, style}) => {
             return (<FlowIcon style={style}/>);
             break;
         case VIEWS.Mood:
-            return (<MoodIcon style={style}/>);
+            return (<MoodIcon style={style} fill="black"/>);
             break;
         case VIEWS.Sleep:
             return (<SleepIcon style={style}/>);
