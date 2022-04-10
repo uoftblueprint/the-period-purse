@@ -93,7 +93,6 @@ export default function CycleScreen ({navigation}){
         setAvgCycleLength(numDays);
        }
        else {
-         console.log("defaulting average cycle length");
          setAvgCycleLength(DEFAULTS.AVG_CYCLE_LENGTH);
        }
      })
@@ -130,7 +129,6 @@ export default function CycleScreen ({navigation}){
   const tipInvisibleStyle = {
     marginBottom: tabBarHeight
   }
-  console.log(showTip)
   const cardContainerStyle = showTip ? styles.cardContainer : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
   return (
     <SafeAreaView style={styles.container}>

@@ -52,9 +52,8 @@ import {View, Text, StyleSheet} from 'react-native';
  }
 
  export default function CycleCard({periodDays, daysSinceLastPeriod, cycleDonutPercent, showTip}){
-   let styleWithTip = showTip ? {} : styles.noTip;
    return (
-        <View style={[styles.card, styleWithTip]}>
+        <View style={[styles.card, !showTip && styles.noTip]}>
           <Cycle periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
         </View>
    );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ImageBackground} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png';
@@ -57,7 +57,7 @@ export default function CycleHistoryScreen({navigation}){
     let [onPeriod, setOnPeriod] = useState(DEFAULTS.ON_PERIOD);
     
     useFocusEffect(
-        React.useCallback(() => {
+        useCallback(() => {
         GETStoredYears().then(
             years => {
                 setStoredYears(years);
@@ -72,7 +72,7 @@ export default function CycleHistoryScreen({navigation}){
 
     //get intervals for all stored years
     useFocusEffect(
-        React.useCallback(
+        useCallback(
         () => {
         async function storeYearsCycles() {
             for (const year of storedYears){
@@ -80,7 +80,6 @@ export default function CycleHistoryScreen({navigation}){
                 currentIntervals[year] = intervals;
             }
             setCurrentIntervals({...currentIntervals});
-            console.log(currentIntervals);
         }
         storeYearsCycles();
     }, [storedYears]));
