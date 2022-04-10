@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 import { CalendarList } from 'react-native-calendars';
 import { STACK_SCREENS } from '../CalendarNavigator';
-import { getCalendarByYear, getSymptomsFromCalendar, initializeEmptyYear } from '../../services/utils/helpers';
+import { getCalendarByYear, getISODate, getSymptomsFromCalendar } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 
@@ -139,14 +139,28 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             }
         })
 
+        let inputData = {}
+
         if(selectedDates.length > 0){
             try {
                 await LogMultipleDayPeriod(selectedDates);
+                for (let date of selectedDates) {
+                    let cal = await getCalendarByYear(date.year);
+                    let submitSymp = getSymptomsFromCalendar(cal, date.day, date.month, date.year);
+                    let dateObject = new Date(date.year, date.month - 1, date.day)
+                    inputData[getISODate(dateObject)] = {
+                      symptoms: submitSymp
+                    }
+            
+                }
             } catch (error) {
                 console.log(error);
             }
         }
-        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE);
+
+
+
+        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
     }
 
     const alertPopup = (info) =>  {
