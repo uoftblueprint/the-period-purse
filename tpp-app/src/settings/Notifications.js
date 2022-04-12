@@ -1,48 +1,35 @@
 import React, {useState} from 'react';
-import {View, Switch, Text, StyleSheet, Image, TouchableOpacity} from 'react-native'; 
+import {View,  Text, StyleSheet, Image, TouchableOpacity} from 'react-native'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from './NotificationAccordion'
-import {Picker} from '@react-native-picker/picker';
-
-const NotificationsButton = (props) => {
-    return (
-        <View style={{top: -120}}>
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>  
-      
-            <NotificationStack name={"Remind me to log period"}/>
-          
-            <View>
-            <Accordion title={"How many days in advance"} selectedText={"2 days"}  type={"days"}/> 
-            <Accordion title={"Reminder time"} selectedText={"10:00"} type={"time"}/>
-
-                </View>   
-            <NotificationStack name={"Remind me to log symptoms"}/>
-            <Accordion title={"Repeat"} selectedText={"Only During Period"}  type={"howOften"}/> 
-            <Accordion title={"Reminder time"} selectedText={"10:00"} type={"time"}/>   
-    </ScrollView>
-        </View>
-    )
-}
-
-const remindSwitch = (props) => {
-    return ( 
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 16}}>
-    <Text style={styles.remindText}>{}</Text>
-    <Switch
-        onValueChange={props.togglePeriodSwitch}
-        value={props.remindPeriodEnabled}
-         />
-    </View>
-    )}
 
 export default function Notifications () {
     
-    return (
-        
-        <SafeAreaView>
+    // states 
 
-        <NotificationsButton />
+    const [advanceDays, setAdvanceDays] = useState("2 days");
+    const [periodReminderTime, setPeriodReminderTime] = useState("10:00 AM");
+    const [symptomsReminderFreq, setsymptomsReminderFreq] = useState("Only During Period");
+    const [symptomsReminderTime, setSymptomsReminderTime] = useState("10:00 AM")
+
+    // get for all of the shit, set the text 
+
+
+    return (
+        <SafeAreaView>
+        <View style={{top: -120}}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>  
+            <NotificationStack name={"Remind me to log period"}/>
+            <View>
+            <Accordion title={"How many days in advance"} selectedText={advanceDays}  type={"days"}/> 
+            <Accordion title={"Reminder time"} selectedText={periodReminderTime} type={"time"}/>
+                </View>
+            <NotificationStack name={"Remind me to log symptoms"}/>
+            <Accordion title={"Repeat"} selectedText={symptomsReminderFreq}  type={"howOften"}/> 
+            <Accordion title={"Reminder time"} selectedText={symptomsReminderTime} type={"time"}/>   
+    </ScrollView>
+        </View>
         </SafeAreaView>
     )
 }                
