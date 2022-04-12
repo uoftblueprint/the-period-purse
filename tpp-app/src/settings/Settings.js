@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking} from 'react-native';
+import React, {useState} from 'react';
+import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground} from 'react-native';
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
 import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/flow.png';
@@ -332,17 +333,31 @@ export default function Settings ({ navigation }) {
 
 
     return (
-        <ScrollView style={styles.container}>
-            <Preferences/>
+        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+            <ScrollView>
+                <View style={styles.container}>
+                <Preferences/>
             <NotificationSettings navigation={navigation}/>
             <SettingOptions navigation={navigation}/>
             <Socials />
             <TermsAndConditions />
-        </ScrollView>
+                </View>
+            </ScrollView>
+        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
+    bgImage: {
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'center'
+      },
+    rowContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
     preferences: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -363,9 +378,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
+        justifyContent: 'space-evenly',
         marginLeft: 24,
-        marginRight: 20,
-        marginTop: -20,
+        marginRight: 10,
+        marginTop: 85,
         marginBottom: 75
     },
     dropShadow: {

@@ -6,6 +6,7 @@ import PadsPage from '../pages/PadInfo.js'
 import MenstrualCupsPage from '../pages/MenstrualCupsInfo.js'
 import ClothPadsPage from '../pages/ClothPadsInfo.js'
 import TamponsPage from "../pages/TamponInfo.js"
+import MenstrualDiscPage from "../pages/MenstrualDiscInfo.js"
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +16,8 @@ export const STACK_SCREENS = {
     PADS: "Pads",
     CLOTH_PADS: "Cloth Pads",
     MENSTRUAL_CUPS: "Menstrual Cups",
-    TAMPONS: "Tampons"
+    TAMPONS: "Tampons",
+    DISC: "Menstrual Disc"
 };
 
 export default function InfoNavigator() {
@@ -27,6 +29,7 @@ export default function InfoNavigator() {
             <Stack.Screen name={STACK_SCREENS.CLOTH_PADS} component={ClothPadsPage} />
             <Stack.Screen name={STACK_SCREENS.MENSTRUAL_CUPS} component={MenstrualCupsPage} />
             <Stack.Screen name={STACK_SCREENS.TAMPONS} component={TamponsPage} />
+            <Stack.Screen name={STACK_SCREENS.DISC} component={MenstrualDiscPage} />
         </Stack.Navigator>
     )
 }

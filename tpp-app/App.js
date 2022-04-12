@@ -16,6 +16,7 @@ import { GETAllTrackingPreferences } from './src/services/SettingsService';
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
 
+
 // Initialize Sentry's SDK
 Sentry.init({
   dsn: "https://35946e620f1a4559b9abd70d044e6ca0@o1164205.ingest.sentry.io/6253138",
@@ -29,7 +30,7 @@ const Tab = createBottomTabNavigator();
 
 const InfoIconStyled = ({tintColor}) => (
     <View style={{top: 3}}>
-        <InfoIcon/>
+        <InfoIcon />
     </View>
 );
 
@@ -91,7 +92,9 @@ export function MainPage() {
             headerShown: false,
             tabBarIcon: ({tintColor}) => (
               <InfoIconStyled {...tintColor} />
-            )
+            ),
+            tabBarActiveTintColor: "#5A9F93",
+            tabBarInactiveTintColor: "#6D6E71",
           }}/>
           <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
             headerShown: false,
@@ -103,7 +106,9 @@ export function MainPage() {
             headerShown: false,
             tabBarIcon: (props) => (
               <SettingsIconStyled {...props} />
-          )
+          ),
+            tabBarActiveTintColor: "#5A9F93",
+            tabBarInactiveTintColor: "#6D6E71",
           }}/>
         </Tab.Navigator>
       </NavigationContainer>
@@ -125,5 +130,6 @@ function App() {
     // tracking preferences have not been set, go to onboarding
     return (<Welcome></Welcome>);
 }
+
 
 export default Sentry.wrap(App);
