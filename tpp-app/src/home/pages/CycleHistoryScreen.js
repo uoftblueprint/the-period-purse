@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ImageBackground} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png';
+import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png';
 import {ExpandedHistoryCard} from '../components/CycleHistory';
 import CycleService from '../../services/cycle/CycleService';
 import {GETStoredYears} from '../../services/utils/helpers';
 import {useFocusEffect} from '@react-navigation/native';
+import { set } from 'date-fns';
 
 function Header({navigation}){
     return(
@@ -41,20 +42,22 @@ function YearButton({year, selectedYear, setSelectedYear}){
 }
 
 export default function CycleHistoryScreen({navigation}){
+    let currentYear = new Date().getFullYear();
+    let intervalsDefault = {};
+    intervalsDefault[currentYear] = []
     const DEFAULTS = {
-        CURRENT_INTERVALS: [],
+        INTERVALS: intervalsDefault,
         STORED_YEARS: [],
         ON_PERIOD: false
     }
 
-    let [currentIntervals, setCurrentIntervals] = useState(DEFAULTS.CURRENT_INTERVALS);
-    let [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    let [currentIntervals, setCurrentIntervals] = useState(DEFAULTS.INTERVALS);
+    let [selectedYear, setSelectedYear] = useState(currentYear);
     let [storedYears, setStoredYears] = useState(DEFAULTS.STORED_YEARS);
     let [onPeriod, setOnPeriod] = useState(DEFAULTS.ON_PERIOD);
     
     useFocusEffect(
-        React.useCallback(() => {
-        console.log("on focus for startup")
+        useCallback(() => {
         GETStoredYears().then(
             years => {
                 setStoredYears(years);
@@ -67,18 +70,19 @@ export default function CycleHistoryScreen({navigation}){
         .catch(() => setOnPeriod(DEFAULTS.ON_PERIOD))
     }, []));
 
-    //update the cycles being rendered to reflect newly selected year.
+    //get intervals for all stored years
     useFocusEffect(
-        React.useCallback(() => {
-            console.log("on focus for intervalss")
-            CycleService.GETCycleHistoryByYear(selectedYear).then(
-                intervals => {
-                    setCurrentIntervals(intervals);
-                }
-            )
-            .catch(() => setCurrentIntervals(DEFAULTS.CURRENT_INTERVALS)) //error case, render empty card
+        useCallback(
+        () => {
+        async function storeYearsCycles() {
+            for (const year of storedYears){
+                intervals = await CycleService.GETCycleHistoryByYear(year)            
+                currentIntervals[year] = intervals;
+            }
+            setCurrentIntervals({...currentIntervals});
         }
-    ,[selectedYear]));
+        storeYearsCycles();
+    }, [storedYears]));
 
     return (
         <SafeAreaView style={styles.container}>
@@ -90,7 +94,7 @@ export default function CycleHistoryScreen({navigation}){
                     </View>
                     <ExpandedHistoryCard 
                         navigation={navigation} 
-                        intervals={currentIntervals} 
+                        intervals={currentIntervals[selectedYear]} 
                         renderedYear={selectedYear}
                         onPeriod={onPeriod}
                     />

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
 import Selector, {SelectedIcon} from '../components/Selector';
@@ -8,18 +8,11 @@ import {Button} from 'react-native-elements';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 const sideComponentWidth = 120
 
-export const Calendar = ({navigation, marked, yearData, setYearInView, selectedView}) => {
-    //updates the data when you come back to the calendar screen, might not need this
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         getCalendarData();
-    //     });
-    //     return unsubscribe;
-    // }, [navigation]);
+export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 
     return (
         <CalendarList
@@ -88,52 +81,64 @@ export const Calendar = ({navigation, marked, yearData, setYearInView, selectedV
 }
 
 // Calendar Screen component that can be accessed by other functions
-export default function CalendarScreen ({ navigation }) {
+export default function CalendarScreen ({ route, navigation }) {
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
     const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
-    const [yearInView, setYearInView] = useState([new Date().getFullYear()])
+    const [yearInView, setYearInView] = useState([])
 
-    const [yearData, setYearData] = useState({})
+    const [cachedYears, setCachedYears] = useState({})
     const [marked, setMarked] = useState({})
 
     useEffect(() => {
-        // Whenever the user scrolls and changes what year is in view
-        yearInView.forEach(year => {
-            let yearNumber = year.toString()
-            // If the data for that year doesn't already exist
-            if (yearData[yearNumber] === undefined) {
-                let newData = GETYearData(year)
+        async function fetchYearData() {
+            // Whenever the user scrolls and changes what year is in view
+            for(let year of yearInView) {
 
-                const newYear = {...yearData, ...newData};
+                // If the data for that year doesn't already exist
+                if (cachedYears[year] === undefined) {
 
-                setYearData(newYear)
+                    let currentYearData = {}
+                    currentYearData[year] = await GETYearData(year)
 
-                
-               let newMarkedData = {}
-                // We know that this data is now in the variable, so now attempt
-                // to convert it into the appropriate key and value data
-                let monthArray = newYear[yearNumber]
-                if (monthArray) {
-                    for (var i = 0; i < monthArray.length; i++) {
-                        for (var j = 0; j < monthArray[i].length; j++) {
-                            let date = new Date(year, i, j + 1)
-                            let isoDate = getISODate(date);
-                            let symptomData = monthArray[i][j]
-    
-                            // Add it into the marked state, which then updates the calendar
-                            newMarkedData[isoDate] = {
-                                symptoms: symptomData
+                    let newCachedYears = {}
+                    newCachedYears[year] = true
+                    setCachedYears(cachedState => ({...cachedState, ...newCachedYears}))
+
+                    let newMarkedData = {}
+                    // We know that this data is now in the variable, so now attempt
+                    // to convert it into the appropriate key and value data
+                    let monthArray = currentYearData[year]
+                    if (monthArray) {
+                        for (let i = 0; i < monthArray.length; i++) {
+                            for (let j = 0; j < monthArray[i].length; j++) {
+                                let date = new Date(year, i, j + 1)
+                                let isoDate = getISODate(date);
+                                let symptomData = monthArray[i][j]
+        
+                                // Add it into the marked state, which then updates the calendar
+                                newMarkedData[isoDate] = {
+                                    symptoms: symptomData
+                                }
                             }
                         }
                     }
-    
-                }
+                    setMarked(markedState => ({...markedState, ...newMarkedData}))
+                } 
+            }
+        }
+
+        fetchYearData()
+    }, [yearInView]) 
+
+    useFocusEffect(
+        useCallback(() => {
+            let newMarkedData = route.params?.inputData
+            if (newMarkedData) {
                 setMarked(markedState => ({...markedState, ...newMarkedData}))
-            }  
+            }
 
-        })
-    }, [yearInView, selectedView]) 
-
+        }, [route.params?.inputData])
+    )
 
     const toggleSelectedView = (targetView) => {
         
@@ -154,7 +159,7 @@ export default function CalendarScreen ({ navigation }) {
                 {renderedArrow}
             </TouchableOpacity>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
-            <Calendar navigation={navigation} marked={marked} yearData={yearData} setYearInView={setYearInView} selectedView={selectedView}/>
+            <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
         </View>
     )
 }

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import {StyleSheet, Text, ImageBackground, SafeAreaView, View, ScrollView} from 'react-native';
 import CycleCard from '../components/CycleCard';
-import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/watercolor-background.png';
+import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png';
 import CycleService from '../../services/cycle/CycleService';
 import {MinimizedHistoryCard} from '../components/CycleHistory';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -93,7 +93,6 @@ export default function CycleScreen ({navigation}){
         setAvgCycleLength(numDays);
        }
        else {
-         console.log("defaulting average cycle length");
          setAvgCycleLength(DEFAULTS.AVG_CYCLE_LENGTH);
        }
      })
@@ -107,6 +106,7 @@ export default function CycleScreen ({navigation}){
        else{
          toSet = DEFAULTS.DAYS_TILL_PERIOD;
          //if the prediction is invalid, don't show the tooltip
+         //will not show tip until average cycle is computed
          setShowTip(false);
        }
        setDaysTillPeriod(toSet);
@@ -129,7 +129,6 @@ export default function CycleScreen ({navigation}){
   const tipInvisibleStyle = {
     marginBottom: tabBarHeight
   }
-
   const cardContainerStyle = showTip ? styles.cardContainer : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
   return (
     <SafeAreaView style={styles.container}>
@@ -146,6 +145,7 @@ export default function CycleScreen ({navigation}){
             periodDays={periodDays} 
             daysSinceLastPeriod={daysSinceLastPeriod} 
             cycleDonutPercent={cycleDonutPercent}
+            showTip={showTip}
           />
           <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
             <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
@@ -171,6 +171,8 @@ export default function CycleScreen ({navigation}){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center'
   },
   cardContainer: {
       flex: 1,

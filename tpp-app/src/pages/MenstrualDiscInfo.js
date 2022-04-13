@@ -1,36 +1,31 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
-import PadImage from "tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-2x.png";
 import { BackButton } from '../home/components/BackButtonComponent';
+import DiscImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/disc_image.png';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 
-export default function PadInfo({ navigation }) {
+export default function MenstrualDiscInfo({ navigation }) {
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()} /></View>
-                    <Image
-                        source= {PadImage}
-                        style={styles.image}
+                <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
+                    <Image 
+                    source= {DiscImage}
+                    style={styles.image}
                         />
-                <Text style={styles.titleText}>Pads</Text>
+                <Text style={styles.titleText}>Menstrual Disc</Text>
                 
-                <Text style={styles.bodyText}>
-                    BRB, grabbing a pad.
+                <Text style={styles.bodyText}> 
+                Vibe check! (Because your period’s almost here). Menstrual discs are gaining popularity very 
+                quickly and were created less than 30 years ago! 
 
-                    Despite being the oldest period product, 
-                    invented back in the 10th century, we’re still 
-                    the most popular choice for youth.
-
-                    Do you know what is inside your pad? Most
-                    are made from plastic, so every pad you’ve 
-                    ever used is still sitting in a landfill. Ack. 
-                    There are brands that use healthier, biodegradable ingredients like bamboo. You 
-                    gotta go check them out.
-
-                    Period prep time: remember to keep one
-                    or two pads in your school backpack for you
-                    and your friends! They come in different sizes and absorbencies, so you’ll have to test them out to see which ones work best for you during your cycle.
+                Unlike menstrual cups, discs don't use suction to stay in place. If you can feel it, try making sure
+                that it is pushed all the way back before tucking it up behind your pubic bone.
+                
+                Many menstrual discs are single use, but there are more companies coming on the market 
+                introducing reusable menstrual discs. They are made of non-porous medical grade silicone, and
+                like a menstrual cup, should be changed up to every 12 hours. They only come in one size and 
+                one shape, so it fits everyone!
                 </Text>
             
             </View>
@@ -46,11 +41,9 @@ const styles = StyleSheet.create({
       },
     image: {
         position: 'absolute', 
-        width: 80, 
-        height: 164, 
-        left: 165, 
-        top: 88, 
-        bottom: 560
+        width: 114, 
+        height: 108, 
+        top: '18%'
     },
     titleText: {
         position: 'absolute',
@@ -58,9 +51,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Avenir',
         left: '10.64%',
         right: '10.64%',
-        top: '37%',
+        top: '35.84%',
         bottom: '15.15%',
-        fontWeight: '800',
+        fontWeight: "800",
         fontSize: 34,
         lineHeight: 46,
         letterSpacing: -0.02
@@ -83,5 +76,4 @@ const styles = StyleSheet.create({
             top: 54.51,
             bottom: 741.52
         }
-    
 });
