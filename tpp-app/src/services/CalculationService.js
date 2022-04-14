@@ -6,159 +6,74 @@ import {getCalendarByYear, getDaysDiffInclusive, getSymptomsFromCalendar} from "
 import CycleService from "./cycle/CycleService";
 import { GETStoredYears } from "./utils/helpers";
 
-
 /**
- * Returns Array of the Symptoms of the last three days
- * @return {Array} of size 3
+ * Calculates the average period length given a completeHistory of their period intervals
+ * Returns undefined if not enough entries to calculate average
  */
-const GETLastThreeDaysSymptoms = async () => {
-    const today = new Date();
-    const yesterday = subDays(today, 1);
-    const twoDaysEarlier = subDays(today, 2);
-
-    const calendar = await getCalendarByYear(today.getFullYear());
-
-    const todaySymptoms = await getSymptomsFromCalendar(
-        calendar,
-        today.getDay(),
-        today.getMonth() + 1,
-        today.getFullYear()
-    );
-
-    const yesterdaySymptoms = await getSymptomsFromCalendar(
-        calendar,
-        yesterday.getDay(),
-        yesterday.getMonth() + 1,
-        yesterday.getFullYear()
-    );
-
-    const twoDaysEarlierSymptoms = await getSymptomsFromCalendar(
-        calendar,
-        twoDaysEarlier.getDay(),
-        twoDaysEarlier.getMonth() + 1,
-        twoDaysEarlier.getFullYear()
-    );
-
-    return [twoDaysEarlierSymptoms, yesterdaySymptoms, todaySymptoms];
-};
-
-/**
- * Returns True if today is the day a period is over, False otherwise i.e. matches period patten of X _ _
- * @return {boolean} Resolves into a boolean indicating if period is over today
- */
-export const isPeriodOver = async () => {
-    const lastThreeDaysSymptoms = await GETLastThreeDaysSymptoms();
-    const twoDaysEarlierSymptoms = lastThreeDaysSymptoms[0];
-    const yesterdaySymptoms = lastThreeDaysSymptoms[1];
-    const todaySymptoms = lastThreeDaysSymptoms[2];
-
-    const todayNoPeriod = (!todaySymptoms.flow || todaySymptoms.flow === FLOW_LEVEL.NONE);
-    const yesterdayNoPeriod = (!yesterdaySymptoms.flow || yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
-    const twoDaysEarlierPeriod = (twoDaysEarlierSymptoms.flow && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE);
-    return todayNoPeriod && yesterdayNoPeriod && twoDaysEarlierPeriod;
-};
-
-/**
- * Returns True if today is the start of a period, False otherwise i.e. matches period pattern of _ _ X
- * @return {boolean} Returns a boolean indicating if period has started today
- */
-export const isPeriodStarting = async () => {
-    const lastThreeDaysSymptoms = await GETLastThreeDaysSymptoms();
-    const twoDaysEarlierSymptoms = lastThreeDaysSymptoms[0];
-    const yesterdaySymptoms = lastThreeDaysSymptoms[1];
-    const todaySymptoms = lastThreeDaysSymptoms[2];
-
-    const todayPeriod = (todaySymptoms.flow && todaySymptoms.flow !== FLOW_LEVEL.NONE);
-    const yesterdayNoPeriod = (!yesterdaySymptoms.flow || yesterdaySymptoms.flow === FLOW_LEVEL.NONE);
-    const twoDaysEarlierNoPeriod = (!twoDaysEarlierSymptoms.flow || twoDaysEarlierSymptoms.flow === FLOW_LEVEL.NONE);
-    return todayPeriod && yesterdayNoPeriod && twoDaysEarlierNoPeriod;
+export const calculateAveragePeriodLength = (completeHistory) => {
+    return completeHistory.length > 0 ? completeHistory.reduce(function (sum, interval) {
+        return sum + interval.periodDays;
+    }, 0) / completeHistory.length : undefined;
 }
 
 /**
- * Calculates the average period length of the user.
+ * Calculates the average cycle length given a completeHistory of their period intervals
+ * Returns undefined if not enough entries to calculate average
  */
-export const calculateAveragePeriodLength = async () => new Promise( async (resolve, reject) => {
-    // Only calculate Average Period Length once period is over
-    if (await isPeriodOver()) {
-        // Record all period intervals
-        let completeHistory = [];
-
-        // Get all Years
-        GETStoredYears()
-            .then((years) => {
-                years.forEach(async (year) => {
-                    completeHistory.push.apply(completeHistory, await CycleService.GETCycleHistoryByYear(year));
-                });
-            })
-            .catch((e) => {
-                console.log(`calculateAveragePeriodLength error: ${JSON.stringify(error)}`);
-                reject();
-            });
-
-        // Use reduce to find average
-        const averagePeriodLength = completeHistory.reduce(function (sum, interval) {
-            return sum + interval.periodDays;
-        }, 0) / completeHistory.length;
-
-        await AsyncStorage.Set(
-            KEYS.AVERAGE_PERIOD_LENGTH, JSON.stringify(averagePeriodLength)
-        ).then(() => {
-            console.log(`Recalculated ${KEYS.AVERAGE_PERIOD_LENGTH} as ${averagePeriodLength}`)
-            resolve();
-        }).catch((error) => {
-            console.log(`calculateAveragePeriodLength error: ${JSON.stringify(error)}`);
-            reject();
-        });
-    }
-
-    // Else don't calculate, resolve without doing anything
-    resolve();
-});
+export const calculateAverageCycleLength = (completeHistory) => {
+    return ( completeHistory.length - 1) > 0 ? completeHistory
+        // Map to difference of days
+        .map((interval, index) => {
+            return index === 0 ? 0 : getDaysDiffInclusive(completeHistory[index - 1].start, interval.start) - 1
+        })
+        // Remove 0th index
+        .slice(1)
+        // Find average
+        .reduce((sum, cycleDays) => {
+            return sum + cycleDays;
+        }, 0) / ( completeHistory.length - 1) : undefined;
+}
 
 /**
- * Calculates the average cycle length of the user.
+ * Calculates and saves to AsyncStorage the average period length and average cycle length of the user.
  */
-export const calculateAverageCycleLength = async () => new Promise( async (resolve, reject) => {
-    // Only calculate Average Cycle Length once period is starting and cycle is over
-    if (isPeriodStarting()) {
-        let completeHistory = [];
-
+export const calculateAverages = async () => new Promise( async (resolve, reject) => {
         // Get all Years
         GETStoredYears()
             .then((years) => {
-                years.forEach(async (year) => {
-                    completeHistory.push.apply(completeHistory, await CycleService.GETCycleHistoryByYear(year));
+                let promises = []
+                years.forEach((year) => {
+                    promises.push(CycleService.GETCycleHistoryByYear(year));
                 });
+
+                Promise.all(promises)
+                    .then((history) => {
+                        const completeHistory = [].concat.apply([], history);
+
+                        const averagePeriodLength = calculateAveragePeriodLength(completeHistory);
+
+                        // Use map and reduce to find average
+                        const averageCycleLength = calculateAverageCycleLength(completeHistory);
+
+                        AsyncStorage.multiSet([
+                            [KEYS.AVERAGE_CYCLE_LENGTH, JSON.stringify(averageCycleLength)],
+                            [KEYS.AVERAGE_PERIOD_LENGTH, JSON.stringify(averagePeriodLength)]
+                        ]).then(() => {
+                            console.log(`Recalculated ${KEYS.AVERAGE_PERIOD_LENGTH} as ${averagePeriodLength}`)
+                            console.log(`Recalculated ${KEYS.AVERAGE_CYCLE_LENGTH} as ${averageCycleLength}`)
+                            resolve();
+                        }).catch((error) => {
+                            console.log(`calculateAverageCycleLength error: ${JSON.stringify(error)}`);
+                            reject();
+                        });
+                    })
+                    .catch((error) => {
+                        console.log(`GETCycleHistoryByYear promises error: ${JSON.stringify(error)}`);
+                        reject();
+                    });
             })
             .catch((e) => {
-                console.log(`calculateAverageCycleLength error: ${JSON.stringify(error)}`);
+                console.log(`GETStoredYears error: ${JSON.stringify(error)}`);
                 reject();
             });
-
-        // Use map and reduce to find average
-        const averageCycleLength = completeHistory
-            // Map to difference of days
-            .map((interval, index) => {
-                index === 0 ? 0 : getDaysDiffInclusive(completeHistory[index-1].start, interval.start)
-             })
-            // Remove 0th index
-            .slice(1)
-            // Find average
-            .reduce((sum, cycleDays) => {
-                return sum + cycleDays;
-        }, 0) / completeHistory.length;
-
-        await AsyncStorage.Set(
-            KEYS.AVERAGE_CYCLE_LENGTH, JSON.stringify(averageCycleLength)
-        ).then(() => {
-            console.log(`Recalculated ${KEYS.AVERAGE_CYCLE_LENGTH} as ${averageCycleLength}`)
-            resolve();
-        }).catch((error) => {
-            console.log(`calculateAverageCycleLength error: ${JSON.stringify(error)}`);
-            reject();
-        });
-    }
-
-    // Else don't calculate, resolve without doing anything
-    resolve();
 });

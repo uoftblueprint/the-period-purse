@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, Image, ImageBackground, View } from 'react-native';
-import MNationIcon from '../../ios/tppapp/Images.xcassets/AppIcon.appiconset/1024.png'
-import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
+import MNationIcon from '../../ios/tppapp/Images.xcassets/SplashScreen.imageset/splashscreen.png'
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PeriodStart from './PeriodStart';
@@ -15,6 +15,7 @@ import Success from './Success';
 import Confirmation from './Confirmation';
 import { WideButton } from './components/ButtonComponents';
 import { STACK_SCREENS } from './Confirmation';
+import AppleSignin from './AppleSignin';
 
 // Get Start Page Component
 const GetStarted = ({ navigation }) => (
@@ -23,7 +24,7 @@ const GetStarted = ({ navigation }) => (
     <Text style={styles.titleText}>Welcome!</Text>
     <View style={{height: 80}}></View>
     <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
-    <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS.REGISTRATION)}/>
+    <AppleSignin />
   </ImageBackground>
 );
 

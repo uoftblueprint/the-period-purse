@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking} from 'react-native';
+import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground} from 'react-native';
 import {Card} from 'react-native-elements';
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
 import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
@@ -9,6 +10,8 @@ import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { socialMediaIcons } from './icons';
 import { ScrollView } from 'react-native-gesture-handler';
+
+
 
 const Stats = (props) => {
 
@@ -99,8 +102,8 @@ const Socials = () => {
     return (
         <View style={styles.iconsContainer}>
             {
-                socialMediaIcons.map(socialMedia => {
-                    return <SocialMediaButton icon={socialMedia.component} url={socialMedia.url} />
+                socialMediaIcons.map((socialMedia, i) => {
+                    return <SocialMediaButton key={i} icon={socialMedia.component} url={socialMedia.url} />
                 })
             }
         </View>
@@ -114,7 +117,7 @@ const TermsAndConditions = () => {
 
     return (
         <View styles={styles.termsAndConditionsContainer}>
-            <View style={styles.copyright}> 
+            <View style={styles.copyright}>
                 <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
             </View>
             <View style={styles.terms}>
@@ -136,10 +139,10 @@ export default function Settings () {
     const togglePeriodSwitch = () => setRemindPeriodEnabled(!remindPeriodEnabled);
     const toggleSymptomsSwitch = () => {
 
-        setRemindSymptomsEnabled(!remindSymptomsEnabled);    
-        
+        setRemindSymptomsEnabled(!remindSymptomsEnabled);
+
         if (remindPeriodEnabled) {
-            // Schedule a reoccuring notification 
+            // Schedule a reoccuring notification
             PushNotificationIOS.addNotificationRequest({
                 id: 'remindsymptoms',
                 title: 'Daily Log Reminder',
@@ -164,25 +167,34 @@ export default function Settings () {
         date.setMinutes(0);
         return date;
     };
-    
+
 
     return (
-        <ScrollView style={styles.container}>
-            <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
-            <Preferences/>
-            <Notifications
-                remindPeriodEnabled={remindPeriodEnabled}
-                remindSymptomsEnabled={remindSymptomsEnabled}
-                togglePeriodSwitch={togglePeriodSwitch}
-                toggleSymptomsSwitch={toggleSymptomsSwitch}
-            />
-            <Socials />
-            <TermsAndConditions />
-        </ScrollView>
+        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+            <ScrollView>
+                <View style={styles.container}>
+                <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
+                <Preferences/>
+                <Notifications
+                    remindPeriodEnabled={remindPeriodEnabled}
+                    remindSymptomsEnabled={remindSymptomsEnabled}
+                    togglePeriodSwitch={togglePeriodSwitch}
+                    toggleSymptomsSwitch={toggleSymptomsSwitch}
+                />
+                <Socials />
+                <TermsAndConditions />
+                </View>
+            </ScrollView>
+        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
+    bgImage: {
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'center'
+      },
     rowContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -206,12 +218,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     container: {
+        justifyContent: 'space-evenly',
         marginLeft: 24,
-        marginRight: 38,
+        marginRight: 10,
         marginTop: 85,
         marginBottom: 75
     },
-  
+
     dropShadow: {
         shadowOffset: {width:0, height:1},
         shadowRadius: 10,

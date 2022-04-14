@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
-import {initializeEmptyYear, getDateString, getCalendarByYear, getSymptomsFromCalendar, getDaysDiffInclusive, getPeriodsInYear}  from '../utils/helpers';
+import {getDateString, getCalendarByYear, getSymptomsFromCalendar, getDaysDiffInclusive, getPeriodsInYear}  from '../utils/helpers';
 import {Symptoms} from '../utils/models';
-import differenceInCalendarDays from 'date-fns/differenceInDays';
+import differenceInDays from 'date-fns/differenceInDays';
 import isSameDay from 'date-fns/isSameDay';
 import subDays from 'date-fns/subDays';
 import addDays from 'date-fns/addDays';
@@ -28,7 +28,7 @@ async function getLastPeriodsEnd(finalPeriodStart, calendar = null){
       calendar = await getCalendarByYear(current.getFullYear());
     }
 
-    let dateSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
+    let dateSymptoms = getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
     let yesterdaySymptoms = new Symptoms();
     let twoDaysEarlierSymptoms = new Symptoms()
 
@@ -47,7 +47,7 @@ async function getLastPeriodsEnd(finalPeriodStart, calendar = null){
 
       twoDaysEarlierSymptoms = yesterdaySymptoms;
       yesterdaySymptoms = dateSymptoms;
-      dateSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
+      dateSymptoms = getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
       noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
       noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null) ;
       flowTwoDaysEarlier = (twoDaysEarlierSymptoms.flow !== null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE)
@@ -75,7 +75,7 @@ async function getFirstPeriodStart(firstPeriodEnd, calendar = null){
       calendar = await getCalendarByYear(current.getFullYear());
     }
 
-    let dateSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
+    let dateSymptoms = getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
     let tomorrowSymptoms = new Symptoms();
     let twoDaysLaterSymptoms = new Symptoms()
 
@@ -93,7 +93,7 @@ async function getFirstPeriodStart(firstPeriodEnd, calendar = null){
 
       twoDaysLaterSymptoms = tomorrowSymptoms;
       tomorrowSymptoms = dateSymptoms;
-      dateSymptoms = await getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
+      dateSymptoms = getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
       noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
       noFlowTomorrow = (tomorrowSymptoms.flow === FLOW_LEVEL.NONE || tomorrowSymptoms.flow === null) ;
       flowTwoDaysLater = (twoDaysLaterSymptoms.flow !== null && twoDaysLaterSymptoms.flow !== FLOW_LEVEL.NONE)
@@ -115,9 +115,9 @@ async function isPeriodStart(date, calendar){
   var yesterday = subDays(date, 1);
   var twoDaysEarlier = subDays(date, 2);
 
-  let dateSymptoms = await getSymptomsFromCalendar(calendar, date.getDate(), date.getMonth()+1, date.getFullYear());
-  let yesterdaySymptoms = await getSymptomsFromCalendar(calendar, yesterday.getDate(), yesterday.getMonth()+1, yesterday.getFullYear());
-  let twoDaysEarlierSymptoms = await getSymptomsFromCalendar(calendar, twoDaysEarlier.getDate(), twoDaysEarlier.getMonth()+1, twoDaysEarlier.getFullYear());
+  let dateSymptoms = getSymptomsFromCalendar(calendar, date.getDate(), date.getMonth()+1, date.getFullYear());
+  let yesterdaySymptoms = getSymptomsFromCalendar(calendar, yesterday.getDate(), yesterday.getMonth()+1, yesterday.getFullYear());
+  let twoDaysEarlierSymptoms = getSymptomsFromCalendar(calendar, twoDaysEarlier.getDate(), twoDaysEarlier.getMonth()+1, twoDaysEarlier.getFullYear());
 
 
   // search for _ _ X where _ is no period or not logged, and X is period
@@ -196,7 +196,7 @@ const CycleService = {
       return res;
     } catch (e) {
       console.log(e);
-      return null;
+      return undefined;
     }
 
   },
@@ -210,9 +210,8 @@ const CycleService = {
       return res;
     } catch (e) {
       console.log(e);
-      return null;
+      return undefined;
     }
-
   },
 
   /**
@@ -223,12 +222,11 @@ const CycleService = {
    */
   GETPeriodDay: async function (calendar = null){
 
-    let periodDays = 0;
     var date = new Date()
     if (!calendar){
       calendar = await getCalendarByYear(date.getFullYear());
     }
-    let dateSymptoms = await getSymptomsFromCalendar(calendar, date.getDate(), date.getMonth()+1, date.getFullYear());
+    let dateSymptoms = getSymptomsFromCalendar(calendar, date.getDate(), date.getMonth()+1, date.getFullYear());
     if (dateSymptoms.flow === null || dateSymptoms.flow === FLOW_LEVEL.NONE){
       return 0;
     }
@@ -237,10 +235,38 @@ const CycleService = {
       return getDaysDiffInclusive(startDate, date);
     }
 
-    return periodDays;
 
   },
 
+ /**
+    * Get the days since the last period has ended.
+    * @return {Promise} Resolves into 0 if user on their period, and an integer of the days they have been on their period otherwise
+    */
+  GETDaysSinceLastPeriodEnd: async function (){
+    var curr = new Date()
+    var days = 0;
+
+    let calendar = await getCalendarByYear(curr.getFullYear());
+
+    let currSymptoms = getSymptomsFromCalendar(calendar, curr.getDate(), curr.getMonth() + 1, curr.getFullYear());
+    let hasFlow = (currSymptoms.flow !== null && currSymptoms.flow !== FLOW_LEVEL.NONE);
+
+    // furthest back we will check for a last period
+    let furthest_date = new Date(curr.getFullYear() - 1,10, 30);
+
+
+    while(!isSameDay(furthest_date, curr) && !hasFlow){
+      curr = subDays(curr, 1);
+      currSymptoms = getSymptomsFromCalendar(calendar, curr.getDate(), curr.getMonth() + 1, curr.getFullYear());
+      hasFlow = (currSymptoms.flow !== null && currSymptoms.flow !== FLOW_LEVEL.NONE);
+      days+=1;
+    }
+    if (isSameDay(furthest_date, curr)){
+      //return 0 in the case we have not found a period within our defined bounds
+      return 0;
+    }
+    return days;
+  },
 
   /**
    * Get most recent period start date
@@ -250,6 +276,7 @@ const CycleService = {
    */
   GETMostRecentPeriodStartDate: async function (calendar = null) {
     var date = new Date()
+
 
     if (!calendar){
       calendar = await getCalendarByYear(date.getFullYear());
@@ -309,7 +336,7 @@ const CycleService = {
     let calendar = await getCalendarByYear(year);
     let periods = await getPeriodsInYear(year, calendar);
 
-    if(periods.length == 0){
+    if(periods.length === 0){
       return intervals;
     }
 
@@ -372,6 +399,36 @@ const CycleService = {
       console.log(e);
     }
     return intervals;
+  },
+
+  /**
+   * 
+   * @returns {Promise} resolves to the expected number of days till the next period. In case of error, returns -1
+   */
+  GETPredictedDaysTillPeriod: async function() {
+    //formula is last period start + cycle length is predicted next period day
+    let today = new Date();
+    let calendar = await getCalendarByYear(today.getFullYear());
+    let periods = await getPeriodsInYear(today.getFullYear(), calendar);
+    let prevPeriodStart;
+    if (isPeriodStart(today, calendar)){
+      prevPeriodStart = today;
+    }
+    else{
+      prevPeriodStart = await getLastPeriodStart(today, periods, calendar);
+    }
+
+
+    let avgCycleLength = await this.GETAverageCycleLength(calendar);
+
+    let nextPeriodStart = addDays(prevPeriodStart, avgCycleLength);
+    if(avgCycleLength && prevPeriodStart){
+      return differenceInDays(nextPeriodStart, today);
+    }
+    else {
+      return -1;  
+    }
+
   }
 }
 

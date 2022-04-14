@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {FLOW_LEVEL} from './utils/constants'
-import { initializeEmptyYear, GETsymptomsForDate, isValidDate } from './utils/helpers'
+import { initializeEmptyYear, isValidDate, getCalendarByYear, getSymptomsFromCalendar } from './utils/helpers'
 import { Symptoms } from './utils/models';
 
 
@@ -13,34 +13,37 @@ import { Symptoms } from './utils/models';
  * @param {Symptoms} symptoms
  */
 export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Promise(async (resolve, reject) => {
-    // Check that symptoms object is not all null or not empty
-    let notEmpty = Object.values(symptoms).some((symptom) => symptom !== null)
-    if (!symptoms || notEmpty) {
-        reject("No symptoms to record");
-    }
-
     // Check that date, month, year combo is valid
     if (!isValidDate(day, month, year)) {
-        reject("Not a valid date");
+        reject("Sorry, this isn't a valid date to log symptoms for!");
+        return;
     }
 
     // Try to POST new symptoms in async storage
     try {
-        // Get the year's data or set to empty year
-        const yearData = JSON.parse(await AsyncStorage.getItem(year.toString())) ?? initializeEmptyYear(year);
+        //Get the year's data or set to empty year
+        const fetchYear = await AsyncStorage.getItem(year.toString());
+        const yearData = JSON.parse(fetchYear) ?? initializeEmptyYear(year);
 
-        yearData[month-1][day-1] = symptoms
+        yearData[month-1][day-1] = symptoms;
+        let yearStr = JSON.stringify(yearData);
+
 
         // post symptoms to storage
-        await AsyncStorage.setItem(year.toString(), JSON.stringify(yearData))
-            .then(() => resolve())
+        await AsyncStorage.setItem(year.toString(), yearStr)
+            .then(() => {
+              resolve();
+              return;
+            })
             .catch((e) => {
-                console.log(JSON.stringify(e));
-                reject(`Unable to mergeItem and post symptoms for this day, month, year: ${day, month, year}`);
+                console.log(`Unable to mergeItem and post symptoms for this day, month, year: ${day, month, year}. Error: ${JSON.stringify(e)}`);
+                reject(`Something went wrong. Please try again later.`);
+                return;
             });
     } catch (e) {
         console.log(`POSTsymptomsForDate error: ${JSON.stringify(e)}`);
-        reject("Something went wrong");
+        reject("Something went wrong. Please try again later.");
+        return;
     }
 })
 
@@ -52,21 +55,81 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
  * date.month is a number (January = 1),
  * date.year is a number.
  */
-export const LogMultipleDayPeriod = async (dates) => {
+export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve, reject) => {
     // run this code for each value in the dates array
-    dates.map(async (date)=>{
-        const year = date.year;
-        const month = date.month;
-        const day = date.day;
+    if(dates.length > 0){
+        try {
+            curYear = dates[0].year;
+            const calendarData = await getCalendarByYear(curYear);
+        
 
-        let symptoms = await GETsymptomsForDate(day, month, year)
+            dates.map((date) => {
+                const year = date.year;
+                const month = date.month;
+                const day = date.day;
+                try {
+                    
+                    let symptoms = getSymptomsFromCalendar(calendarData, day, month, year);
 
-        if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
-            symptoms.flow = FLOW_LEVEL.MEDIUM;
+                    // console.log(symptoms);
+
+                    if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
+                        symptoms.flow = FLOW_LEVEL.MEDIUM;
+                    }
+
+                    calendarData[year][month-1][day-1] = symptoms;
+                } catch (error) {
+                    console.log(error);
+                }
+
+            })
+
+            if(calendarData[curYear]){
+                AsyncStorage.setItem(curYear.toString(), JSON.stringify(calendarData[curYear]))
+                .then(() => resolve())
+                .catch((e) => {
+                    console.log(JSON.stringify(e));
+                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
+                });
+                
+            }
+            
+            if(calendarData[curYear - 1]){
+                AsyncStorage.setItem((curYear - 1).toString(), JSON.stringify(calendarData[curYear - 1]))
+                .then(() => resolve())
+                .catch((e) => {
+                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
+                    console.log(JSON.stringify(e));
+                });
+            }
+
+            // a bit unneccessary since you can't log symptoms for the future.
+            if(calendarData[curYear + 1]){
+                AsyncStorage.setItem((curYear + 1).toString(), JSON.stringify(calendarData[curYear + 1]))
+                .then(() => resolve())
+                .catch((e) => {
+                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
+                    console.log(JSON.stringify(e));
+                });
+            }
+
+        } catch (error) {
+            console.log("error with multiselect:",error);
         }
+    }
 
-        POSTsymptomsForDate(day, month, year, symptoms);
+})
 
-    })
+// TODO implement helper function
+const postSymptomsForYear = async (calendarData, year) => {
+    if(calendarData[year]){
 
+        await AsyncStorage.setItem(year.toString(), JSON.stringify(calendarData[year]))
+        // .then(() => resolve())
+        // .catch((e) => {
+        //     console.log(JSON.stringify(e));
+        //     reject(`Unable to mergeItem and post symptoms for multiselect.`);
+        // });
+        
+    }
 }
