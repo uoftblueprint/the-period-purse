@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground} from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
@@ -296,42 +296,6 @@ const SettingOptions = ({navigation}) => {
     )
 }
 export default function Settings ({ navigation }) {
-    const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(true);
-    const [remindSymptomsEnabled, setRemindSymptomsEnabled] = useState(false);
-
-    const togglePeriodSwitch = () => setRemindPeriodEnabled(!remindPeriodEnabled);
-    const toggleSymptomsSwitch = () => {
-
-        setRemindSymptomsEnabled(!remindSymptomsEnabled);
-
-        if (remindPeriodEnabled) {
-            // Schedule a reoccuring notification
-            PushNotificationIOS.addNotificationRequest({
-                id: 'remindsymptoms',
-                title: 'Daily Log Reminder',
-                body: 'Daily reminder to log your symptoms!',
-                badge: 1,
-                fireDate: getCorrectDate(),
-                repeats: true,
-                repeatsComponent: {
-                    hour: true,
-                    minute: true,
-                },
-            });
-        } else {
-            PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms'])
-        }
-    }
-
-    const getCorrectDate = () => {
-        const date = new Date();
-        date.setDate(date.getDate() + 1);
-        date.setHours(9);
-        date.setMinutes(0);
-        return date;
-    };
-
-
     return (
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <ScrollView>
@@ -381,7 +345,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         marginLeft: 24,
         marginRight: 10,
-        marginTop: 85,
+        marginTop: -10,
         marginBottom: 75
     },
     dropShadow: {

@@ -3,6 +3,7 @@ import {View, TouchableOpacity, Text, StyleSheet, LayoutAnimation } from "react-
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { POSTRemindLogPeriodFreq, POSTRemindLogSymptomsFreq } from '../services/SettingsService';
 
 export default class NotficationAccordion extends Component {
     constructor(props) {
@@ -15,7 +16,7 @@ export default class NotficationAccordion extends Component {
 
     render () {
         return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <TouchableOpacity ref={this.accordion} style={styles.dropDownTextBox} onPress={()=>this.toggleExpand()}>
                 <Text style={[styles.dropDownLeftText]}>{this.props.title}</Text>
                 <Text style={styles.dropDownRightText}>{this.props.selectedText}</Text>
@@ -26,7 +27,7 @@ export default class NotficationAccordion extends Component {
                 this.state.expanded &&
                 <View style={styles.child}>
                     
-                <PickerTab pickerType={this.props.type}/>
+                <PickerTab pickerType={this.props.type} selectedText={this.props.selectedText}/>
                 </View>
             }
         </SafeAreaView>
@@ -45,18 +46,18 @@ const PickerTab = (props) => {
     let picker;
 
     switch (props.pickerType) {
-        case "time":
-            picker = <TimePicker/>
+        case "periodTime":
+            picker = <PeriodTimePicker setValue={props.selectedText}/>
             break;
-
+        case "symptomTime":
+            picker = <SymptomTimePicker setValue={props.selectedText} />
+            break;
         case "days":
-            picker = <SchedulingPicker/>
+            picker = <SchedulingPicker setValue={props.selectedText}/>
             break;
-        
         case "howOften":
-            picker = <FrequencyPicker/>
+            picker = <FrequencyPicker setValue={props.selectedText}/>
             break;
-    
         default:
             break;
     }
@@ -67,15 +68,15 @@ const PickerTab = (props) => {
 
 }
 
-const FrequencyPicker = () => {
-    const [selectedValue, setSelectedValue] = useState();
-    const [selectedMeridian, setMeridian] = useState();
+const FrequencyPicker = (props) => {
+    const [selectedValue, setSelectedValue] = useState(props.setValue);
     return (
         <View>
         <Picker
          selectedValue={selectedValue}
          onValueChange={(itemValue) =>
-         setSelectedValue(itemValue)}>
+         {setSelectedValue(itemValue),
+         POSTRemindLogSymptomsFreq(selectedValue)}}>
         <Picker.Item 
     label={"Every day"}
     value={"Every day"} 
@@ -97,9 +98,17 @@ const FrequencyPicker = () => {
     );
 }
 
-const TimePicker = () => {
-    const [selectedValue, setSelectedValue] = useState();
-    const [selectedMeridian, setMeridian] = useState();
+const SymptomTimePicker = (props) => {
+    var storedTime = "10:00"
+    var storedMeridian = "AM"
+    if (typeof props.setValue == 'string'){
+        const values = props.setValue.split("")
+        storedTime = values[0]
+        storedMeridian = values[1]
+    }
+
+    const [selectedValue, setSelectedValue] = useState(storedTime);
+    const [selectedMeridian, setMeridian] = useState(storedMeridian);
 return(
     <View>
     <Picker  
@@ -108,52 +117,52 @@ return(
     setSelectedValue(itemValue)
     }>
      <Picker.Item 
-    label={"1"}
-    value={"1"} 
+    label={"1:00"}
+    value={"1:00"} 
     />
     <Picker.Item 
-    label={"2"}
-    value={"2"} 
+    label={"2:00"}
+    value={"2:00"} 
     />
     <Picker.Item 
-    label={"3"}
-    value={"3"} 
+    label={"3:00"}
+    value={"3:00"} 
     />
     <Picker.Item 
-    label={"4"}
-    value={"4"} 
+    label={"4:00"}
+    value={"4:00"} 
     />
     <Picker.Item 
-    label={"5"}
-    value={"5"} 
+    label={"5:00"}
+    value={"5:00"} 
     />
     <Picker.Item 
-    label={"6"}
-    value={"6"} 
+    label={"6:00"}
+    value={"6:00"} 
     />
     <Picker.Item 
-    label={"7"}
-    value={"7"} 
+    label={"7:00"}
+    value={"7:00"} 
     />
     <Picker.Item 
-    label={"8"}
-    value={"8"} 
+    label={"8:00"}
+    value={"8:00"} 
     />
     <Picker.Item 
-    label={"9"}
-    value={"9"} 
+    label={"9:00"}
+    value={"9:00"} 
     />
     <Picker.Item 
-    label={"10"}
-    value={"10"} 
+    label={"10:00"}
+    value={"10:00"} 
     />
     <Picker.Item 
-    label={"11"}
-    value={"11"} 
+    label={"11:00"}
+    value={"11:00"} 
     />
     <Picker.Item 
-    label={"12"}
-    value={"12"} 
+    label={"12:00"}
+    value={"12:00"} 
     />
     </Picker>
     <Picker  
@@ -173,19 +182,104 @@ return(
     </View>
 )
 }
+const PeriodTimePicker = (props) => {
+    var storedTime = "10:00"
+    var storedMeridian = "AM"
+    if (typeof props.setValue == 'string'){
+        const values = props.setValue.split("")
+        storedTime = values[0]
+        storedMeridian = values[1]
+    }
 
-const SchedulingPicker = () => {
-    const [selectedValue, setSelectedValue] = useState();
+    const [selectedValue, setSelectedValue] = useState(storedTime);
+    const [selectedMeridian, setMeridian] = useState(storedMeridian);
+return(
+    <View>
+    <Picker  
+    selectedValue={selectedValue}
+    onValueChange={(itemValue) =>
+    setSelectedValue(itemValue)
+    }>
+     <Picker.Item 
+    label={"1:00"}
+    value={"1:00"} 
+    />
+    <Picker.Item 
+    label={"2:00"}
+    value={"2:00"} 
+    />
+    <Picker.Item 
+    label={"3:00"}
+    value={"3:00"} 
+    />
+    <Picker.Item 
+    label={"4:00"}
+    value={"4:00"} 
+    />
+    <Picker.Item 
+    label={"5:00"}
+    value={"5:00"} 
+    />
+    <Picker.Item 
+    label={"6:00"}
+    value={"6:00"} 
+    />
+    <Picker.Item 
+    label={"7:00"}
+    value={"7:00"} 
+    />
+    <Picker.Item 
+    label={"8:00"}
+    value={"8:00"} 
+    />
+    <Picker.Item 
+    label={"9:00"}
+    value={"9:00"} 
+    />
+    <Picker.Item 
+    label={"10:00"}
+    value={"10:00"} 
+    />
+    <Picker.Item 
+    label={"11:00"}
+    value={"11:00"} 
+    />
+    <Picker.Item 
+    label={"12:00"}
+    value={"12:00"} 
+    />
+    </Picker>
+    <Picker  
+            selectedValue={selectedMeridian}
+            onValueChange={(itemValue) =>
+            setMeridian(itemValue)
+            }>
+            <Picker.Item 
+            label={"AM"}
+            value={"AM"} 
+            />
+            <Picker.Item 
+            label={"PM"}
+            value={"PM"} 
+            />
+            </Picker>
+    </View>
+)
+}
+const SchedulingPicker = (props) => {
+    const [selectedValue, setSelectedValue] = useState(props.setValue);
 
     return (
         <View>
         <Picker  
         selectedValue={selectedValue}
         onValueChange={(itemValue) =>
-        setSelectedValue(itemValue)
+        {setSelectedValue(itemValue)
+        POSTRemindLogPeriodFreq(selectedValue)
+        }
         }>
              <Picker.Item 
-                label={"1 day"}
+                label={"1 days"}
                 value={"1"} 
                 />
                 <Picker.Item 
@@ -219,6 +313,11 @@ const SchedulingPicker = () => {
 }
 
 const styles =  StyleSheet.create({
+    container: {
+       padding: -48,
+       
+    },
+
     dropDownTextBox: {
         flexDirection: 'row',
         justifyContent: 'space-between', 

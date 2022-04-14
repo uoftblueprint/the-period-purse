@@ -1,36 +1,73 @@
-import React, {useState} from 'react';
-import {View,  Text, StyleSheet, Image, TouchableOpacity} from 'react-native'; 
+import React, {useEffect, useState} from 'react';
+import {View,  Text, StyleSheet, Image, TouchableOpacity, ImageBackground} from 'react-native'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from './NotificationAccordion'
+import { GETRemindLogPeriodFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsFreq, GETRemindLogSymptomsTime } from '../services/SettingsService';
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 
 export default function Notifications () {
     
     // states 
-
     const [advanceDays, setAdvanceDays] = useState("2 days");
     const [periodReminderTime, setPeriodReminderTime] = useState("10:00 AM");
-    const [symptomsReminderFreq, setsymptomsReminderFreq] = useState("Only During Period");
+    const [symptomsReminderFreq, setSymptomsReminderFreq] = useState("Only During Period");
     const [symptomsReminderTime, setSymptomsReminderTime] = useState("10:00 AM")
 
     // get for all of the shit, set the text 
+    useEffect(() => {
+        async function setPickers () {
+            let storedAdvanceDays = await GETRemindLogPeriodFreq()
+            let storedPeriodReminderTime = await GETRemindLogPeriodTime()
+            let storedSymptomsReminderFreq = await GETRemindLogSymptomsFreq()
+            let storedSymptomsReminderTime = await GETRemindLogSymptomsTime()
 
+            if (storedAdvanceDays != null) {
+                setAdvanceDays(storedAdvanceDays + " days")
+            }
+
+            if (storedPeriodReminderTime != null) {
+                setPeriodReminderTime(storedPeriodReminderTime)
+            }
+
+            if (storedSymptomsReminderFreq != null) {
+                setSymptomsReminderFreq(storedSymptomsReminderFreq)
+            }
+
+            if (storedSymptomsReminderTime != null) {
+                setSymptomsReminderTime(storedSymptomsReminderTime)
+            }
+        }
+    setPickers();
+    },[]);
 
     return (
+        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
         <SafeAreaView>
         <View style={{top: -120}}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>  
             <NotificationStack name={"Remind me to log period"}/>
-            <View>
+
             <Accordion title={"How many days in advance"} selectedText={advanceDays}  type={"days"}/> 
-            <Accordion title={"Reminder time"} selectedText={periodReminderTime} type={"time"}/>
-                </View>
+            <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
+            <Accordion title={"Reminder time"} selectedText={periodReminderTime} type={"periodTime"}/>
+                
             <NotificationStack name={"Remind me to log symptoms"}/>
             <Accordion title={"Repeat"} selectedText={symptomsReminderFreq}  type={"howOften"}/> 
-            <Accordion title={"Reminder time"} selectedText={symptomsReminderTime} type={"time"}/>   
+            <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
+            <Accordion title={"Reminder time"} selectedText={symptomsReminderTime} type={"symptomTime"}/>   
     </ScrollView>
         </View>
         </SafeAreaView>
+        </ImageBackground>
     )
 }                
 
@@ -50,7 +87,12 @@ const NotificationStack = (props) => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({   
+    bgImage: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center'
+  },
     rowContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
