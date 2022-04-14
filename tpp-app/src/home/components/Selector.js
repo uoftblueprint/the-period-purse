@@ -47,7 +47,7 @@ const Selector = (props) => {
 
 
     return (
-        <View style={[{backgroundColor: '#FFFFFF'}, styles.elevatedElement]}>
+        <View style={[{backgroundColor: '#FFFFFF'}, props.expanded && styles.elevatedSelector]}>
             {props.expanded &&
             <View style={[styles.selectorContainer]}>
                 <TouchableOpacity onPress={() => props.toggleSelectedView(VIEWS.Flow)} 
@@ -85,12 +85,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginBottom: 50,
     },
-    elevatedElement: {
+    elevatedSelector: {
         position: "absolute",
         width: "100%",
         zIndex: 3,
         marginTop: 30,
-        height: "7%"
+        height: "7%",
     },
     selectedIcon: {
         backgroundColor: '#EFEFF4',
