@@ -1,29 +1,49 @@
 import React from 'react';
-import { StyleSheet, View, ImageBackground } from 'react-native';
-import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
+import { StyleSheet, SafeAreaView, ImageBackground } from 'react-native';
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { WideButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { BackButtonContainer } from './components/ContainerComponents';
+import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
+import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar3.svg";
 
-export default function Backup ({ navigation }) {
+export default function Backup ({ route, navigation }) {
+  const { periodLength, periodStart, periodEnd, trackingPreferences } = route.params;
+
   return (
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS["Symptoms Choices"])}}/>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
+            periodLength: periodLength,
+            periodStart: periodStart,
+            periodEnd: periodEnd
+        })}}/>
       </BackButtonContainer>
-      <TitleText>
-        Would you like to {'\n'} back up your data?
-      </TitleText>
-      <BodyText>
-        Your data will be lost if you {'\n'} switch devices
-      </BodyText>
 
-      <View style={{marginTop: 20}}>
-        <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS["Registration"])}/>
-        <WideButton title="Continue as guest" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Confirmation"])}/>
-      </View>
+      <SafeAreaView pointerEvents="box-none" style={{ alignItems: 'center' }}>
+        <BackgroundShape/>
+        <BarIcon style={{ bottom: "15%" }}/>
+
+        <TitleText style={{ bottom: "12%" }}>
+          Would you like to {'\n'} back up your data?
+        </TitleText>
+        <BodyText style={{ bottom: "12%" }}>
+          Your data will be lost if you {'\n'} switch devices
+        </BodyText>
+        <SafeAreaView style={{ bottom: "10%" }}>
+          <WideButton title="Register" color="#B31F20" onPress={() => navigation.navigate(STACK_SCREENS.REGISTRATION)}/>
+          <WideButton title="Continue as guest" color="#5A9F93" 
+            onPress={() => navigation.navigate(STACK_SCREENS.CONFIRMATION, {
+              periodLength: periodLength, 
+              periodStart: periodStart,
+              periodEnd: periodEnd,
+              trackingPreferences: trackingPreferences
+            })}/>
+        </SafeAreaView>
+      </SafeAreaView>
+
     </ImageBackground>
   );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, ImageBackground, TextInput, KeyboardAvoidingView } from 'react-native';
-import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/background.png'
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { WideButton } from './components/ButtonComponents';
@@ -11,7 +11,7 @@ export default function Registration ({ navigation }) {
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS["Backup"])}}/>
+        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS.GET_STARTED)}}/>
         <PageTitleContainer>
           <PageTitle>Registration</PageTitle>
         </PageTitleContainer>
@@ -27,7 +27,7 @@ export default function Registration ({ navigation }) {
         enabled behavior={ Platform.OS === 'ios'? 'padding': null}
         keyboardVerticalOffset={30}>
         <View style={{height: "80%"}}></View>
-        <WideButton title="Continue" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS["Password"])}/>
+        <WideButton title="Continue" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PASSWORD)}/>
       </KeyboardAvoidingView>
     </ImageBackground>
   );

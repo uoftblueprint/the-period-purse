@@ -15,7 +15,7 @@ export const BodyText = styled.Text`
   fontSize: 16px; 
   fontWeight: 400;
   color: #000000;
-  padding: 10px
+  padding-top: 10px
 `;
 
 // Title of the page at the top 

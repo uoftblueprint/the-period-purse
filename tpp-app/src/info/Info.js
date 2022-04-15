@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity, ImageBackground} from 'react-native';
+import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import padIcon from '../../ios/tppapp/Images.xcassets/icons/pad_icon.png';
 import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png';
 import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon.png';
@@ -8,6 +9,8 @@ import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.p
 import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
 import { GETFactCycle, POSTFactCycle } from "./InfoService"
 import { getFullCurrentDateString } from "../services/utils/helpers.js"
+import discIcon from '../../ios/tppapp/Images.xcassets/icons/disc_icon.png'
+import { STACK_SCREENS } from './InfoNavigator';
 
 const LearnMoreCard = () => {
     return(
@@ -78,60 +81,64 @@ const cardData = [
     {
         name: "Period" + "\n" + "Underwears",
         image: underwearIcon,
-        screen: "Period Underwears"
+        screen: STACK_SCREENS.PERIOD_UNDERWEARS
     },
     {
         name: "Menstrual Cups",
         image: cupIcon,
-        screen: "Menstrual Cups"
+        screen: STACK_SCREENS.MENSTRUAL_CUPS
     },
     {
         name: "Pads",
         image: padIcon,
-        screen: "Pads"
+        screen: STACK_SCREENS.PADS
     },
     {
         name: "Cloth Pads",
         image: clothPadIcon,
-        screen: "Cloth Pads"
+        screen: STACK_SCREENS.CLOTH_PADS
     },
     {
         name: "Tampons",
         image: tamponsIcon,
-        screen: "Tampons"
+        screen: STACK_SCREENS.TAMPONS
+    },
+    {
+        name: "Menstrual Disc",
+        image: discIcon,
+        screen: STACK_SCREENS.DISC
     }
 ]
 
 export default function Info ({ navigation }) {
     return (
-        <ScrollView>
-            <TouchableOpacity style={styles.didYouKnowCard} onPress={() => navigation.navigate("DidYouKnow")}>
-                <DidYouKnowCard />
-            </TouchableOpacity>
-            <View style={styles.cardContainer}>
-                <Text style={{
-                    ...styles.productText,
-                    textAlign: 'left',
-                    color: "#6D6E71",
-                    margin: 15
-                }}>
-                    Learn more about period products
-                </Text>
+        <ImageBackground source={OnboardingBackground} style={styles.container}>
+            <ScrollView>
+                <View style={styles.cardContainer}>
+                    <Text style={{
+                        ...styles.productText,
+                        textAlign: 'left',
+                        color: "#6D6E71",
+                        margin: 15
+                    }}>
+                        Learn more about period products
+                    </Text>
 
-                <View style={styles.containerRow}>
-                    {cardData.map((card, i) => { return (
-                        <MenstrualProductCard
-                            key={i}
-                            name={card.name}
-                            image={card.image}
-                            onPress={() => navigation.navigate(card.screen)}
-                        />
-                    )})}
+                    <View style={styles.containerRow}>
+                        {cardData.map((card, i) => { return (
+                            <MenstrualProductCard
+                                key={i}
+                                name={card.name}
+                                image={card.image}
+                                onPress={() => navigation.navigate(card.screen)}
+                            />
+                        )})}
+                    </View>
+
+                    <LearnMoreCard/>
                 </View>
-
-                <LearnMoreCard/>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </ImageBackground>
     )
 }
 
@@ -145,6 +152,11 @@ const styles = StyleSheet.create({
         left: 17,
         top: 77
     },
+    container: {
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'center'
+      },
     productCard: {
         backgroundColor: '#FFA3A4',
         alignItems: 'center',

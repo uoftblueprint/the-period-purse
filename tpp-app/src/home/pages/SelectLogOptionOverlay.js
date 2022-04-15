@@ -9,6 +9,7 @@ import Calendar from '../../../ios/tppapp/Images.xcassets/icons/calendar_icon_mu
 
 export default function SelectLogOptionOverlay({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
+  const today = new Date();
 
   return (
       <TouchableWithoutFeedback onPress={() => navigation.goBack()} >
@@ -20,7 +21,14 @@ export default function SelectLogOptionOverlay({ navigation }) {
               icon={<BloodDrop/>}
               onPress={() => {
                 navigation.goBack(); // dismiss this overlay first
-                navigation.navigate('LogSymptoms');
+                navigation.navigate(
+                  'LogSymptoms',
+                  {"date": {
+                    year: today.getFullYear(),
+                    month: today.getMonth() + 1,
+                    day: today.getDate()
+                  }}
+                );
               }}
             />
 
