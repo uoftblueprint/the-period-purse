@@ -27,15 +27,15 @@ Sentry.init({
 
 const Tab = createBottomTabNavigator();
 
-const InfoIconStyled = ({tintColor}) => (
+const InfoIconStyled = (props) => (
     <View style={{top: 3}}>
-        <InfoIcon />
+        <InfoIcon fill={props.focused ? '#5A9F93' : '#6D6E71'} />
     </View>
 );
 
-const SettingsIconStyled = ({tintColor}) => (
+const SettingsIconStyled = (props) => (
   <View style={{top: 3}}>
-      <SettingsIcon/>
+      <SettingsIcon fill={props.focused ? '#5A9F93' : '#6D6E71'} />
   </View>
 );
 
@@ -89,8 +89,8 @@ export function MainPage() {
         <Tab.Navigator initialRouteName='MiddleButton'>
           <Tab.Screen name="Info" component={InfoNavigator} options={{
             headerShown: false,
-            tabBarIcon: ({tintColor}) => (
-              <InfoIconStyled {...tintColor} />
+            tabBarIcon: (props) => (
+              <InfoIconStyled {...props} />
             ),
             tabBarActiveTintColor: "#5A9F93",
             tabBarInactiveTintColor: "#6D6E71",
@@ -105,7 +105,7 @@ export function MainPage() {
             headerShown: false,
             tabBarIcon: (props) => (
               <SettingsIconStyled {...props} />
-          ),
+            ),
             tabBarActiveTintColor: "#5A9F93",
             tabBarInactiveTintColor: "#6D6E71",
           }}/>
