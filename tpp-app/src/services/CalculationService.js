@@ -13,7 +13,7 @@ import { GETStoredYears } from "./utils/helpers";
 export const calculateAveragePeriodLength = (completeHistory) => {
     return completeHistory.length > 0 ? completeHistory.reduce(function (sum, interval) {
         return sum + interval.periodDays;
-    }, 0) / completeHistory.length : undefined;
+    }, 0) / completeHistory.length : 0;
 }
 
 /**
@@ -31,7 +31,7 @@ export const calculateAverageCycleLength = (completeHistory) => {
         // Find average
         .reduce((sum, cycleDays) => {
             return sum + cycleDays;
-        }, 0) / ( completeHistory.length - 1) : undefined;
+        }, 0) / ( completeHistory.length - 1) : 0;
 }
 
 /**
