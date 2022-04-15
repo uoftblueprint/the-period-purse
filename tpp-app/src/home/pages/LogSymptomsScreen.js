@@ -209,14 +209,13 @@ export default function LogSymptomsScreen({ navigation, route }) {
           symptoms: submitSymp
         }
         navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: [inputData]})
-        // navigation.goBack(isDirty);
       })
       .catch((e) => {
         let errorInfo = submitError(typeof e === 'string' ? e : JSON.stringify(e));
         alertPopup(errorInfo)
           .then(() => { // YES close screen
             navigation.goBack();
-          })          
+          })
           .catch() // CANCEL do nothing and close alert
         setSubmitting(false);
       })
@@ -272,7 +271,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 
   return (
-    <SafeAreaView style={styles.screen}><ScrollView>
+    <SafeAreaView style={styles.screen}><ScrollView style={styles.content}>
 
       {/* HEADER NAV */}
       <View style={styles.navbarContainer}>
@@ -345,12 +344,14 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#EFEFF4',
         flex: 1,
-        paddingTop: Constants.statusBarHeight
+    },
+    content: {
+        backgroundColor: '#fff',
     },
     navbarContainer: {
-        paddingTop: 98,
+        paddingTop: Constants.statusBarHeight,
         paddingBottom: 30,
         position: 'relative',
         flexDirection: 'row',
@@ -367,8 +368,7 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontWeight: "600",
         fontSize: 20,
-        paddingLeft: 30,
-        paddingRight: 30
+        paddingHorizontal: 30
     },
     close: {
       height: 30,

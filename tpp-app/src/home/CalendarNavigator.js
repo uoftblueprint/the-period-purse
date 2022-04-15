@@ -30,7 +30,7 @@ export default function CalendarNavigator() {
                 animation: 'fade',
                 presentation: 'transparentModal'
               }} />
-            <Stack.Screen name={STACK_SCREENS.LOG_SYMPTOMS} component={LogSymptomsScreen} options={{ presentation: 'modal' }}/>
+            <Stack.Screen name={STACK_SCREENS.LOG_SYMPTOMS} component={LogSymptomsScreen} options={{ presentation: 'fullScreenModal' }}/>
             <Stack.Screen name={STACK_SCREENS.LOG_MULTIPLE_DATES} component={LogMultipleDatesScreen} options={{ presentation: 'fullScreenModal' }}/>
             <Stack.Screen name={STACK_SCREENS.CYCLE_HISTORY} component={CycleHistoryScreen}/>
         </Stack.Navigator>

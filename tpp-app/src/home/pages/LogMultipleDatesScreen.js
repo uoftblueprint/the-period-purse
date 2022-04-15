@@ -6,6 +6,7 @@ import { STACK_SCREENS } from '../CalendarNavigator';
 import { getCalendarByYear, getISODate, getSymptomsFromCalendar } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
+import Constants from 'expo-constants';
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -26,7 +27,7 @@ const DayComponent = ({props}) => {
 }
 
 export const Calendar = ({ navigation, setSelectedDates, markedDates}) => {
-    
+
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -107,7 +108,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
               },
             },
           });
-    
+
           isMarked
             ? setNumSelected(numSelected + 1)
             : setNumSelected(numSelected - 1);
@@ -121,11 +122,11 @@ export default function LogMultipleDatesScreen ({ navigation }) {
               },
             },
           });
-    
+
           setNumSelected(numSelected + 1);
         }
     };
-        
+
 
     const onSubmit = async() => {
         const selectedDates = [];
@@ -134,7 +135,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             if(markedDates[date].marked){
                 const processed = date.split("-");
                 const data = {year: processed[0], month: processed[1], day: processed[2]};
-                
+
                 selectedDates.push(data);
             }
         })
@@ -151,7 +152,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                     inputData[getISODate(dateObject)] = {
                       symptoms: submitSymp
                     }
-            
+
                 }
             } catch (error) {
                 console.log(error);
@@ -181,7 +182,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         if(Object.keys(markedDates).some(key => markedDates[key].marked)){
 
             alertPopup(unsavedChanges);
-          
+
         }else{
             navigation.navigate(STACK_SCREENS.CALENDAR_PAGE);
         }
@@ -196,7 +197,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                   <CloseIcon fill={'#181818'}/>
                 </TouchableOpacity>
                 <View style={styles.navbarTextContainer}>
-                    
+
                     <Text style={styles.navbarTitle}>Tap date to log period</Text>
                     <Text style={styles.navbarSubTitle}>
                         {numSelected !== 1
@@ -206,8 +207,8 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
                 </View>
             </View>
-            
-            <Calendar 
+
+            <Calendar
                 numSelected={numSelected}
                 setNumSelected={setNumSelected}
                 navigation={navigation}
@@ -224,11 +225,10 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
-        
+        flex: 1,
     },
     navbarContainer: {
-        paddingTop: 98,
+        paddingTop: Constants.statusBarHeight + 50,
         paddingBottom: 30,
         position: 'relative',
         flexDirection: 'row',
@@ -282,10 +282,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom:30,
         right:40,
-        width: 60,  
-        height: 60,   
-        borderRadius: 30,            
-        backgroundColor: '#5A9F93', 
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: '#5A9F93',
     },
     selectedIcon: {
         position: 'relative',
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
         left: -2,
         marginLeft: 'auto',
         marginRight: 'auto'
-        
+
     },
 
 })
