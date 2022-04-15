@@ -196,7 +196,7 @@ const CycleService = {
       return res;
     } catch (e) {
       console.log(e);
-      return undefined;
+      return null;
     }
 
   },
@@ -210,7 +210,7 @@ const CycleService = {
       return res;
     } catch (e) {
       console.log(e);
-      return undefined;
+      return null;
     }
   },
 
