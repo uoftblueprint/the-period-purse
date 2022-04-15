@@ -128,7 +128,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     };
         
 
-    const onSubmit = async url => {
+    const onSubmit = async() => {
         const selectedDates = [];
 
         Object.keys(markedDates).map(date => {
