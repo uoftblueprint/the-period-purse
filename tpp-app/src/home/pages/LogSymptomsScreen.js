@@ -295,21 +295,23 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
           {/* SWITCH AND DISPLAY DATE */}
           <View style={styles.switchDate}>
-            {isNewDayValid(false, selectedDate) &&
-              <DateArrow
-                onPress={async () => await switchDate(false)}
-                isRight={false}
-              />
+            {isNewDayValid(false, selectedDate)
+              ? <DateArrow
+                  onPress={async () => await switchDate(false)}
+                  isRight={false}
+                />
+              : <View opacity={0}><DateArrow/></View>
             }
             <View style={styles.centerText}>
               <Text style={styles.subtitle}>Log your symptoms for:</Text>
               <Text style={styles.navbarTitle}>{dateStr}</Text>
             </View>
-            {isNewDayValid(true, selectedDate) &&
-              <DateArrow
-                onPress={async () => await switchDate(true)}
-                isRight={true}
-              />
+            {isNewDayValid(true, selectedDate)
+              ? <DateArrow
+                  onPress={async () => await switchDate(true)}
+                  isRight={true}
+                />
+              : <View opacity={0}><DateArrow/></View>
             }
           </View>
 
