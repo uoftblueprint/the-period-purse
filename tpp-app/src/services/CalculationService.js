@@ -8,7 +8,8 @@ import { GETStoredYears } from "./utils/helpers";
 
 /**
  * Calculates the average period length given a completeHistory of their period intervals
- * Returns undefined if not enough entries to calculate average
+ * @param completeHistory list of period intervals in the form returned by GETCycleHistoryByYear
+ * @return {number} representing average period length, 0 if not enough entries to calculate average
  */
 export const calculateAveragePeriodLength = (completeHistory) => {
     return completeHistory.length > 0 ? completeHistory.reduce(function (sum, interval) {
@@ -18,7 +19,8 @@ export const calculateAveragePeriodLength = (completeHistory) => {
 
 /**
  * Calculates the average cycle length given a completeHistory of their period intervals
- * Returns undefined if not enough entries to calculate average
+ * @param completeHistory list of period intervals in the form returned by GETCycleHistoryByYear
+ * @return {number} representing average cycle length, 0 if not enough entries
  */
 export const calculateAverageCycleLength = (completeHistory) => {
     return ( completeHistory.length - 1) > 0 ? completeHistory

@@ -80,6 +80,7 @@ export default function CycleScreen ({navigation}){
 
      CycleService.GETAveragePeriodLength().then(numDays => {
        if(numDays){
+         // Round to one decimal place
         setAvgPeriodLength(Math.round(numDays * 10) / 10);
        }
        else {
@@ -90,6 +91,7 @@ export default function CycleScreen ({navigation}){
      
      CycleService.GETAverageCycleLength().then(numDays => {
        if(numDays){
+         // Round to one decimal place
          setAvgCycleLength(Math.round(numDays * 10) / 10);
        }
        else {
