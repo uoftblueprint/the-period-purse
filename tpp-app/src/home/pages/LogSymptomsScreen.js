@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
 import Accordion from "../components/Accordion";
-import { getDateString, isValidDate } from "../../services/utils/helpers";
+import {flowOnOffModeChanged, getDateString, isValidDate} from "../../services/utils/helpers";
 import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils/helpers";
 import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { GETAllTrackingPreferences } from "../../services/SettingsService";
@@ -213,7 +213,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
           // navigation.goBack(isDirty);
 
           // Only need to recalculateAverages if flow was changed
-          if (submitSymp.flow !== stored.flow) {
+          if (flowOnOffModeChanged(submitSymp.flow, stored.flow)) {
               await calculateAverages();
           }
       })
