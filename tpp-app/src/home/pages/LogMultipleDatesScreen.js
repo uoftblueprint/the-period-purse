@@ -6,7 +6,7 @@ import { STACK_SCREENS } from '../CalendarNavigator';
 import { getCalendarByYear, getISODate, getSymptomsFromCalendar } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
-import {calculateAverageCycleLength, calculateAveragePeriodLength} from "../../services/CalculationService";
+import { calculateAverages } from "../../services/CalculationService";
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -128,7 +128,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     };
         
 
-    const onSubmit = async() => {
+    const onSubmit = async url => {
         const selectedDates = [];
 
         Object.keys(markedDates).map(date => {
