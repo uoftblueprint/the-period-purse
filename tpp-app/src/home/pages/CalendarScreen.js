@@ -9,10 +9,10 @@ import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 
-
 const sideComponentWidth = 120
+export let scrollDate = new Date()
 
-export const Calendar = ({navigation, marked, yearData, setYearInView, selectedView}) => {
+export const Calendar = ({ navigation, marked, yearData, setYearInView, selectedView, currentDate }) => {
     //updates the data when you come back to the calendar screen, might not need this
     // useEffect(() => {
     //     const unsubscribe = navigation.addListener('focus', () => {
@@ -23,6 +23,9 @@ export const Calendar = ({navigation, marked, yearData, setYearInView, selectedV
 
     return (
         <CalendarList
+        // Initially visible month. Default = now
+        current={currentDate}
+
         // Max amount of months allowed to scroll to the past. Default = 50
         pastScrollRange={12}
 
@@ -34,6 +37,7 @@ export const Calendar = ({navigation, marked, yearData, setYearInView, selectedV
 
         // Check which months are currently in view
         onVisibleMonthsChange={(months) => {
+            scrollDate = months[0]['dateString']
             let currentYears = []
             months.forEach(month => {
                 let currentYear = parseInt(month['year'])
@@ -88,7 +92,7 @@ export const Calendar = ({navigation, marked, yearData, setYearInView, selectedV
 }
 
 // Calendar Screen component that can be accessed by other functions
-export default function CalendarScreen ({ navigation }) {
+export default function CalendarScreen ({ route, navigation }) {
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
     const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
     const [yearInView, setYearInView] = useState([new Date().getFullYear()])
@@ -145,6 +149,17 @@ export default function CalendarScreen ({ navigation }) {
             setSelectedView(targetView);
         }
     }
+
+    let currentDate;
+    if(route && route.params && route.params.newDate)
+        currentDate = route.params.newDate;
+    useEffect(() => {
+        if(!currentDate)
+            setSelectedView(VIEWS.Nothing)
+        else if(selectedView !== VIEWS.Flow)
+            setSelectedView(VIEWS.Flow)
+    }, [currentDate])
+
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
     return (
         <View style={styles.container}>
@@ -158,7 +173,8 @@ export default function CalendarScreen ({ navigation }) {
                     />
             </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
-            <Calendar navigation={navigation} marked={marked} yearData={yearData} setYearInView={setYearInView} selectedView={selectedView}/>
+            <Calendar navigation={navigation} marked={marked} yearData={yearData} setYearInView={setYearInView} 
+                        selectedView={selectedView} currentDate={currentDate ? currentDate : new Date()}/>
         </View>
     )
 }

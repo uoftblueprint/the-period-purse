@@ -6,6 +6,7 @@ import { STACK_SCREENS } from '../CalendarNavigator';
 import { getCalendarByYear, getSymptomsFromCalendar, initializeEmptyYear } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
+import { scrollDate } from './CalendarScreen';
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -25,10 +26,13 @@ const DayComponent = ({props}) => {
     )
 }
 
-export const Calendar = ({ navigation, setSelectedDates, markedDates}) => {
+export const Calendar = ({ navigation, setSelectedDates, markedDates, currentDate }) => {
     
     return (
         <CalendarList
+        // Initially visible month. Default = now
+        current={currentDate}
+
         // Max amount of months allowed to scroll to the past. Default = 50
         pastScrollRange={12}
 
@@ -146,7 +150,9 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 console.log(error);
             }
         }
-        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE);
+        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, { 
+            newDate: selectedDates.length > 0 ? selectedDates[0] : null
+        });
     }
 
     const alertPopup = (info) =>  {
@@ -199,6 +205,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 navigation={navigation}
                 setSelectedDates={setSelectedDates}
                 markedDates={markedDates}
+                currentDate={scrollDate}
             />
             {/* {Cal} */}
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
