@@ -18,7 +18,7 @@ export default function SelectLogOptionOverlay({ navigation }) {
 
             <OptionButton
               title={"Log daily symptoms"}
-              icon={<BloodDrop/>}
+              icon={<BloodDrop />}
               onPress={() => {
                 navigation.goBack(); // dismiss this overlay first
                 navigation.navigate(
