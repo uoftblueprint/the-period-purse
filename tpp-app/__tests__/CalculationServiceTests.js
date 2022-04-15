@@ -9,7 +9,7 @@ beforeEach(async () => {
 });
 
 describe ("Test Calculation Service's isPeriodStarting()", () => {
-    it ("On calculate averages for one calendar, should call AsyncStorage.multiSet with expected averages 99 and 5",  async () => {
+    it ("On calculate averages for one calendar, should call AsyncStorage.multiSet with expected averages 30.363636363636363 and 5.25",  async () => {
         // Mocked data
         const calendarOneHistory = [
             {
@@ -72,15 +72,13 @@ describe ("Test Calculation Service's isPeriodStarting()", () => {
         await calculateAverages();
 
         // Expect 132 and 5
-        const expectedAveragePeriodLength = JSON.stringify(calculateAveragePeriodLength(calendarOneHistory));
-        const expectedAverageCycleLength = JSON.stringify(calculateAverageCycleLength(calendarOneHistory));
         expect(spy).toHaveBeenCalledWith([
-            [KEYS.AVERAGE_CYCLE_LENGTH, expectedAverageCycleLength],
-            [KEYS.AVERAGE_PERIOD_LENGTH, expectedAveragePeriodLength]
+            [KEYS.AVERAGE_CYCLE_LENGTH, "30.363636363636363"],
+            [KEYS.AVERAGE_PERIOD_LENGTH, "5.25"]
         ]);
     });
 
-    it ("On calculate averages for two calendars, should call AsyncStorage.multiSet with expected averages 99 and 5",  async () => {
+    it ("On calculate averages for two calendars, should call AsyncStorage.multiSet with expected averages 132 and 5",  async () => {
         // Mocked data
         const calendarOneHistory = [
             {
@@ -114,15 +112,13 @@ describe ("Test Calculation Service's isPeriodStarting()", () => {
         await calculateAverages();
 
         // Expect 132 and 5
-        const expectedAveragePeriodLength = JSON.stringify(calculateAveragePeriodLength(calendarOneHistory.concat(calendarTwoHistory)));
-        const expectedAverageCycleLength = JSON.stringify(calculateAverageCycleLength(calendarOneHistory.concat(calendarTwoHistory)));
         expect(spy).toHaveBeenCalledWith([
-            [KEYS.AVERAGE_CYCLE_LENGTH, expectedAverageCycleLength],
-            [KEYS.AVERAGE_PERIOD_LENGTH, expectedAveragePeriodLength]
+            [KEYS.AVERAGE_CYCLE_LENGTH, "132"],
+            [KEYS.AVERAGE_PERIOD_LENGTH, "5"]
         ]);
     });
 
-    it ("On calculate averages for one entry only, should call AsyncStorage.multiSet with expected averages undefined and 5",  async () => {
+    it ("On calculate averages for one entry only, should call AsyncStorage.multiSet with expected averages 0 and 10",  async () => {
         // Mocked data
         const singleEntryPeriodDays = 10
         const calendarOneEntryHistory = [
@@ -142,14 +138,14 @@ describe ("Test Calculation Service's isPeriodStarting()", () => {
         // Act
         await calculateAverages();
 
-        // Expect 132 and 5
+        // Expect 0 and 10
         expect(spy).toHaveBeenCalledWith([
-            [KEYS.AVERAGE_CYCLE_LENGTH, undefined],
+            [KEYS.AVERAGE_CYCLE_LENGTH, "0"],
             [KEYS.AVERAGE_PERIOD_LENGTH, JSON.stringify(singleEntryPeriodDays)]
         ]);
     });
 
-    it ("On calculate averages with no history, should not throw error and set averages to undefined",  async () => {
+    it ("On calculate averages with no history, should not throw error and set averages to 0",  async () => {
         // Mocked data
         const calendarnohistory = [];
 
@@ -165,8 +161,8 @@ describe ("Test Calculation Service's isPeriodStarting()", () => {
 
         // Expect
         expect(spy).toHaveBeenCalledWith([
-            [KEYS.AVERAGE_CYCLE_LENGTH, undefined],
-            [KEYS.AVERAGE_PERIOD_LENGTH, undefined]
+            [KEYS.AVERAGE_CYCLE_LENGTH, "0"],
+            [KEYS.AVERAGE_PERIOD_LENGTH, "0"]
         ]);
     });
 });

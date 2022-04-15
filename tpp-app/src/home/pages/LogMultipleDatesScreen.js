@@ -158,8 +158,6 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             }
         }
 
-
-
         navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
         await calculateAverages();
     }

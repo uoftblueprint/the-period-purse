@@ -212,7 +212,10 @@ export default function LogSymptomsScreen({ navigation, route }) {
           navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: [inputData]})
           // navigation.goBack(isDirty);
 
-          await calculateAverages();
+          // Only need to recalculateAverages if flow was changed
+          if (submitSymp.flow !== stored.flow) {
+              await calculateAverages();
+          }
       })
       .catch((e) => {
         let errorInfo = submitError(typeof e === 'string' ? e : JSON.stringify(e));
