@@ -51,9 +51,9 @@ import {View, Text, StyleSheet} from 'react-native';
  )
  }
 
- export default function CycleCard({periodDays, daysSinceLastPeriod, cycleDonutPercent}){
+ export default function CycleCard({periodDays, daysSinceLastPeriod, cycleDonutPercent, showTip}){
    return (
-        <View style={[styles.card]}>
+        <View style={[styles.card, !showTip && styles.noTip]}>
           <Cycle periodDays={periodDays} daysSinceLastPeriod={daysSinceLastPeriod} cycleDonutPercent={cycleDonutPercent}/>
         </View>
    );
@@ -64,6 +64,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     height: 298,
     backgroundColor: "white",
+  },
+  noTip: {
+    marginTop: 50
   },
   cycleText: {
     fontFamily: "Avenir",

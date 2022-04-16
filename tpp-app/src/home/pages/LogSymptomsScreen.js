@@ -10,6 +10,8 @@ import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { GETAllTrackingPreferences } from "../../services/SettingsService";
 import { POSTsymptomsForDate } from "../../services/LogSymptomsService";
 import { TRACK_SYMPTOMS } from "../../services/utils/constants";
+import { STACK_SCREENS } from "../CalendarNavigator";
+import { getISODate } from '../../services/utils/helpers';
 
 
 // Alert popup constants
@@ -202,14 +204,19 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
     POSTsymptomsForDate(selectedDate.getDate(), selectedDate.getMonth() + 1, selectedDate.getFullYear(), submitSymp)
       .then(() => {
-        navigation.goBack();
+        let inputData = {}
+        inputData[getISODate(selectedDate)] = {
+          symptoms: submitSymp
+        }
+        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData})
+        // navigation.goBack(isDirty);
       })
       .catch((e) => {
         let errorInfo = submitError(typeof e === 'string' ? e : JSON.stringify(e));
         alertPopup(errorInfo)
           .then(() => { // YES close screen
             navigation.goBack();
-          })
+          })          
           .catch() // CANCEL do nothing and close alert
         setSubmitting(false);
       })
