@@ -70,6 +70,11 @@ export const LogMultipleDayPeriod = async (datesToMark, datesToUnmark) => {
                 const month = date.month;
                 const day = date.day;
                 try {
+
+                    // initialize years that are not in the data
+                    if(!calendarData[year]){
+                        calendarData[year] = initializeEmptyYear(year);
+                    }
                     
                     let symptoms = getSymptomsFromCalendar(calendarData, day, month, year);
 
@@ -92,33 +97,15 @@ export const LogMultipleDayPeriod = async (datesToMark, datesToUnmark) => {
 
             })
 
-            if(calendarData[curYear]){
-                AsyncStorage.setItem(curYear.toString(), JSON.stringify(calendarData[curYear]))
-                .then(() => resolve())
-                .catch((e) => {
-                    console.log(JSON.stringify(e));
-                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
-                });
-                
-            }
-            
-            if(calendarData[curYear - 1]){
-                AsyncStorage.setItem((curYear - 1).toString(), JSON.stringify(calendarData[curYear - 1]))
-                .then(() => resolve())
-                .catch((e) => {
-                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
-                    console.log(JSON.stringify(e));
-                });
-            }
+            for (const [key, value] of Object.entries(calendarData)){
 
-            // a bit unneccessary since you can't log symptoms for the future.
-            if(calendarData[curYear + 1]){
-                AsyncStorage.setItem((curYear + 1).toString(), JSON.stringify(calendarData[curYear + 1]))
-                .then(() => resolve())
-                .catch((e) => {
-                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
-                    console.log(JSON.stringify(e));
-                });
+                if(value){
+                    try {
+                        await AsyncStorage.setItem(key.toString(), JSON.stringify(value));
+                    } catch (error) {
+                        console.log(`LogMultipleDayPeriod error: ${JSON.stringify(error)}`)
+                    }
+                }
             }
 
         } catch (error) {
