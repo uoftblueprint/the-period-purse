@@ -21,6 +21,7 @@ const trackSymptomsToViews = {
 const Selector = (props) => {
   let [prefsMap, setPrefsMap] = useState([]);
   let [toggleable, setToggleable] = useState(true);
+  let [numTracked, setNumTracked] = useState(0);
   useEffect(() => {
       GETAllTrackingPreferences().then(allPrefs => {
           //convert into map so you can directly index in
@@ -42,6 +43,7 @@ const Selector = (props) => {
               setToggleable(false);
 
           }
+          setNumTracked(numTracked);
           setPrefsMap(newPrefsMap)
       })
   }, [])
@@ -50,7 +52,7 @@ const Selector = (props) => {
   return (
     <View style={{backgroundColor: '#FFFFFF'}}>
         {props.expanded &&
-        <View style={styles.selectorContainer}>
+        <View style={[styles.selectorContainer, numTracked === 5 && styles.allSelectedContainer]}>
             {prefsMap[TRACK_SYMPTOMS.FLOW] && <TouchableOpacity 
                 onPress={() => props.toggleSelectedView(props.views.Flow, toggleable)} 
                 style={[props.selectedView === props.views.Flow&& styles.selectedIcon, styles.iconContainer]} 
@@ -96,6 +98,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: "row",
         marginBottom: 50,
+    },
+    allSelectedContainer: {
+        justifyContent: 'space-between'
     },
     selectedIcon: {
         backgroundColor: '#EFEFF4',
