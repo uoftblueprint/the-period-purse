@@ -1,6 +1,8 @@
 
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import {GETAllTrackingPreferences} from '../../services/SettingsService';
+import { TRACK_SYMPTOMS } from "../../services/utils/constants";
 import FlowIcon from "../../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import MoodIcon from "../../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../../ios/tppapp/Images.xcassets/icons/exercise.svg";
@@ -8,25 +10,38 @@ import CrampsIcon from "../../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 import SleepIcon from "../../../ios/tppapp/Images.xcassets/icons/sleep.svg";
 
 const Selector = (props) => {
+  let [prefsMap, setPrefsMap] = useState([]);
+  useEffect(() => {
+      GETAllTrackingPreferences().then(allPrefs => {
+          //convert into map so you can directly index in
+          let newPrefsMap = Object.assign({}, ...allPrefs.map(pref => ({ [pref[0]] : (pref[1] === 'true')})));
+          console.log(newPrefsMap)
+          console.log(newPrefsMap[TRACK_SYMPTOMS.FLOW]);
+          console.log(newPrefsMap[TRACK_SYMPTOMS.CRAMPS]);
+          setPrefsMap(newPrefsMap)
+      })
+  }, [])
+
+  
   return (
     <View style={{backgroundColor: '#FFFFFF'}}>
         {props.expanded &&
         <View style={styles.selectorContainer}>
-            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Flow)} style={[props.selectedView === props.views.Flow&& styles.selectedIcon, styles.iconContainer]} >
+            {prefsMap[TRACK_SYMPTOMS.FLOW] && <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Flow)} style={[props.selectedView === props.views.Flow&& styles.selectedIcon, styles.iconContainer]} >
                 <FlowIcon style={styles.icon} fill="black"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Mood)} style={[props.selectedView === props.views.Mood && styles.selectedIcon, styles.iconContainer]}>
+            </TouchableOpacity>}
+            {prefsMap[TRACK_SYMPTOMS.MOOD] && <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Mood)} style={[props.selectedView === props.views.Mood && styles.selectedIcon, styles.iconContainer]}>
                 <MoodIcon style={styles.icon} fill="black"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Exercise)} style={[props.selectedView === props.views.Exercise && styles.selectedIcon, styles.iconContainer]}>
+            </TouchableOpacity>}
+            {prefsMap[TRACK_SYMPTOMS.EXERCISE] && <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Exercise)} style={[props.selectedView === props.views.Exercise && styles.selectedIcon, styles.iconContainer]}>
                 <ExerciseIcon style={styles.icon} fill="black"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Cramps)} style={[props.selectedView === props.views.Cramps && styles.selectedIcon, styles.iconContainer]}>
+            </TouchableOpacity>}
+            {prefsMap[TRACK_SYMPTOMS.CRAMPS] && <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Cramps)} style={[props.selectedView === props.views.Cramps && styles.selectedIcon, styles.iconContainer]}>
                 <CrampsIcon style={styles.icon} fill="black"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Sleep)} style={[props.selectedView === props.views.Sleep && styles.selectedIcon, styles.iconContainer]}>
+            </TouchableOpacity>}
+            {prefsMap[TRACK_SYMPTOMS.SLEEP] && <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Sleep)} style={[props.selectedView === props.views.Sleep && styles.selectedIcon, styles.iconContainer]}>
                 <SleepIcon style={styles.icon} fill="black"/>
-            </TouchableOpacity>
+            </TouchableOpacity>}
 
         </View>
         }
