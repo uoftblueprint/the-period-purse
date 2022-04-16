@@ -65,14 +65,13 @@ export const LogMultipleDayPeriod = async (datesToMark, datesToUnmark) => {
             const calendarData = await getCalendarByYear(curYear);
 
 
-            allDates.map((date) => {
+            allDates.map((date, index) => {
                 const year = date.year;
                 const month = date.month;
                 const day = date.day;
                 try {
                     
                     let symptoms = getSymptomsFromCalendar(calendarData, day, month, year);
-                    const index = allDates.indexOf(date);
 
                     // Need to mark the date with period
                     if (index < datesToMark.length) {
