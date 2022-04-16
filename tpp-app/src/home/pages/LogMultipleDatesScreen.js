@@ -93,6 +93,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     const SELECTED_COLOR = '#E44545';
 
     useEffect( () => {
+        // Retrieve all marked dates and indicate that they are marked in log multiple dates screen
         async function populateMarkedDates() {
             GETStoredYears()
                 .then((years) => {
@@ -235,6 +236,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
       }
 
     const onClose = () => {
+        // alert that there are unsaved changes if there are newly marked dates, or newly unmarked dates
         if(Object.keys(markedDates).some(key =>
             (markedDates[key].marked && !markedDates[key].originalMarked) || (!markedDates[key].marked && markedDates[key].originalMarked))) {
             alertPopup(unsavedChanges);
