@@ -18,7 +18,7 @@ export const Calendar = ({ navigation, marked, setYearInView, selectedView, curr
     return (
         <CalendarList
         // Initially visible month. Default = now
-        current={currentDate}
+        current={currentDate ? currentDate : scrollDate}
 
         // Max amount of months allowed to scroll to the past. Default = 50
         pastScrollRange={12}
@@ -156,15 +156,10 @@ export default function CalendarScreen ({ route, navigation }) {
         }
     }
 
-    let currentDate;
-    if(route && route.params && route.params.newDate)
-        currentDate = route.params.newDate;
     useEffect(() => {
-        if(!currentDate)
-            setSelectedView(VIEWS.Nothing)
-        else if(selectedView !== VIEWS.Flow)
+        if(route.params?.newDate && selectedView !== VIEWS.Flow)
             setSelectedView(VIEWS.Flow)
-    }, [currentDate])
+    }, [route.params?.newDate])
 
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
     return (
@@ -179,8 +174,13 @@ export default function CalendarScreen ({ route, navigation }) {
                     />
             </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
-            <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} 
-                        selectedView={selectedView} currentDate={currentDate ? currentDate : new Date()}/>
+            <Calendar 
+                navigation={navigation} 
+                marked={marked} 
+                setYearInView={setYearInView} 
+                selectedView={selectedView} 
+                currentDate={route.params?.newDate}
+            />
         </View>
     )
 }
