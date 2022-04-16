@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     containter: {
         padding: 20,
         paddingTop: 100,
-        paddingBottom: 100,
+        marginBottom: 75,
     },
     titleText: {
         alignSelf: "center",
