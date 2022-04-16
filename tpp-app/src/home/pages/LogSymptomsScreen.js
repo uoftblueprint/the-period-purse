@@ -206,7 +206,8 @@ export default function LogSymptomsScreen({ navigation, route }) {
       .then(() => {
         let inputData = {}
         inputData[getISODate(selectedDate)] = {
-          symptoms: submitSymp
+          // submitSymp may be null, in that case pass back blank Symptoms object
+          symptoms: submitSymp ? submitSymp : new Symptoms()
         }
         navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData})
         // navigation.goBack(isDirty);
