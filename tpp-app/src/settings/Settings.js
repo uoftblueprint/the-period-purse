@@ -13,6 +13,10 @@ import { socialMediaIcons } from './icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, POSTRemindLogPeriod, POSTRemindLogSymptoms, POSTUpdateOnePreference } from '../services/SettingsService';
 import { TRACK_SYMPTOMS } from '../services/utils/constants'
+import CycleService from '../services/cycle/CycleService';
+import {useFocusEffect} from '@react-navigation/native';
+import getSymptomsFromCalendar from '../services/utils/helpers.js';
+
 
 const PreferenceButton = (props) => {
 
@@ -212,7 +216,28 @@ return(
 const NotificationSettings = ({navigation}) => {
     const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(false);
     const [remindSymptomsEnabled, setRemindSymptomsEnabled] = useState(false);
+    const [remindSymptomsFreq, setRemindSymptomsFreq] = useState("Every day");
+    const [remindPeriodFreq, setRemindPeriodFreq] = useState("2 days");
+    const [remindPeriodTime, setRemindPeriodTime] = useState("10:00 AM");
+    const [remindSymptomsTime, setSymptomsTime] = useState("10:00 AM");
+    const [numberOfDaysUntilPeriod, setNumberOfDaysUntilPeriod] = useState(0);
 
+    useFocusEffect(React.useCallback(() => {
+        CycleService.GETPredictedDaysTillPeriod().then(numDays => {
+            let toSet;
+            if(numDays && numDays != -1){
+              toSet = numDays;
+            }
+            else{ 
+              toSet = 0
+            }
+            setNumberOfDaysUntilPeriod(toSet)
+          })
+          .catch(() => {
+            setDaysTillPeriod(0);
+          });
+   
+     }, []));
 
 // get here 
 useEffect(() => {
@@ -231,37 +256,128 @@ useEffect(() => {
     getRemindSymptomsEnabled();
 }, [])
 
+useEffect(() => {
+    async function getFreqTimes() {
+        let storedPeriodFreq = await GETRemindLogPeriodFreq();
+        let storedSymptomFreq = await GETRemindLogSymptomsFreq();
+        let storedPeriodTime = await GETRemindLogPeriodTime();
+        let storedSymptomTime = await GETRemindLogSymptomsTime();
+
+        if (storedPeriodFreq) {
+            setRemindPeriodFreq(storedPeriodFreq)
+        }
+
+        if (storedSymptomFreq) {
+            setRemindSymptomsFreq(storedPeriodFreq)
+        }
+
+        if (storedPeriodTime) {
+            setRemindPeriodTime(storedPeriodTime);
+        }
+
+        if(storedSymptomTime) {
+            setRemindSymptomsTime(storedSymptomTime);
+        }
+    }
+    getFreqTimes();
+}, []);
+
     const togglePeriodSwitch = () => {
         setRemindPeriodEnabled(!remindPeriodEnabled)
-        POSTRemindLogPeriod(remindPeriodEnabled);}; // post here 
+        POSTRemindLogPeriod(remindPeriodEnabled); // post here 
+        let daysAheadStr = remindPeriodFreq.split(" ")[0]
+        
+        let daysAhead = parseInt(daysAheadStr);
+        
+        if(remindPeriodEnabled){
+            if (numberOfDaysUntilPeriod > daysAhead) { // if the number of days until period is less than days ahead, then we can't schedule notification
+                PushNotificationIOS.addNotificationRequest({
+                    id: 'remindperiod',
+                    title: 'Period Reminder!',
+                    body: `Your period is predicted to come in ${daysAheadStr} days.`,
+                    badge: 1,
+                    fireDate: getCorrectDate((numberOfDaysUntilPeriod - daysAhead), remindPeriodTime),
+                    repeats: true
+                })
+            }
+            
+        } else {
+            PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
+        }
+    }; 
     const toggleSymptomsSwitch = () => { // post here 
 
         setRemindSymptomsEnabled(!remindSymptomsEnabled);    
         POSTRemindLogSymptoms(remindSymptomsEnabled);
-        if (remindPeriodEnabled) {
+        
+        if (remindSymptomsEnabled) {
             // Schedule a reoccuring notification 
-            PushNotificationIOS.addNotificationRequest({
-                id: 'remindsymptoms',
-                title: 'Daily Log Reminder',
-                body: 'Daily reminder to log your symptoms!',
-                badge: 1,
-                fireDate: getCorrectDate(),
-                repeats: true,
-                repeatsComponent: {
-                    hour: true,
-                    minute: true,
-                },
-            });
+            switch (remindPeriodFreq) {
+                case "Every day":
+                    PushNotificationIOS.addNotificationRequest({
+                        id: 'remindsymptoms',
+                        title: 'Daily Log Reminder',
+                        body: 'Daily reminder to log your symptoms!',
+                        badge: 1,
+                        fireDate: getCorrectDate(1, remindSymptomsTime),
+                        repeats: true,
+                        repeatsComponent: {
+                            hour: true,
+                            minute: true,
+                        },
+                    });
+                    break;
+                case "Every week":
+                    PushNotificationIOS.addNotificationRequest({
+                        id: 'remindsymptoms',
+                        title: 'Weekly Log Reminder',
+                        body: 'Weekly reminder to log your symptoms!',
+                        badge: 1,
+                        fireDate: getCorrectDate(7, remindSymptomsTime),
+                        repeats: true,
+                        repeatsComponent: {
+                            hour: true,
+                            minute: true,
+                        },
+                    });
+                    break;
+                case "Every month":
+                    PushNotificationIOS.addNotificationRequest({
+                        id: 'remindsymptoms',
+                        title: 'Monthly Log Reminder',
+                        body: 'Monthly reminder to log your symptoms!',
+                        badge: 1,
+                        fireDate: getCorrectDate(30, remindSymptomsTime),
+                        repeats: true,
+                        repeatsComponent: {
+                            hour: true,
+                            minute: true,
+                        },
+                    });
+                    break;
+                case "Only during period":
+                    let currSymptoms = getSymptomsFromCalendar(calendar, curr.getDate(), curr.getMonth() + 1, curr.getFullYear());
+                    let hasFlow = (currSymptoms.flow !== null && currSymptoms.flow !== FLOW_LEVEL.NONE);
+                
+                    break;
+                default:
+                    break;
+            }
         } else {
             PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms'])
         }
     }
 
-    const getCorrectDate = () => {
+    const getCorrectDate = (daysAdded, time) => {
+        // takes a string time and parses it
+        const timeToSet = time.split("")
+        let hour = parseInt(timeToSet[0].split(":")[0])
+        let minute = parseInt(timeToSet[0].split(":")[1])
+
         const date = new Date();
-        date.setDate(date.getDate() + 1);
-        date.setHours(9);
-        date.setMinutes(0);
+        date.setDate(date.getDate() + daysAdded);
+        date.setHours(hour);
+        date.setMinutes(minute);
         return date;
     };
 return (
@@ -269,16 +385,14 @@ return (
         <Text style={styles.heading}>Notification Settings</Text>
         <NotificationsButton 
             text={"Remind me to log period"} 
-            subtext={"2 days before at 9:00 am"} 
+            subtext={`${remindPeriodFreq} before at ${remindPeriodTime}`} 
             toggle={togglePeriodSwitch} 
             enabled={remindPeriodEnabled} />
         <NotificationsButton
             text={"Remind me to log symptoms"}
-            subtext={"Every day at 10:00 pm"} 
+            subtext={`${remindSymptomsFreq} at ${remindPeriodTime}`} 
             toggle={toggleSymptomsSwitch}
             enabled={remindSymptomsEnabled}/>
-   
-
     </SafeAreaView>
 )
 }
