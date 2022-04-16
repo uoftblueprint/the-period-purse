@@ -6,6 +6,11 @@ import TikTokIcon from "../../../ios/tppapp/Images.xcassets/icons/tiktok.svg";
 import TwitterIcon from "../../../ios/tppapp/Images.xcassets/icons/twitter.svg";
 import YoutubeIcon from "../../../ios/tppapp/Images.xcassets/icons/youtube.svg";
 
+export const STACK_SCREENS = {
+    TERMS_AND_CONDITION: "TermsAndCondition",
+    PRIVACY_POLICY: "PrivacyPolicy"
+}
+
 const socialMediaIcons = [
     {"component": <InstagramIcon />, "url": "https://www.instagram.com/theperiodpurse/"},
     {"component": <TikTokIcon />, "url": "https://www.tiktok.com/@theperiodpurse"},
@@ -38,10 +43,14 @@ const Socials = () => {
     );
 }
 
-const TermsAndConditions = () => {
-    const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
-        Linking.openURL("https://www.google.com/");
-    });
+const TermsAndConditions = ({navigation}) => {
+    const openLink = () => {
+        navigation.navigate(STACK_SCREENS.PRIVACY_POLICY)
+    }
+
+    // const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
+    //     Linking.openURL("https://www.google.com/");
+    // });
 
     return (
         <View styles={styles.termsAndConditionsContainer}>
@@ -50,19 +59,23 @@ const TermsAndConditions = () => {
             </View>
             <View style={styles.terms}>
                 <TouchableOpacity onPress={openLink} style={styles.icon} >
-                    <Text style={styles.termsText}> Terms and Privacy Policy. </Text>
-                    <Text style={styles.lineText}> ______________________ </Text>
+                    <Text style={styles.termsText}> Terms and Conditions</Text>
+                    <Text style={styles.lineText}> __________________ </Text>
+                </TouchableOpacity>
+                <Text> and </Text>
+                <TouchableOpacity onPress={openLink} style={styles.icon} >
+                    <Text style={styles.termsText}> Privacy Policy. </Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
 }
 
-export const Footer = () => {
+export const Footer = ({navigation}) => {
     return (
         <View>
             <Socials/>
-            <TermsAndConditions/>
+            <TermsAndConditions navigation={navigation}/>
         </View>
     )
 }
@@ -107,5 +120,6 @@ const styles = StyleSheet.create({
     },
     termsText: {
         color: "#5A9F93",
+        textDecorationLine: "underline"
     }
 });

@@ -96,7 +96,7 @@ export default function Info ({ navigation }) {
                     </View>
 
                     <LearnMoreCard/>
-                    <Footer/>
+                    <Footer navigation={navigation}/>
                 </View>
             </ScrollView>
         </ImageBackground>
@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
         flex:1,
         paddingHorizontal: 10,
         paddingTop: 80,
+        marginBottom: 75,
     },
     containerRow: {
         flex: 1,

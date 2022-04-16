@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import * as Sentry from "@sentry/react-native";
@@ -14,6 +15,8 @@ import InfoNavigator from './src/info/InfoNavigator';
 import { GETAllTrackingPreferences } from './src/services/SettingsService';
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
+import {STACK_SCREENS} from './src/services/utils/footer';
+import PrivacyPolicyScreen from './src/home/pages/PrivacyPolicyScreen';
 
 
 // Initialize Sentry's SDK
@@ -26,6 +29,7 @@ Sentry.init({
 });
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 const InfoIconStyled = ({tintColor}) => (
     <View style={{top: 3}}>
@@ -48,6 +52,33 @@ export function MyTabs() {
   );
 }
 
+const Testing = () => {
+  return(<Tab.Navigator initialRouteName='MiddleButton'>
+  <Tab.Screen name="Info" component={InfoNavigator} options={{
+    headerShown: false,
+    tabBarIcon: ({tintColor}) => (
+      <InfoIconStyled {...tintColor} />
+    ),
+    tabBarActiveTintColor: "#5A9F93",
+    tabBarInactiveTintColor: "#6D6E71",
+  }}/>
+  <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
+    headerShown: false,
+    tabBarButton: (props) => (
+      <TabBarMiddleButton {...props} style={{ top: -30 }} inOverlay={false} />
+    )
+  }}/>
+  <Tab.Screen name="Settings" component={Settings} options={{
+    headerShown: false,
+    tabBarIcon: (props) => (
+      <SettingsIconStyled {...props} />
+  ),
+    tabBarActiveTintColor: "#5A9F93",
+    tabBarInactiveTintColor: "#6D6E71",
+  }}/>
+
+</Tab.Navigator>)
+}
 
 export function MainPage() {
   const navigationRef = useNavigationContainerRef();
@@ -86,30 +117,12 @@ export function MainPage() {
 
   return (
       <NavigationContainer ref={navigationRef} independent={true}>
-        <Tab.Navigator initialRouteName='MiddleButton'>
-          <Tab.Screen name="Info" component={InfoNavigator} options={{
-            headerShown: false,
-            tabBarIcon: ({tintColor}) => (
-              <InfoIconStyled {...tintColor} />
-            ),
-            tabBarActiveTintColor: "#5A9F93",
-            tabBarInactiveTintColor: "#6D6E71",
-          }}/>
-          <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
-            headerShown: false,
-            tabBarButton: (props) => (
-              <TabBarMiddleButton {...props} style={{ top: -30 }} inOverlay={false} />
-            )
-          }}/>
-          <Tab.Screen name="Settings" component={Settings} options={{
-            headerShown: false,
-            tabBarIcon: (props) => (
-              <SettingsIconStyled {...props} />
-          ),
-            tabBarActiveTintColor: "#5A9F93",
-            tabBarInactiveTintColor: "#6D6E71",
-          }}/>
-        </Tab.Navigator>
+        <Stack.Navigator intialRouteName="footer" screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="main" component={Testing}/>
+          <Stack.Screen name={STACK_SCREENS.PRIVACY_POLICY} component={PrivacyPolicyScreen}/>
+
+        
+        </Stack.Navigator>
       </NavigationContainer>
   );
 }

@@ -130,7 +130,7 @@ const Preferences = (props) => {
 //     )
 // }
 
-export default function Settings () {
+export default function Settings ({navigation}) {
     const [cycleLength, setCycleLength] = useState(35);
     const [periodLength, setPeriodLength] = useState(5);
     const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(true);
@@ -173,15 +173,17 @@ export default function Settings () {
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <ScrollView>
                 <View style={styles.container}>
-                <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
-                <Preferences/>
-                <Notifications
-                    remindPeriodEnabled={remindPeriodEnabled}
-                    remindSymptomsEnabled={remindSymptomsEnabled}
-                    togglePeriodSwitch={togglePeriodSwitch}
-                    toggleSymptomsSwitch={toggleSymptomsSwitch}
-                />
-                <Footer/>
+                    <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
+                    <Preferences/>
+                    <Notifications
+                        remindPeriodEnabled={remindPeriodEnabled}
+                        remindSymptomsEnabled={remindSymptomsEnabled}
+                        togglePeriodSwitch={togglePeriodSwitch}
+                        toggleSymptomsSwitch={toggleSymptomsSwitch}
+                    />
+                </View>
+                <View style={{marginBottom:75}}>
+                    <Footer navigation={navigation}/>
                 </View>
             </ScrollView>
         </ImageBackground>
@@ -221,7 +223,7 @@ const styles = StyleSheet.create({
         marginLeft: 24,
         marginRight: 10,
         marginTop: 85,
-        marginBottom: 75
+
     },
 
     dropShadow: {
