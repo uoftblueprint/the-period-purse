@@ -5,11 +5,7 @@ import InstagramIcon from "../../../ios/tppapp/Images.xcassets/icons/instagram.s
 import TikTokIcon from "../../../ios/tppapp/Images.xcassets/icons/tiktok.svg";
 import TwitterIcon from "../../../ios/tppapp/Images.xcassets/icons/twitter.svg";
 import YoutubeIcon from "../../../ios/tppapp/Images.xcassets/icons/youtube.svg";
-
-export const STACK_SCREENS = {
-    TERMS_AND_CONDITION: "TermsAndCondition",
-    PRIVACY_POLICY: "PrivacyPolicy"
-}
+import { STACK_SCREENS } from '../../../App';
 
 const socialMediaIcons = [
     {"component": <InstagramIcon />, "url": "https://www.instagram.com/theperiodpurse/"},
@@ -43,14 +39,13 @@ const Socials = () => {
     );
 }
 
-const TermsAndConditions = ({navigation}) => {
-    const openLink = () => {
+export const TermsAndConditions = ({navigation}) => {
+    const openPrivacyPolicy = () => {
         navigation.navigate(STACK_SCREENS.PRIVACY_POLICY)
     }
-
-    // const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
-    //     Linking.openURL("https://www.google.com/");
-    // });
+    const openTermsAndCondition = () => {
+        navigation.navigate(STACK_SCREENS.TERMS_AND_CONDITION)
+    }
 
     return (
         <View styles={styles.termsAndConditionsContainer}>
@@ -58,13 +53,12 @@ const TermsAndConditions = ({navigation}) => {
                 <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
             </View>
             <View style={styles.terms}>
-                <TouchableOpacity onPress={openLink} style={styles.icon} >
+                <TouchableOpacity onPress={openTermsAndCondition} style={styles.textLink} >
                     <Text style={styles.termsText}> Terms and Conditions</Text>
-                    <Text style={styles.lineText}> __________________ </Text>
                 </TouchableOpacity>
-                <Text> and </Text>
-                <TouchableOpacity onPress={openLink} style={styles.icon} >
-                    <Text style={styles.termsText}> Privacy Policy. </Text>
+                <Text style={styles.textLink}> and </Text>
+                <TouchableOpacity onPress={openPrivacyPolicy} style={styles.textLink} >
+                    <Text style={styles.termsText}>Privacy Policy. </Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -97,6 +91,9 @@ const styles = StyleSheet.create({
     icon: {
         margin: 10,
     },
+    textLink: {
+        marginVertical: 10,
+    },
     termsAndConditionsContainer: {
         marginTop: 10,
     },
@@ -114,12 +111,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
     },
+    termsText: {
+        color: "#5A9F93",
+        textDecorationLine: "underline"
+    },
     lineText: {
         marginTop: -10,
         color: "#5A9F93",
     },
-    termsText: {
-        color: "#5A9F93",
-        textDecorationLine: "underline"
-    }
 });
