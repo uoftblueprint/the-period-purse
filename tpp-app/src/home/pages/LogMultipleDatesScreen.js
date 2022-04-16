@@ -3,9 +3,11 @@ import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 import { CalendarList } from 'react-native-calendars';
 import { STACK_SCREENS } from '../CalendarNavigator';
-import { getCalendarByYear, getISODate, getSymptomsFromCalendar } from '../../services/utils/helpers';
+import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar} from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
+import {GETYearData} from "../../services/CalendarService";
+import {FLOW_LEVEL} from "../../services/utils/constants";
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -87,6 +89,51 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     // const [selectedDates, setSelectedDates] = useState([]);
     const [numSelected, setNumSelected] = useState(0);
     const [markedDates, setMarkedDates] = useState({});
+    const DESELECTED_COLOR = '#FFFFFF';
+    const SELECTED_COLOR = '#72C6B7';
+
+    useEffect( () => {
+        async function populateMarkedDates() {
+            GETStoredYears()
+                .then((years) => {
+                    let promises = []
+                    years.forEach((year) => {
+                        promises.push(GETYearData(year));
+                    });
+
+                    Promise.all(promises)
+                        .then((history) => {
+                            let allMarkedDates = {}
+                            history.forEach((year, yearIndex) => {
+                                year.forEach((month, monthIndex) => {
+                                    month.forEach((day, dayIndex) => {
+                                        if (day.flow !== null && day.flow !== FLOW_LEVEL.NONE) {
+                                            let monthString = monthIndex + 1 < 10 ? '0' + (monthIndex + 1) : (monthIndex + 1);
+                                            let dayString = dayIndex + 1 < 10 ? '0' + (dayIndex + 1) : (dayIndex + 1);
+                                            let stringDate = years[yearIndex] + '-' + monthString + '-' + dayString;
+                                            allMarkedDates[stringDate] = {
+                                                marked: false,
+                                                customStyles: {
+                                                    backgroundColor: '#72C6b7',
+                                                },
+                                            };
+                                        }
+                                    })
+                                });
+                            });
+                            setMarkedDates(allMarkedDates);
+                        })
+                        .catch((error) => {
+                            console.log(`GETCycleHistoryByYear error: ${JSON.stringify(error)}`);
+                        });
+                })
+                .catch((error) => {
+                    console.log(`GETStoredYears error: ${JSON.stringify(error)}`);
+                });
+        }
+
+        populateMarkedDates();
+    }, []);
 
     const unsavedChanges = {
         title: "Unsaved changes",
@@ -103,7 +150,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             [date.dateString]: {
               marked: isMarked,
               customStyles: {
-                backgroundColor: isMarked ? '#72C6B7' : '#FFFFFF',
+                backgroundColor: isMarked ? SELECTED_COLOR : DESELECTED_COLOR,
               },
             },
           });
@@ -117,7 +164,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             [date.dateString]: {
               marked: true,
               customStyles: {
-                backgroundColor: '#72C6b7',
+                backgroundColor: SELECTED_COLOR,
               },
             },
           });
