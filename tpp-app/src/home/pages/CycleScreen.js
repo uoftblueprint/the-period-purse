@@ -139,7 +139,7 @@ export default function CycleScreen ({navigation}){
         {/* View that contains all the relevant cards */}
         <ScrollView>
           {/* Period Notification (Period in X days) */}
-          <View style={cardContainerStyle}>
+          <SafeAreaView style={cardContainerStyle}>
             {showTip && (
             <PeriodNotification daysTillPeriod={daysTillPeriod}>
               <Paddy style={styles.paddyIcon}/>
@@ -164,7 +164,7 @@ export default function CycleScreen ({navigation}){
               intervals={intervals}
               onPeriod={periodDays !=0}
             />
-          </View>
+          </SafeAreaView>
 
         </ScrollView>
       </ImageBackground>
