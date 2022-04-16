@@ -90,7 +90,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     const [numSelected, setNumSelected] = useState(0);
     const [markedDates, setMarkedDates] = useState({});
     const DESELECTED_COLOR = '#FFFFFF';
-    const SELECTED_COLOR = '#72C6B7';
+    const SELECTED_COLOR = '#E44545';
 
     useEffect( () => {
         async function populateMarkedDates() {
@@ -112,9 +112,10 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                                             let dayString = dayIndex + 1 < 10 ? '0' + (dayIndex + 1) : (dayIndex + 1);
                                             let stringDate = years[yearIndex] + '-' + monthString + '-' + dayString;
                                             allMarkedDates[stringDate] = {
-                                                marked: false,
+                                                marked: true,
+                                                originalMarked: true,
                                                 customStyles: {
-                                                    backgroundColor: '#72C6b7',
+                                                    backgroundColor: SELECTED_COLOR,
                                                 },
                                             };
                                         }
@@ -145,10 +146,12 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     const setSelectedDates = date => {
         if (markedDates[date.dateString]) {
           const isMarked = !markedDates[date.dateString].marked;
+          const isOriginalMarked = markedDates[date.dateString].originalMarked;
           setMarkedDates({
             ...markedDates,
             [date.dateString]: {
               marked: isMarked,
+              originalMarked: isOriginalMarked,
               customStyles: {
                 backgroundColor: isMarked ? SELECTED_COLOR : DESELECTED_COLOR,
               },
@@ -163,6 +166,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             ...markedDates,
             [date.dateString]: {
               marked: true,
+              originalMarked: false,
               customStyles: {
                 backgroundColor: SELECTED_COLOR,
               },
@@ -175,37 +179,43 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         
 
     const onSubmit = async() => {
-        const selectedDates = [];
+        let selectedDates = [];
+        let deselectedDates = [];
 
         Object.keys(markedDates).map(date => {
-            if(markedDates[date].marked){
+            // Dates that were not selected before that have been marked as selected
+            if (markedDates[date].marked && !markedDates[date].originalMarked) {
                 const processed = date.split("-");
                 const data = {year: processed[0], month: processed[1], day: processed[2]};
                 
                 selectedDates.push(data);
+
+            // Dates that were selected before that have been marked as unselected
+            } else if (!markedDates[date].marked && markedDates[date].originalMarked) {
+                const processed = date.split("-");
+                const data = {year: processed[0], month: processed[1], day: processed[2]};
+
+                deselectedDates.push(data);
             }
-        })
+        });
 
         let inputData = {}
 
-        if(selectedDates.length > 0){
+        if(selectedDates.length + deselectedDates.length > 0){
             try {
-                await LogMultipleDayPeriod(selectedDates);
-                for (let date of selectedDates) {
+                await LogMultipleDayPeriod(selectedDates, deselectedDates);
+                for (let date of selectedDates.concat(deselectedDates)) {
                     let cal = await getCalendarByYear(date.year);
                     let submitSymp = getSymptomsFromCalendar(cal, date.day, date.month, date.year);
                     let dateObject = new Date(date.year, date.month - 1, date.day)
                     inputData[getISODate(dateObject)] = {
                       symptoms: submitSymp
                     }
-            
                 }
             } catch (error) {
                 console.log(error);
             }
         }
-
-
 
         navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
     }
@@ -225,10 +235,9 @@ export default function LogMultipleDatesScreen ({ navigation }) {
       }
 
     const onClose = () => {
-        if(Object.keys(markedDates).some(key => markedDates[key].marked)){
-
+        if(Object.keys(markedDates).some(key =>
+            (markedDates[key].marked && !markedDates[key].originalMarked) || (!markedDates[key].marked && markedDates[key].originalMarked))) {
             alertPopup(unsavedChanges);
-          
         }else{
             navigation.navigate(STACK_SCREENS.CALENDAR_PAGE);
         }
@@ -246,9 +255,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                     
                     <Text style={styles.navbarTitle}>Tap date to log period</Text>
                     <Text style={styles.navbarSubTitle}>
-                        {numSelected !== 1
-                        ? `${numSelected} days selected`
-                        : `${numSelected} day selected`}
+                        Selected dates will have their Flow level set to Medium
                     </Text>
 
                 </View>
@@ -296,7 +303,7 @@ const styles = StyleSheet.create({
     },
     navbarSubTitle: {
         color: '#181818',
-        fontWeight: "400",
+        fontWeight: "300",
         fontSize: 13,
     },
     close: {
@@ -305,8 +312,8 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       position: 'absolute',
-      left: 18,
-      bottom: 27
+      left: '5%',
+      top: '170%'
     },
     dayContainer:{
         borderColor: '#D1D3D4',
