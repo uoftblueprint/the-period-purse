@@ -76,8 +76,6 @@ export const LogMultipleDayPeriod = async (dates) => {
                     
                     let symptoms = getSymptomsFromCalendar(calendarData, day, month, year);
 
-                    // console.log(symptoms);
-
                     if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
                         symptoms.flow = FLOW_LEVEL.MEDIUM;
                     }
@@ -90,7 +88,7 @@ export const LogMultipleDayPeriod = async (dates) => {
             })
 
             for (const [key, value] of Object.entries(calendarData)){
-                // console.log(key, value);
+
                 if(value){
                     try {
                         await AsyncStorage.setItem(key.toString(), JSON.stringify(value));
@@ -99,35 +97,6 @@ export const LogMultipleDayPeriod = async (dates) => {
                     }
                 }
             }
-
-            // if(calendarData[curYear]){
-            //     AsyncStorage.setItem(curYear.toString(), JSON.stringify(calendarData[curYear]))
-            //     .then(() => resolve())
-            //     .catch((e) => {
-            //         console.log(JSON.stringify(e));
-            //         reject(`Unable to mergeItem and post symptoms for multiselect.`);
-            //     });
-                
-            // }
-            
-            // if(calendarData[curYear - 1]){
-            //     AsyncStorage.setItem((curYear - 1).toString(), JSON.stringify(calendarData[curYear - 1]))
-            //     .then(() => resolve())
-            //     .catch((e) => {
-            //         reject(`Unable to mergeItem and post symptoms for multiselect.`);
-            //         console.log(JSON.stringify(e));
-            //     });
-            // }
-
-            // // a bit unneccessary since you can't log symptoms for the future.
-            // if(calendarData[curYear + 1]){
-            //     AsyncStorage.setItem((curYear + 1).toString(), JSON.stringify(calendarData[curYear + 1]))
-            //     .then(() => resolve())
-            //     .catch((e) => {
-            //         reject(`Unable to mergeItem and post symptoms for multiselect.`);
-            //         console.log(JSON.stringify(e));
-            //     });
-            // }
 
         } catch (error) {
             console.log("error with multiselect:",error);
