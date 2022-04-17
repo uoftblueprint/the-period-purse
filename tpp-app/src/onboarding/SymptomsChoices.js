@@ -71,9 +71,6 @@ export default function SymptomsChoices ({ route, navigation }) {
       </SafeAreaView>
 
       <SymptomsButtonContainer>
-        {/* <SafeAreaView style={[styles.symptoms, { backgroundColor: flow }]}>
-          <SymptomsChoicesButton onPress={handleFlow} title="Flow" icon={<FlowIcon style={styles.icon}/>}/>
-        </SafeAreaView> */}
         <SafeAreaView style={[styles.symptoms, { backgroundColor: mood }]}>
           <SymptomsChoicesButton onPress={handleMood} title="Mood" icon={<MoodIcon style={styles.icon}/>}/>
         </SafeAreaView>
@@ -91,7 +88,7 @@ export default function SymptomsChoices ({ route, navigation }) {
       <TwoButtonContainer>
         <NextButton title="Next" onPress={() => 
           {
-            trackingPreferences = [true, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL];
+            let trackingPreferences = [true, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL];
             POSTSymptomsToTrack(trackingPreferences[0], trackingPreferences[1], trackingPreferences[2],
                                 trackingPreferences[3], trackingPreferences[4]);
             navigation.navigate(STACK_SCREENS.CONFIRMATION, {
