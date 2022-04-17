@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Alert, SafeAreaView, ScrollView} from 'react-native';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 import { CalendarList } from 'react-native-calendars';
-import { STACK_SCREENS } from '../CalendarNavigator';
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar} from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
@@ -221,7 +221,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             }
         }
 
-        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
+        navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
         await calculateAverages();
     }
 
@@ -234,7 +234,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
               text: info.cancelTitle,
               style: "cancel"
             },
-            { text: info.acceptTitle, onPress: () => navigation.navigate(STACK_SCREENS.CALENDAR_PAGE) }
+            { text: info.acceptTitle, onPress: () => navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE) }
           ]
         );
       }
@@ -245,7 +245,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             (markedDates[key].marked && !markedDates[key].originalMarked) || (!markedDates[key].marked && markedDates[key].originalMarked))) {
             alertPopup(unsavedChanges);
         }else{
-            navigation.navigate(STACK_SCREENS.CALENDAR_PAGE);
+            navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE);
         }
     }
 

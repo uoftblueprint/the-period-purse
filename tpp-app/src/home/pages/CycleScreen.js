@@ -11,6 +11,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import BloodDrop from '../../../ios/tppapp/Images.xcassets/icons/flow_with_heart.svg';
 import Calendar from '../../../ios/tppapp/Images.xcassets/icons/menstruation_calendar.svg';
 import Paddy from '../../../ios/tppapp/Images.xcassets/icons/paddy.svg';
+import { Footer } from '../../services/utils/footer';
 
 function InfoCard(props){
   return (
@@ -166,8 +167,10 @@ export default function CycleScreen ({navigation}){
               intervals={intervals}
               onPeriod={periodDays !=0}
             />
+            <View style={{marginBottom: 70}}>
+              <Footer navigation={navigation} />
+            </View>
           </SafeAreaView>
-
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>

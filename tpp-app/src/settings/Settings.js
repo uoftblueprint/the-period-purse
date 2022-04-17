@@ -8,7 +8,7 @@ import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import MoodIcon from '../../ios/tppapp/Images.xcassets/icons/mood.png';
 import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import { socialMediaIcons } from './icons';
+import { Footer } from '../services/utils/footer';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
@@ -98,39 +98,39 @@ const Preferences = (props) => {
     );
 }
 
-const Socials = () => {
-    return (
-        <View style={styles.iconsContainer}>
-            {
-                socialMediaIcons.map((socialMedia, i) => {
-                    return <SocialMediaButton key={i} icon={socialMedia.component} url={socialMedia.url} />
-                })
-            }
-        </View>
-    );
-}
+// const Socials = () => {
+//     return (
+//         <View style={styles.iconsContainer}>
+//             {
+//                 socialMediaIcons.map((socialMedia, i) => {
+//                     return <SocialMediaButton key={i} icon={socialMedia.component} url={socialMedia.url} />
+//                 })
+//             }
+//         </View>
+//     );
+// }
 
-const TermsAndConditions = () => {
-    const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
-        Linking.openURL("https://www.google.com/");
-    });
+// const TermsAndConditions = () => {
+//     const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
+//         Linking.openURL("https://www.google.com/");
+//     });
 
-    return (
-        <View styles={styles.termsAndConditionsContainer}>
-            <View style={styles.copyright}>
-                <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
-            </View>
-            <View style={styles.terms}>
-                <TouchableOpacity onPress={openLink} style={styles.icon} >
-                    <Text style={styles.termsText}> Terms and Privacy Policy. </Text>
-                    <Text style={styles.lineText}> ______________________ </Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
-}
+//     return (
+//         <View styles={styles.termsAndConditionsContainer}>
+//             <View style={styles.copyright}>
+//                 <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
+//             </View>
+//             <View style={styles.terms}>
+//                 <TouchableOpacity onPress={openLink} style={styles.icon} >
+//                     <Text style={styles.termsText}> Terms and Privacy Policy. </Text>
+//                     <Text style={styles.lineText}> ______________________ </Text>
+//                 </TouchableOpacity>
+//             </View>
+//         </View>
+//     )
+// }
 
-export default function Settings () {
+export default function Settings ({navigation}) {
     const [cycleLength, setCycleLength] = useState(35);
     const [periodLength, setPeriodLength] = useState(5);
     const [remindPeriodEnabled, setRemindPeriodEnabled] = useState(true);
@@ -173,16 +173,17 @@ export default function Settings () {
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <ScrollView>
                 <SafeAreaView style={styles.container}>
-                <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
-                <Preferences/>
-                <Notifications
-                    remindPeriodEnabled={remindPeriodEnabled}
-                    remindSymptomsEnabled={remindSymptomsEnabled}
-                    togglePeriodSwitch={togglePeriodSwitch}
-                    toggleSymptomsSwitch={toggleSymptomsSwitch}
-                />
-                <Socials />
-                <TermsAndConditions />
+                    <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
+                    <Preferences/>
+                    <Notifications
+                        remindPeriodEnabled={remindPeriodEnabled}
+                        remindSymptomsEnabled={remindSymptomsEnabled}
+                        togglePeriodSwitch={togglePeriodSwitch}
+                        toggleSymptomsSwitch={toggleSymptomsSwitch}
+                    />
+                <View style={{marginBottom:75}}>
+                    <Footer navigation={navigation}/>
+                </View>
                 </SafeAreaView>
             </ScrollView>
         </ImageBackground>
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
         marginLeft: 24,
         marginRight: 10,
         marginTop: 85,
-        marginBottom: 75
+
     },
 
     dropShadow: {

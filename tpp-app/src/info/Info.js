@@ -8,6 +8,7 @@ import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
 import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png'
 import discIcon from '../../ios/tppapp/Images.xcassets/icons/disc_icon.png'
 import { STACK_SCREENS } from './InfoNavigator';
+import { Footer } from '../services/utils/footer';
 
 const LearnMoreCard = () => {
     return(
@@ -97,6 +98,7 @@ export default function Info ({ navigation }) {
                     </View>
 
                     <LearnMoreCard/>
+                    <Footer navigation={navigation}/>
                 </SafeAreaView>
             </ScrollView>
         </ImageBackground>
@@ -145,7 +147,8 @@ const styles = StyleSheet.create({
     cardContainer: {
         flex: 1,
         paddingHorizontal: '10%',
-        paddingTop: '40%'
+        paddingTop: '40%',
+        marginBottom: 75,
     },
     containerRow: {
         flex: 1,
