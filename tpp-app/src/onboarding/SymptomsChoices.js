@@ -56,7 +56,7 @@ export default function SymptomsChoices ({ route, navigation }) {
       
       <SafeAreaView pointerEvents="none" style={{ alignItems: 'center' }}>
         <BackgroundShape style={{ top: 65 }}/>
-        <CalendarIcon width='250' height='250' style={{ bottom: "35%" }}/>
+        <CalendarIcon width='250' height='250' style={{ bottom: "34%" }}/>
         <BarIcon style={{ bottom: "33%" }}/>
         <TitleText style={{ bottom: "30%" }}>
           What symptoms do you {'\n'} want to track?
