@@ -62,6 +62,36 @@ async function getLastPeriodsEnd(finalPeriodStart, calendar = null){
 export {getLastPeriodsEnd};
 
 /**
+ * Checks to see if the user is currently on their period by checking today and yesterday's flow
+ * @param {Object} calendar The object containing the symptoms for this year, last year, and next year. Optional.
+ * @returns {Promise} Resolves into a boolean representing whether the user is current on their period or not
+ */
+
+async function isOnPeriod (calendar = null) {
+
+  let current = await this.GETMostRecentPeriodStartDate(calendar) // most recent period start date
+
+  var yesterday = subDays(current, 1);
+
+  if (!calendar) {
+    calendar = await getCalendarByYear(current)
+  }
+  let dateSymptoms = getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
+  let yesterdaySymptoms = getSymptomsFromCalendar(calendar, yesterday.getDate(), yesterday.getMonth(), yesterday.getFullYear());
+
+
+  var noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
+  var noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null) ;
+
+    if (noFlowYesterday && noFlowToday) {
+      return false
+    } else {
+      return true
+    }
+}
+
+export{isOnPeriod}
+/**
  * Gets the start date of the first period recorded in the year, which may be in the previous year.
  * @param {Date} firstPeriodEnd The first recorded period date in the year.
  * @param {Object} calendar The object containing the symptoms for this year, last year, and next year. Optional.
