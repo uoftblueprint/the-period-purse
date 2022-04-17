@@ -6,18 +6,19 @@ import { STACK_SCREENS } from '../CalendarNavigator';
 import { getCalendarByYear, getISODate, getSymptomsFromCalendar } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
+import {FILTER_COLOURS, FILTER_TEXT_COLOURS} from "../../services/utils/constants";
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
 
     return(
         // onpress should select the dates for multi select
-        <TouchableOpacity disabled={true} onPress={() => onPress(date)}>
+        <TouchableOpacity disabled={new Date(date.dateString) > new Date()} onPress={() => onPress(date)}>
             <View style={{
                 ...styles.dayContainer,
-                backgroundColor: marking && marking['customStyles'].backgroundColor,
+                backgroundColor: new Date(date.dateString) > new Date() ? FILTER_COLOURS.DISABLED : marking && marking['customStyles'].backgroundColor,
             }}>
-                <Text>
+                <Text style={{ color: new Date(date.dateString) > new Date() ? FILTER_TEXT_COLOURS.DISABLED : '#000000' }}>
                     {date.day}
                 </Text>
             </View>
@@ -33,7 +34,7 @@ export const Calendar = ({ navigation, setSelectedDates, markedDates}) => {
         pastScrollRange={12}
 
         // Max amount of months allowed to scroll to the future. Default = 50
-        futureScrollRange={0}
+        futureScrollRange={1}
 
         // Enable or disable scrolling of calendar list
         scrollEnabled={true}
@@ -208,7 +209,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
                 </View>
             </View>
-            <View stlye={styles.calendar}>
+            <View style={styles.calendar}>
                 <Calendar
                     numSelected={numSelected}
                     setNumSelected={setNumSelected}
@@ -217,7 +218,6 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                     markedDates={markedDates}
                 />
             </View>
-            {/* {Cal} */}
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
                 <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
         
     },
     calendar: {
-        marginBottom: '20%',
+        marginBottom: '-35%',
     },
     navbarContainer: {
         paddingTop: '12%',
