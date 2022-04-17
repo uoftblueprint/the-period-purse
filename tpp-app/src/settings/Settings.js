@@ -170,24 +170,22 @@ export default function Settings () {
 
 
     return (
-        <SafeAreaView>
-            <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
-                <ScrollView>
-                    <View style={styles.container}>
-                    <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
-                    <Preferences/>
-                    <Notifications
-                        remindPeriodEnabled={remindPeriodEnabled}
-                        remindSymptomsEnabled={remindSymptomsEnabled}
-                        togglePeriodSwitch={togglePeriodSwitch}
-                        toggleSymptomsSwitch={toggleSymptomsSwitch}
-                    />
-                    <Socials />
-                    <TermsAndConditions />
-                    </View>
-                </ScrollView>
-            </ImageBackground>
-        </SafeAreaView>
+        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+            <ScrollView>
+                <SafeAreaView style={styles.container}>
+                <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
+                <Preferences/>
+                <Notifications
+                    remindPeriodEnabled={remindPeriodEnabled}
+                    remindSymptomsEnabled={remindSymptomsEnabled}
+                    togglePeriodSwitch={togglePeriodSwitch}
+                    toggleSymptomsSwitch={toggleSymptomsSwitch}
+                />
+                <Socials />
+                <TermsAndConditions />
+                </SafeAreaView>
+            </ScrollView>
+        </ImageBackground>
     )
 }
 
