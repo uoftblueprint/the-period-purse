@@ -70,6 +70,6 @@ export const SymptomsButtonContainer = styled.SafeAreaView`
   flexDirection: row;
   alignSelf: center;
   justify-content: space-between;
-  width: 85%;
-  bottom: 70%
+  width: 69%;
+  bottom: 67%;
 `;
