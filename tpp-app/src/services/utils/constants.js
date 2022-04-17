@@ -72,7 +72,8 @@ export const FILTER_COLOURS = {
     MEDIUM: '#1A50A0',
     LIGHT: '#467CCD',
     LITTLE: '#92B8F0',
-  }
+  },
+  DISABLED: "#EEEEEE"
 }
 
 export const FILTER_TEXT_COLOURS = {
@@ -101,7 +102,8 @@ export const FILTER_TEXT_COLOURS = {
     MEDIUM: '#FFF',
     LIGHT: '#FFF',
     LITTLE: '#000',
-  }
+  },
+  DISABLED: '#AAAAAA'
 }
 
 export const VIEWS = {

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground} from 'react-native';
+import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground, SafeAreaView} from 'react-native';
 import {Card} from 'react-native-elements';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
@@ -172,7 +172,7 @@ export default function Settings ({navigation}) {
     return (
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <ScrollView>
-                <View style={styles.container}>
+                <SafeAreaView style={styles.container}>
                     <Stats cycleLength={cycleLength} periodLength={periodLength}></Stats>
                     <Preferences/>
                     <Notifications
@@ -181,10 +181,10 @@ export default function Settings ({navigation}) {
                         togglePeriodSwitch={togglePeriodSwitch}
                         toggleSymptomsSwitch={toggleSymptomsSwitch}
                     />
-                </View>
                 <View style={{marginBottom:75}}>
                     <Footer navigation={navigation}/>
                 </View>
+                </SafeAreaView>
             </ScrollView>
         </ImageBackground>
     )

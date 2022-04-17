@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, Alert, SafeAreaView, ScrollView} from 'react-native';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 import { CalendarList } from 'react-native-calendars';
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar} from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
+import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/utils/constants";
 import {GETYearData} from "../../services/CalendarService";
-import {FLOW_LEVEL} from "../../services/utils/constants";
 import { calculateAverages } from "../../services/CalculationService";
 
 const DayComponent = ({props}) => {
@@ -15,12 +15,12 @@ const DayComponent = ({props}) => {
 
     return(
         // onpress should select the dates for multi select
-        <TouchableOpacity onPress={() => onPress(date)}>
+        <TouchableOpacity disabled={new Date(date.dateString) > new Date()} onPress={() => onPress(date)}>
             <View style={{
                 ...styles.dayContainer,
-                backgroundColor: marking && marking['customStyles'].backgroundColor,
+                backgroundColor: new Date(date.dateString) > new Date() ? FILTER_COLOURS.DISABLED : marking && marking['customStyles'].backgroundColor,
             }}>
-                <Text>
+                <Text style={{ color: new Date(date.dateString) > new Date() ? FILTER_TEXT_COLOURS.DISABLED : '#000000' }}>
                     {date.day}
                 </Text>
             </View>
@@ -36,7 +36,7 @@ export const Calendar = ({ navigation, setSelectedDates, markedDates}) => {
         pastScrollRange={12}
 
         // Max amount of months allowed to scroll to the future. Default = 50
-        futureScrollRange={12}
+        futureScrollRange={1}
 
         // Enable or disable scrolling of calendar list
         scrollEnabled={true}
@@ -49,6 +49,8 @@ export const Calendar = ({ navigation, setSelectedDates, markedDates}) => {
         markedDates={markedDates}
 
         theme={{
+            paddingBottom: 100,
+            margin: 20,
             calendarBackground: '#ffffff',
             // Sun Mon Tue Wed Thu Fri Sat Bar
             textSectionTitleColor: '#000000',
@@ -83,7 +85,7 @@ export const Calendar = ({ navigation, setSelectedDates, markedDates}) => {
         }}
         />
     )
-}
+};
 
 
 export default function LogMultipleDatesScreen ({ navigation }) {
@@ -249,7 +251,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.navbarContainer}>
 
                 <TouchableOpacity onPress={() => onClose()} style={styles.close}>
@@ -264,19 +266,19 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
                 </View>
             </View>
-            
-            <Calendar 
-                numSelected={numSelected}
-                setNumSelected={setNumSelected}
-                navigation={navigation}
-                setSelectedDates={setSelectedDates}
-                markedDates={markedDates}
-            />
-            {/* {Cal} */}
+            <View style={styles.calendar}>
+                <Calendar
+                    numSelected={numSelected}
+                    setNumSelected={setNumSelected}
+                    navigation={navigation}
+                    setSelectedDates={setSelectedDates}
+                    markedDates={markedDates}
+                />
+            </View>
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
                 <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -285,12 +287,15 @@ const styles = StyleSheet.create({
         flex: 1
         
     },
+    calendar: {
+        marginBottom: '-35%',
+    },
     navbarContainer: {
-        paddingTop: 98,
-        paddingBottom: 30,
+        paddingTop: '12%',
+        paddingBottom: '10%',
         position: 'relative',
         flexDirection: 'row',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#EFEFF4',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center'

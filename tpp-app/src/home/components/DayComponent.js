@@ -25,8 +25,12 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
         // for sleep it will be a number etc.
         let symptomAttribute = marking.symptoms[viewKey]
 
+        // If disabled
+        if (marking.disable) {
+            bgColor = FILTER_COLOURS.DISABLED;
+            textColor = FILTER_TEXT_COLOURS.DISABLED;
         // If it contains a working attribute
-        if (symptomAttribute) {
+        } else if (symptomAttribute) {
             
             let attribute = symptomAttribute
             
@@ -66,7 +70,7 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
     }
 
     return(
-        <TouchableOpacity onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
+        <TouchableOpacity disabled={bgColor === FILTER_COLOURS.DISABLED && textColor === FILTER_TEXT_COLOURS.DISABLED } onPress={() => {navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}}>
             <View style={styles.dayContainer} backgroundColor={bgColor}>
                 <Text style={{ color: textColor }}>
                     {date.day}    
