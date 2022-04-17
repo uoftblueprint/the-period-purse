@@ -6,6 +6,7 @@ import { STACK_SCREENS } from '../CalendarNavigator';
 import { getCalendarByYear, getISODate, getSymptomsFromCalendar } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
+import { calculateAverages } from "../../services/CalculationService";
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -151,16 +152,14 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                     inputData[getISODate(dateObject)] = {
                       symptoms: submitSymp
                     }
-            
                 }
             } catch (error) {
                 console.log(error);
             }
         }
 
-
-
         navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
+        await calculateAverages();
     }
 
     const alertPopup = (info) =>  {

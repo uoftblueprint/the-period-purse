@@ -115,6 +115,7 @@ export const VIEWS = {
 
 export const KEYS = {
   AVERAGE_PERIOD_LENGTH: "averagePeriodLength",
+  AVERAGE_CYCLE_LENGTH: "averageCycleLength",
   INITIAL_PERIOD_LENGTH: "initialPeriodLength",
   SELECTED_YEAR: "selectedYear",
   SELECTED_MONTH: "selectedMonth",
