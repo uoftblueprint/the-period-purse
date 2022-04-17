@@ -139,6 +139,6 @@ const styles = StyleSheet.create({
   },
   image: {
     position: 'absolute', 
-
+    marginLeft: '2%'
   },
 });
