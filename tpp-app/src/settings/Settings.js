@@ -15,7 +15,7 @@ import { GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, PO
 import { TRACK_SYMPTOMS } from '../services/utils/constants'
 import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
-import getSymptomsFromCalendar from '../services/utils/helpers.js';
+import {getSymptomsFromCalendar, getCalendarByYear} from '../services/utils/helpers.js';
 
 
 const PreferenceButton = (props) => {
@@ -356,9 +356,18 @@ useEffect(() => {
                     });
                     break;
                 case "Only during period":
-                    let currSymptoms = getSymptomsFromCalendar(calendar, curr.getDate(), curr.getMonth() + 1, curr.getFullYear());
-                    let hasFlow = (currSymptoms.flow !== null && currSymptoms.flow !== FLOW_LEVEL.NONE);
-                
+                    if (CycleService.isOnPeriod) {
+                        id: 'remindsymptoms',
+                        title: 'Symptom Logging Reminder',
+                        body: 'Reminder to log your period!',
+                        badge: 1,
+                        fireDate: getCorrectDate(1, remindSymptomsTime),
+                        repeats: true,
+                        repeatsComponent: {
+                            hour: true,
+                            minute: true,
+                        },
+                    });
                     break;
                 default:
                     break;
