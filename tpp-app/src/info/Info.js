@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity, ImageBackground} from 'react-native';
+import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity, ImageBackground, SafeAreaView} from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import padIcon from '../../ios/tppapp/Images.xcassets/icons/pad_icon.png';
 import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png';
@@ -73,14 +73,16 @@ export default function Info ({ navigation }) {
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <ScrollView>
-                <View style={styles.cardContainer}>
+                <SafeAreaView style={styles.cardContainer}>
                     <Text style={{
                         ...styles.productText,
                         textAlign: 'left',
                         color: "#6D6E71",
-                        margin: 15
+                        marginTop: '10%',
+                        marginLeft: '5%',
+                        marginBottom: '2%'
                     }}>
-                        Learn more about period products
+                        Tap to learn more about period products
                     </Text>
 
                     <View style={styles.containerRow}>
@@ -95,7 +97,7 @@ export default function Info ({ navigation }) {
                     </View>
 
                     <LearnMoreCard/>
-                </View>
+                </SafeAreaView>
             </ScrollView>
         </ImageBackground>
     )
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         borderWidth: 0,
         borderColor: "#000",
-        margin: 15,
+        margin: '3%',
         shadowColor: '#000',
         shadowOffset: { width: 4, height: 10 },
         shadowOpacity: 0.25,
@@ -127,27 +129,29 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         alignItems: 'center',
         justifyContent: 'center',
-        width: "92%",
+        width: "88%",
         height: 235,
         borderRadius: 12,
         borderWidth: 0,
         borderColor: "#000",
-        margin: 15,
+        marginTop: '3%',
+        marginLeft: '6%',  // 5%
+        marginBottom: '5%',
         shadowColor: '#000',
         shadowOffset: { width: 4, height: 10 },
         shadowOpacity: 0.25,
         shadowRadius: 12,
     },
     cardContainer: {
-        flex:1,
-        paddingHorizontal: 10,
-        paddingTop: 80,
+        flex: 1,
+        paddingHorizontal: '10%',
+        paddingTop: '40%'
     },
     containerRow: {
         flex: 1,
         flexDirection: 'row',
         flexWrap: "wrap",
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly'
     },
     productText: {
         fontFamily: "Avenir",
