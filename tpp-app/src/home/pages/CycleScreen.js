@@ -165,8 +165,10 @@ export default function CycleScreen ({navigation}){
               intervals={intervals}
               onPeriod={periodDays !=0}
             />
+            <View style={{marginBottom: 70}}>
+              <Footer navigation={navigation} />
+            </View>
           </SafeAreaView>
-
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
