@@ -4,7 +4,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
-    "start": "react-native start"
+    "start": "react-native start",
+    "test": "jest"
   },
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.1.5",
@@ -42,11 +43,13 @@
     "react-native-tab-view": "^3.1.1",
     "react-native-unimodules": "~0.14.5",
     "react-native-web": "~0.13.12",
+    "react-test-renderer": "^18.0.0",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@react-navigation/native": "^6.0.6"
+    "@react-navigation/native": "^6.0.6",
+    "jest": "^27.5.1"
   },
   "private": true,
   "name": "tpp-app",

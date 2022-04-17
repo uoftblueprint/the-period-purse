@@ -50,20 +50,22 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
 
 /**
  * Updates user's flow to medium on selected days where the user's flow was originally null or none.
- * @param {Array<date>} dates
+ * @param {Array<date>} datesToMark
+ * @param {Array<date>} datesToUnmark
  * where date.day is a number (1st day of month = 1),
  * date.month is a number (January = 1),
  * date.year is a number.
  */
-export const LogMultipleDayPeriod = async (dates) => {
+export const LogMultipleDayPeriod = async (datesToMark, datesToUnmark) => {
     // run this code for each value in the dates array
-    if(dates.length > 0){
+    if(datesToMark.length + datesToUnmark.length > 0){
         try {
-            curYear = dates[0].year;
+            const allDates = datesToMark.concat(datesToUnmark);
+            const curYear = allDates[0].year;
             const calendarData = await getCalendarByYear(curYear);
-        
 
-            dates.map((date) => {
+
+            allDates.map((date, index) => {
                 const year = date.year;
                 const month = date.month;
                 const day = date.day;
@@ -76,8 +78,16 @@ export const LogMultipleDayPeriod = async (dates) => {
                     
                     let symptoms = getSymptomsFromCalendar(calendarData, day, month, year);
 
-                    if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
-                        symptoms.flow = FLOW_LEVEL.MEDIUM;
+                    // Need to mark the date with period
+                    if (index < datesToMark.length) {
+                        if (symptoms.flow == null || symptoms.flow === FLOW_LEVEL.NONE){
+                            symptoms.flow = FLOW_LEVEL.MEDIUM;
+                        }
+                    }
+
+                    // Need to unmark the date with no period
+                    else if (datesToMark.length <= index) {
+                        symptoms.flow = null;
                     }
 
                     calendarData[year][month-1][day-1] = symptoms;
