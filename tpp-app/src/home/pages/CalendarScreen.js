@@ -134,7 +134,7 @@ export default function CalendarScreen ({ route, navigation }) {
         useCallback(() => {
             let newMarkedData = route.params?.inputData
             if (newMarkedData) {
-                setMarked(markedState => ({...markedState, ...newMarkedData}))
+                setMarked(markedState => ({...markedState, ...newMarkedData}));
             }
 
         }, [route.params?.inputData])

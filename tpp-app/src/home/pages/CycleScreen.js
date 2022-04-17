@@ -108,7 +108,7 @@ export default function CycleScreen ({navigation}){
          toSet = DEFAULTS.DAYS_TILL_PERIOD;
          //if the prediction is invalid, don't show the tooltip
          //will not show tip until average cycle is computed
-         setShowTip(false);
+        //  setShowTip(false);
        }
        setDaysTillPeriod(toSet);
      })
@@ -130,40 +130,42 @@ export default function CycleScreen ({navigation}){
   const tipInvisibleStyle = {
     marginBottom: tabBarHeight
   }
-  const cardContainerStyle = showTip ? styles.cardContainer : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
+  const tipVisibleStyle = {
+    marginBottom: 50
+  }
+  const cardContainerStyle = showTip ? Object.assign({}, styles.cardContainer, tipVisibleStyle) : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={background} style={styles.container}>    
         {/* View that contains all the relevant cards */}
-        <ScrollView contentContainerStyle={cardContainerStyle}>
+        <ScrollView>
           {/* Period Notification (Period in X days) */}
-          {showTip && (
-          <PeriodNotification daysTillPeriod={daysTillPeriod}>
-            <Paddy style={styles.paddyIcon}/>
-          </PeriodNotification>
-          )}
-          <CycleCard 
-            periodDays={periodDays} 
-            daysSinceLastPeriod={daysSinceLastPeriod} 
-            cycleDonutPercent={cycleDonutPercent}
-            showTip={showTip}
-          />
-          <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
-            <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
-              <BloodDrop fill="red" style={styles.icon}/>
-            </InfoCard>
-            <InfoCard header="Average cycle length" days={avgCycleLength} backgroundColor="#B9E0D8">
-              <Calendar fill="red" style={styles.icon}/>
-            </InfoCard>
+          <SafeAreaView style={cardContainerStyle}>
+            {showTip && (
+            <PeriodNotification daysTillPeriod={daysTillPeriod}>
+              <Paddy style={styles.paddyIcon}/>
+            </PeriodNotification>
+            )}
+            <CycleCard 
+              periodDays={periodDays} 
+              daysSinceLastPeriod={daysSinceLastPeriod} 
+              cycleDonutPercent={cycleDonutPercent}
+              showTip={showTip}
+            />
+            <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
+              <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
+                <BloodDrop fill="red" style={styles.icon}/>
+              </InfoCard>
+              <InfoCard header="Average cycle length" days={avgCycleLength} backgroundColor="#B9E0D8">
+                <Calendar fill="red" style={styles.icon}/>
+              </InfoCard>
+            </SafeAreaView>
+            <MinimizedHistoryCard 
+              navigation={navigation} 
+              intervals={intervals}
+              onPeriod={periodDays !=0}
+            />
           </SafeAreaView>
-          <MinimizedHistoryCard 
-            navigation={navigation} 
-            intervals={intervals}
-            onPeriod={periodDays !=0}
-          />
-          <View style={{marginBottom:75}}>
-            <Footer navigation={navigation}/>
-          </View>
 
         </ScrollView>
       </ImageBackground>
@@ -182,8 +184,8 @@ const styles = StyleSheet.create({
       flex: 1,
       marginHorizontal: 16,
       alignItems: 'stretch',
-      justifyContent: 'space-evenly',
-  },  
+      paddingBottom: 50,
+  },
   rowContainer:{
     flexDirection: 'row',
     justifyContent: 'space-evenly',
@@ -259,6 +261,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   element: {
-    marginVertical: "15%"
+     marginVertical: "7%"
   }
 })

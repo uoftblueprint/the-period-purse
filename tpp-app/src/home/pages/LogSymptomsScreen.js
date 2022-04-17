@@ -208,7 +208,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
         inputData[getISODate(selectedDate)] = {
           symptoms: submitSymp
         }
-        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: [inputData]})
+        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData})
         // navigation.goBack(isDirty);
       })
       .catch((e) => {
