@@ -61,13 +61,12 @@ export default function SymptomsChoices ({ route, navigation }) {
         <TitleText style={{ bottom: "30%" }}>
           What symptoms do you {'\n'} want to track?
         </TitleText>
-        {/* <BodyText style={{ bottom: "33%" }}>
-          You can change these later in your settings. {'\n'}
-          Select at least one to proceed. 
-        </BodyText> */}
+        <BodyText style={{ bottom: "29%" }}>
+          You can change these anytime in your settings. {'\n'}
+        </BodyText>
         <Card containerStyle={[styles.card]}>
           <FlowDeselected style={styles.image}/>
-          <Text style={{marginLeft: 85, marginRight: 10, fontSize: 14.5}}>By default, you can track your period by logging your flow. In addition, choose up to four other symptoms to track.</Text>
+          <Text style={{marginTop: '3%', marginLeft: '28%', marginRight: '4%', fontSize: 14.5}}>By default, track your period by logging flow. Choose up to four other symptoms to track.</Text>
         </Card>
       </SafeAreaView>
 
