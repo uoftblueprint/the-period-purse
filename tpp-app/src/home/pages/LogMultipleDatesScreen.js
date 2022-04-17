@@ -8,6 +8,7 @@ import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 import {GETYearData} from "../../services/CalendarService";
 import {FLOW_LEVEL} from "../../services/utils/constants";
+import { calculateAverages } from "../../services/CalculationService";
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -219,6 +220,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         }
 
         navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
+        await calculateAverages();
     }
 
     const alertPopup = (info) =>  {
