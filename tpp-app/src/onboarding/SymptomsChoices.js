@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 0, width: 0 },
     shadowOpacity: 0,
     shadowRadius: 0,
-    backgroundColor: '#c9e3de'
+    backgroundColor: '#CEE2DE'
   },
   image: {
     position: 'absolute', 
