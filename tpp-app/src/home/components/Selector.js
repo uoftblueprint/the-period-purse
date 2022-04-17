@@ -45,31 +45,51 @@ const Selector = (props) => {
     let selectedColor = "#B31F20";
     let unselectedColor = "#6D6E71";
 
+    const iconData = [
+        {
+            onPress: () => props.toggleSelectedView(VIEWS.Flow),
+            touchableStyle: [flowSelected && styles.selectedIcon, styles.iconContainer],
+            internalIcon: (<FlowIcon style={styles.icon} fill= {flowSelected ? selectedColor : unselectedColor}/>)
+        },
+        {
+            onPress: () => props.toggleSelectedView(VIEWS.Mood),
+            touchableStyle: [moodSelected && styles.selectedIcon, styles.iconContainer],
+            internalIcon: (<MoodIcon style={styles.icon} fill= {moodSelected ? selectedColor : unselectedColor}/>)
+        },
+        {
+            onPress: () => props.toggleSelectedView(VIEWS.Exercise),
+            touchableStyle: [exerciseSelected && styles.selectedIcon, styles.iconContainer],
+            internalIcon: (<ExerciseIcon style={styles.icon} fill= {exerciseSelected ? selectedColor : unselectedColor}/>)
+        },
+        {
+            onPress: () => props.toggleSelectedView(VIEWS.Cramps),
+            touchableStyle: [crampsSelected && styles.selectedIcon, styles.iconContainer],
+            internalIcon: (<CrampsIcon style={styles.icon} fill= {crampsSelected ? selectedColor : unselectedColor}/>)
+        },
+        {
+            onPress: () => props.toggleSelectedView(VIEWS.Sleep),
+            touchableStyle: [sleepSelected && styles.selectedIcon, styles.iconContainer],
+            internalIcon: (<SleepIcon style={styles.icon} fill= {sleepSelected ? selectedColor : unselectedColor}/>)
+        },
+    ]
+
+
 
     return (
         <View style={[{backgroundColor: '#FFFFFF'}, props.expanded && styles.elevatedSelector]}>
             {props.expanded &&
             <View style={[styles.selectorContainer]}>
-                <TouchableOpacity onPress={() => props.toggleSelectedView(VIEWS.Flow)} 
-                    style={[flowSelected && styles.selectedIcon, styles.iconContainer]} >
-                    <FlowIcon style={styles.icon} fill={flowSelected ? selectedColor : unselectedColor}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.toggleSelectedView(VIEWS.Mood)} 
-                    style={[ moodSelected && styles.selectedIcon, styles.iconContainer]}>
-                    <MoodIcon style={styles.icon} fill= {moodSelected ? selectedColor : unselectedColor}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.toggleSelectedView(VIEWS.Exercise)} 
-                    style={[exerciseSelected && styles.selectedIcon, styles.iconContainer]}>
-                    <ExerciseIcon style={styles.icon} fill= {exerciseSelected ? selectedColor : unselectedColor}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.toggleSelectedView(VIEWS.Cramps)} 
-                    style={[ crampsSelected && styles.selectedIcon, styles.iconContainer]}>
-                    <CrampsIcon style={styles.icon} fill= {crampsSelected ? selectedColor : unselectedColor}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.toggleSelectedView(VIEWS.Sleep)} 
-                    style={[sleepSelected && styles.selectedIcon, styles.iconContainer]}>
-                    <SleepIcon style={styles.icon} fill= {sleepSelected ? selectedColor : unselectedColor}/>
-                </TouchableOpacity>
+                 {iconData.map((icon, i) => {
+                    return (
+                        <TouchableOpacity
+                            onPress={icon.onPress}
+                            key={i}
+                            style={icon.touchableStyle}
+                        >
+                            {icon.internalIcon}
+                        </TouchableOpacity>
+                    )
+                })}
             </View>
             }
         </View>
