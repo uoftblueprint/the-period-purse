@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, {createElement} from "react";
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import FlowIcon from "../../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import MoodIcon from "../../../ios/tppapp/Images.xcassets/icons/mood.svg";
@@ -47,29 +47,29 @@ const Selector = (props) => {
 
     const iconData = [
         {
-            onPress: () => props.toggleSelectedView(VIEWS.Flow),
-            touchableStyle: [flowSelected && styles.selectedIcon, styles.iconContainer],
-            internalIcon: (<FlowIcon style={styles.icon} fill= {flowSelected ? selectedColor : unselectedColor}/>)
+            view: VIEWS.Flow,
+            selected: flowSelected,
+            internalIcon: FlowIcon
         },
         {
-            onPress: () => props.toggleSelectedView(VIEWS.Mood),
-            touchableStyle: [moodSelected && styles.selectedIcon, styles.iconContainer],
-            internalIcon: (<MoodIcon style={styles.icon} fill= {moodSelected ? selectedColor : unselectedColor}/>)
+            view: VIEWS.Mood,
+            selected: moodSelected,
+            internalIcon: MoodIcon
         },
         {
-            onPress: () => props.toggleSelectedView(VIEWS.Exercise),
-            touchableStyle: [exerciseSelected && styles.selectedIcon, styles.iconContainer],
-            internalIcon: (<ExerciseIcon style={styles.icon} fill= {exerciseSelected ? selectedColor : unselectedColor}/>)
+            view: VIEWS.Exercise,
+            selected: exerciseSelected,
+            internalIcon: ExerciseIcon
         },
         {
-            onPress: () => props.toggleSelectedView(VIEWS.Cramps),
-            touchableStyle: [crampsSelected && styles.selectedIcon, styles.iconContainer],
-            internalIcon: (<CrampsIcon style={styles.icon} fill= {crampsSelected ? selectedColor : unselectedColor}/>)
+            view: VIEWS.Cramps,
+            selected: crampsSelected,
+            internalIcon: CrampsIcon
         },
         {
-            onPress: () => props.toggleSelectedView(VIEWS.Sleep),
-            touchableStyle: [sleepSelected && styles.selectedIcon, styles.iconContainer],
-            internalIcon: (<SleepIcon style={styles.icon} fill= {sleepSelected ? selectedColor : unselectedColor}/>)
+            view: VIEWS.Sleep,
+            selected: sleepSelected,
+            internalIcon: SleepIcon
         },
     ]
 
@@ -80,13 +80,16 @@ const Selector = (props) => {
             {props.expanded &&
             <View style={[styles.selectorContainer]}>
                  {iconData.map((icon, i) => {
+                    let renderedIcon = createElement(icon.internalIcon, {
+                        fill: icon.selected ? selectedColor : unselectedColor
+                    })
                     return (
                         <TouchableOpacity
-                            onPress={icon.onPress}
+                            onPress={() => props.toggleSelectedView(icon.view)}
                             key={i}
-                            style={icon.touchableStyle}
+                            style={[icon.selected && styles.selectedIcon, styles.iconContainer]}
                         >
-                            {icon.internalIcon}
+                            {renderedIcon}
                         </TouchableOpacity>
                     )
                 })}
