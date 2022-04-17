@@ -6,7 +6,7 @@ import { MoodHappyIcon, MoodSadIcon, MoodNeutralIcon, MoodSickIcon, MoodAngryIco
 import { ExerciseBallSportIcon, ExerciseCardioIcon, ExerciseCycleSportIcon, ExerciseMartialArtsIcon, ExerciseRacketSportsIcon, ExerciseStrengthIcon, ExerciseWaterSportIcon, ExerciseWinterSportIcon, ExerciseYogaIcon} from '../../services/utils/calendaricons';
 import { VIEWS } from '../../services/utils/constants';
 import { FILTER_COLOURS, FILTER_TEXT_COLOURS } from '../../services/utils/constants';
-import { STACK_SCREENS } from '../CalendarNavigator';
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 
 // The component that is used by each day in the calendar
 export const DayComponent = ({ date, state, marking, selectedView, navigation }) => {
@@ -66,7 +66,7 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
     }
 
     return(
-        <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
+        <TouchableOpacity onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
             <View style={styles.dayContainer} backgroundColor={bgColor}>
                 <Text style={{ color: textColor }}>
                     {date.day}    

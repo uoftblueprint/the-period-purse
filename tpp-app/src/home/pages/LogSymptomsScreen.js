@@ -10,7 +10,7 @@ import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { GETAllTrackingPreferences } from "../../services/SettingsService";
 import { POSTsymptomsForDate } from "../../services/LogSymptomsService";
 import { TRACK_SYMPTOMS } from "../../services/utils/constants";
-import { STACK_SCREENS } from "../CalendarNavigator";
+import { CALENDAR_STACK_SCREENS } from "../CalendarNavigator";
 import { getISODate } from '../../services/utils/helpers';
 
 
@@ -208,7 +208,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
         inputData[getISODate(selectedDate)] = {
           symptoms: submitSymp
         }
-        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData})
+        navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData})
         // navigation.goBack(isDirty);
       })
       .catch((e) => {
