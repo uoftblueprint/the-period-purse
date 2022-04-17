@@ -357,6 +357,7 @@ useEffect(() => {
                     break;
                 case "Only during period":
                     if (CycleService.isOnPeriod) {
+                        PushNotificationIOS.addNotificationRequest({
                         id: 'remindsymptoms',
                         title: 'Symptom Logging Reminder',
                         body: 'Reminder to log your period!',
@@ -368,6 +369,7 @@ useEffect(() => {
                             minute: true,
                         },
                     });
+                }
                     break;
                 default:
                     break;
