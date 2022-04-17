@@ -66,7 +66,7 @@ export default function SymptomsChoices ({ route, navigation }) {
         </BodyText>
         <Card containerStyle={[styles.card]}>
           <FlowDeselected style={styles.image}/>
-          <Text style={{marginTop: '3%', marginLeft: '28%', marginRight: '4%', fontSize: 14.5}}>By default, track your period by logging flow. Choose up to four other symptoms to track.</Text>
+          <Text style={{marginLeft: 85, marginRight: 6, fontSize: 14.5}}>By default, you can track your period by logging your flow. In addition, choose up to four other symptoms to track.</Text>
         </Card>
       </SafeAreaView>
 
