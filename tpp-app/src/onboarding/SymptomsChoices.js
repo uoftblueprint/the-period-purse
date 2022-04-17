@@ -4,7 +4,7 @@ import {Card, Text} from 'react-native-elements';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
-import { NextButton, SymptomsChoicesButton } from './components/ButtonComponents';
+import { NextButton, SymptomsChoicesButton, SkipButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer, SymptomsButtonContainer } from './components/ContainerComponents';
 import { POSTSymptomsToTrack } from '../services/OnboardingService';
@@ -86,6 +86,15 @@ export default function SymptomsChoices ({ route, navigation }) {
       </SymptomsButtonContainer>
 
       <TwoButtonContainer>
+        <SkipButton title="Skip" onPress={() => {
+          POSTSymptomsToTrack(true, false, false, false, false);
+          navigation.navigate(STACK_SCREENS.CONFIRMATION, {
+              periodLength: periodLength,
+              periodStart: periodStart,
+              periodEnd: periodEnd,
+              trackingPreferences: [true, false, false, false, false]
+            });
+            }}/>
         <NextButton title="Next" onPress={() => 
           {
             let trackingPreferences = [true, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL];
