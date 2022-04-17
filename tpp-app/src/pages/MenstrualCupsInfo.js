@@ -6,32 +6,30 @@ import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenB
 
 export default function MenstrualCupInfo({ navigation }) {
     return (
-        <SafeAreaView>
-            <ImageBackground source={OnboardingBackground} style={styles.container}>
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()} /></View>
-                    <Image
-                    source= {CupImage}
-                    style={styles.image}
-                        />
-                    <Text style={styles.titleText}>Menstrual Cup</Text>
+        <ImageBackground source={OnboardingBackground} style={styles.container}>
+            <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()} /></View>
+                <Image
+                source= {CupImage}
+                style={styles.image}
+                    />
+                <Text style={styles.titleText}>Menstrual Cup</Text>
 
-                    <Text style={styles.bodyText}>
-                    Just popping in to let you know - the earliest versions of the menstrual cup were designed in
-                    1932 and made of natural rubber. Today, menstrual cups are typically made of silicone, which is
-                    flexible, durable and anti-bacterial.
+                <Text style={styles.bodyText}>
+                Just popping in to let you know - the earliest versions of the menstrual cup were designed in
+                1932 and made of natural rubber. Today, menstrual cups are typically made of silicone, which is
+                flexible, durable and anti-bacterial.
 
-                    Menstrual cups are cost effective and sustainable, with almost no waste created each cycle. A
-                    cup costs about $40 CAD and can last at least two years.
+                Menstrual cups are cost effective and sustainable, with almost no waste created each cycle. A
+                cup costs about $40 CAD and can last at least two years.
 
-                    A menstrual cup can be used for up to 12 hours, depending on your menstrual flow. It does take
-                    a few uses to learn how often you want to “empty” your cup, and this can vary for each cycle
-                    and for every person.
-                    </Text>
+                A menstrual cup can be used for up to 12 hours, depending on your menstrual flow. It does take
+                a few uses to learn how often you want to “empty” your cup, and this can vary for each cycle
+                and for every person.
+                </Text>
 
-                </View>
-            </ImageBackground>
-        </SafeAreaView>
+            </SafeAreaView>
+        </ImageBackground>
     )
 }
 

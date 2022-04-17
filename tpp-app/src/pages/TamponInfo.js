@@ -6,32 +6,30 @@ import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenB
 
 export default function TamponInfo({ navigation }) {
     return (
-        <SafeAreaView>
-            <ImageBackground source={OnboardingBackground} style={styles.container}>
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
-                        <Image
-                        source= {TamponImage}
-                        style={styles.image}
-                            />
-                    <Text style={styles.titleText}>Tampons</Text>
+        <ImageBackground source={OnboardingBackground} style={styles.container}>
+            <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
+                    <Image
+                    source= {TamponImage}
+                    style={styles.image}
+                        />
+                <Text style={styles.titleText}>Tampons</Text>
 
-                    <Text style={styles.bodyText}>
-                    Heyyyy! Iz me, your period.
+                <Text style={styles.bodyText}>
+                Heyyyy! Iz me, your period.
 
-                    Can you imagine that Ancient Egyptians made tampons out of softened papyrus? Ancient
-                    Greeks wrapped bits of wood with lint. Eeek. Today, tampons are made of absorbent
-                    ingredients like purified cotton, rayon fibers, and sometimes bleach. But there are amazing
-                    companies that make biodegradable tampons out of organic material. Do you know what’s in
-                    your tampons?
+                Can you imagine that Ancient Egyptians made tampons out of softened papyrus? Ancient
+                Greeks wrapped bits of wood with lint. Eeek. Today, tampons are made of absorbent
+                ingredients like purified cotton, rayon fibers, and sometimes bleach. But there are amazing
+                companies that make biodegradable tampons out of organic material. Do you know what’s in
+                your tampons?
 
-                    Tampon applicators are one of the most common items found when doing a beach clean up.
-                    Double eeks. Can you find a tampon without an applicator?
-                    Don’t worry, tampons won’t get lost inside you and you can sleep with one inserted too.
-                    </Text>
-                </View>
-            </ImageBackground>
-        </SafeAreaView>
+                Tampon applicators are one of the most common items found when doing a beach clean up.
+                Double eeks. Can you find a tampon without an applicator?
+                Don’t worry, tampons won’t get lost inside you and you can sleep with one inserted too.
+                </Text>
+            </SafeAreaView>
+        </ImageBackground>
     )
 }
 
@@ -46,7 +44,7 @@ const styles = StyleSheet.create({
         width: 212, 
         height: 117, 
         left: 97, 
-        top: 135, 
+        top: "20%",
         bottom: 560
     },
     titleText: {
