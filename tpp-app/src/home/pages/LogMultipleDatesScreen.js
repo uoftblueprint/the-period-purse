@@ -7,6 +7,7 @@ import { getCalendarByYear, getISODate, getSymptomsFromCalendar } from '../../se
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 import {FILTER_COLOURS, FILTER_TEXT_COLOURS} from "../../services/utils/constants";
+import { calculateAverages } from "../../services/CalculationService";
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -154,16 +155,14 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                     inputData[getISODate(dateObject)] = {
                       symptoms: submitSymp
                     }
-            
                 }
             } catch (error) {
                 console.log(error);
             }
         }
 
-
-
         navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
+        await calculateAverages();
     }
 
     const alertPopup = (info) =>  {

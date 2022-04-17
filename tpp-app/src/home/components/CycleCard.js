@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   noTip: {
-    marginTop: 50
+    marginTop: "7%"
   },
   cycleText: {
     fontFamily: "Avenir",
