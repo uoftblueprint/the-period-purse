@@ -72,7 +72,7 @@ export default function SymptomsChoices ({ route, navigation }) {
 
       <SymptomsButtonContainer>
         <SafeAreaView style={[styles.symptoms, { backgroundColor: mood }]}>
-          <SymptomsChoicesButton onPress={handleMood} title="Mood" icon={<MoodIcon style={styles.icon}/>}/>
+          <SymptomsChoicesButton onPress={handleMood} title="Mood" icon={<MoodIcon style={styles.icon} fill="black"/>}/>
         </SafeAreaView>
         <SafeAreaView style={[styles.symptoms, { backgroundColor: exercise }]}>
           <SymptomsChoicesButton onPress={handleExercise} title="Exercise" icon={<ExerciseIcon style={styles.icon}/>}/>

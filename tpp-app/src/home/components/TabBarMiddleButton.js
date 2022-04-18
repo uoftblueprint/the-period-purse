@@ -42,7 +42,7 @@ export const TabBarMiddleButton = ({ style, inOverlay }) => {
       ]}
       onPress={() => {
         if (inOverlay) {
-          navigation.navigate('MiddleButton', { screen: 'Calendar' })
+          navigation.goBack();
         } else {
           calendarShowing && !overlayVisible
             ? navigation.navigate('MiddleButton', { screen: 'SelectLogOption' })
