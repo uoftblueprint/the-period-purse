@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, SafeAreaView, TouchableOpacity, Text } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
@@ -20,7 +20,7 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
         pastScrollRange={12}
 
         // Max amount of months allowed to scroll to the future. Default = 50
-        futureScrollRange={12}
+        futureScrollRange={0}
 
         // Enable or disable scrolling of calendar list
         scrollEnabled={true}
@@ -117,12 +117,14 @@ export default function CalendarScreen ({ route, navigation }) {
         
                                 // Add it into the marked state, which then updates the calendar
                                 newMarkedData[isoDate] = {
-                                    symptoms: symptomData
+                                    symptoms: symptomData,
+                                    disable: date > new Date()
                                 }
                             }
                         }
                     }
                     setMarked(markedState => ({...markedState, ...newMarkedData}))
+                    console.log("MARKED 127", newMarkedData);
                 } 
             }
         }
@@ -134,7 +136,7 @@ export default function CalendarScreen ({ route, navigation }) {
         useCallback(() => {
             let newMarkedData = route.params?.inputData
             if (newMarkedData) {
-                setMarked(markedState => ({...markedState, ...newMarkedData}))
+                setMarked(markedState => ({...markedState, ...newMarkedData}));
             }
 
         }, [route.params?.inputData])
@@ -152,19 +154,24 @@ export default function CalendarScreen ({ route, navigation }) {
     }
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
                 <Text style={styles.dropdownText}>{selectedView}</Text>
                 <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
                 {renderedArrow}
             </TouchableOpacity>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
-            <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
-        </View>
+            <View style={styles.calendar}>
+                <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
+            </View>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    calendar: {
+      marginBottom: '20%'
+    },
     container: {
         flex: 1,
         alignItems: 'stretch',
