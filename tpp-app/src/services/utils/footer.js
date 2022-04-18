@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text, Linking} from 'react-native';
 import FacebookIcon from "../../../ios/tppapp/Images.xcassets/icons/facebook.svg";
 import InstagramIcon from "../../../ios/tppapp/Images.xcassets/icons/instagram.svg";
 import TikTokIcon from "../../../ios/tppapp/Images.xcassets/icons/tiktok.svg";

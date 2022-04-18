@@ -123,8 +123,7 @@ export default function CalendarScreen ({ route, navigation }) {
                             }
                         }
                     }
-                    setMarked(markedState => ({...markedState, ...newMarkedData}))
-                    console.log("MARKED 127", newMarkedData);
+                    setMarked(markedState => ({...markedState, ...newMarkedData}));
                 } 
             }
         }
