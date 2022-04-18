@@ -144,12 +144,12 @@ const styles = StyleSheet.create({
     selectorContainer: {
         flex:1,
         alignSelf:'stretch',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         flexDirection: "row",
-        marginBottom: 50,
+        marginBottom: '14%',
     },
     allSelectedContainer: {
-        justifyContent: 'space-between'
+        justifyContent: 'space-evenly'
     },
     elevatedSelector: {
         position: "absolute",
