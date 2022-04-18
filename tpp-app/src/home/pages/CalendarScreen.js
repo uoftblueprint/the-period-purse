@@ -1,8 +1,8 @@
+import { View, StyleSheet, SafeAreaView, TouchableOpacity, Text } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
-import {View, StyleSheet, SafeAreaView} from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
-import Selector from '../components/Selector';
+import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
 import { GETYearData } from '../../services/CalendarService';
@@ -152,18 +152,14 @@ export default function CalendarScreen ({ route, navigation }) {
             setSelectedView(targetView);
         }
     }
-    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
+    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.navbarContainer}>
-                <Button icon={renderedArrow}
-                    iconRight={true}
-                    title={selectedView}
-                    titleStyle={styles.dropdownText}
-                        type="clear"
-                    onPress={() => setDropdownExpanded(!dropdownExpanded)}
-                    />
-            </View>
+            <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
+                <Text style={styles.dropdownText}>{selectedView}</Text>
+                <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
+                {renderedArrow}
+            </TouchableOpacity>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
             <View style={styles.calendar}>
                 <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
@@ -186,7 +182,11 @@ const styles = StyleSheet.create({
         marginTop: 0,
         flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#FFFFFF'
+    },
+    selectorItem:{
+        marginHorizontal: 10
     },
     horizContainer: {
         flex:1,
@@ -195,11 +195,16 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     dropdownText:{
-        fontStyle: 'normal',
-        fontWeight: "700",
-        color: "#000",
-        alignItems: 'center',
-        lineHeight:20,
+
+
+        fontFamily: "Avenir",
+        fontSize: 20,
+        fontWeight: "800",
+        lineHeight: 27,
+        letterSpacing: -0.4848649203777313,
+        textAlign: "center",
+
+
 
     },
 })
