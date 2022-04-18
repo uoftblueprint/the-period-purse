@@ -386,8 +386,10 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       position: 'absolute',
-      left: 18,
-      bottom: 27
+      left: 17.05,
+      right: 348.5,
+      top: 24.51,
+      bottom: 741.52
     },
     centerText: {
       flexDirection: 'column',

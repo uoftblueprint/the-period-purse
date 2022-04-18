@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
         marginBottom: '-35%',
     },
     navbarContainer: {
-        paddingTop: Constants.statusBarHeight + 50,
+        paddingTop: Constants.statusBarHeight,
         paddingBottom: '10%',
         position: 'relative',
         flexDirection: 'row',
@@ -321,8 +321,10 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       position: 'absolute',
-      left: '5%',
-      top: '170%'
+      left: 17.05,
+      right: 348.5,
+      top: 24.51,
+      bottom: 741.52
     },
     dayContainer:{
         borderColor: '#D1D3D4',
