@@ -21,10 +21,11 @@ export const CALENDAR_STACK_SCREENS = {
     CALENDAR_PAGE: "Calendar"
 };
 
-export default function CalendarNavigator() {
+export default function CalendarNavigator(route) {
+    console.log("calendar navigator 25", route);
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name={CALENDAR_STACK_SCREENS.CYCLE_CALENDAR_TABS} component={CycleCalendarTabs} />
+            <Stack.Screen name={CALENDAR_STACK_SCREENS.CYCLE_CALENDAR_TABS} component={CycleCalendarTabs(route)} />
             <Stack.Screen name={CALENDAR_STACK_SCREENS.SELECT_LOG_OPTION} component={SelectLogOptionOverlay}
               options={{
                 animation: 'fade',

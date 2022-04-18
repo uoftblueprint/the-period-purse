@@ -58,7 +58,8 @@ export function MyTabs() {
   );
 }
 
-const MainPage = () => {
+const MainPage = (route) => {
+  console.log("mainPage 62", route);
   return(
   <Tab.Navigator initialRouteName='MiddleButton'>
     <Tab.Screen name="Info" component={InfoNavigator} options={{
@@ -69,7 +70,7 @@ const MainPage = () => {
       tabBarActiveTintColor: "#5A9F93",
       tabBarInactiveTintColor: "#6D6E71",
     }}/>
-    <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
+    <Tab.Screen name="MiddleButton" component={CalendarNavigator(route)} options={{
       headerShown: false,
       tabBarButton: (props) => (
         <TabBarMiddleButton {...props} style={{ top: -30 }} inOverlay={false} />
@@ -87,13 +88,13 @@ const MainPage = () => {
   </Tab.Navigator>)
 }
 
-export function MainNavigator() {
+export function MainNavigator({ route, navigation }) {
   const navigationRef = useNavigationContainerRef();
 
   // Requests for notification permissions and also creates a local notification listener
   // Does not handle remote notifications from a server.
   useEffect(() => {
-
+    console.log("96", route);
     PushNotificationIOS.addEventListener('localNotification', ((notification) => {
       const isClicked = notification.getData().userInteraction === 1;
 
@@ -125,7 +126,7 @@ export function MainNavigator() {
   return (
       <NavigationContainer ref={navigationRef} independent={true}>
         <Stack.Navigator intialRouteName="footer" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name={STACK_SCREENS.MAIN_PAGE} component={MainPage}/>
+          <Stack.Screen name={STACK_SCREENS.MAIN_PAGE} component={MainPage(route)}/>
           <Stack.Screen name={STACK_SCREENS.PRIVACY_POLICY} component={PrivacyPolicyScreen}/>
           <Stack.Screen name={STACK_SCREENS.TERMS_AND_CONDITION} component={TermsAndConditions}/>
         </Stack.Navigator>
@@ -143,7 +144,7 @@ function App() {
   }, [])
   if(preferences && preferences[0] && preferences[0][1])
     // tracking preferences have been set, go to main page
-    return (<MainNavigator></MainNavigator>);
+    return (<Welcome></Welcome>);
   else
     // tracking preferences have not been set, go to onboarding
     return (<Welcome></Welcome>);

@@ -124,7 +124,7 @@ export default function CalendarScreen ({ route, navigation }) {
                         }
                     }
                     setMarked(markedState => ({...markedState, ...newMarkedData}))
-                    console.log("MARKED 127", newMarkedData);
+                    console.log("127", route);
                 } 
             }
         }
@@ -134,12 +134,12 @@ export default function CalendarScreen ({ route, navigation }) {
 
     useFocusEffect(
         useCallback(() => {
-            let newMarkedData = route.params?.inputData
+            let newMarkedData = route?.params?.inputData
             if (newMarkedData) {
                 setMarked(markedState => ({...markedState, ...newMarkedData}));
             }
 
-        }, [route.params?.inputData])
+        }, [route?.params?.inputData])
     )
 
     const toggleSelectedView = (targetView) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+import {StyleSheet, Text, View, ImageBackground, Image} from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { CrossButton } from './components/ButtonComponents';
 import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
@@ -44,45 +44,44 @@ export default function Confirmation ({ route, navigation }) {
   }
 
   function DateRange() {
-    if(periodStart && periodEnd)
-      return (<Text style={styles.text}>{periodStart} to {periodEnd}</Text>)
-    else
-      return (null);
+    return (<Text style={styles.text}>{periodStart} to {periodEnd}</Text>)
   }
 
   function Length() {
-    if(periodLength) 
-      return (<Text style={styles.text}>{periodLength} days</Text>);
-    else
-      return (null);
+    return (<Text style={styles.text}>{periodLength} days</Text>);
   }
 
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
-        <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS.MAIN_PAGE)}}/>
+        <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS.MAIN_PAGE, { showTooltip: true} )}}/>
       </BackButtonContainer>
-
-      <PaddyIcon style={{alignSelf: "center"}}/>
+      <Image style={{alignSelf: "center", width: '35%', height: '16%', marginTop: '-45%'}} source={require('../../ios/tppapp/Images.xcassets/SplashScreen.imageset/splashscreen.png')} />
       <Text style={styles.bigText}>You're all set!</Text>
 
-      <View style={styles.row}>
-        <Text style={styles.smallText}>Average period length</Text>
-        <Length/>
-      </View>
-      <HorizontalLine></HorizontalLine>
+      { periodLength && <View>
+        <View style={styles.row}>
+          <Text style={styles.smallText}>Average period length</Text>
+          <Length/>
+        </View>
+        <HorizontalLine/>
+      </View> }
 
-      <View style={styles.row}>
-        <Text style={styles.smallText}>Last period</Text>
-        <DateRange/>
-      </View>
-      <HorizontalLine></HorizontalLine>
+      { periodStart && periodEnd && <View>
+        <View style={styles.row}>
+          <Text style={styles.smallText}>Last period</Text>
+          <DateRange/>
+        </View>
+        <HorizontalLine/>
+      </View> }
 
-      <View style={styles.row}>
-        <Text style={styles.smallText}>Symptoms to log</Text>
-        <IconPref/>
-      </View>
-      <HorizontalLine></HorizontalLine>
+      { trackingPreferences.length && <View>
+        <View style={styles.row}>
+          <Text style={styles.smallText}>Symptoms to log</Text>
+          <IconPref/>
+        </View>
+        <HorizontalLine/>
+      </View> }
     </ImageBackground>
   );
 }

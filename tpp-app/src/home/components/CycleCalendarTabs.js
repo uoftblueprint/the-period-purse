@@ -7,7 +7,8 @@ import Constants from 'expo-constants';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function HomeNavigator() {
+export default function HomeNavigator(route) {
+  console.log("home navigator 11", route);
   return (
       <Tab.Navigator 
         style={{top: Constants.statusBarHeight}}
@@ -32,7 +33,7 @@ export default function HomeNavigator() {
           }
         }}
       >
-        <Tab.Screen name="Calendar" component={CalendarScreen} />
+        <Tab.Screen name="Calendar" component={CalendarScreen(route)} />
         <Tab.Screen name="Cycle" component={CycleScreen} />
       </Tab.Navigator>
   );
