@@ -6,8 +6,9 @@ import {View, Text, StyleSheet} from 'react-native';
  function OnPeriodText({periodDays}){
    return (
      <View style={styles.periodTextContainer}>
-       <Text style={styles.cycleText}>Period Day </Text>
+       <Text style={styles.cycleText}>Day </Text>
        <Text style={styles.cycleNumber}> {periodDays} </Text>
+       <Text style={styles.cycleText}> of period </Text>
      </View>
    )
  }

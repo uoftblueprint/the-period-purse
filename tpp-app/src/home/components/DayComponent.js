@@ -41,8 +41,10 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
                     break;
                 case 'exercise':
                     attribute = filterExercise(symptomAttribute.exercise_minutes)
-                    iconName = viewKey + symptomAttribute.exercise.toLowerCase()
-                    iconName = iconName.replace(/\s+/g, '')
+                    if (symptomAttribute.exercise) {
+                        iconName = viewKey + symptomAttribute.exercise.toLowerCase()
+                        iconName = iconName.replace(/\s+/g, '')
+                    }
 
                     break;
             }

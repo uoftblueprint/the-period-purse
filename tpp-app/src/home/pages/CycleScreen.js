@@ -47,7 +47,7 @@ export default function CycleScreen ({navigation}){
     CYCLE_DONUT_PERCENT: 0,
     DAYS_TILL_PERIOD: 0,
     INTERVALS: [],
-    SHOW_TIP: true
+    SHOW_TIP: false
   };
 
 
@@ -66,6 +66,7 @@ export default function CycleScreen ({navigation}){
 
      CycleService.GETPeriodDay().then(days => {
        setPeriodDays(days);
+       setShowTip(days <= 0);
      })
      .catch(() => {setPeriodDays(DEFAULTS.PERIOD_DAYS)});
 
