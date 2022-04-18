@@ -37,15 +37,15 @@ Sentry.init({
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const InfoIconStyled = ({tintColor}) => (
+const InfoIconStyled = (props) => (
     <View style={{top: 3}}>
-        <InfoIcon />
+        <InfoIcon fill={props.focused ? '#5A9F93' : '#6D6E71'} />
     </View>
 );
 
-const SettingsIconStyled = ({tintColor}) => (
+const SettingsIconStyled = (props) => (
   <View style={{top: 3}}>
-      <SettingsIcon/>
+      <SettingsIcon fill={props.focused ? '#5A9F93' : '#6D6E71'} />
   </View>
 );
 
@@ -59,32 +59,30 @@ export function MyTabs() {
 }
 
 const MainPage = () => {
-  return(
-  <Tab.Navigator initialRouteName='MiddleButton'>
-    <Tab.Screen name="Info" component={InfoNavigator} options={{
-      headerShown: false,
-      tabBarIcon: ({tintColor}) => (
-        <InfoIconStyled {...tintColor} />
-      ),
-      tabBarActiveTintColor: "#5A9F93",
-      tabBarInactiveTintColor: "#6D6E71",
-    }}/>
-    <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
-      headerShown: false,
-      tabBarButton: (props) => (
-        <TabBarMiddleButton {...props} style={{ top: -30 }} inOverlay={false} />
-      )
-    }}/>
-    <Tab.Screen name="Settings" component={Settings} options={{
-      headerShown: false,
-      tabBarIcon: (props) => (
-        <SettingsIconStyled {...props} />
-    ),
-      tabBarActiveTintColor: "#5A9F93",
-      tabBarInactiveTintColor: "#6D6E71",
-    }}/>
-
-  </Tab.Navigator>)
+  return(<Tab.Navigator initialRouteName='MiddleButton'>
+          <Tab.Screen name="Info" component={InfoNavigator} options={{
+            headerShown: false,
+            tabBarIcon: (props) => (
+              <InfoIconStyled {...props} />
+            ),
+            tabBarActiveTintColor: "#5A9F93",
+            tabBarInactiveTintColor: "#6D6E71",
+          }}/>
+          <Tab.Screen name="MiddleButton" component={CalendarNavigator} options={{
+            headerShown: false,
+            tabBarButton: (props) => (
+              <TabBarMiddleButton {...props} style={{ top: -30 }} inOverlay={false} />
+            )
+          }}/>
+          <Tab.Screen name="Settings" component={Settings} options={{
+            headerShown: false,
+            tabBarIcon: (props) => (
+              <SettingsIconStyled {...props} />
+            ),
+            tabBarActiveTintColor: "#5A9F93",
+            tabBarInactiveTintColor: "#6D6E71",
+          }}/>
+        </Tab.Navigator>)
 }
 
 export function MainNavigator() {

@@ -70,7 +70,7 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
     }
 
     return(
-        <TouchableOpacity disabled={bgColor === FILTER_COLOURS.DISABLED && textColor === FILTER_TEXT_COLOURS.DISABLED } onPress={() => {navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}}>
+        <TouchableOpacity disabled={bgColor === FILTER_COLOURS.DISABLED && textColor === FILTER_TEXT_COLOURS.DISABLED } onPress={() => {navigation.navigate(CALENDAR_STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}}>
             <View style={styles.dayContainer} backgroundColor={bgColor}>
                 <Text style={{ color: textColor }}>
                     {date.day}    

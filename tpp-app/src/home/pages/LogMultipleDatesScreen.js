@@ -6,6 +6,7 @@ import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar} from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
+import Constants from 'expo-constants';
 import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/utils/constants";
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
@@ -29,7 +30,7 @@ const DayComponent = ({props}) => {
 }
 
 export const Calendar = ({ navigation, setSelectedDates, markedDates}) => {
-    
+
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -161,7 +162,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
               },
             },
           });
-    
+
           isMarked
             ? setNumSelected(numSelected + 1)
             : setNumSelected(numSelected - 1);
@@ -176,11 +177,11 @@ export default function LogMultipleDatesScreen ({ navigation }) {
               },
             },
           });
-    
+
           setNumSelected(numSelected + 1);
         }
     };
-        
+
 
     const onSubmit = async() => {
         let selectedDates = [];
@@ -191,7 +192,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             if (markedDates[date].marked && !markedDates[date].originalMarked) {
                 const processed = date.split("-");
                 const data = {year: processed[0], month: processed[1], day: processed[2]};
-                
+
                 selectedDates.push(data);
 
             // Dates that were selected before that have been marked as unselected
@@ -258,7 +259,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                   <CloseIcon fill={'#181818'}/>
                 </TouchableOpacity>
                 <View style={styles.navbarTextContainer}>
-                    
+
                     <Text style={styles.navbarTitle}>Tap date to log period</Text>
                     <Text style={styles.navbarSubTitle}>
                         Selected dates will have their Flow level set to Medium
@@ -284,14 +285,13 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
-        
+        flex: 1,
     },
     calendar: {
         marginBottom: '-35%',
     },
     navbarContainer: {
-        paddingTop: '12%',
+        paddingTop: Constants.statusBarHeight + 50,
         paddingBottom: '10%',
         position: 'relative',
         flexDirection: 'row',
@@ -345,10 +345,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom:30,
         right:40,
-        width: 60,  
-        height: 60,   
-        borderRadius: 30,            
-        backgroundColor: '#5A9F93', 
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: '#5A9F93',
     },
     selectedIcon: {
         position: 'relative',
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
         left: -2,
         marginLeft: 'auto',
         marginRight: 'auto'
-        
+
     },
 
 })

@@ -223,7 +223,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
         alertPopup(errorInfo)
           .then(() => { // YES close screen
             navigation.goBack();
-          })          
+          })
           .catch() // CANCEL do nothing and close alert
         setSubmitting(false);
       })
@@ -279,7 +279,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 
   return (
-    <SafeAreaView style={styles.screen}><ScrollView>
+    <SafeAreaView style={styles.screen}><ScrollView style={styles.content}>
 
       {/* HEADER NAV */}
       <View style={styles.navbarContainer}>
@@ -303,21 +303,23 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
           {/* SWITCH AND DISPLAY DATE */}
           <View style={styles.switchDate}>
-            {isNewDayValid(false, selectedDate) &&
-              <DateArrow
-                onPress={async () => await switchDate(false)}
-                isRight={false}
-              />
+            {isNewDayValid(false, selectedDate)
+              ? <DateArrow
+                  onPress={async () => await switchDate(false)}
+                  isRight={false}
+                />
+              : <View opacity={0}><DateArrow/></View>
             }
             <View style={styles.centerText}>
               <Text style={styles.subtitle}>Log your symptoms for:</Text>
               <Text style={styles.navbarTitle}>{dateStr}</Text>
             </View>
-            {isNewDayValid(true, selectedDate) &&
-              <DateArrow
-                onPress={async () => await switchDate(true)}
-                isRight={true}
-              />
+            {isNewDayValid(true, selectedDate)
+              ? <DateArrow
+                  onPress={async () => await switchDate(true)}
+                  isRight={true}
+                />
+              : <View opacity={0}><DateArrow/></View>
             }
           </View>
 
@@ -352,12 +354,14 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#EFEFF4',
         flex: 1,
-        paddingTop: Constants.statusBarHeight
+    },
+    content: {
+        backgroundColor: '#fff',
     },
     navbarContainer: {
-        paddingTop: 98,
+        paddingTop: Constants.statusBarHeight,
         paddingBottom: 30,
         position: 'relative',
         flexDirection: 'row',
@@ -374,8 +378,7 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontWeight: "600",
         fontSize: 20,
-        paddingLeft: 30,
-        paddingRight: 30
+        paddingHorizontal: 30
     },
     close: {
       height: 30,
