@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {StyleSheet, Text, ImageBackground, SafeAreaView, View, ScrollView} from 'react-native';
 import CycleCard from '../components/CycleCard';
@@ -33,7 +32,7 @@ function PeriodNotification(props){
   return (
     <View style={[styles.periodNotifCard, styles.element]}>
       { props.daysTillPeriod > 0 && <Text style={styles.periodNotifText}> Your period might be coming within the next {props.daysTillPeriod} days.</Text> }
-      { props.daysTillPeriod === 0 && <Text style={styles.periodNotifText}> Your period will likely come any day now!</Text> }
+      { props.daysTillPeriod <= 0 && <Text style={styles.periodNotifText}> Your period will likely come any day now!</Text> }
         {props.children}
     </View>
   )
