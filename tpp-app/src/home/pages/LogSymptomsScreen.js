@@ -4,14 +4,15 @@ import Constants from 'expo-constants';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
 import Accordion from "../components/Accordion";
-import { getDateString, isValidDate } from "../../services/utils/helpers";
+import {flowOnOffModeChanged, getDateString, isValidDate} from "../../services/utils/helpers";
 import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils/helpers";
 import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { GETAllTrackingPreferences } from "../../services/SettingsService";
 import { POSTsymptomsForDate } from "../../services/LogSymptomsService";
 import { TRACK_SYMPTOMS } from "../../services/utils/constants";
-import { STACK_SCREENS } from "../CalendarNavigator";
+import { CALENDAR_STACK_SCREENS } from "../CalendarNavigator";
 import { getISODate } from '../../services/utils/helpers';
+import { calculateAverages } from "../../services/CalculationService";
 
 
 // Alert popup constants
@@ -203,13 +204,19 @@ export default function LogSymptomsScreen({ navigation, route }) {
     let submitSymp = notEmpty ? finalSymps : null;
 
     POSTsymptomsForDate(selectedDate.getDate(), selectedDate.getMonth() + 1, selectedDate.getFullYear(), submitSymp)
-      .then(() => {
-        let inputData = {}
-        inputData[getISODate(selectedDate)] = {
-          symptoms: submitSymp
-        }
-        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData})
-        // navigation.goBack(isDirty);
+      .then(async () => {
+          let inputData = {}
+          inputData[getISODate(selectedDate)] = {
+              // submitSymp may be null, in that case pass back blank Symptoms object
+              symptoms: submitSymp ? submitSymp : new Symptoms()
+          }
+          navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData})
+          // navigation.goBack(isDirty);
+
+          // Only need to recalculateAverages if flow was changed
+          if (flowOnOffModeChanged(submitSymp.flow, stored.flow)) {
+              await calculateAverages();
+          }
       })
       .catch((e) => {
         let errorInfo = submitError(typeof e === 'string' ? e : JSON.stringify(e));

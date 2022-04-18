@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ScrollView} from 'react-native';
 import addDays from 'date-fns/addDays';
-import { STACK_SCREENS } from '../CalendarNavigator';
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ShowMore = ({navigation}) => {
     return(
-        <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.CYCLE_HISTORY, {screen: STACK_SCREENS.CYCLE_HISTORY})}>
+        <TouchableOpacity onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.CYCLE_HISTORY, {screen: CALENDAR_STACK_SCREENS.CYCLE_HISTORY})}>
             <View style={styles.showMoreButton}>
                 <Text style={styles.showMoreText}>
                     Show More

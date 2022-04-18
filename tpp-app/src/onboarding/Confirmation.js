@@ -20,7 +20,9 @@ export const STACK_SCREENS = {
   REGISTRATION : "Registration",
   PASSWORD : "Password",
   SUCCESS : "Success",
-  CONFIRMATION : "Confirmation"
+  CONFIRMATION : "Confirmation",
+  TERMS_AND_CONDITION: "TermsAndCondition",
+  PRIVACY_POLICY: "PrivacyPolicy"
 };
 
 export default function Confirmation ({ route, navigation }) {

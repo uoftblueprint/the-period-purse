@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
+import {StyleSheet, Text, View, Image, ImageBackground, SafeAreaView} from 'react-native';
 import PadImage from "tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-2x.png";
 import { BackButton } from '../home/components/BackButtonComponent';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
@@ -7,33 +7,33 @@ import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenB
 export default function PadInfo({ navigation }) {
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()} /></View>
                     <Image
                         source= {PadImage}
                         style={styles.image}
                         />
                 <Text style={styles.titleText}>Pads</Text>
-                
+
                 <Text style={styles.bodyText}>
                     BRB, grabbing a pad.
 
-                    Despite being the oldest period product, 
-                    invented back in the 10th century, we’re still 
+                    Despite being the oldest period product,
+                    invented back in the 10th century, we’re still
                     the most popular choice for youth.
 
                     Do you know what is inside your pad? Most
-                    are made from plastic, so every pad you’ve 
-                    ever used is still sitting in a landfill. Ack. 
-                    There are brands that use healthier, biodegradable ingredients like bamboo. You 
+                    are made from plastic, so every pad you’ve
+                    ever used is still sitting in a landfill. Ack.
+                    There are brands that use healthier, biodegradable ingredients like bamboo. You
                     gotta go check them out.
 
                     Period prep time: remember to keep one
                     or two pads in your school backpack for you
                     and your friends! They come in different sizes and absorbencies, so you’ll have to test them out to see which ones work best for you during your cycle.
                 </Text>
-            
-            </View>
+
+            </SafeAreaView>
         </ImageBackground>
     )
 }
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         width: 80, 
         height: 164, 
         left: 165, 
-        top: 88, 
+        top: "13%",
         bottom: 560
     },
     titleText: {
