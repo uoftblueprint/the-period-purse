@@ -11,7 +11,7 @@ import CycleHistoryScreen from './pages/CycleHistoryScreen';
 // tab bar on the bottom is kept when navigating within pages.
 const Stack = createNativeStackNavigator();
 
-export const STACK_SCREENS = {
+export const CALENDAR_STACK_SCREENS = {
     CYCLE_CALENDAR_TABS: "CycleCalendarTabs",
     SELECT_LOG_OPTION: "SelectLogOption",
     LOG_SYMPTOMS: "LogSymptoms",
@@ -24,15 +24,15 @@ export const STACK_SCREENS = {
 export default function CalendarNavigator() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name={STACK_SCREENS.CYCLE_CALENDAR_TABS} component={CycleCalendarTabs} />
-            <Stack.Screen name={STACK_SCREENS.SELECT_LOG_OPTION} component={SelectLogOptionOverlay}
+            <Stack.Screen name={CALENDAR_STACK_SCREENS.CYCLE_CALENDAR_TABS} component={CycleCalendarTabs} />
+            <Stack.Screen name={CALENDAR_STACK_SCREENS.SELECT_LOG_OPTION} component={SelectLogOptionOverlay}
               options={{
                 animation: 'fade',
                 presentation: 'transparentModal'
               }} />
-            <Stack.Screen name={STACK_SCREENS.LOG_SYMPTOMS} component={LogSymptomsScreen} options={{ presentation: 'fullScreenModal' }}/>
-            <Stack.Screen name={STACK_SCREENS.LOG_MULTIPLE_DATES} component={LogMultipleDatesScreen} options={{ presentation: 'fullScreenModal' }}/>
-            <Stack.Screen name={STACK_SCREENS.CYCLE_HISTORY} component={CycleHistoryScreen}/>
+            <Stack.Screen name={CALENDAR_STACK_SCREENS.LOG_SYMPTOMS} component={LogSymptomsScreen} options={{ presentation: 'fullScreenModal' }}/>
+            <Stack.Screen name={CALENDAR_STACK_SCREENS.LOG_MULTIPLE_DATES} component={LogMultipleDatesScreen} options={{ presentation: 'fullScreenModal' }}/>
+            <Stack.Screen name={CALENDAR_STACK_SCREENS.CYCLE_HISTORY} component={CycleHistoryScreen}/>
         </Stack.Navigator>
     )
 }
