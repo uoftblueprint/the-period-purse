@@ -82,6 +82,7 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 
 // Calendar Screen component that can be accessed by other functions
 export default function CalendarScreen ({ route, navigation }) {
+    console.log("85");
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
     const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
     const [yearInView, setYearInView] = useState([])
@@ -134,12 +135,12 @@ export default function CalendarScreen ({ route, navigation }) {
 
     useFocusEffect(
         useCallback(() => {
-            let newMarkedData = route?.params?.inputData
+            let newMarkedData = route.params?.inputData
             if (newMarkedData) {
                 setMarked(markedState => ({...markedState, ...newMarkedData}));
             }
 
-        }, [route?.params?.inputData])
+        }, [route.params?.inputData])
     )
 
     const toggleSelectedView = (targetView) => {

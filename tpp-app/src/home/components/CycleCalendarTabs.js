@@ -33,7 +33,7 @@ export default function HomeNavigator(route) {
           }
         }}
       >
-        <Tab.Screen name="Calendar" component={CalendarScreen(route)} />
+        <Tab.Screen name="Calendar" component={CalendarScreen} />
         <Tab.Screen name="Cycle" component={CycleScreen} />
       </Tab.Navigator>
   );
