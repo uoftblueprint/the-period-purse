@@ -201,14 +201,14 @@ export default function LogSymptomsScreen({ navigation, route }) {
     let finalSymps = new Symptoms(flowStr, moodStr, sleepMins, crampsStr, exerciseObj, notesStr);
     // If all symptoms are null, POST null instead of an empty Symptom object
     let notEmpty = Object.values(finalSymps).some((symptom) => symptom !== null);
-    let submitSymp = notEmpty ? finalSymps : null;
+    let submitSymp = notEmpty ? finalSymps : new Symptoms();
 
     POSTsymptomsForDate(selectedDate.getDate(), selectedDate.getMonth() + 1, selectedDate.getFullYear(), submitSymp)
       .then(async () => {
           let inputData = {}
           inputData[getISODate(selectedDate)] = {
               // submitSymp may be null, in that case pass back blank Symptoms object
-              symptoms: submitSymp ? submitSymp : new Symptoms()
+              symptoms: submitSymp
           }
           navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData})
           // navigation.goBack(isDirty);

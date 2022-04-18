@@ -32,7 +32,8 @@ function InfoCard(props){
 function PeriodNotification(props){
   return (
     <View style={[styles.periodNotifCard, styles.element]}>
-      <Text style={styles.periodNotifText}> Your period might be coming within the next {props.daysTillPeriod} days.</Text>
+      { props.daysTillPeriod > 0 && <Text style={styles.periodNotifText}> Your period might be coming within the next {props.daysTillPeriod} days.</Text> }
+      { props.daysTillPeriod === 0 && <Text style={styles.periodNotifText}> Your period will likely come any day now!</Text> }
         {props.children}
     </View>
   )
