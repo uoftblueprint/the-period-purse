@@ -17,15 +17,6 @@ import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
 import {getSymptomsFromCalendar, getCalendarByYear} from '../services/utils/helpers.js';
 
-function Header(){
-    return(
-    <View style={ styles.headerContainer}>
-        <Text style={styles.headerText}>Settings</Text>
-        <View style={styles.nonCenterComponent}><Text></Text></View>
-    </View>
-    );
-}
-
 const PreferenceButton = (props) => {
 
     return (
@@ -417,7 +408,7 @@ useEffect(() => {
         return date;
     };
 return (
-    <TouchableOpacity onPress={() => props.navigation.navigate("Notifications")}> 
+  
     <SafeAreaView style={{top: -50}}>
         <Text style={styles.heading}>Notifications</Text>
         <NotificationsButton 
@@ -430,8 +421,8 @@ return (
             subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`} 
             toggle={toggleSymptomsSwitch}
             enabled={remindSymptomsEnabled}/>
-
-
+  <TouchableOpacity onPress={() => props.navigation.navigate("Notifications")}> 
+<View>
     
      <SafeAreaView style={styles.notificationSettingsView} >
     <Text style={styles.optionText}>Customize notifications</Text>
@@ -451,9 +442,10 @@ return (
         borderBottomColor: '#CFCFCF',
         borderBottomWidth: 1,
         }}/>
-       
+       </View>
+       </TouchableOpacity>
     </SafeAreaView>
-    </TouchableOpacity>
+
 )
 }
 
