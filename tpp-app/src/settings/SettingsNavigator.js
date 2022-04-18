@@ -1,11 +1,13 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {TouchableOpacity} from 'react-native';
 import Settings from "./Settings"
 import Notifications from './Notifications';
 const Stack = createNativeStackNavigator();
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export default function SettingsNavigator() {
+
+export default function SettingsNavigator({navigation}) {
     return(
         <Stack.Navigator intialRouteName="Settings" screenOptions={{ headerShown: true,
             headerStyle: {height: 200},
@@ -16,7 +18,14 @@ export default function SettingsNavigator() {
             },
           }}>
              <Stack.Screen name={"Settings"} component={Settings} />
-             <Stack.Screen name={"Notifications"} component={Notifications} />
+             <Stack.Screen name={"Notifications"} component={Notifications} 
+              options={{
+                headerLeft : () => (<TouchableOpacity 
+                  onPress={() => navigation.goBack()}
+              >
+                  <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
+              </TouchableOpacity>)
+              }}/>
         </Stack.Navigator>
     )
 };

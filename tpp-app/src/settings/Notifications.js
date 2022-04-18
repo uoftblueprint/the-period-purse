@@ -1,89 +1,119 @@
 import React, {useEffect, useState} from 'react';
-import {View,  Text, StyleSheet, Image, TouchableOpacity, ImageBackground} from 'react-native'; 
+import {View,  Text, StyleSheet, ImageBackground} from 'react-native'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from './NotificationAccordion'
-import { GETRemindLogPeriodFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsFreq, GETRemindLogSymptomsTime } from '../services/SettingsService';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 
+
 export default function Notifications () {
-    
-    // states 
-    const [advanceDays, setAdvanceDays] = useState("2 days");
-    const [periodReminderTime, setPeriodReminderTime] = useState("10:00 AM");
-    const [symptomsReminderFreq, setSymptomsReminderFreq] = useState("Only During Period");
-    const [symptomsReminderTime, setSymptomsReminderTime] = useState("10:00 AM")
+    const [remindPeriodFreq, setRemindPeriodFreq] = useState("2 days");
+    const [remindPeriodTime, setRemindPeriodTime] = useState("10:00");
+    const [remindPeriodTimeMeridian, setRemindPeriodTimeMeridian] = useState("AM");
+    const [remindSymptomsFreq, setRemindSymptomsFreq] = useState("Every day");
+    const [remindSymptomsTime, setRemindSymptomsTime] = useState("10:00");
+    const [remindSymptomsTimeMeridian, setRemindSymptomsTimeMeridian] = useState("AM");
 
-    // get for all of the shit, set the text 
-    useEffect(() => {
-        async function setPickers () {
-            let storedAdvanceDays = await GETRemindLogPeriodFreq()
-            let storedPeriodReminderTime = await GETRemindLogPeriodTime()
-            let storedSymptomsReminderFreq = await GETRemindLogSymptomsFreq()
-            let storedSymptomsReminderTime = await GETRemindLogSymptomsTime()
+    const [notificationSettingsValues, setNotificationSettingsValues] = useState([remindPeriodFreq, remindPeriodTime, remindPeriodTimeMeridian,
+        remindSymptomsFreq, remindSymptomsTime, remindSymptomsTimeMeridian]);
+    const [notificationSettingFunctions, setNotificationSettingFunctions] = useState([setRemindPeriodFreq, setRemindPeriodTime, setRemindPeriodTimeMeridian,
+        setRemindSymptomsFreq, setRemindSymptomsTime, setRemindSymptomsTimeMeridian]);
 
-            if (storedAdvanceDays != null) {
-                setAdvanceDays(storedAdvanceDays + " days")
-            }
+// get the frequencies
+useEffect(() => {
+    async function getFreqTimes() {
+        let storedPeriodFreq = await GETRemindLogPeriodFreq();
+        let storedSymptomFreq = await GETRemindLogSymptomsFreq();
+        let storedPeriodTime = await GETRemindLogPeriodTime();
+        let storedSymptomTime = await GETRemindLogSymptomsTime();
 
-            if (storedPeriodReminderTime != null) {
-                setPeriodReminderTime(storedPeriodReminderTime)
-            }
-
-            if (storedSymptomsReminderFreq != null) {
-                setSymptomsReminderFreq(storedSymptomsReminderFreq)
-            }
-
-            if (storedSymptomsReminderTime != null) {
-                setSymptomsReminderTime(storedSymptomsReminderTime)
-            }
+        if (storedPeriodFreq) {
+            setRemindPeriodFreq(storedPeriodFreq);
         }
-    setPickers();
-    },[]);
+
+        if (storedSymptomFreq) {
+            setRemindSymptomsFreq(storedPeriodFreq);
+        }
+
+        if (storedPeriodTime) {
+            setRemindPeriodTime(storedPeriodTime.slice(0, storedPeriodTime.length - 2));
+            setRemindPeriodTimeMeridian(storedPeriodTime.slice(-2));
+
+        }
+
+        if(storedSymptomTime) {
+            setRemindSymptomsTime(storedSymptomTime.slice(0, storedSymptomTime.length - 2));
+            setRemindSymptomsTimeMeridian(storedSymptomTime.slice(-2));
+        }
+// [periodFreq, periodTime, periodMerdian, symptomsFreq, symptomsTime, symptomsMerdian], same pattern for setting functions
+        setNotificationSettingsValues([remindPeriodFreq, remindPeriodTime, remindPeriodTimeMeridian,
+                                        remindSymptomsFreq, remindSymptomsTime, remindSymptomsTimeMeridian]);
+
+        setNotificationSettingFunctions([setRemindPeriodFreq, setRemindPeriodTime, setRemindPeriodTimeMeridian,
+                                        setRemindSymptomsFreq, setRemindSymptomsTime, setRemindSymptomsTimeMeridian]);
+                        
+    }
+    getFreqTimes();
+}, []);
 
     return (
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+                        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>  
         <SafeAreaView>
-        <View style={{top: -120}}>
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>  
-            <NotificationStack name={"Remind me to log period"}/>
+        <View style={{top: -90}}>
 
-            <Accordion title={"How many days in advance"} selectedText={advanceDays}  type={"days"}/> 
+            <NotificationStack name={"Remind me to log period"}/>
             <View
             style={{
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
                 }}/>
-            <Accordion title={"Reminder time"} selectedText={periodReminderTime} type={"periodTime"}/>
-                
+
+            <Accordion title={"How many days in advance"} selectedText={remindPeriodFreq} type={"days"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/> 
+            <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
+            <Accordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} type={"periodTime"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
+            <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
             <NotificationStack name={"Remind me to log symptoms"}/>
-            <Accordion title={"Repeat"} selectedText={symptomsReminderFreq}  type={"howOften"}/> 
             <View
             style={{
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
                 }}/>
-            <Accordion title={"Reminder time"} selectedText={symptomsReminderTime} type={"symptomTime"}/>   
-    </ScrollView>
+            <Accordion title={"Repeat"} selectedText={remindSymptomsFreq}  type={"howOften"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/> 
+            <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
+            <Accordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} type={"symptomTime"} pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>   
+            <View
+            style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                }}/>
         </View>
         </SafeAreaView>
+        </ScrollView>
         </ImageBackground>
     )
 }                
 
 const NotificationStack = (props) => {
     return (
-        <SafeAreaView>
+
         <SafeAreaView style={styles.rowContainer} >
         <Text style={styles.optionText}>{props.name}</Text>
     
         </SafeAreaView>
-        <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-    </SafeAreaView>
+      
     )
 }
 
@@ -97,12 +127,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-      dropShadow: {
-        shadowColor: 'rgba(0,0,0, .2)',
-        shadowOffset: { height: 0, width: 0 },
-        shadowOpacity: 0, //default is 1
-        shadowRadius: 0//default is 1
+        bottom: -10
     },
     dropDownTextBox: {
         flexDirection: 'row',

@@ -17,6 +17,14 @@ import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
 import {getSymptomsFromCalendar, getCalendarByYear} from '../services/utils/helpers.js';
 
+function Header(){
+    return(
+    <View style={ styles.headerContainer}>
+        <Text style={styles.headerText}>Settings</Text>
+        <View style={styles.nonCenterComponent}><Text></Text></View>
+    </View>
+    );
+}
 
 const PreferenceButton = (props) => {
 
@@ -409,7 +417,6 @@ useEffect(() => {
         return date;
     };
 return (
-    // pass in parent data and setting functions through navigation 
     <TouchableOpacity onPress={() => props.navigation.navigate("Notifications")}> 
     <SafeAreaView style={{top: -50}}>
         <Text style={styles.heading}>Notifications</Text>
@@ -623,5 +630,6 @@ const styles = StyleSheet.create({
     },
     termsText: {
         color: "#5A9F93",
-    }
+    },
+    
 });

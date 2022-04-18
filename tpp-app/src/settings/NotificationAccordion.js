@@ -27,7 +27,7 @@ export default class NotficationAccordion extends Component {
                 this.state.expanded &&
                 <View style={styles.child}>
                     
-                <PickerTab pickerType={this.props.type} selectedText={this.props.selectedText}/>
+                <PickerTab pickerType={this.props.type} selectedText={this.props.selectedText} pickerDataValues={this.props.pickerDataValues} pickerDataFunctions={this.props.pickerDataFunctions}/>
                 </View>
             }
         </SafeAreaView>
@@ -110,12 +110,13 @@ const SymptomTimePicker = (props) => {
     const [selectedValue, setSelectedValue] = useState(storedTime);
     const [selectedMeridian, setMeridian] = useState(storedMeridian);
 return(
-    <View>
+    <View style={styles.timePickerContainer}>
     <Picker  
     selectedValue={selectedValue}
     onValueChange={(itemValue) =>
     setSelectedValue(itemValue)
-    }>
+    }
+    style={styles.timePickerTimeWidth}>
      <Picker.Item 
     label={"1:00"}
     value={"1:00"} 
@@ -169,7 +170,8 @@ return(
             selectedValue={selectedMeridian}
             onValueChange={(itemValue) =>
             setMeridian(itemValue)
-            }>
+            }
+            style={styles.timePickerMeridianWidth}>
             <Picker.Item 
             label={"AM"}
             value={"AM"} 
@@ -194,12 +196,12 @@ const PeriodTimePicker = (props) => {
     const [selectedValue, setSelectedValue] = useState(storedTime);
     const [selectedMeridian, setMeridian] = useState(storedMeridian);
 return(
-    <View>
+    <View style={styles.timePickerContainer}>
     <Picker  
     selectedValue={selectedValue}
     onValueChange={(itemValue) =>
-    setSelectedValue(itemValue)
-    }>
+    setSelectedValue(itemValue)}
+    style={styles.timePickerTimeWidth}>
      <Picker.Item 
     label={"1:00"}
     value={"1:00"} 
@@ -252,8 +254,8 @@ return(
     <Picker  
             selectedValue={selectedMeridian}
             onValueChange={(itemValue) =>
-            setMeridian(itemValue)
-            }>
+            setMeridian(itemValue)}
+            style={styles.timePickerMeridianWidth}>
             <Picker.Item 
             label={"AM"}
             value={"AM"} 
@@ -351,4 +353,15 @@ const styles =  StyleSheet.create({
         color: '#FFFF',
         width:'100%'
     },
+    timePickerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    timePickerMeridianWidth: {
+        width: 100,
+      },
+      timePickerTimeWidth: {
+        width: 150,
+      },
 })
