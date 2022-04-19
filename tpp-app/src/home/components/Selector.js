@@ -9,7 +9,6 @@ import MoodIcon from "../../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 import SleepIcon from "../../../ios/tppapp/Images.xcassets/icons/sleep.svg";
-import {VIEWS} from '../../services/utils/constants';
 
 //write function that takes props & renders the corresponding icon
 export const SelectedIcon = ({selectedView, style}) => {
@@ -50,6 +49,13 @@ const Selector = (props) => {
   let [prefsMap, setPrefsMap] = useState([]);
   let [toggleable, setToggleable] = useState(true);
   let [numTracked, setNumTracked] = useState(0);
+    let flowSelected = props.selectedView === VIEWS.Flow;
+    let moodSelected = props.selectedView === VIEWS.Mood;
+    let exerciseSelected = props.selectedView === VIEWS.Exercise;
+    let crampsSelected = props.selectedView === VIEWS.Cramps;
+    let sleepSelected = props.selectedView === VIEWS.Sleep;
+    let selectedColor = "#B31F20";
+    let unselectedColor = "#6D6E71";
   useEffect(() => {
       GETAllTrackingPreferences().then(allPrefs => {
           //convert into map so you can directly index in
