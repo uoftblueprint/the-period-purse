@@ -1,12 +1,14 @@
 
-import React, {createElement} from "react";
+import React, {useEffect, useState, createElement} from "react";
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import {GETAllTrackingPreferences} from '../../services/SettingsService';
+import { TRACK_SYMPTOMS } from "../../services/utils/constants";
+import {VIEWS} from "../../services/utils/constants";
 import FlowIcon from "../../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import MoodIcon from "../../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 import SleepIcon from "../../../ios/tppapp/Images.xcassets/icons/sleep.svg";
-import {VIEWS} from '../../services/utils/constants';
 
 //write function that takes props & renders the corresponding icon
 export const SelectedIcon = ({selectedView, style}) => {
@@ -35,41 +37,85 @@ export const SelectedIcon = ({selectedView, style}) => {
 
 }
 
+const trackSymptomsToViews = {
+    [TRACK_SYMPTOMS.MOOD] : VIEWS.Mood,
+    [TRACK_SYMPTOMS.CRAMPS] : VIEWS.Cramps,
+    [TRACK_SYMPTOMS.FLOW] : VIEWS.Flow,
+    [TRACK_SYMPTOMS.EXERCISE] : VIEWS.Exercise,
+    [TRACK_SYMPTOMS.SLEEP] : VIEWS.Sleep
+}
+
 const Selector = (props) => {
+  let [prefsMap, setPrefsMap] = useState([]);
+  let [toggleable, setToggleable] = useState(true);
+  let [numTracked, setNumTracked] = useState(0);
     let flowSelected = props.selectedView === VIEWS.Flow;
     let moodSelected = props.selectedView === VIEWS.Mood;
     let exerciseSelected = props.selectedView === VIEWS.Exercise;
     let crampsSelected = props.selectedView === VIEWS.Cramps;
     let sleepSelected = props.selectedView === VIEWS.Sleep;
-
     let selectedColor = "#B31F20";
     let unselectedColor = "#6D6E71";
+  useEffect(() => {
+      GETAllTrackingPreferences().then(allPrefs => {
+          //convert into map so you can directly index in
+          let newPrefsMap = Object.assign({}, ...allPrefs.map(pref => ({ [pref[0]] : (pref[1] === 'true')})));
+
+          // find only tracked symptom, if there is only one
+          let numTracked = 0;
+          let onlyTracked;
+          for (const prefName in newPrefsMap){
+              if(newPrefsMap[prefName]){
+                  numTracked+=1;
+                  onlyTracked = trackSymptomsToViews[prefName];
+              }
+          }
+
+          if(numTracked === 1){
+              // only one option for selection, so disable toggling & select the only option
+              props.toggleSelectedView(onlyTracked, true)
+              setToggleable(false);
+
+          }
+          setNumTracked(numTracked);
+          setPrefsMap(newPrefsMap)
+      })
+  }, [])
+
+  
 
     const iconData = [
         {
             view: VIEWS.Flow,
             selected: flowSelected,
-            internalIcon: FlowIcon
+            internalIcon: FlowIcon,
+            visible: prefsMap[TRACK_SYMPTOMS.FLOW]
         },
         {
             view: VIEWS.Mood,
             selected: moodSelected,
-            internalIcon: MoodIcon
+            internalIcon: MoodIcon,
+            visible: prefsMap[TRACK_SYMPTOMS.MOOD]
         },
         {
             view: VIEWS.Exercise,
             selected: exerciseSelected,
-            internalIcon: ExerciseIcon
+            internalIcon: ExerciseIcon,
+            visible: prefsMap[TRACK_SYMPTOMS.EXERCISE]
         },
         {
             view: VIEWS.Cramps,
             selected: crampsSelected,
-            internalIcon: CrampsIcon
+            internalIcon: CrampsIcon,
+            visible: prefsMap[TRACK_SYMPTOMS.CRAMPS]
         },
         {
             view: VIEWS.Sleep,
             selected: sleepSelected,
-            internalIcon: SleepIcon
+            internalIcon: SleepIcon,
+            visible: prefsMap[TRACK_SYMPTOMS.SLEEP]
+
+
         },
     ]
 
@@ -78,14 +124,14 @@ const Selector = (props) => {
     return (
         <View style={[{backgroundColor: '#FFFFFF'}, props.expanded && styles.elevatedSelector]}>
             {props.expanded &&
-            <View style={[styles.selectorContainer]}>
+            <View style={[styles.selectorContainer, numTracked === 5 && styles.allSelectedContainer]}>
                  {iconData.map((icon, i) => {
                     let renderedIcon = createElement(icon.internalIcon, {
                         fill: icon.selected ? selectedColor : unselectedColor
                     })
                     return (
-                        <TouchableOpacity
-                            onPress={() => props.toggleSelectedView(icon.view)}
+                        icon.visible && <TouchableOpacity
+                            onPress={() => props.toggleSelectedView(icon.view, toggleable)}
                             key={i}
                             style={[icon.selected && styles.selectedIcon, styles.iconContainer]}
                         >
@@ -104,9 +150,12 @@ const styles = StyleSheet.create({
     selectorContainer: {
         flex:1,
         alignSelf:'stretch',
-        justifyContent: 'space-around',
+        justifyContent: 'space-evenly',
         flexDirection: "row",
-        marginBottom: 50,
+        marginBottom: '14%',
+    },
+    allSelectedContainer: {
+        justifyContent: 'space-evenly'
     },
     elevatedSelector: {
         position: "absolute",
