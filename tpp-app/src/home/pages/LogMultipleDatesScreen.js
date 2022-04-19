@@ -7,7 +7,6 @@ import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar} 
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 import { scrollDate } from './CalendarScreen';
-import Constants from 'expo-constants';
 import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/utils/constants";
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
@@ -225,9 +224,10 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             }
         }
 
-        navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {
-            inputData: inputData, 
-            newDate: selectedDates.length > 0 ? selectedDates[0] : null});
+        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, { 
+            inputData: inputData,
+            newDate: selectedDates.length > 0 ? selectedDates[0] : null
+        });
         await calculateAverages();
     }
 
@@ -272,18 +272,16 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
                 </View>
             </View>
-            
-            {/* {Cal} */}
             <View style={styles.calendar}>
-                <Calendar
-                    numSelected={numSelected}
-                    setNumSelected={setNumSelected}
-                    navigation={navigation}
-                    setSelectedDates={setSelectedDates}
-                    markedDates={markedDates}
-                    currentDate={scrollDate}
-                />
-            </View>
+              <Calendar 
+                  numSelected={numSelected}
+                  setNumSelected={setNumSelected}
+                  navigation={navigation}
+                  setSelectedDates={setSelectedDates}
+                  markedDates={markedDates}
+                  currentDate={scrollDate}
+              />
+            </View>  
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
                 <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>

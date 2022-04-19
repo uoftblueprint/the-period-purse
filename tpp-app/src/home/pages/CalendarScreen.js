@@ -163,7 +163,7 @@ export default function CalendarScreen ({ route, navigation }) {
             setSelectedView(VIEWS.Flow)
     }, [route.params?.newDate])
 
-    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
+    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
     return (
         <SafeAreaView style={styles.container}>
             <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
@@ -172,16 +172,16 @@ export default function CalendarScreen ({ route, navigation }) {
                 {renderedArrow}
             </TouchableOpacity>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
-            <View style={styles.calendar}>
-                <Calendar 
-                    navigation={navigation} 
-                    marked={marked} 
-                    setYearInView={setYearInView} 
-                    selectedView={selectedView}
-                    currentDate={route.params?.newDate}
-                />
-            </View>
-        </SafeAreaView>
+        <View style={styles.calendar}>
+            <Calendar 
+                navigation={navigation} 
+                marked={marked} 
+                setYearInView={setYearInView} 
+                selectedView={selectedView} 
+                currentDate={route.params?.newDate}
+            />
+        </View>
+       </SafeAreaView>
     )
 }
 
