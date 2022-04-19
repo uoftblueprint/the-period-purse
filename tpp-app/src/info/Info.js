@@ -9,6 +9,7 @@ import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.p
 import discIcon from '../../ios/tppapp/Images.xcassets/icons/disc_icon.png'
 import { STACK_SCREENS } from './InfoNavigator';
 import { Footer } from '../services/utils/footer';
+import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 
 const LearnMoreCard = () => {
     return(
@@ -33,6 +34,16 @@ const MenstrualProductCard = ({ onPress, name, image }) =>{
         <TouchableOpacity style={styles.productCard} onPress={onPress}>
             <Image style={styles.productIcon} source={image}/>
             <Text style={styles.productText}>{name}</Text>
+        </TouchableOpacity>
+    )
+}
+
+const FunFactCard = ({ onPress }) =>{
+    return (
+        <TouchableOpacity style={styles.funFactCard} onPress={onPress}>
+            <PaddyIcon style={styles.paddyStyling} height={"75%"}/>
+            <Text style={styles.DYKText}>Did you know?</Text>
+            <Text style={styles.DYKBodyText}>Only 46% of Canadians feel comfortable talking about periods. Periods rank lower in... </Text>
         </TouchableOpacity>
     )
 }
@@ -75,11 +86,12 @@ export default function Info ({ navigation }) {
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <ScrollView>
                 <SafeAreaView style={styles.cardContainer}>
+                    <FunFactCard onPress={() => navigation.navigate(STACK_SCREENS.FUN_FACT)}/>
                     <Text style={{
                         ...styles.productText,
                         textAlign: 'left',
                         color: "#6D6E71",
-                        marginTop: '10%',
+                        marginTop: '5%',
                         marginLeft: '5%',
                         marginBottom: '2%'
                     }}>
@@ -111,6 +123,21 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         justifyContent: 'center'
       },
+    funFactCard: {
+        backgroundColor: '#72C6B7',
+        borderRadius: 12,
+        borderWidth: 0,
+        borderColor: "#000",
+        width: "88%",
+        margin: '3%',
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 10 },
+        shadowOpacity: 0.25,
+        shadowRadius: 12,
+        height: 130,
+        flexBasis: 165,
+        marginLeft: '6%',
+    },
     productCard: {
         backgroundColor: '#FFA3A4',
         alignItems: 'center',
@@ -168,6 +195,22 @@ const styles = StyleSheet.create({
         fontSize: 14,
         margin: 20,
     },
+    DYKText: {
+        fontFamily: "Avenir",
+        fontWeight: "800",
+        fontSize: 16,
+        margin: 20,
+        color: '#fff',
+        left: "3%"
+    },
+    DYKBodyText: {
+        fontFamily: "Avenir",
+        left: "8%",
+        fontWeight: "400",
+        paddingRight: "35%",
+        top: "-5%"
+
+    },
     visitButton: {
         backgroundColor: "#73C7B7",
         borderRadius: 8,
@@ -175,4 +218,9 @@ const styles = StyleSheet.create({
     productIcon: {
         marginBottom: 10
     },
+    paddyStyling: {
+        position: 'absolute',
+        left: "65%",
+        top: "12%"
+    }
 });
