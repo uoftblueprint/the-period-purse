@@ -17,7 +17,6 @@ import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
 import {STACK_SCREENS} from './SettingsNavigator.js';
 const PreferenceButton = (props) => {
-
     return (
     <View style = {styles.horizontalCenteredColumn}>
         <TouchableOpacity style={[styles.preferenceButton, {backgroundColor: props.set }]} onPress={props.onPress}>
@@ -60,9 +59,9 @@ const Preferences = (props) => {
             let stored = await GETAllTrackingPreferences();
             // set trackingPrefs somewhere
             for (let pref of stored) {
-              let toTrack = pref[1]
+              let toTrack = pref[1].toLowerCase() === 'true';
               // if tracking that symptom is set to true, append it to trackingPrefs
-              if (toTrack) {
+                if (toTrack) {
                   let title = pref[0];
                   switch(title) {
                     case TRACK_SYMPTOMS.MOOD:
@@ -93,29 +92,44 @@ const Preferences = (props) => {
           }
           fetchPreferences();
       }, [])
-   
-    const handleFlow = () => { 
-        flow === WHITE ? trackFlow(TEAL) : trackExercise(WHITE);
 
-        POSTUpdateOnePreference(TRACK_SYMPTOMS.FLOW, flow == TEAL);
-      }
-      const handleSleep = () => { 
-        sleep === WHITE ? trackSleep(TEAL) : trackSleep(WHITE);
+    useEffect(() => {
+        console.log(mood, 'im changing!')
+    }, [mood])
 
-        POSTUpdateOnePreference(TRACK_SYMPTOMS.SLEEP, sleep == TEAL);
+    const handleFlow = () => {
+        POSTUpdateOnePreference(TRACK_SYMPTOMS.FLOW, flow === WHITE)
+            .then(() => {
+                flow === WHITE ? trackFlow(TEAL) : trackFlow(WHITE);
+            });
       }
-      const handleMood = () => { 
-        mood === WHITE ? trackMood(TEAL) : trackMood(WHITE);
 
-        POSTUpdateOnePreference(TRACK_SYMPTOMS.MOOD, mood == TEAL);
+      const handleSleep = () => {
+        POSTUpdateOnePreference(TRACK_SYMPTOMS.SLEEP, sleep === WHITE)
+            .then(() => {
+                sleep === WHITE ? trackSleep(TEAL) : trackSleep(WHITE);
+            });
       }
-      const handleCramp = () => { 
-        cramps === WHITE ? trackCramps(TEAL) : trackCramps(WHITE);
-        POSTUpdateOnePreference(TRACK_SYMPTOMS.CRAMPS, cramps == TEAL);
+
+      const handleMood = async () => {
+        POSTUpdateOnePreference(TRACK_SYMPTOMS.MOOD, mood === WHITE)
+            .then(() => {
+                mood === WHITE ? trackMood(TEAL) : trackMood(WHITE);
+            });
       }
-      const handleExercise = () => { 
-        exercise === WHITE ? trackExercise(TEAL) : trackExercise(WHITE);
-        POSTUpdateOnePreference(TRACK_SYMPTOMS.EXERCISE, exercise == TEAL);
+
+      const handleCramp = () => {
+        POSTUpdateOnePreference(TRACK_SYMPTOMS.CRAMPS, cramps === WHITE)
+            .then(() => {
+                cramps === WHITE ? trackCramps(TEAL) : trackCramps(WHITE);
+            });
+      }
+
+      const handleExercise = () => {
+        POSTUpdateOnePreference(TRACK_SYMPTOMS.EXERCISE, exercise === WHITE)
+            .then(() => {
+                exercise === WHITE ? trackExercise(TEAL) : trackExercise(WHITE);
+            });
       }
     return (
         <View>

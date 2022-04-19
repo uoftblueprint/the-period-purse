@@ -24,7 +24,7 @@ export const DELETEAccountData = async () => new Promise(async (resolve, reject)
  */
 export const GETAllTrackingPreferences = async () => new Promise(async (resolve, reject) => {
     try {
-        values = await AsyncStorage.multiGet([
+        await AsyncStorage.multiGet([
             TRACK_SYMPTOMS.FLOW,
             TRACK_SYMPTOMS.MOOD,
             TRACK_SYMPTOMS.SLEEP,
