@@ -11,8 +11,7 @@ export const DELETEAccountData = async () => new Promise(async (resolve, reject)
         await AsyncStorage.clear().then(() => {
             console.log("Deleted user account data");
             resolve();
-        })
-
+        });
     } catch (e) {
         console.log(`DELETEAccountData error: ${JSON.stringify(e)}`);
         reject();
@@ -34,9 +33,6 @@ export const GETAllTrackingPreferences = async () => new Promise(async (resolve,
         ]).then((values) => {
             console.log("Got All Tracking Preferences");
             resolve(values);
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject('Unable to getItem');
         });
     } catch (e) {
         console.log(`GETAllTrackingPreferences error: ${JSON.stringify(e)}`)
@@ -65,9 +61,6 @@ export const POSTUpdatePreferences = async (flow, mood, sleep, cramps, exercise)
         ]).then(() => {
             console.log("Posted symptoms")
             resolve();
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to post preferences")
         });
     } catch (e) {
         console.log(`POSTUpdatePreferences error: ${JSON.stringify(e)}`)
@@ -87,10 +80,7 @@ export const POSTUpdateOnePreference = async (key, value) => new Promise(async(r
             ).then(() => {
             console.log(`Updated symptom: ${JSON.stringify(key)}`);
             resolve();
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to update symptom");
-        })
+        });
     } catch (e) {
         console.log(`POSTUpdateOnePreference error: ${JSON.stringify(e)}`);
         reject();
@@ -108,10 +98,7 @@ export const POSTRemindLogPeriod = async (enableRemind) => new Promise(async (re
         await AsyncStorage.setItem(REMINDERS.REMIND_LOG_PERIOD, JSON.stringify(enableRemind)).then(() => {
             console.log("Posted period logging reminder");
             resolve();
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to post period logging reminder");
-        })
+        });
     } catch (e) {
         console.log(`POSTRemindLogPeriod error: ${JSON.stringify(e)}`)
         reject();
@@ -128,7 +115,7 @@ export const GETRemindLogPeriod = async () => new Promise(async(resolve, reject)
             ).then((value) => {
                 console.log(`Retrieved RemindLogPeriod boolean`);
                 resolve(value != null ? JSON.parse(value) : null);
-            })
+            });
     } catch (e) {
         console.log(`GETRemindLogPeriod error: ${JSON.stringify(e)}`);
         reject();
@@ -146,10 +133,7 @@ export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (
         await AsyncStorage.setItem(REMINDERS.REMIND_LOG_SYMPTOMS, JSON.stringify(enableRemind)).then(() => {
             console.log("Posted period symptom logging reminder");
             resolve();
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to post period symptom logging reminder");
-        })
+        });
     } catch (e) {
         console.log(`POSTRemindLogSymptoms error: ${JSON.stringify(e)}`)
         reject();
@@ -167,7 +151,7 @@ export const GETRemindLogSymptoms = async () => new Promise(async (resolve, reje
             ).then((value) => {
                 console.log(`Retrieved RemindLogSymptoms boolean`);
                 resolve(value != null ? JSON.parse(value) : null);
-            })
+            });
     } catch (e) {
         console.log(`GETRemindLogSymptoms error: ${JSON.stringify(e)}`);
         reject();
@@ -184,11 +168,7 @@ export const POSTRemindLogPeriodFreq = async (advanceDays) => new Promise(async 
         await AsyncStorage.setItem(REMINDERS.LOG_PERIOD_DAYS, JSON.stringify(advanceDays)).then(() => {
             console.log("Posted the number of days in advance to send log period reminder");
             resolve();
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to post number of days in advance to send log period reminder ");
-        })
-
+        });
     } catch (e) {
         console.log(`POSTRemindLogPeriodFreq error: ${JSON.stringify(e)}`)
         reject();
@@ -204,10 +184,7 @@ export const GETRemindLogPeriodFreq = async () => new Promise(async (resolve, re
         value = await AsyncStorage.getItem(REMINDERS.LOG_PERIOD_DAYS).then((value) => {
             console.log("Retrieved the number of days in advance to send log period reminder");
             resolve(value);
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to retrieve number of days in advance to send log period reminder");
-        })
+        });
     } catch (e) {
         console.log(`POSTRemindLogPeriodFreq error: ${JSON.stringify(e)}`)
         reject();
@@ -225,10 +202,7 @@ export const POSTRemindLogPeriodTime = async (time) => new Promise(async (resolv
         await AsyncStorage.setItem(REMINDERS.LOG_PERIOD_TIME, JSON.stringify(time)).then(() => {
             console.log("Posted time to send log period reminder");
             resolve();
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to post time to send log period reminder");
-        })
+        });
     } catch (e) {
         console.log(`POSTRemindLogPeriodTime error: ${JSON.stringify(e)}`)
         reject();
@@ -244,10 +218,7 @@ export const GETRemindLogPeriodTime = async () => new Promise(async (resolve, re
         value = await AsyncStorage.getItem(REMINDERS.LOG_PERIOD_TIME).then((value) => {
             console.log("Retrieved the time to log period reminder");
             resolve(value);
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to retrieve the time to send log period reminder");
-        })
+        });
     } catch (e) {
         console.log(`GETRemindLogPeriodTime error: ${JSON.stringify(e)}`)
         reject();
@@ -264,9 +235,6 @@ export const POSTRemindLogSymptomsFreq = async (freq) => new Promise(async (reso
         await AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_DAYS, JSON.stringify(freq)).then(() => {
             console.log("Posted log symptoms reminder frequency");
             resolve();
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to post log symptoms reminder frequency");
         })
     } catch (e) {
         console.log(`POSTRemindLogSymptomsFreq error: ${JSON.stringify(e)}`)
@@ -283,10 +251,7 @@ export const GETRemindLogSymptomsFreq = async () => new Promise(async (resolve, 
         value = await AsyncStorage.get(REMINDERS.LOG_SYMPTOMS_DAYS).then((value) => {
             console.log("Retrieved log symptoms reminder frequency");
             resolve(value);
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to retrieve log symptoms reminder frequency");
-        })
+        });
     } catch (e) {
         console.log(`GETRemindLogSymptomsFreq error: ${JSON.stringify(e)}`)
         reject();
@@ -304,11 +269,7 @@ export const POSTRemindLogSymptomsTime = async (time) => new Promise(async (reso
         await AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_TIME, JSON.stringify(time)).then(() => {
             console.log("Posted log symptoms reminder time");
             resolve();
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to post log symptoms reminder time");
-        })
-
+        });
     } catch (e) {
         console.log(`POSTRemindLogSymptomsTime error: ${JSON.stringify(e)}`)
         reject();
@@ -324,11 +285,7 @@ export const GETRemindLogSymptomsTime = async () => new Promise(async (resolve, 
         value = await AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_TIME).then((value) => {
             console.log("Retrieved log symptoms reminder time");
             resolve(value);
-        }).catch((e) => {
-            console.log(JSON.stringify(e));
-            reject("Unable to retrieve log symptoms reminder time");
-        })
-
+        });
     } catch (e) {
         console.log(`GETRemindLogSymptomsTime error: ${JSON.stringify(e)}`)
         reject();
