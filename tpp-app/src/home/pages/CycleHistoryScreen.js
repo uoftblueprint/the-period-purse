@@ -76,8 +76,7 @@ export default function CycleHistoryScreen({navigation}){
         () => {
         async function storeYearsCycles() {
             for (const year of storedYears){
-                intervals = await CycleService.GETCycleHistoryByYear(year)            
-                currentIntervals[year] = intervals;
+                currentIntervals[year] = await CycleService.GETCycleHistoryByYear(year);
             }
             setCurrentIntervals({...currentIntervals});
         }

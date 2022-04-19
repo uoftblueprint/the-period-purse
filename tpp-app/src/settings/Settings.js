@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground} from 'react-native';
+import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground, SafeAreaView} from 'react-native';
+import {Card} from 'react-native-elements';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
 import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
@@ -10,6 +11,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { socialMediaIcons } from './icons';
+import { Footer } from '../services/utils/footer';
 import { ScrollView } from 'react-native-gesture-handler';
 import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, POSTRemindLogPeriod, POSTRemindLogSymptoms, POSTUpdateOnePreference } from '../services/SettingsService';
 import { TRACK_SYMPTOMS } from '../services/utils/constants'
@@ -145,37 +147,37 @@ const Preferences = (props) => {
     );
 }
 
-const Socials = () => {
-    return (
-        <View style={styles.iconsContainer}>
-            {
-                socialMediaIcons.map((socialMedia, i) => {
-                    return <SocialMediaButton key={i} icon={socialMedia.component} url={socialMedia.url} />
-                })
-            }
-        </View>
-    );
-}
+// const Socials = () => {
+//     return (
+//         <View style={styles.iconsContainer}>
+//             {
+//                 socialMediaIcons.map((socialMedia, i) => {
+//                     return <SocialMediaButton key={i} icon={socialMedia.component} url={socialMedia.url} />
+//                 })
+//             }
+//         </View>
+//     );
+// }
 
-const TermsAndConditions = () => {
-    const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
-        Linking.openURL("https://www.google.com/");
-    });
+// const TermsAndConditions = () => {
+//     const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
+//         Linking.openURL("https://www.google.com/");
+//     });
 
-    return (
-        <View styles={styles.termsAndConditionsContainer}>
-            <View style={styles.copyright}>
-                <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
-            </View>
-            <View style={styles.terms}>
-                <TouchableOpacity onPress={openLink} style={styles.icon} >
-                    <Text style={styles.termsText}> Terms and Privacy Policy. </Text>
-                    <Text style={styles.lineText}> ______________________ </Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
-}
+//     return (
+//         <View styles={styles.termsAndConditionsContainer}>
+//             <View style={styles.copyright}>
+//                 <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
+//             </View>
+//             <View style={styles.terms}>
+//                 <TouchableOpacity onPress={openLink} style={styles.icon} >
+//                     <Text style={styles.termsText}> Terms and Privacy Policy. </Text>
+//                     <Text style={styles.lineText}> ______________________ </Text>
+//                 </TouchableOpacity>
+//             </View>
+//         </View>
+//     )
+// }
 
 const settingScreens = new Map([
     ["Profile Information", STACK_SCREENS.PROFILE_INFORMATION],
@@ -484,13 +486,14 @@ export default function Settings ({ navigation }) {
     return (
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <ScrollView>
-                <View style={styles.container}>
+                <SafeAreaView style={styles.container}>
                 <Preferences/>
             <NotificationSettings navigation={navigation}/>
             <SettingOptions navigation={navigation}/>
-            <Socials />
-            <TermsAndConditions />
+                <View style={{marginBottom:75}}>
+                    <Footer navigation={navigation}/>
                 </View>
+                </SafeAreaView>
             </ScrollView>
         </ImageBackground>
     )

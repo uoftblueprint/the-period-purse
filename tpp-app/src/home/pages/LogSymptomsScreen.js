@@ -4,14 +4,15 @@ import Constants from 'expo-constants';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
 import Accordion from "../components/Accordion";
-import { getDateString, isValidDate } from "../../services/utils/helpers";
+import {flowOnOffModeChanged, getDateString, isValidDate} from "../../services/utils/helpers";
 import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils/helpers";
 import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { GETAllTrackingPreferences } from "../../services/SettingsService";
 import { POSTsymptomsForDate } from "../../services/LogSymptomsService";
 import { TRACK_SYMPTOMS } from "../../services/utils/constants";
-import { STACK_SCREENS } from "../CalendarNavigator";
+import { CALENDAR_STACK_SCREENS } from "../CalendarNavigator";
 import { getISODate } from '../../services/utils/helpers';
+import { calculateAverages } from "../../services/CalculationService";
 
 
 // Alert popup constants
@@ -200,23 +201,29 @@ export default function LogSymptomsScreen({ navigation, route }) {
     let finalSymps = new Symptoms(flowStr, moodStr, sleepMins, crampsStr, exerciseObj, notesStr);
     // If all symptoms are null, POST null instead of an empty Symptom object
     let notEmpty = Object.values(finalSymps).some((symptom) => symptom !== null);
-    let submitSymp = notEmpty ? finalSymps : null;
+    let submitSymp = notEmpty ? finalSymps : new Symptoms();
 
     POSTsymptomsForDate(selectedDate.getDate(), selectedDate.getMonth() + 1, selectedDate.getFullYear(), submitSymp)
-      .then(() => {
-        let inputData = {}
-        inputData[getISODate(selectedDate)] = {
-          symptoms: submitSymp
-        }
-        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: [inputData]})
-        // navigation.goBack(isDirty);
+      .then(async () => {
+          let inputData = {}
+          inputData[getISODate(selectedDate)] = {
+              // submitSymp may be null, in that case pass back blank Symptoms object
+              symptoms: submitSymp
+          }
+          navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData})
+          // navigation.goBack(isDirty);
+
+          // Only need to recalculateAverages if flow was changed
+          if (flowOnOffModeChanged(submitSymp.flow, stored.flow)) {
+              await calculateAverages();
+          }
       })
       .catch((e) => {
         let errorInfo = submitError(typeof e === 'string' ? e : JSON.stringify(e));
         alertPopup(errorInfo)
           .then(() => { // YES close screen
             navigation.goBack();
-          })          
+          })
           .catch() // CANCEL do nothing and close alert
         setSubmitting(false);
       })
@@ -272,7 +279,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 
   return (
-    <SafeAreaView style={styles.screen}><ScrollView>
+    <SafeAreaView style={styles.screen}><ScrollView style={styles.content}>
 
       {/* HEADER NAV */}
       <View style={styles.navbarContainer}>
@@ -296,21 +303,23 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
           {/* SWITCH AND DISPLAY DATE */}
           <View style={styles.switchDate}>
-            {isNewDayValid(false, selectedDate) &&
-              <DateArrow
-                onPress={async () => await switchDate(false)}
-                isRight={false}
-              />
+            {isNewDayValid(false, selectedDate)
+              ? <DateArrow
+                  onPress={async () => await switchDate(false)}
+                  isRight={false}
+                />
+              : <View opacity={0}><DateArrow/></View>
             }
             <View style={styles.centerText}>
               <Text style={styles.subtitle}>Log your symptoms for:</Text>
               <Text style={styles.navbarTitle}>{dateStr}</Text>
             </View>
-            {isNewDayValid(true, selectedDate) &&
-              <DateArrow
-                onPress={async () => await switchDate(true)}
-                isRight={true}
-              />
+            {isNewDayValid(true, selectedDate)
+              ? <DateArrow
+                  onPress={async () => await switchDate(true)}
+                  isRight={true}
+                />
+              : <View opacity={0}><DateArrow/></View>
             }
           </View>
 
@@ -345,12 +354,14 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#EFEFF4',
         flex: 1,
-        paddingTop: Constants.statusBarHeight
+    },
+    content: {
+        backgroundColor: '#fff',
     },
     navbarContainer: {
-        paddingTop: 98,
+        paddingTop: Constants.statusBarHeight,
         paddingBottom: 30,
         position: 'relative',
         flexDirection: 'row',
@@ -367,8 +378,7 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontWeight: "600",
         fontSize: 20,
-        paddingLeft: 30,
-        paddingRight: 30
+        paddingHorizontal: 30
     },
     close: {
       height: 30,
@@ -376,8 +386,10 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       position: 'absolute',
-      left: 18,
-      bottom: 27
+      left: 17.05,
+      right: 348.5,
+      top: 24.51,
+      bottom: 741.52
     },
     centerText: {
       flexDirection: 'column',
