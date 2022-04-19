@@ -1,18 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground, SafeAreaView} from 'react-native';
-import {Card} from 'react-native-elements';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
-import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.png';
-import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.png';
-import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/flow.png';
-import MoodIcon from '../../ios/tppapp/Images.xcassets/icons/mood.png';
-import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.png';
+import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.svg';
+import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.svg';
+import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/flow.svg';
+import MoodIcon from '../../ios/tppapp/Images.xcassets/icons/mood.svg';
+import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.svg';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Footer } from '../services/utils/footer';
 import { ScrollView } from 'react-native-gesture-handler';
 import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, POSTRemindLogPeriod, POSTRemindLogSymptoms, POSTUpdateOnePreference } from '../services/SettingsService';
-import { TRACK_SYMPTOMS } from '../services/utils/constants'
+import {TRACK_SYMPTOMS, VIEWS} from '../services/utils/constants'
 import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
 import {STACK_SCREENS} from './SettingsNavigator.js';
@@ -21,9 +20,11 @@ const PreferenceButton = (props) => {
     return (
     <View style = {styles.horizontalCenteredColumn}>
         <TouchableOpacity style={[styles.preferenceButton, {backgroundColor: props.set }]} onPress={props.onPress}>
-                <Image
-                    source={props.source}
-                />
+            {props.source === VIEWS.Flow && <FlowIcon/>}
+            {props.source === VIEWS.Mood && <MoodIcon fill="black"/>}
+            {props.source === VIEWS.Sleep && <SleepIcon/>}
+            {props.source === VIEWS.Exercise && <ExerciseIcon/>}
+            {props.source === VIEWS.Cramps && <CrampsIcon/>}
         </TouchableOpacity>
         <Text>{props.cardName}</Text>
 
@@ -136,11 +137,11 @@ const Preferences = (props) => {
         <View>
             <Text style={styles.heading}>Tracking Preferences </Text>
             <View style={styles.preferences}>
-                <PreferenceButton source={FlowIcon} cardName="Flow" set={flow} onPress={handleFlow}/>
-                <PreferenceButton source={MoodIcon} cardName="Mood" set={mood} onPress={handleMood}/>
-                <PreferenceButton source={SleepIcon} cardName="Sleep" set={sleep} onPress={handleSleep}/>
-                <PreferenceButton source={CrampsIcon} cardName="Cramps" set={cramps} onPress={handleCramp}/>
-                <PreferenceButton source={ExerciseIcon} cardName="Exercise" set={exercise} onPress={handleExercise}/>
+                <PreferenceButton source={VIEWS.Flow} cardName="Flow" set={flow} onPress={handleFlow}/>
+                <PreferenceButton source={VIEWS.Mood} cardName="Mood" set={mood} onPress={handleMood}/>
+                <PreferenceButton source={VIEWS.Exercise} cardName="Exercise" set={exercise} onPress={handleExercise}/>
+                <PreferenceButton source={VIEWS.Cramps} cardName="Cramps" set={cramps} onPress={handleCramp}/>
+                <PreferenceButton source={VIEWS.Sleep} cardName="Sleep" set={sleep} onPress={handleSleep}/>
             </View>
         </View>
     );
@@ -186,8 +187,9 @@ const settingScreens = new Map([
 ])
 
 const SettingsStackButton = (props) => {
+    console.log(props);
     return (
-    <TouchableOpacity onPress={() => props.navigation.navigate(settingScreens[props.name])}>
+    <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.DELETE_ACCOUNT)}>
         <SafeAreaView style={styles.optionView} >
 
         <Text style={styles.optionText}>{props.name}</Text>
@@ -206,6 +208,7 @@ const SettingsStackButton = (props) => {
             style={{
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
+                top: "5%"
                 }}/>
     </TouchableOpacity>
     );
@@ -220,6 +223,10 @@ return(
         onValueChange={props.toggle}
         value={props.enabled}
         trackColor={{true: "#72C6B7"}}
+        style={{
+            top: "5%",
+            left: "-10%"
+        }}
     />
    
 </View>
@@ -228,7 +235,7 @@ return(
             style={{
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
-                bottom: 20
+                bottom: "15%"
                 }}/>
 </View>
 )}
@@ -430,7 +437,7 @@ useEffect(() => {
     };
 return (
   
-    <SafeAreaView style={{top: -50}}>
+    <SafeAreaView style={{top: "-5%"}}>
         <Text style={styles.heading}>Notifications</Text>
         <NotificationsButton 
             text={"Remind me to log period"} 
@@ -443,7 +450,7 @@ return (
             toggle={toggleSymptomsSwitch}
             enabled={remindSymptomsEnabled}/>
   <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}> 
-<View>
+    <View>
     
      <SafeAreaView style={styles.notificationSettingsView} >
     <Text style={styles.optionText}>Customize notifications</Text>
@@ -453,15 +460,14 @@ return (
             size={24}
             color="#5A9F93"
             style={{transform: [{rotateY: '180deg'}],}}
-            /></View>
-
-
-
+            />
+    </View>
     </SafeAreaView>
     <View
         style={{
         borderBottomColor: '#CFCFCF',
         borderBottomWidth: 1,
+        top: "15%"
         }}/>
        </View>
        </TouchableOpacity>
@@ -472,12 +478,12 @@ return (
 
 const SettingOptions = ({navigation}) => {
     return (
-        <SafeAreaView style={{top: -125}}>
+        <SafeAreaView style={{top: "-8%"}}>
             <Text style={styles.heading}>Account settings </Text>
-        <SettingsStackButton name={"Profile Information"}  navigation={navigation} />
-        <SettingsStackButton name={"Privacy Policy"}  navigation={navigation}/>
-        <SettingsStackButton name={"Log Out"} navigation={navigation}/>
-        <SettingsStackButton name={"Delete Account"} navigation={navigation} />
+        {/*<SettingsStackButton name={"Profile Information"}  navigation={navigation} />*/}
+        {/*<SettingsStackButton name={"Privacy Policy"}  navigation={navigation}/>*/}
+        {/*<SettingsStackButton name={"Log Out"} navigation={navigation}/>*/}
+        <SettingsStackButton name={STACK_SCREENS.DELETE_ACCOUNT} navigation={navigation} />
         </SafeAreaView>
     )
 }
@@ -487,11 +493,9 @@ export default function Settings ({ navigation }) {
             <ScrollView>
                 <SafeAreaView style={styles.container}>
                 <Preferences/>
-            <NotificationSettings navigation={navigation}/>
-            <SettingOptions navigation={navigation}/>
-                <View style={{marginBottom:75}}>
-                    <Footer navigation={navigation}/>
-                </View>
+                <NotificationSettings navigation={navigation}/>
+                <SettingOptions navigation={navigation}/>
+                <Footer navigation={navigation}/>
                 </SafeAreaView>
             </ScrollView>
         </ImageBackground>
@@ -552,7 +556,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         letterSpacing: -0.3,
         marginBottom: 9,
-        marginTop: 32,
+        marginTop: "18%",
         lineHeight: 20,
         left: 0
     },
@@ -575,13 +579,13 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     },
     optionView:{
-        paddingTop: -25,
-        paddingBottom: -25,
+        paddingTop: "15%",
+        paddingBottom: "15%",
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
     notificationSettingsView :{
-        paddingTop: -50,
+        paddingTop: "-20%",
         paddingBottom: -20,
         flexDirection: 'row',
         justifyContent: 'space-between'
@@ -597,7 +601,7 @@ const styles = StyleSheet.create({
     reminderTextBox : {
         flexDirection: 'row',
         justifyContent: 'space-between', 
-        padding: 16,
+        padding: "3%",
         height: 72,
         left: 0
     },
@@ -606,7 +610,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         fontSize: 12,
         lineHeight: 34,
-        top: -20,
+        top: "-30%",
         color: '#6D6E71',
         left: 4
     },

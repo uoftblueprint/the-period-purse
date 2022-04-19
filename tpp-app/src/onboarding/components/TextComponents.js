@@ -6,6 +6,7 @@ export const TitleText = styled.Text`
   fontFamily: Avenir;
   fontSize: 26px; 
   fontWeight: 800;
+  color: #000000;
 `;
 
 // Smaller text on the onboarding pages

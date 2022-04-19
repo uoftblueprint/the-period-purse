@@ -86,26 +86,30 @@ export default function SymptomsChoices ({ route, navigation }) {
       </SymptomsButtonContainer>
 
       <TwoButtonContainer>
-        <SkipButton title="Skip" onPress={() => {
-          POSTSymptomsToTrack(true, false, false, false, false);
-          navigation.navigate(STACK_SCREENS.CONFIRMATION, {
-              periodLength: periodLength,
-              periodStart: periodStart,
-              periodEnd: periodEnd,
-              trackingPreferences: [true, false, false, false, false]
-            });
+        <SkipButton title="Skip" onPress={async () => {
+          POSTSymptomsToTrack(true, false, false, false, false)
+              .then(() => {
+                navigation.navigate(STACK_SCREENS.CONFIRMATION, {
+                  periodLength: periodLength,
+                  periodStart: periodStart,
+                  periodEnd: periodEnd,
+                  trackingPreferences: [true, false, false, false, false]
+                });
+              });
             }}/>
-        <NextButton title="Next" onPress={() => 
+        <NextButton title="Next" onPress={async () =>
           {
-            let trackingPreferences = [true, mood == TEAL, sleep == TEAL, cramp == TEAL, exercise == TEAL];
+            let trackingPreferences = [true, mood === TEAL, sleep === TEAL, cramp === TEAL, exercise === TEAL];
             POSTSymptomsToTrack(trackingPreferences[0], trackingPreferences[1], trackingPreferences[2],
-                                trackingPreferences[3], trackingPreferences[4]);
-            navigation.navigate(STACK_SCREENS.CONFIRMATION, {
-              periodLength: periodLength,
-              periodStart: periodStart,
-              periodEnd: periodEnd,
-              trackingPreferences: trackingPreferences
-            });
+                                trackingPreferences[3], trackingPreferences[4])
+                .then(() => {
+                  navigation.navigate(STACK_SCREENS.CONFIRMATION, {
+                    periodLength: periodLength,
+                    periodStart: periodStart,
+                    periodEnd: periodEnd,
+                    trackingPreferences: trackingPreferences
+                  });
+                });
           }}
           disabled={[flow, mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
       </TwoButtonContainer>

@@ -5,6 +5,7 @@ import Settings from "./Settings"
 import Notifications from './Notifications';
 const Stack = createNativeStackNavigator();
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import DeleteAccount from "./DeleteAccount";
 
 export const STACK_SCREENS = {
   SETTINGS: "Settings",
@@ -32,6 +33,7 @@ export default function SettingsNavigator({navigation}) {
               //     <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
               // </TouchableOpacity>)}}
               />
+              <Stack.Screen name={STACK_SCREENS.DELETE_ACCOUNT} component={DeleteAccount} />
         </Stack.Navigator>
     )
 };
