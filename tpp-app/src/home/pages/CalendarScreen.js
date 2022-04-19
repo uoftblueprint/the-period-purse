@@ -142,17 +142,17 @@ export default function CalendarScreen ({ route, navigation }) {
     )
 
     const toggleSelectedView = (targetView, toggleable) => {
-        if(toggleable){
-            if (selectedView === targetView){
+        if (toggleable) {
+            if (selectedView === targetView) {
                 setSelectedView(VIEWS.Nothing);
-            }
-            else {
+                console.log("bruh");
+            } else {
                 console.log("Selected " + targetView)
                 setSelectedView(targetView);
             }
         }
-        
     }
+
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (
         <SafeAreaView style={styles.container}>
