@@ -55,7 +55,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
         let prefArr = [...trackingPrefs];
         // set trackingPrefs somewhere
         for (let pref of allPrefs) {
-          let toTrack = pref[1]
+            let toTrack = pref[1].toLowerCase() === 'true';
           // if tracking that symptom is set to true, append it to trackingPrefs
           if (toTrack) {
               let title = pref[0];

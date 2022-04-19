@@ -9,6 +9,7 @@ import * as Sentry from "@sentry/react-native";
 import Info from './src/info/Info';
 import Settings from './src/settings/Settings';
 import CalendarNavigator from './src/home/CalendarNavigator';
+import SettingsNavigator from './src/settings/SettingsNavigator';
 import { TabBarMiddleButton } from './src/home/components/TabBarMiddleButton';
 import Welcome from './src/onboarding/Welcome';
 import InfoNavigator from './src/info/InfoNavigator';
@@ -74,7 +75,7 @@ const MainPage = () => {
               <TabBarMiddleButton {...props} style={{ top: -30 }} inOverlay={false} />
             )
           }}/>
-          <Tab.Screen name="Settings" component={Settings} options={{
+          <Tab.Screen name="Settings" component={SettingsNavigator} options={{
             headerShown: false,
             tabBarIcon: (props) => (
               <SettingsIconStyled {...props} />
