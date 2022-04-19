@@ -80,6 +80,8 @@ const Selector = (props) => {
                   props.toggleSelectedView(onlyTracked, true)
                   setToggleable(false);
 
+              } else {
+                  setToggleable(true);
               }
               setNumTracked(numTracked);
               setPrefsMap(newPrefsMap)
