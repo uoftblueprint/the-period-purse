@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     alignSelf: 'center',
     marginTop: '10%',
-    color: "#6D6E71",
     right: 5
   },
   icon: {

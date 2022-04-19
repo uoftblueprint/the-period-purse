@@ -20,7 +20,9 @@ export const STACK_SCREENS = {
   REGISTRATION : "Registration",
   PASSWORD : "Password",
   SUCCESS : "Success",
-  CONFIRMATION : "Confirmation"
+  CONFIRMATION : "Confirmation",
+  TERMS_AND_CONDITION: "TermsAndCondition",
+  PRIVACY_POLICY: "PrivacyPolicy"
 };
 
 export default function Confirmation ({ route, navigation }) {
@@ -28,10 +30,11 @@ export default function Confirmation ({ route, navigation }) {
 
   function IconPref() {
     let iconComponents = []
+    console.log();
     if(trackingPreferences[0])  // flow
       iconComponents.push(<FlowIcon key="flow" style={styles.icon}/>);
     if(trackingPreferences[1])  // mood
-      iconComponents.push(<MoodIcon key="mood" style={styles.icon}/>);
+      iconComponents.push(<MoodIcon key="mood" style={styles.icon} fill="black"/>);
     if(trackingPreferences[2])  // sleep
       iconComponents.push(<SleepIcon key="sleep" style={styles.icon}/>);
     if(trackingPreferences[3])  // cramps
@@ -63,24 +66,29 @@ export default function Confirmation ({ route, navigation }) {
 
       <PaddyIcon style={{alignSelf: "center"}}/>
       <Text style={styles.bigText}>You're all set!</Text>
+      { periodLength && <View>
+        <View style={styles.row}>
+          <Text style={styles.smallText}>Average period length</Text>
+          <Length/>
+        </View>
+        <HorizontalLine></HorizontalLine>
+      </View> }
 
-      <View style={styles.row}>
-        <Text style={styles.smallText}>Average period length</Text>
-        <Length/>
-      </View>
-      <HorizontalLine></HorizontalLine>
-
-      <View style={styles.row}>
-        <Text style={styles.smallText}>Last period</Text>
-        <DateRange/>
-      </View>
-      <HorizontalLine></HorizontalLine>
+      { periodStart && periodEnd && <View>
+        <View style={styles.row}>
+          <Text style={styles.smallText}>Last period</Text>
+          <DateRange/>
+        </View>
+        <HorizontalLine></HorizontalLine>
+      </View> }
 
       <View style={styles.row}>
         <Text style={styles.smallText}>Symptoms to log</Text>
         <IconPref/>
       </View>
       <HorizontalLine></HorizontalLine>
+
+      <Text style={styles.infoText}>Tap the X to close</Text>
     </ImageBackground>
   );
 }
@@ -123,5 +131,12 @@ const styles = StyleSheet.create({
     marginRight: 15,
     marginBottom: 15,
     marginTop: 4
+  },
+  infoText: {
+    fontFamily: "Avenir",
+    fontSize: 12,
+    fontWeight: "800",
+    textAlign: "center",
+    bottom: "-25%"
   }
 });

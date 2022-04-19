@@ -1,8 +1,8 @@
+import { View, StyleSheet, SafeAreaView, TouchableOpacity, Text } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
-import Selector from '../components/Selector';
+import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'react-native-elements';
 import { GETYearData } from '../../services/CalendarService';
@@ -24,7 +24,7 @@ export const Calendar = ({ navigation, marked, setYearInView, selectedView, curr
         pastScrollRange={12}
 
         // Max amount of months allowed to scroll to the future. Default = 50
-        futureScrollRange={12}
+        futureScrollRange={0}
 
         // Enable or disable scrolling of calendar list
         scrollEnabled={true}
@@ -122,12 +122,13 @@ export default function CalendarScreen ({ route, navigation }) {
         
                                 // Add it into the marked state, which then updates the calendar
                                 newMarkedData[isoDate] = {
-                                    symptoms: symptomData
+                                    symptoms: symptomData,
+                                    disable: date > new Date()
                                 }
                             }
                         }
                     }
-                    setMarked(markedState => ({...markedState, ...newMarkedData}))
+                    setMarked(markedState => ({...markedState, ...newMarkedData}));
                 } 
             }
         }
@@ -145,14 +146,15 @@ export default function CalendarScreen ({ route, navigation }) {
         }, [route.params?.inputData])
     )
 
-    const toggleSelectedView = (targetView) => {
-        
-        if (selectedView === targetView){
-            setSelectedView(VIEWS.Nothing);
-        }
-        else {
-            console.log("Selected " + targetView)
-            setSelectedView(targetView);
+    const toggleSelectedView = (targetView, toggleable) => {
+        if (toggleable) {
+            if (selectedView === targetView) {
+                setSelectedView(VIEWS.Nothing);
+                console.log("bruh");
+            } else {
+                console.log("Selected " + targetView)
+                setSelectedView(targetView);
+            }
         }
     }
 
@@ -161,31 +163,32 @@ export default function CalendarScreen ({ route, navigation }) {
             setSelectedView(VIEWS.Flow)
     }, [route.params?.newDate])
 
-    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
+    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (
-        <View style={styles.container}>
-            <View style={styles.navbarContainer}>
-                <Button icon={renderedArrow}
-                    iconRight={true}
-                    title={selectedView}
-                    titleStyle={styles.dropdownText}
-                        type="clear"
-                    onPress={() => setDropdownExpanded(!dropdownExpanded)}
-                    />
-            </View>
+        <SafeAreaView style={styles.container}>
+            <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
+                <Text style={styles.dropdownText}>{selectedView}</Text>
+                <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
+                {renderedArrow}
+            </TouchableOpacity>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
-            <Calendar 
-                navigation={navigation} 
-                marked={marked} 
-                setYearInView={setYearInView} 
-                selectedView={selectedView} 
-                currentDate={route.params?.newDate}
-            />
-        </View>
+            <View style={styles.calendar}>
+                <Calendar 
+                    navigation={navigation} 
+                    marked={marked} 
+                    setYearInView={setYearInView} 
+                    selectedView={selectedView}
+                    currentDate={route.params?.newDate}
+                />
+            </View>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    calendar: {
+      marginBottom: '20%'
+    },
     container: {
         flex: 1,
         alignItems: 'stretch',
@@ -196,7 +199,11 @@ const styles = StyleSheet.create({
         marginTop: 0,
         flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#FFFFFF'
+    },
+    selectorItem:{
+        marginHorizontal: 10
     },
     horizContainer: {
         flex:1,
@@ -205,11 +212,11 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     dropdownText:{
-        fontStyle: 'normal',
-        fontWeight: "700",
-        color: "#000",
-        alignItems: 'center',
-        lineHeight:20,
-
+        fontFamily: "Avenir",
+        fontSize: 20,
+        fontWeight: "800",
+        lineHeight: 27,
+        letterSpacing: -0.4848649203777313,
+        textAlign: "center",
     },
 })
