@@ -4,7 +4,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
-    "start": "react-native start"
+    "start": "react-native start",
+    "test": "jest"
   },
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.1.5",
@@ -30,10 +31,11 @@
     "react-native-exception-handler": "^2.10.10",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-pager-view": "^5.4.15",
-    "react-native-progress-wheel": "^1.0.5",
     "react-native-paper": "^4.12.0",
     "react-native-paper-dates": "^0.8.7",
+    "react-native-progress-wheel": "^1.0.5",
     "react-native-reanimated": "~2.2.0",
+    "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-svg": "^12.1.1",
@@ -41,11 +43,13 @@
     "react-native-tab-view": "^3.1.1",
     "react-native-unimodules": "~0.14.5",
     "react-native-web": "~0.13.12",
+    "react-test-renderer": "^18.0.0",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@react-navigation/native": "^6.0.6"
+    "@react-navigation/native": "^6.0.6",
+    "jest": "^27.5.1"
   },
   "private": true,
   "name": "tpp-app",

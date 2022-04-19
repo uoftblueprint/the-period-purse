@@ -50,31 +50,44 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
 
 /**
  * Updates user's flow to medium on selected days where the user's flow was originally null or none.
- * @param {Array<date>} dates
+ * @param {Array<date>} datesToMark
+ * @param {Array<date>} datesToUnmark
  * where date.day is a number (1st day of month = 1),
  * date.month is a number (January = 1),
  * date.year is a number.
  */
-export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve, reject) => {
+export const LogMultipleDayPeriod = async (datesToMark, datesToUnmark) => {
     // run this code for each value in the dates array
-    if(dates.length > 0){
+    if(datesToMark.length + datesToUnmark.length > 0){
         try {
-            curYear = dates[0].year;
+            const allDates = datesToMark.concat(datesToUnmark);
+            const curYear = allDates[0].year;
             const calendarData = await getCalendarByYear(curYear);
-        
 
-            dates.map((date) => {
+
+            allDates.map((date, index) => {
                 const year = date.year;
                 const month = date.month;
                 const day = date.day;
                 try {
+
+                    // initialize years that are not in the data
+                    if(!calendarData[year]){
+                        calendarData[year] = initializeEmptyYear(year);
+                    }
                     
                     let symptoms = getSymptomsFromCalendar(calendarData, day, month, year);
 
-                    // console.log(symptoms);
+                    // Need to mark the date with period
+                    if (index < datesToMark.length) {
+                        if (symptoms.flow == null || symptoms.flow === FLOW_LEVEL.NONE){
+                            symptoms.flow = FLOW_LEVEL.MEDIUM;
+                        }
+                    }
 
-                    if (symptoms.flow == null || symptoms.flow == FLOW_LEVEL.NONE){
-                        symptoms.flow = FLOW_LEVEL.MEDIUM;
+                    // Need to unmark the date with no period
+                    else if (datesToMark.length <= index) {
+                        symptoms.flow = null;
                     }
 
                     calendarData[year][month-1][day-1] = symptoms;
@@ -84,33 +97,15 @@ export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve,
 
             })
 
-            if(calendarData[curYear]){
-                AsyncStorage.setItem(curYear.toString(), JSON.stringify(calendarData[curYear]))
-                .then(() => resolve())
-                .catch((e) => {
-                    console.log(JSON.stringify(e));
-                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
-                });
-                
-            }
-            
-            if(calendarData[curYear - 1]){
-                AsyncStorage.setItem((curYear - 1).toString(), JSON.stringify(calendarData[curYear - 1]))
-                .then(() => resolve())
-                .catch((e) => {
-                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
-                    console.log(JSON.stringify(e));
-                });
-            }
+            for (const [key, value] of Object.entries(calendarData)){
 
-            // a bit unneccessary since you can't log symptoms for the future.
-            if(calendarData[curYear + 1]){
-                AsyncStorage.setItem((curYear + 1).toString(), JSON.stringify(calendarData[curYear + 1]))
-                .then(() => resolve())
-                .catch((e) => {
-                    reject(`Unable to mergeItem and post symptoms for multiselect.`);
-                    console.log(JSON.stringify(e));
-                });
+                if(value){
+                    try {
+                        await AsyncStorage.setItem(key.toString(), JSON.stringify(value));
+                    } catch (error) {
+                        console.log(`LogMultipleDayPeriod error: ${JSON.stringify(error)}`)
+                    }
+                }
             }
 
         } catch (error) {
@@ -118,7 +113,7 @@ export const LogMultipleDayPeriod = async (dates) => new Promise(async (resolve,
         }
     }
 
-})
+}
 
 // TODO implement helper function
 const postSymptomsForYear = async (calendarData, year) => {
