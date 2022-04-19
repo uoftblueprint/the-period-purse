@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         marginBottom: 75
     },
     iconsContainer: {
-        marginTop: 50,
+        marginTop: "10%",
         justifyContent: "center",
         flexDirection: "row",
         alignItems: "center",
