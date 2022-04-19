@@ -15,8 +15,7 @@ import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, 
 import { TRACK_SYMPTOMS } from '../services/utils/constants'
 import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
-import {getSymptomsFromCalendar, getCalendarByYear} from '../services/utils/helpers.js';
-
+import {STACK_SCREENS} from './SettingsNavigator.js';
 const PreferenceButton = (props) => {
 
     return (
@@ -96,26 +95,26 @@ const Preferences = (props) => {
       }, [])
    
     const handleFlow = () => { 
-        flow == WHITE ? trackFlow(TEAL) : trackExercise(WHITE);
+        flow === WHITE ? trackFlow(TEAL) : trackExercise(WHITE);
 
         POSTUpdateOnePreference(TRACK_SYMPTOMS.FLOW, flow == TEAL);
       }
       const handleSleep = () => { 
-        sleep == WHITE ? trackSleep(TEAL) : trackSleep(WHITE);
+        sleep === WHITE ? trackSleep(TEAL) : trackSleep(WHITE);
 
         POSTUpdateOnePreference(TRACK_SYMPTOMS.SLEEP, sleep == TEAL);
       }
       const handleMood = () => { 
-        mood == WHITE ? trackMood(TEAL) : trackMood(WHITE);
+        mood === WHITE ? trackMood(TEAL) : trackMood(WHITE);
 
         POSTUpdateOnePreference(TRACK_SYMPTOMS.MOOD, mood == TEAL);
       }
       const handleCramp = () => { 
-        cramps == WHITE ? trackCramps(TEAL) : trackCramps(WHITE);
+        cramps === WHITE ? trackCramps(TEAL) : trackCramps(WHITE);
         POSTUpdateOnePreference(TRACK_SYMPTOMS.CRAMPS, cramps == TEAL);
       }
       const handleExercise = () => { 
-        exercise == WHITE ? trackExercise(TEAL) : trackExercise(WHITE);
+        exercise === WHITE ? trackExercise(TEAL) : trackExercise(WHITE);
         POSTUpdateOnePreference(TRACK_SYMPTOMS.EXERCISE, exercise == TEAL);
       }
     return (
@@ -164,9 +163,16 @@ const TermsAndConditions = () => {
     )
 }
 
+const settingScreens = new Map([
+    ["Profile Information", STACK_SCREENS.PROFILE_INFORMATION],
+    ["Privacy Policy", STACK_SCREENS.PRIVACY_POLICY],
+    ["Log Out", STACK_SCREENS.LOG_OUT],
+    ["Delete Account", STACK_SCREENS.DELETE_ACCOUNT]
+])
+
 const SettingsStackButton = (props) => {
     return (
-    <TouchableOpacity onPress={() => props.navigation.navigate(props.name)}>
+    <TouchableOpacity onPress={() => props.navigation.navigate(settingScreens[props.name])}>
         <SafeAreaView style={styles.optionView} >
 
         <Text style={styles.optionText}>{props.name}</Text>
@@ -421,7 +427,7 @@ return (
             subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`} 
             toggle={toggleSymptomsSwitch}
             enabled={remindSymptomsEnabled}/>
-  <TouchableOpacity onPress={() => props.navigation.navigate("Notifications")}> 
+  <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}> 
 <View>
     
      <SafeAreaView style={styles.notificationSettingsView} >

@@ -6,7 +6,13 @@ import Notifications from './Notifications';
 const Stack = createNativeStackNavigator();
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-
+export const STACK_SCREENS = {
+  SETTINGS: "Settings",
+  NOTIFICATIONS: "Notifications",
+  PROFILE_INFORMATION: "Profile Information",
+  PRIVACY_POLCIY: "Privacy Policy",
+  DELETE_ACCOUNT: "Delete Account"
+}
 export default function SettingsNavigator({navigation}) {
     return(
         <Stack.Navigator intialRouteName="Settings" screenOptions={{ headerShown: true,
@@ -17,15 +23,15 @@ export default function SettingsNavigator({navigation}) {
               fontFamily: "Avenir",
             },
           }}>
-             <Stack.Screen name={"Settings"} component={Settings} />
-             <Stack.Screen name={"Notifications"} component={Notifications} 
-              options={{
-                headerLeft : () => (<TouchableOpacity 
-                  onPress={() => navigation.goBack()}
-              >
-                  <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
-              </TouchableOpacity>)
-              }}/>
+             <Stack.Screen name={STACK_SCREENS.SETTINGS} component={Settings} />
+             <Stack.Screen name={STACK_SCREENS.NOTIFICATIONS} component={Notifications} 
+              // options={{
+              //   headerLeft : () => (<TouchableOpacity 
+              //     onPress={() => navigation.goBack(null)}
+              // >
+              //     <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
+              // </TouchableOpacity>)}}
+              />
         </Stack.Navigator>
     )
 };

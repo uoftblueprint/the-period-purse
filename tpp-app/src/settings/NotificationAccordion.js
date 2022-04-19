@@ -294,7 +294,7 @@ const SchedulingPicker = (props) => {
                 />
                 <Picker.Item 
                 label={"4 days"}
-                value={"1"} 
+                value={"4"} 
                 />
                 <Picker.Item 
                 label={"5 days"}
