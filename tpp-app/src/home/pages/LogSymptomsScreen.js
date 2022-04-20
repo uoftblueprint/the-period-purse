@@ -341,8 +341,12 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
       <View style={[styles.centerText, {marginHorizontal: 28}]}>
         <TouchableOpacity
-          style={styles.saveButton}
-          onPress={() => setSubmitting(true) }
+          disabled={!isDirty}
+          style={[styles.saveButton, isDirty ? styles.saveButtonActive : styles.saveButtonDisabled]}
+          onPress={() => {
+            if (!isDirty) return; // if no changes, do nothing
+            setSubmitting(true);
+          }}
         >
           <Text style={{color: '#fff'}}>Save</Text>
         </TouchableOpacity>
@@ -404,9 +408,21 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#5A9F93',
       width: '100%',
       height: 39,
       marginTop: 25
+    },
+    saveButtonActive: {
+      backgroundColor: '#5A9F93',
+
+    },
+    saveButtonDisabled: {
+      backgroundColor: '#A9BDBA',
+    },
+    arrows: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 30,
+      width: 30
     }
 });
