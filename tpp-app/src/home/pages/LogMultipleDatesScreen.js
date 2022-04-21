@@ -10,6 +10,7 @@ import { scrollDate } from './CalendarScreen';
 import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/utils/constants";
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
+import Constants from 'expo-constants';
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -223,10 +224,16 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 console.log(error);
             }
         }
-
-        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, { 
+        
+        let newDate = null;
+        if(selectedDates.length > 0) 
+            newDate = [selectedDates[0].year, selectedDates[0].month, selectedDates[0].day].join("-")
+        else if(deselectedDates.length > 0)
+            newDate = [deselectedDates[0].year, deselectedDates[0].month, deselectedDates[0].day].join("-")
+        
+        navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, { 
             inputData: inputData,
-            newDate: selectedDates.length > 0 ? selectedDates[0] : null
+            newDate: newDate
         });
         await calculateAverages();
     }
@@ -279,7 +286,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                   navigation={navigation}
                   setSelectedDates={setSelectedDates}
                   markedDates={markedDates}
-                  currentDate={scrollDate}
+                  currentDate={scrollDate ? scrollDate : getISODate(new Date())}
               />
             </View>  
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>

@@ -4,14 +4,13 @@ import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
 import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Button} from 'react-native-elements';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
 
 const sideComponentWidth = 120
-export let scrollDate = new Date()
+export let scrollDate;
 
 export const Calendar = ({ navigation, marked, setYearInView, selectedView, currentDate }) => {
 
