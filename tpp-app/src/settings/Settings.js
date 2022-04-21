@@ -137,7 +137,6 @@ const Preferences = (props) => {
         <View>
             <Text style={styles.heading}>Tracking Preferences </Text>
             <View style={styles.preferences}>
-                <PreferenceButton source={VIEWS.Flow} cardName="Flow" set={flow} onPress={handleFlow}/>
                 <PreferenceButton source={VIEWS.Mood} cardName="Mood" set={mood} onPress={handleMood}/>
                 <PreferenceButton source={VIEWS.Exercise} cardName="Exercise" set={exercise} onPress={handleExercise}/>
                 <PreferenceButton source={VIEWS.Cramps} cardName="Cramps" set={cramps} onPress={handleCramp}/>
@@ -328,13 +327,14 @@ useEffect(() => {
 
     const togglePeriodSwitch = () => {
         setRemindPeriodEnabled(!remindPeriodEnabled)
-        POSTRemindLogPeriod(remindPeriodEnabled); // post here 
+        // POSTRemindLogPeriod(remindPeriodEnabled); // post here
         let daysAheadStr = remindPeriodFreq.split(" ")[0]
         
         let daysAhead = parseInt(daysAheadStr);
-        
-        if(remindPeriodEnabled){
-            if (numberOfDaysUntilPeriod > daysAhead) { // if the number of days until period is less than days ahead, then we can't schedule notification
+        console.log("334", remindPeriodEnabled);
+        if(!remindPeriodEnabled){
+            console.log("REMIND 0");
+            // if (numberOfDaysUntilPeriod > daysAhead) { // if the number of days until period is less than days ahead, then we can't schedule notification
                 PushNotificationIOS.addNotificationRequest({
                     id: 'remindperiod',
                     title: 'Period Reminder!',
@@ -343,7 +343,7 @@ useEffect(() => {
                     fireDate: getCorrectDate((numberOfDaysUntilPeriod - daysAhead), remindPeriodTime),
                     repeats: true
                 })
-            }
+            // }
             
         } else {
             PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
@@ -355,6 +355,7 @@ useEffect(() => {
         POSTRemindLogSymptoms(remindSymptomsEnabled);
         
         if (remindSymptomsEnabled) {
+            console.log("REMIND1", remindPeriodFreq);
             // Schedule a reoccuring notification 
             switch (remindPeriodFreq) {
                 case "Every day":
@@ -429,10 +430,16 @@ useEffect(() => {
         let hour = parseInt(timeToSet[0].split(":")[0])
         let minute = parseInt(timeToSet[0].split(":")[1])
 
+        // const date = new Date();
+        // date.setDate(date.getDate() + daysAdded);
+        // date.setHours(hour);
+        // date.setMinutes(minute);
+        // return date;
         const date = new Date();
-        date.setDate(date.getDate() + daysAdded);
-        date.setHours(hour);
-        date.setMinutes(minute);
+        date.setDate(date.getDate());
+        date.setHours(10);
+        date.setMinutes(40);
+        console.log("DATE SET", date);
         return date;
     };
 return (
@@ -492,9 +499,11 @@ export default function Settings ({ navigation }) {
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <ScrollView>
                 <SafeAreaView style={styles.container}>
-                <Preferences/>
-                <NotificationSettings navigation={navigation}/>
-                <SettingOptions navigation={navigation}/>
+                    <View style={{ marginLeft: "5%" }}>
+                    <Preferences/>
+                    <NotificationSettings navigation={navigation}/>
+                    <SettingOptions navigation={navigation}/>
+                    </View>
                 <Footer navigation={navigation}/>
                 </SafeAreaView>
             </ScrollView>
@@ -516,6 +525,7 @@ const styles = StyleSheet.create({
     preferences: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-evenly',
         padding: 10,
         left: -20
     },
@@ -534,7 +544,6 @@ const styles = StyleSheet.create({
     },
     container: {
         justifyContent: 'space-evenly',
-        marginLeft: 24,
         marginRight: 10,
         marginTop: -10,
         marginBottom: 75
