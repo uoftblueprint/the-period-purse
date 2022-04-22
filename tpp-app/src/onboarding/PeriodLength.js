@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ImageBackground, TextInput, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, ImageBackground, TextInput, Text, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
@@ -43,6 +43,7 @@ export default function PeriodLength ({ navigation }) {
         <InputContainer style={{ bottom: "25%" }}>
           <TextInput style={periodLength ? styles.output : styles.input} 
           placeholder="Tap to input" 
+          placeholderTextColor='#6D6E71'
           keyboardType="number-pad" 
           returnKeyType='done'
           onChangeText={(periodLength) => setPeriodLength(periodLength)}
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     alignSelf: 'center',
     marginTop: '10%',
-    right: 5
+    right: 5,
   },
   icon: {
     alignSelf: 'center',

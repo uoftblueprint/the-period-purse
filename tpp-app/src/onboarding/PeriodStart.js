@@ -92,9 +92,9 @@ export default function PeriodStart ({ route, navigation }) {
             <DatePickerButton 
               title={range.startDate ? getCustomDateString(range.startDate) : "Choose date"} 
               onPress={() => setOpen(true)}
-              inputted={range.startDate}>
-            </DatePickerButton>
-            <CalendarIconPref/>
+              inputted={range.startDate}
+              icon={<CalendarIconPref style={styles.icon}/>}
+            />
           </InputContainer>
           <DatePickerModal 
             backgroundColor="#000000"
@@ -183,6 +183,6 @@ const styles = StyleSheet.create({
   icon: {
     alignSelf: 'center',
     left: '30%',
-    bottom: '38%'
+    bottom: '-35%'
   }
 });

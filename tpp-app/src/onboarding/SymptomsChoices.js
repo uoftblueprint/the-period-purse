@@ -8,7 +8,6 @@ import { NextButton, SymptomsChoicesButton, SkipButton } from './components/Butt
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer, SymptomsButtonContainer } from './components/ContainerComponents';
 import { POSTSymptomsToTrack } from '../services/OnboardingService';
-import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
