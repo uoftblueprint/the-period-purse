@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ImageBackground, KeyboardAwareScrollView, TextInput, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, ImageBackground, TextInput, Text, SafeAreaView } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
@@ -11,6 +11,7 @@ import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_s
 import PeriodLengthIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_length.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar1.svg";
 import KeyboardIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_keyboard.svg";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function PeriodLength ({ navigation }) {
   const [periodLength, setPeriodLength] = useState(null)
@@ -23,52 +24,50 @@ export default function PeriodLength ({ navigation }) {
   }
 
   return (
-    <KeyboardAwareScrollView> 
+    
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
-      
-      {/* behavior={Platform.OS === "ios" ? "padding" : "height"}> */}
+      <KeyboardAwareScrollView> 
+        
+        <BackButtonContainer>
+          <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.GET_STARTED)}}/>
+        </BackButtonContainer>
 
-      <BackButtonContainer>
-        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.GET_STARTED)}}/>
-      </BackButtonContainer>
-      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
-      <SafeAreaView pointerEvents="box-none" style={{ alignItems: 'center' }}>
-        <BackgroundShape style={{ top: 10 }}/>
-        <PeriodLengthIcon width='130' height='130' style={{ bottom: '38%' }}/>
-        <BarIcon style={{ bottom: '30%'}}/>
+        <SafeAreaView pointerEvents="box-none" style={{ alignItems: 'center' }}>
+          <BackgroundShape style={{ top: 10 }}/>
+          <PeriodLengthIcon width='130' height='130' style={{ bottom: '38%' }}/>
+          <BarIcon style={{ bottom: '30%'}}/>
 
-        <TitleText style={{ bottom: '28%' }}>
-          How long does your {'\n'} period usually last?
-        </TitleText>
-        <BodyText style={{ bottom: "28%" }}>
-          This will help us make our {'\n'} reminders more accurate
-        </BodyText>
+          <TitleText style={{ bottom: '28%' }}>
+            How long does your {'\n'} period usually last?
+          </TitleText>
+          <BodyText style={{ bottom: "28%" }}>
+            This will help us make our {'\n'} reminders more accurate
+          </BodyText>
 
-        <InputContainer style={{ bottom: "25%" }}>
-          <TextInput style={periodLength ? styles.output : styles.input} 
-          placeholder="Tap to input" 
-          keyboardType="number-pad" 
-          returnKeyType='done'
-          onChangeText={(periodLength) => setPeriodLength(periodLength)}
-          />
-          <KeyboardIconPref/>
-        </InputContainer>
-      </SafeAreaView>
-      {/* </TouchableWithoutFeedback> */}
+          <InputContainer style={{ bottom: "25%" }}>
+            <TextInput style={periodLength ? styles.output : styles.input} 
+            placeholder="Tap to input" 
+            keyboardType="number-pad" 
+            returnKeyType='done'
+            onChangeText={(periodLength) => setPeriodLength(periodLength)}
+            />
+            <KeyboardIconPref/>
+          </InputContainer>
+        </SafeAreaView>
 
-      <TwoButtonContainer>
-        <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: null })}/>
-        <NextButton title="Next" onPress={() => 
-          {
-            POSTInitialPeriodLength(parseInt(periodLength));
-            navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: periodLength });
-          }}
-          disabled={periodLength && periodLength > 0? false : true}/>
-      </TwoButtonContainer>
+        <TwoButtonContainer>
+          <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: null })}/>
+          <NextButton title="Next" onPress={() => 
+            {
+              POSTInitialPeriodLength(parseInt(periodLength));
+              navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: periodLength });
+            }}
+            disabled={periodLength && periodLength > 0? false : true}/>
+        </TwoButtonContainer>
 
-      
+      </KeyboardAwareScrollView>
     </ImageBackground>
-    </KeyboardAwareScrollView>
+   
   );
 }
 
