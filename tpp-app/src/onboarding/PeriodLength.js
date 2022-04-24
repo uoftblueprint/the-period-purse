@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ImageBackground, TextInput, Text, SafeAreaView, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, ImageBackground, KeyboardAwareScrollView, TextInput, Text, SafeAreaView } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
@@ -23,11 +23,15 @@ export default function PeriodLength ({ navigation }) {
   }
 
   return (
+    <KeyboardAwareScrollView> 
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
+      
+      {/* behavior={Platform.OS === "ios" ? "padding" : "height"}> */}
+
       <BackButtonContainer>
         <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.GET_STARTED)}}/>
       </BackButtonContainer>
-
+      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
       <SafeAreaView pointerEvents="box-none" style={{ alignItems: 'center' }}>
         <BackgroundShape style={{ top: 10 }}/>
         <PeriodLengthIcon width='130' height='130' style={{ bottom: '38%' }}/>
@@ -43,7 +47,6 @@ export default function PeriodLength ({ navigation }) {
         <InputContainer style={{ bottom: "25%" }}>
           <TextInput style={periodLength ? styles.output : styles.input} 
           placeholder="Tap to input" 
-          placeholderTextColor='#6D6E71'
           keyboardType="number-pad" 
           returnKeyType='done'
           onChangeText={(periodLength) => setPeriodLength(periodLength)}
@@ -51,6 +54,7 @@ export default function PeriodLength ({ navigation }) {
           <KeyboardIconPref/>
         </InputContainer>
       </SafeAreaView>
+      {/* </TouchableWithoutFeedback> */}
 
       <TwoButtonContainer>
         <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: null })}/>
@@ -61,7 +65,10 @@ export default function PeriodLength ({ navigation }) {
           }}
           disabled={periodLength && periodLength > 0? false : true}/>
       </TwoButtonContainer>
+
+      
     </ImageBackground>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -76,7 +83,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     alignSelf: 'center',
     marginTop: '10%',
-    right: 5,
+    right: 5
   },
   icon: {
     alignSelf: 'center',
