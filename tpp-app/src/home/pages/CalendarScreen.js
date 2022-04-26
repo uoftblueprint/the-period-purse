@@ -4,7 +4,6 @@ import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
 import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Button} from 'react-native-elements';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
@@ -165,7 +164,7 @@ export default function CalendarScreen ({ route, navigation }) {
             <View style={styles.calendar}>
                 <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
             </View>
-        </SafeAreaView>
+       </SafeAreaView>
     )
 }
 
@@ -196,16 +195,11 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     dropdownText:{
-
-
         fontFamily: "Avenir",
         fontSize: 20,
         fontWeight: "800",
         lineHeight: 27,
         letterSpacing: -0.4848649203777313,
         textAlign: "center",
-
-
-
     },
 })

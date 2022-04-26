@@ -5,6 +5,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { TabBarMiddleButton } from '../components/TabBarMiddleButton'
 import BloodDrop from '../../../ios/tppapp/Images.xcassets/icons/blood_drop';
 import Calendar from '../../../ios/tppapp/Images.xcassets/icons/calendar_icon_multiple_dates';
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 
 
 export default function SelectLogOptionOverlay({ navigation }) {
@@ -22,7 +23,7 @@ export default function SelectLogOptionOverlay({ navigation }) {
               onPress={() => {
                 navigation.goBack(); // dismiss this overlay first
                 navigation.navigate(
-                  'LogSymptoms',
+                  CALENDAR_STACK_SCREENS.LOG_SYMPTOMS,
                   {"date": {
                     year: today.getFullYear(),
                     month: today.getMonth() + 1,
@@ -37,7 +38,7 @@ export default function SelectLogOptionOverlay({ navigation }) {
               icon={<Calendar />}
               onPress={() => {
                 navigation.goBack();
-                navigation.navigate('LogMultipleDates');
+                navigation.navigate(CALENDAR_STACK_SCREENS.LOG_MULTIPLE_DATES);
               }}
             />
 
