@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
-import { CrossButton } from './components/ButtonComponents';
+import { CrossButton, WideButton } from './components/ButtonComponents';
 import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
@@ -62,10 +62,6 @@ export default function Confirmation ({ route, navigation }) {
   return (
   <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
-      <BackButtonContainer>
-        <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS.MAIN_PAGE)}}/>
-      </BackButtonContainer>
-
       <PaddyIcon style={{alignSelf: "center"}}/>
       <Text style={styles.bigText}>You're all set!</Text>
       { periodLength && <View>
@@ -90,7 +86,10 @@ export default function Confirmation ({ route, navigation }) {
       </View>
       <HorizontalLine></HorizontalLine>
 
-      <Text style={styles.infoText}>Tap the X to close</Text>
+      <WideButton 
+        title="Let's go!" color="#5A9F93" bottom="-8%"
+        onPress={() => navigation.navigate(STACK_SCREENS.MAIN_PAGE)}
+      />
     </ImageBackground>
   </ErrorFallback>
   );

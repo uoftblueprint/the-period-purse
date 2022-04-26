@@ -35,28 +35,27 @@ const GetStarted = ({ navigation }) => {
     }
 
   return(
-      <ErrorFallback>
-        <ImageBackground source={OnboardingBackground} style={styles.container}>
-          <Image style={styles.appIcon} source={MNationIcon}/>
-          <Text style={styles.titleText}>Welcome!</Text>
-          <View style={{height: 80}}></View>
-          <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
-          <AppleSignin />
-            <Button onPress={causeJSError} title="CAUSE JS ERROR" color="#841584"/>
-            <View style={styles.copyright}>
-              <Text>{`By continuing, you accept the`}</Text>
-          </View>
-          <View style={styles.terms}>
-              <TouchableOpacity onPress={openTermsAndCondition} style={styles.textLink} >
-                  <Text style={styles.termsText}> Terms and Conditions</Text>
-              </TouchableOpacity>
-              <Text style={styles.textLink}> and </Text>
-              <TouchableOpacity onPress={openPrivacyPolicy} style={styles.textLink} >
-                  <Text style={styles.termsText}>Privacy Policy. </Text>
-              </TouchableOpacity>
-          </View>
-        </ImageBackground>
-      </ErrorFallback>
+  <ErrorFallback>
+    <ImageBackground source={OnboardingBackground} style={styles.container}>
+      <Image style={styles.appIcon} source={MNationIcon}/>
+      <Text style={styles.titleText}>Welcome!</Text>
+      <View style={{height: 80}}></View>
+      <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
+      <AppleSignin />
+      <View style={styles.copyright}>
+          <Text>{`By continuing, you accept the`}</Text>
+      </View>
+      <View style={styles.terms}>
+          <TouchableOpacity onPress={openTermsAndCondition} style={styles.textLink} >
+              <Text style={styles.termsText}> Terms and Conditions</Text>
+          </TouchableOpacity>
+          <Text style={styles.textLink}> and </Text>
+          <TouchableOpacity onPress={openPrivacyPolicy} style={styles.textLink} >
+              <Text style={styles.termsText}>Privacy Policy </Text>
+          </TouchableOpacity>
+      </View>
+    </ImageBackground>
+  </ErrorFallback>
   )
 };
 

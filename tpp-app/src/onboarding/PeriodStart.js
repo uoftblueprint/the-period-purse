@@ -24,6 +24,7 @@ export default function PeriodStart ({ route, navigation }) {
 
   const onDismiss = React.useCallback(() => {
     setOpen(false);
+    setRange({ undefined, undefined });
   }, [setOpen]);
 
   const onConfirm = React.useCallback(
@@ -65,6 +66,8 @@ export default function PeriodStart ({ route, navigation }) {
    * @returns string version of date, formatted as "YYYY-MM-DD"
    */
   function getCustomDateString(date) {
+    if(!date)
+      return null;
     var month = date.getMonth() + 1  // month starts at 0
     var day = date.getDate()
     return [date.getFullYear(), (month > 9 ? '' : '0') + month, (day > 9 ? '' : '0') + day].join('-') 
@@ -94,9 +97,9 @@ export default function PeriodStart ({ route, navigation }) {
             <DatePickerButton 
               title={range.startDate ? getCustomDateString(range.startDate) : "Choose date"} 
               onPress={() => setOpen(true)}
-              inputted={range.startDate}>
-            </DatePickerButton>
-            <CalendarIconPref/>
+              inputted={range.startDate}
+              icon={<CalendarIconPref style={styles.icon}/>}
+            />
           </InputContainer>
           <DatePickerModal 
             backgroundColor="#000000"
@@ -125,11 +128,15 @@ export default function PeriodStart ({ route, navigation }) {
           })}/>
           <NextButton title="Next" onPress={() => 
             {
-              if(periodLength == null) {
-                // user did not enter periodLength previously but manually selected a complete date range
-                newPeriodLength = Math.round((range.endDate.getTime() - range.startDate.getTime()) / MILLISECPERDAY);
-                POSTInitialPeriodLength(newPeriodLength);
+              if(range.endDate) { 
+                if(periodLength == null) {
+                  // user did not enter periodLength previously but manually selected a complete date range
+                  newPeriodLength = Math.round((range.endDate.getTime() - range.startDate.getTime()) / MILLISECPERDAY);
+                  POSTInitialPeriodLength(newPeriodLength);
+                }
               }
+              else
+                range.endDate = range.startDate  // just log 1 day if no end date is found
               POSTInitialPeriodStart(range.startDate, range.endDate);
               navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
                 periodLength: newPeriodLength,
@@ -138,7 +145,7 @@ export default function PeriodStart ({ route, navigation }) {
                 periodEnd: getCustomDateString(range.endDate)
               });
             }}
-            disabled={range.endDate && range.startDate ? false : true}/>
+            disabled={range.startDate ? false : true}/>
         </TwoButtonContainer>
       </ImageBackground>
     </PaperProvider>
@@ -186,6 +193,6 @@ const styles = StyleSheet.create({
   icon: {
     alignSelf: 'center',
     left: '30%',
-    bottom: '38%'
+    bottom: '-35%'
   }
 });

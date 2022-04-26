@@ -15,36 +15,36 @@ export default TermsAndConditionsScreen = ({navigation}) => {
     }
 
     return(
-        <ErrorFallback>
-            <ImageBackground source={OnboardingBackground} style={styles.containter}>
-                <View style={styles.navbarContainer}>
-                    <TouchableOpacity onPress={() => onClose()} style={styles.backIcon}>
-                        <BackIcon fill={'#181818'}/>
-                    </TouchableOpacity>
-                    <Text style={styles.navbarText}>Terms and conditions</Text>
-                </View>
-
-                <ScrollView style={styles.scrollContainer}>
-                    <Text style={styles.title}>Terms and conditions</Text>
-                    <View style={styles.line}/>
-                    <RenderHtml source={source} contentWidth={width}/>
-                        {/* <Text style={styles.titleText}>TERMS AND CONDITIONS</Text>
-
-                        <Text style={styles.standardText}>{
-                            `\nThese terms and conditions (the "Terms and Conditions") govern the use of`}
-                            <Text style={{...styles.standardText, fontWeight: "bold",}}> www.theperiodpurse.com </Text>
-                            {`(the "Site"). This Site is owned and operated by The Period Purse. This Site is a news or media website.`
-                        }</Text>
-                        <Text style={styles.standardText}>{`\nBy using this Site, you indicate that you have read and understand these Terms and Conditions and agree to abide by them at all times.`}</Text>
-
-                        <Text style={styles.header}>{`\nIntellectual Property`}</Text>
-                        <Text style={styles.standardText}>{`All content published and made available on our Site is the property of The Period Purse and the Site's creators. This includes, but is not limited to images, text, logos, documents, downloadable files and anything that contributes to the composition of our Site.`}</Text>
-                        <Text style={styles.header}>{`\nAccounts`}</Text>
-                        <Text style={styles.standardText}>{`When you create an account on our Site, you agree to the following:`}</Text>
-                    <Text style={styles.listNumber}>{`\u2022 You are solely responsible for your account and the security and privacy of your account, including passwords or sensitive information attached to that account; and`}</Text> */}
-                </ScrollView>
-            </ImageBackground>
-        </ErrorFallback>
+      <ErrorFallback>
+        <ImageBackground source={OnboardingBackground} style={styles.containter}>
+            <View style={styles.navbarContainer}>
+                <TouchableOpacity onPress={() => onClose()} style={styles.backIcon}>
+                    <BackIcon fill={'#181818'}/>
+                </TouchableOpacity>
+                <Text style={styles.navbarText}>Terms and Conditions</Text>
+            </View>
+            
+            <ScrollView style={styles.scrollContainer}>
+                <Text style={styles.title}>Terms and Conditions</Text>
+                <View style={styles.line}/>
+                <RenderHtml source={source} contentWidth={width}/>
+                    {/* <Text style={styles.titleText}>TERMS AND CONDITIONS</Text>
+                    
+                    <Text style={styles.standardText}>{
+                        `\nThese terms and conditions (the "Terms and Conditions") govern the use of`}
+                        <Text style={{...styles.standardText, fontWeight: "bold",}}> www.theperiodpurse.com </Text>
+                        {`(the "Site"). This Site is owned and operated by The Period Purse. This Site is a news or media website.`
+                    }</Text>
+                    <Text style={styles.standardText}>{`\nBy using this Site, you indicate that you have read and understand these Terms and Conditions and agree to abide by them at all times.`}</Text>
+                    
+                    <Text style={styles.header}>{`\nIntellectual Property`}</Text>
+                    <Text style={styles.standardText}>{`All content published and made available on our Site is the property of The Period Purse and the Site's creators. This includes, but is not limited to images, text, logos, documents, downloadable files and anything that contributes to the composition of our Site.`}</Text>
+                    <Text style={styles.header}>{`\nAccounts`}</Text>
+                    <Text style={styles.standardText}>{`When you create an account on our Site, you agree to the following:`}</Text>
+                <Text style={styles.listNumber}>{`\u2022 You are solely responsible for your account and the security and privacy of your account, including passwords or sensitive information attached to that account; and`}</Text> */}
+            </ScrollView>
+        </ImageBackground>
+  </ErrorFallback>
     );
 }
 

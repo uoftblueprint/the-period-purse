@@ -51,12 +51,12 @@ const FunFactCard = ({ onPress }) =>{
 
 const cardData = [
     {
-        name: "Period" + "\n" + "Underwears",
+        name: "Period" + "\n" + "Underwear",
         image: underwearIcon,
         screen: STACK_SCREENS.PERIOD_UNDERWEARS
     },
     {
-        name: "Menstrual Cups",
+        name: "Menstrual Cup",
         image: cupIcon,
         screen: STACK_SCREENS.MENSTRUAL_CUPS
     },
@@ -66,7 +66,7 @@ const cardData = [
         screen: STACK_SCREENS.PADS
     },
     {
-        name: "Cloth Pads",
+        name: "Cloth Pad",
         image: clothPadIcon,
         screen: STACK_SCREENS.CLOTH_PADS
     },
@@ -84,21 +84,21 @@ const cardData = [
 
 export default function Info ({ navigation }) {
     return (
-        <ErrorFallback>
-            <ImageBackground source={OnboardingBackground} style={styles.container}>
-                <ScrollView>
-                    <SafeAreaView style={styles.cardContainer}>
-                        <FunFactCard onPress={() => navigation.navigate(STACK_SCREENS.FUN_FACT)}/>
-                        <Text style={{
-                            ...styles.productText,
-                            textAlign: 'left',
-                            color: "#6D6E71",
-                            marginTop: '5%',
-                            marginLeft: '5%',
-                            marginBottom: '2%'
-                        }}>
-                            Tap to learn more about period products
-                        </Text>
+     <ErrorFallback>
+        <ImageBackground source={OnboardingBackground} style={styles.container}>
+            <ScrollView>
+                <SafeAreaView style={styles.cardContainer}>
+                    <FunFactCard onPress={() => navigation.navigate(STACK_SCREENS.FUN_FACT)}/>
+                    <Text style={{
+                        ...styles.productText,
+                        textAlign: 'left',
+                        color: "#6D6E71",
+                        marginTop: '5%',
+                        marginLeft: '5%',
+                        marginBottom: '2%'
+                    }}>
+                        Tap to learn more about period products.
+                    </Text>
 
                         <View style={styles.containerRow}>
                             {cardData.map((card, i) => { return (
