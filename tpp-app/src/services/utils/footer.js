@@ -50,7 +50,7 @@ export const TermsAndConditions = ({navigation}) => {
     return (
         <View styles={styles.termsAndConditionsContainer}>
             <View style={styles.copyright}>
-                <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
+                <Text style={styles.copyrightText}>&copy; 2022 The Period Purse. All rights reserved.</Text>
             </View>
             <View style={styles.terms}>
                 <TouchableOpacity onPress={openTermsAndCondition} style={styles.textLink} >
@@ -58,7 +58,7 @@ export const TermsAndConditions = ({navigation}) => {
                 </TouchableOpacity>
                 <Text style={styles.textLink}> and </Text>
                 <TouchableOpacity onPress={openPrivacyPolicy} style={styles.textLink} >
-                    <Text style={styles.termsText}>Privacy Policy. </Text>
+                    <Text style={styles.termsText}>Privacy Policy </Text>
                 </TouchableOpacity>
             </View>
         </View>
