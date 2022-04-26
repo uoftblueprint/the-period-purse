@@ -330,7 +330,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
       </View>
 
-      <KeyboardAwareScrollView style={styles.content} extraScrollHeight={120}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.content} extraHeight={100} extraScrollHeight={120}>
       {/* SYMPTOM ACCORDIONS */}
       {symptoms.map((symptom, i) => {
         if (trackingPrefs.includes(symptom))
@@ -372,13 +372,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#EFEFF4',
         width: '100%',
         height: '100%',
-        flex: 1
+        flex: 1,
+
     },
     saveButtonFloat: {
       backgroundColor: '#fff'
     },
     content: {
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        paddingBottom: 40
     },
     navbarContainer: {
         paddingTop: Constants.statusBarHeight,
