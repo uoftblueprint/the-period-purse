@@ -38,7 +38,7 @@ const trackSymptomsToViews = {
 }
 
 const Selector = (props) => {
-  let [prefsMap, setPrefsMap] = useState([]);
+  let [trackedViews, setTrackedViews] = useState([]);
   let [numTracked, setNumTracked] = useState(0);
     let flowSelected = props.selectedView === VIEWS.Flow;
     let moodSelected = props.selectedView === VIEWS.Mood;
@@ -53,20 +53,26 @@ const Selector = (props) => {
       if (isFocused) {
           GETAllTrackingPreferences().then(allPrefs => {
               //convert into map so you can directly index in
-              let newPrefsMap = Object.assign({}, ...allPrefs.map(pref => ({[pref[0]]: (pref[1] === 'true')})));
+              let newTrackedViews = Object.assign({}, ...allPrefs.map(pref => ({
+                  [trackSymptomsToViews[pref[0]]]: (pref[1] === 'true')
+                })));
 
               // find only tracked symptom, if there is only one
               let numTracked = 0;
-              let onlyTracked;
-              for (const prefName in newPrefsMap) {
-                  if (newPrefsMap[prefName]) {
+              for (const prefName in newTrackedViews) {
+                  if (newTrackedViews[prefName]) {
                       numTracked += 1;
                       onlyTracked = trackSymptomsToViews[prefName];
                   }
               }
 
+              // if the selected view is no longer tracked, default to flow
+              if(!newTrackedViews[props.selectedView]) {
+                  props.setSelectedView(VIEWS.Flow)
+              }
+
               setNumTracked(numTracked);
-              setPrefsMap(newPrefsMap)
+              setTrackedViews(newTrackedViews);
           });
       }
   }, [isFocused])
@@ -78,31 +84,31 @@ const Selector = (props) => {
             view: VIEWS.Flow,
             selected: flowSelected,
             internalIcon: FlowIcon,
-            visible: prefsMap[TRACK_SYMPTOMS.FLOW]
+            visible: trackedViews[VIEWS.Flow]
         },
         {
             view: VIEWS.Mood,
             selected: moodSelected,
             internalIcon: MoodIcon,
-            visible: prefsMap[TRACK_SYMPTOMS.MOOD]
+            visible: trackedViews[VIEWS.Mood]
         },
         {
             view: VIEWS.Exercise,
             selected: exerciseSelected,
             internalIcon: ExerciseIcon,
-            visible: prefsMap[TRACK_SYMPTOMS.EXERCISE]
+            visible: trackedViews[VIEWS.Exercise]
         },
         {
             view: VIEWS.Cramps,
             selected: crampsSelected,
             internalIcon: CrampsIcon,
-            visible: prefsMap[TRACK_SYMPTOMS.CRAMPS]
+            visible: trackedViews[VIEWS.Cramps]
         },
         {
             view: VIEWS.Sleep,
             selected: sleepSelected,
             internalIcon: SleepIcon,
-            visible: prefsMap[TRACK_SYMPTOMS.SLEEP]
+            visible: trackedViews[VIEWS.Sleep]
 
 
         },
