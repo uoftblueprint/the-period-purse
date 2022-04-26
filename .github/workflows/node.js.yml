@@ -34,10 +34,11 @@ jobs:
       working-directory: ./tpp-app
       run: npm ci
       
-    - name: Run Build
-      working-directory: ./tpp-app
-      run: npm run build 
-      
     - name: Test 
       working-directory: ./tpp-app
       run: npm test
+      
+    - name: Run Build
+      working-directory: ./tpp-app
+      run: npm run ios 
+    
