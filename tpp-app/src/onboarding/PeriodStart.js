@@ -23,6 +23,7 @@ export default function PeriodStart ({ route, navigation }) {
 
   const onDismiss = React.useCallback(() => {
     setOpen(false);
+    setRange({ undefined, undefined });
   }, [setOpen]);
 
   const onConfirm = React.useCallback(

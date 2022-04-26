@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 22, 
     textAlign: 'center', 
     fontWeight: '600',
-    marginTop: '8%'
+    marginTop: '10%'
   },
   symptomsChoicesButtonText: {
     color: "#000000",

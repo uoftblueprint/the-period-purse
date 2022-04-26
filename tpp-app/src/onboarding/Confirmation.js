@@ -85,7 +85,7 @@ export default function Confirmation ({ route, navigation }) {
       <HorizontalLine></HorizontalLine>
 
       <WideButton 
-        title="Let's go!" color="#5A9F93" bottom="-22%"
+        title="Let's go!" color="#5A9F93" bottom="-8%"
         onPress={() => navigation.navigate(STACK_SCREENS.MAIN_PAGE)}
       />
     </ImageBackground>

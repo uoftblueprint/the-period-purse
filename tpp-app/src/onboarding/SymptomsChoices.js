@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ImageBackground, ScrollView, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import {Card, Text} from 'react-native-elements';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
@@ -23,15 +23,11 @@ export default function SymptomsChoices ({ route, navigation }) {
   const { periodLength, periodStart, periodEnd } = route.params;
 
   // checks for button selection are based on the background color 
-  const [flow, setFlow] = useState(TEAL);
   const [sleep, setSleep] = useState(WHITE);
   const [mood, setMood] = useState(WHITE);
   const [cramp, setCramp] = useState(WHITE);
   const [exercise, setExercise] = useState(WHITE);
 
-  const handleFlow = () => { 
-    flow == WHITE ? setFlow(TEAL) : setFlow(WHITE);
-  }
   const handleSleep = () => { 
     sleep == WHITE ? setSleep(TEAL) : setSleep(WHITE);
   }
@@ -110,7 +106,7 @@ export default function SymptomsChoices ({ route, navigation }) {
                   });
                 });
           }}
-          disabled={[flow, mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
+          disabled={[mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
       </TwoButtonContainer>
     </ImageBackground>
   );
