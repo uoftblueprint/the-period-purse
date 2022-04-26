@@ -280,10 +280,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 
   return (
-    
     <SafeAreaView style={styles.screen}>
-    
-    
     {/* <ScrollView style={styles.content}> */}
 
       {/* HEADER NAV */}
@@ -361,7 +358,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
         </View>
       </View>
     {/* </ScrollView> */}
-    
+
     </SafeAreaView>
 
   );
@@ -369,7 +366,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: '#EFEFF4',
+        backgroundColor: '#FFF',
         width: '100%',
         height: '100%',
         flex: 1,
