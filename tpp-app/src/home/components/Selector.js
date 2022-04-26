@@ -16,23 +16,14 @@ export const SelectedIcon = ({selectedView, style}) => {
     switch(selectedView) {
         case VIEWS.Cramps:
             return (<CrampsIcon style={style}/>)
-            break;
         case VIEWS.Exercise:
             return (<ExerciseIcon style={style}/>);
-            break;
         case VIEWS.Flow:
             return (<FlowIcon style={style}/>);
-            break;
         case VIEWS.Mood:
             return (<MoodIcon style={style} fill="black"/>);
-            break;
         case VIEWS.Sleep:
             return (<SleepIcon style={style}/>);
-            break;
-        case VIEWS.Nothing:
-            // need to return something? Maybe just check before calling so we don't get this case
-            return (<View/>);
-            break;
     }
 
 
@@ -48,7 +39,6 @@ const trackSymptomsToViews = {
 
 const Selector = (props) => {
   let [prefsMap, setPrefsMap] = useState([]);
-  let [toggleable, setToggleable] = useState(true);
   let [numTracked, setNumTracked] = useState(0);
     let flowSelected = props.selectedView === VIEWS.Flow;
     let moodSelected = props.selectedView === VIEWS.Mood;
@@ -75,14 +65,6 @@ const Selector = (props) => {
                   }
               }
 
-              if (numTracked === 1) {
-                  // only one option for selection, so disable toggling & select the only option
-                  props.toggleSelectedView(onlyTracked, true)
-                  setToggleable(false);
-
-              } else {
-                  setToggleable(true);
-              }
               setNumTracked(numTracked);
               setPrefsMap(newPrefsMap)
           });
@@ -136,11 +118,13 @@ const Selector = (props) => {
                     let renderedIcon = createElement(icon.internalIcon, {
                         fill: icon.selected ? selectedColor : unselectedColor
                     })
+                    let activeOpacity = (icon.selected) ? 1 : 0.2 
                     return (
                         icon.visible && <TouchableOpacity
-                            onPress={() => props.toggleSelectedView(icon.view, toggleable)}
+                            onPress={() => props.setSelectedView(icon.view)}
                             key={i}
                             style={[icon.selected && styles.selectedIcon, styles.iconContainer]}
+                            activeOpacity={activeOpacity}
                         >
                             {renderedIcon}
                         </TouchableOpacity>

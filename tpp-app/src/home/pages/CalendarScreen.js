@@ -83,7 +83,7 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 // Calendar Screen component that can be accessed by other functions
 export default function CalendarScreen ({ route, navigation }) {
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
-    const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
+    const [selectedView, setSelectedView] = useState(VIEWS.Flow);
     const [yearInView, setYearInView] = useState([])
 
     const [cachedYears, setCachedYears] = useState({})
@@ -141,17 +141,6 @@ export default function CalendarScreen ({ route, navigation }) {
         }, [route.params?.inputData])
     )
 
-    const toggleSelectedView = (targetView, toggleable) => {
-        if (toggleable) {
-            if (selectedView === targetView) {
-                setSelectedView(VIEWS.Nothing);
-                console.log("bruh");
-            } else {
-                console.log("Selected " + targetView)
-                setSelectedView(targetView);
-            }
-        }
-    }
 
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (
@@ -161,7 +150,7 @@ export default function CalendarScreen ({ route, navigation }) {
                 <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
                 {renderedArrow}
             </TouchableOpacity>
-            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
+            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={(targetView) => setSelectedView(targetView)}/>
             <View style={styles.calendar}>
                 <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
             </View>
