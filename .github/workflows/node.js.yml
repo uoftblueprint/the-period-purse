@@ -34,6 +34,10 @@ jobs:
       working-directory: ./tpp-app
       run: npm ci
       
+    - name: Install pod packages
+      working-directory: ./tpp-app/ios
+      run: pod install
+      
     - name: Test 
       working-directory: ./tpp-app
       run: npm test
