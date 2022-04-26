@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { Text, SafeAreaView, View, StyleSheet, KeyboardAvoidingView, TouchableOpacity, StatusBar, ScrollView, Alert } from "react-native";
 import Constants from 'expo-constants';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
@@ -13,6 +13,7 @@ import { TRACK_SYMPTOMS } from "../../services/utils/constants";
 import { CALENDAR_STACK_SCREENS } from "../CalendarNavigator";
 import { getISODate } from '../../services/utils/helpers';
 import { calculateAverages } from "../../services/CalculationService";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 // Alert popup constants
@@ -279,7 +280,11 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 
   return (
-    <SafeAreaView style={styles.screen}><ScrollView style={styles.content}>
+    
+    <SafeAreaView style={styles.screen}>
+    
+    
+    {/* <ScrollView style={styles.content}> */}
 
       {/* HEADER NAV */}
       <View style={styles.navbarContainer}>
@@ -325,6 +330,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
       </View>
 
+      <KeyboardAwareScrollView style={styles.content} extraScrollHeight={120}>
       {/* SYMPTOM ACCORDIONS */}
       {symptoms.map((symptom, i) => {
         if (trackingPrefs.includes(symptom))
@@ -338,31 +344,41 @@ export default function LogSymptomsScreen({ navigation, route }) {
             />
         )}
       })}
+      </KeyboardAwareScrollView>
 
-      <View style={[styles.centerText, {marginHorizontal: 28}]}>
-        <TouchableOpacity
-          disabled={!isDirty}
-          style={[styles.saveButton, isDirty ? styles.saveButtonActive : styles.saveButtonDisabled]}
-          onPress={() => {
-            if (!isDirty) return; // if no changes, do nothing
-            setSubmitting(true);
-          }}
-        >
-          <Text style={{color: '#fff'}}>Save</Text>
-        </TouchableOpacity>
+      <View style={styles.saveButtonFloat}>
+        <View style={[styles.centerText, {marginHorizontal: 28}]}>
+          <TouchableOpacity
+            disabled={!isDirty}
+            style={[styles.saveButton, isDirty ? styles.saveButtonActive : styles.saveButtonDisabled]}
+            onPress={() => {
+              if (!isDirty) return; // if no changes, do nothing
+              setSubmitting(true);
+            }}
+          >
+            <Text style={{color: '#fff'}}>Save</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+    {/* </ScrollView> */}
+    
+    </SafeAreaView>
 
-    </ScrollView></SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
     screen: {
         backgroundColor: '#EFEFF4',
-        flex: 1,
+        width: '100%',
+        height: '100%',
+        flex: 1
+    },
+    saveButtonFloat: {
+      backgroundColor: '#fff'
     },
     content: {
-        backgroundColor: '#fff',
+        backgroundColor: '#fff'
     },
     navbarContainer: {
         paddingTop: Constants.statusBarHeight,
@@ -397,7 +413,7 @@ const styles = StyleSheet.create({
     },
     centerText: {
       flexDirection: 'column',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     subtitle: {
       fontSize: 14,
@@ -410,6 +426,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       width: '100%',
       height: 39,
+      bottom: 25,
       marginTop: 25
     },
     saveButtonActive: {
