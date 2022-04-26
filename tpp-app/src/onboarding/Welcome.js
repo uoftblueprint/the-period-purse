@@ -45,7 +45,7 @@ const GetStarted = ({ navigation }) => {
           </TouchableOpacity>
           <Text style={styles.textLink}> and </Text>
           <TouchableOpacity onPress={openPrivacyPolicy} style={styles.textLink} >
-              <Text style={styles.termsText}>Privacy Policy. </Text>
+              <Text style={styles.termsText}>Privacy Policy </Text>
           </TouchableOpacity>
       </View>
     </ImageBackground>
