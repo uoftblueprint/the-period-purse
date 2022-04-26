@@ -5,13 +5,14 @@ import { DELETEAccountData } from '../services/SettingsService';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import {STACK_SCREENS} from "../onboarding/Confirmation";
 import ErrorFallback from "../error/error-boundary";
+import RNRestart from "react-native-restart";
 
-export default function DeleteAccount ({props}) {
+export default function DeleteAccount ({navigation}) {
 
     const deleteAccount = async () => {
         DELETEAccountData()
             .then(() => {
-                props.navigation.navigate(STACK_SCREENS.GET_STARTED);
+                RNRestart.Restart();
             });
     }
 

@@ -8,21 +8,21 @@ import OnboardingBackground
 export default class ErrorFallback extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { error: null, errorInfo: null };
+        this.state = { hasError: false };
     }
 
     componentDidCatch(error, errorInfo) {
         // Catch errors in any components below and re-render with error message
-        console.log("ErrorFallback occurred with error: ", error);
-        this.setState({
-            error: error,
-            errorInfo: errorInfo
-        })
-        // You can also log error messages to an error reporting service here
+        console.log("ErrorFallback occurred with error: ", error, errorInfo);
+        this.setState({ hasError: true });
+    }
+
+    resetErrorBoundary() {
+        this.setState({ hasError: false });
     }
 
     render() {
-        if (this.state.errorInfo) {
+        if (this.state.hasError) {
             // Error path
             return (
                 <ImageBackground source={OnboardingBackground} style={styles.container}>
@@ -34,7 +34,7 @@ export default class ErrorFallback extends React.Component {
                         <Text style={styles.errorText}>Something went wrong. {"\n\n"} Please try again, or close the app and reopen it.</Text>
                         {/*If the issue persists, please contact .... TODO Is there a support email they can contact? Ask Jana */}
                         <TouchableHighlight underlayColor={'#EEEEEE'} style={styles.tryAgainButton}
-                                            onPress={() => { resetErrorBoundary() }}>
+                                            onPress={() => { this.resetErrorBoundary() }}>
                             <Text>Try Again</Text>
                         </TouchableHighlight>
                     </SafeAreaView>

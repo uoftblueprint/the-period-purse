@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, Image, ImageBackground, View, TouchableOpacity } from 'react-native';
+import {StyleSheet, Text, Image, ImageBackground, View, TouchableOpacity, Button} from 'react-native';
 import MNationIcon from '../../ios/tppapp/Images.xcassets/SplashScreen.imageset/splashscreen.png'
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { NavigationContainer } from '@react-navigation/native';
@@ -22,13 +22,17 @@ import ErrorFallback from "../error/error-boundary";
 
 // Get Start Page Component
 const GetStarted = ({ navigation }) => {
-  
+
   const openPrivacyPolicy = () => {
     navigation.navigate(STACK_SCREENS.PRIVACY_POLICY)
   }
   const openTermsAndCondition = () => {
       navigation.navigate(STACK_SCREENS.TERMS_AND_CONDITION)
   }
+
+    const causeJSError = () => {
+        throw new Error('THIS IS A CUSTOM UNHANDLED JS ERROR');
+    }
 
   return(
       <ErrorFallback>
@@ -38,7 +42,8 @@ const GetStarted = ({ navigation }) => {
           <View style={{height: 80}}></View>
           <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
           <AppleSignin />
-          <View style={styles.copyright}>
+            <Button onPress={causeJSError} title="CAUSE JS ERROR" color="#841584"/>
+            <View style={styles.copyright}>
               <Text>{`By continuing, you accept the`}</Text>
           </View>
           <View style={styles.terms}>
@@ -105,12 +110,12 @@ export default function Welcome() {
         name={STACK_SCREENS.CONFIRMATION}
         component={Confirmation}
       />
-      <Stack.Screen 
-        name={STACK_SCREENS.PRIVACY_POLICY} 
+      <Stack.Screen
+        name={STACK_SCREENS.PRIVACY_POLICY}
         component={PrivacyPolicyScreen}
       />
-      <Stack.Screen 
-        name={STACK_SCREENS.TERMS_AND_CONDITION} 
+      <Stack.Screen
+        name={STACK_SCREENS.TERMS_AND_CONDITION}
         component={TermsAndConditions}
       />
       </Stack.Navigator>
