@@ -27,8 +27,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'   
-        cache-dependency-path: tpp-app/package-lock.json
         
     - name: Install NPM packages for server
       run: npm ci
