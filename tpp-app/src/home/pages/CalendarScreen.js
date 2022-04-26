@@ -9,6 +9,7 @@ import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
+import ErrorFallback from "../../error/error-boundary";
 
 const sideComponentWidth = 120
 
@@ -155,6 +156,7 @@ export default function CalendarScreen ({ route, navigation }) {
 
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (
+    <ErrorFallback>
         <SafeAreaView style={styles.container}>
             <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
                 <Text style={styles.dropdownText}>{selectedView}</Text>
@@ -166,6 +168,7 @@ export default function CalendarScreen ({ route, navigation }) {
                 <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
             </View>
         </SafeAreaView>
+    </ErrorFallback>
     )
 }
 

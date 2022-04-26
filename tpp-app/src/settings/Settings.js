@@ -15,6 +15,7 @@ import {TRACK_SYMPTOMS, VIEWS} from '../services/utils/constants'
 import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
 import {STACK_SCREENS} from './SettingsNavigator.js';
+import ErrorFallback from "../error/error-boundary";
 
 const PreferenceButton = (props) => {
     return (
@@ -496,18 +497,20 @@ const SettingOptions = ({navigation}) => {
 }
 export default function Settings ({ navigation }) {
     return (
-        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
-            <ScrollView>
-                <SafeAreaView style={styles.container}>
-                    <View style={{ marginLeft: "5%" }}>
-                    <Preferences/>
-                    <NotificationSettings navigation={navigation}/>
-                    <SettingOptions navigation={navigation}/>
-                    </View>
-                <Footer navigation={navigation}/>
-                </SafeAreaView>
-            </ScrollView>
-        </ImageBackground>
+        <ErrorFallback>
+            <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+                <ScrollView>
+                    <SafeAreaView style={styles.container}>
+                        <View style={{ marginLeft: "5%" }}>
+                        <Preferences/>
+                        <NotificationSettings navigation={navigation}/>
+                        <SettingOptions navigation={navigation}/>
+                        </View>
+                    <Footer navigation={navigation}/>
+                    </SafeAreaView>
+                </ScrollView>
+            </ImageBackground>
+        </ErrorFallback>
     )
 }
 

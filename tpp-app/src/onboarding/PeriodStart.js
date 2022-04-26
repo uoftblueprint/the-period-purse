@@ -13,6 +13,7 @@ import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_s
 import PeriodStartIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_date.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar2.svg";
 import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_calendar.svg";
+import ErrorFallback from "../error/error-boundary";
 
 const MILLISECPERDAY = 24*60*60*1000;
 export default function PeriodStart ({ route, navigation }) {
@@ -70,6 +71,7 @@ export default function PeriodStart ({ route, navigation }) {
   }
 
   return (
+  <ErrorFallback>
     <PaperProvider theme={theme}>
       <ImageBackground source={OnboardingBackground} style={styles.container}>
         <BackButtonContainer>
@@ -140,6 +142,7 @@ export default function PeriodStart ({ route, navigation }) {
         </TwoButtonContainer>
       </ImageBackground>
     </PaperProvider>
+  </ErrorFallback>
   );
 }
 

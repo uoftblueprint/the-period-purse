@@ -7,6 +7,7 @@ import CycleService from '../../services/cycle/CycleService';
 import {GETStoredYears} from '../../services/utils/helpers';
 import {useFocusEffect} from '@react-navigation/native';
 import { set } from 'date-fns';
+import ErrorFallback from "../../error/error-boundary";
 
 function Header({navigation}){
     return(
@@ -84,22 +85,24 @@ export default function CycleHistoryScreen({navigation}){
     }, [storedYears]));
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ImageBackground source={background} style={styles.container}>
-                <Header navigation={navigation}/>
-                <SafeAreaView style={styles.cardContainer}>
-                    <View style={styles.buttonContainer}>
-                        {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>).reverse()}
-                    </View>
-                    <ExpandedHistoryCard 
-                        navigation={navigation} 
-                        intervals={currentIntervals[selectedYear]} 
-                        renderedYear={selectedYear}
-                        onPeriod={onPeriod}
-                    />
-                </SafeAreaView>
-            </ImageBackground>
-        </SafeAreaView>
+        <ErrorFallback>
+            <SafeAreaView style={styles.container}>
+                <ImageBackground source={background} style={styles.container}>
+                    <Header navigation={navigation}/>
+                    <SafeAreaView style={styles.cardContainer}>
+                        <View style={styles.buttonContainer}>
+                            {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>).reverse()}
+                        </View>
+                        <ExpandedHistoryCard
+                            navigation={navigation}
+                            intervals={currentIntervals[selectedYear]}
+                            renderedYear={selectedYear}
+                            onPeriod={onPeriod}
+                        />
+                    </SafeAreaView>
+                </ImageBackground>
+            </SafeAreaView>
+        </ErrorFallback>
     )
 }
 

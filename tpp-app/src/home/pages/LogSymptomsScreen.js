@@ -13,6 +13,7 @@ import { TRACK_SYMPTOMS } from "../../services/utils/constants";
 import { CALENDAR_STACK_SCREENS } from "../CalendarNavigator";
 import { getISODate } from '../../services/utils/helpers';
 import { calculateAverages } from "../../services/CalculationService";
+import ErrorFallback from "../../error/error-boundary";
 
 
 // Alert popup constants
@@ -279,6 +280,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 
   return (
+    <ErrorFallback>
     <SafeAreaView style={styles.screen}><ScrollView style={styles.content}>
 
       {/* HEADER NAV */}
@@ -353,6 +355,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
       </View>
 
     </ScrollView></SafeAreaView>
+    </ErrorFallback>
   );
 }
 

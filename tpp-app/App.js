@@ -18,6 +18,7 @@ import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
 import PrivacyPolicyScreen from './src/home/pages/PrivacyPolicyScreen';
 import TermsAndConditions from './src/home/pages/TermsAndConditions';
+import ErrorFallback from "./src/error/error-boundary";
 
 
 export const STACK_SCREENS = {

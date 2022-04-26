@@ -9,6 +9,7 @@ import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
 import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
+import ErrorFallback from "../error/error-boundary";
 
 export const STACK_SCREENS = {
   GET_STARTED : "Get Started",
@@ -59,6 +60,7 @@ export default function Confirmation ({ route, navigation }) {
   }
 
   return (
+  <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
         <CrossButton onPress={() => {navigation.navigate(STACK_SCREENS.MAIN_PAGE)}}/>
@@ -90,6 +92,7 @@ export default function Confirmation ({ route, navigation }) {
 
       <Text style={styles.infoText}>Tap the X to close</Text>
     </ImageBackground>
+  </ErrorFallback>
   );
 }
 

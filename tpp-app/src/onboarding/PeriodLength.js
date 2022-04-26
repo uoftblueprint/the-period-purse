@@ -11,6 +11,7 @@ import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_s
 import PeriodLengthIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_length.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar1.svg";
 import KeyboardIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_keyboard.svg";
+import ErrorFallback from "../error/error-boundary";
 
 export default function PeriodLength ({ navigation }) {
   const [periodLength, setPeriodLength] = useState(null)
@@ -23,6 +24,7 @@ export default function PeriodLength ({ navigation }) {
   }
 
   return (
+  <ErrorFallback>
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
         <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.GET_STARTED)}}/>
@@ -61,6 +63,7 @@ export default function PeriodLength ({ navigation }) {
           disabled={periodLength && periodLength > 0? false : true}/>
       </TwoButtonContainer>
     </ImageBackground>
+  </ErrorFallback>
   );
 }
 

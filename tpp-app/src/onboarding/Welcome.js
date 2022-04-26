@@ -18,6 +18,7 @@ import { STACK_SCREENS } from './Confirmation';
 import AppleSignin from './AppleSignin';
 import PrivacyPolicyScreen from '../home/pages/PrivacyPolicyScreen';
 import TermsAndConditions from '../home/pages/TermsAndConditions';
+import ErrorFallback from "../error/error-boundary";
 
 // Get Start Page Component
 const GetStarted = ({ navigation }) => {
@@ -30,25 +31,27 @@ const GetStarted = ({ navigation }) => {
   }
 
   return(
-    <ImageBackground source={OnboardingBackground} style={styles.container}>
-      <Image style={styles.appIcon} source={MNationIcon}/>
-      <Text style={styles.titleText}>Welcome!</Text>
-      <View style={{height: 80}}></View>
-      <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
-      <AppleSignin />
-      <View style={styles.copyright}>
-          <Text>{`By continuing, you accept the`}</Text>
-      </View>
-      <View style={styles.terms}>
-          <TouchableOpacity onPress={openTermsAndCondition} style={styles.textLink} >
-              <Text style={styles.termsText}> Terms and Conditions</Text>
-          </TouchableOpacity>
-          <Text style={styles.textLink}> and </Text>
-          <TouchableOpacity onPress={openPrivacyPolicy} style={styles.textLink} >
-              <Text style={styles.termsText}>Privacy Policy. </Text>
-          </TouchableOpacity>
-      </View>
-    </ImageBackground>
+      <ErrorFallback>
+        <ImageBackground source={OnboardingBackground} style={styles.container}>
+          <Image style={styles.appIcon} source={MNationIcon}/>
+          <Text style={styles.titleText}>Welcome!</Text>
+          <View style={{height: 80}}></View>
+          <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
+          <AppleSignin />
+          <View style={styles.copyright}>
+              <Text>{`By continuing, you accept the`}</Text>
+          </View>
+          <View style={styles.terms}>
+              <TouchableOpacity onPress={openTermsAndCondition} style={styles.textLink} >
+                  <Text style={styles.termsText}> Terms and Conditions</Text>
+              </TouchableOpacity>
+              <Text style={styles.textLink}> and </Text>
+              <TouchableOpacity onPress={openPrivacyPolicy} style={styles.textLink} >
+                  <Text style={styles.termsText}>Privacy Policy. </Text>
+              </TouchableOpacity>
+          </View>
+        </ImageBackground>
+      </ErrorFallback>
   )
 };
 
