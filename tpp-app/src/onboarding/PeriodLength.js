@@ -5,7 +5,7 @@ import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
 import { NextButton, SkipButton } from './components/ButtonComponents';
 import { BodyText, TitleText } from './components/TextComponents';
-import { TwoButtonContainer, BackButtonContainer, InputContainer } from './components/ContainerComponents';
+import { TwoButtonContainer, BackButtonContainer } from './components/ContainerComponents';
 import { POSTInitialPeriodLength } from '../services/OnboardingService';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import PeriodLengthIcon from "../../ios/tppapp/Images.xcassets/icons/last_period_length.svg";
@@ -41,16 +41,10 @@ export default function PeriodLength ({ navigation }) {
             This will help us make our {'\n'} reminders more accurate
           </BodyText>
 
-          <SafeAreaView style={{
-            position: "relative",
-            backgroundColor: "#FFFFFF",
-            width: "50%",
-            borderRadius: 10,
-            height: "8%",
-            bottom: "20%"}}/>
+          <SafeAreaView style={styles.inputContainer}/>
           <KeyboardIconPref/>
           <TextInput 
-            style={periodLength ? [styles.inputContainer, styles.output] : [styles.inputContainer, styles.input]} 
+            style={periodLength ? [styles.textinput, styles.output] : [styles.textinput, styles.input]} 
             placeholder='Tap to input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
             placeholderTextColor='#6D6E71'
             keyboardType="number-pad" 
@@ -105,7 +99,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: "30.5%"
   },
-  inputContainer: {
+  textinput: {
     borderColor: "transparent",
     width: "50%",
     borderWidth: 1,
@@ -113,5 +107,13 @@ const styles = StyleSheet.create({
     height: "8%",
     textAlign: "center",
     bottom: "29.6%"
+  },
+  inputContainer: {
+    position: "relative",
+    backgroundColor: "#FFFFFF",
+    width: "50%",
+    borderRadius: 10,
+    height: "8%",
+    bottom: "20%"
   }
 });
