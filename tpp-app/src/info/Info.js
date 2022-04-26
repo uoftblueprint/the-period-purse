@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity, ImageBackground} from 'react-native';
+import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity, ImageBackground, SafeAreaView} from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import padIcon from '../../ios/tppapp/Images.xcassets/icons/pad_icon.png';
 import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png';
@@ -11,6 +11,8 @@ import { GETFactCycle, POSTFactCycle } from "./InfoService"
 import { getFullCurrentDateString } from "../services/utils/helpers.js"
 import discIcon from '../../ios/tppapp/Images.xcassets/icons/disc_icon.png'
 import { STACK_SCREENS } from './InfoNavigator';
+import { Footer } from '../services/utils/footer';
+import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 
 const LearnMoreCard = () => {
     return(
@@ -75,6 +77,14 @@ export function getFactShortened() {
     const dykData = require('../pages/DYKFacts.json');
 
     return dykData[fact_array[1]].slice(87) + "..."
+const FunFactCard = ({ onPress }) =>{
+    return (
+        <TouchableOpacity style={styles.funFactCard} onPress={onPress}>
+            <PaddyIcon style={styles.paddyStyling} height={"75%"}/>
+            <Text style={styles.DYKText}>Did you know?</Text>
+            <Text style={styles.DYKBodyText}>Only 46% of Canadians feel comfortable talking about periods. Periods rank lower in... </Text>
+        </TouchableOpacity>
+    )
 }
 
 const cardData = [
@@ -114,14 +124,17 @@ export default function Info ({ navigation }) {
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <ScrollView>
-                <View style={styles.cardContainer}>
+                <SafeAreaView style={styles.cardContainer}>
+                    <FunFactCard onPress={() => navigation.navigate(STACK_SCREENS.FUN_FACT)}/>
                     <Text style={{
                         ...styles.productText,
                         textAlign: 'left',
                         color: "#6D6E71",
-                        margin: 15
+                        marginTop: '5%',
+                        marginLeft: '5%',
+                        marginBottom: '2%'
                     }}>
-                        Learn more about period products
+                        Tap to learn more about period products
                     </Text>
 
                     <View style={styles.containerRow}>
@@ -136,7 +149,8 @@ export default function Info ({ navigation }) {
                     </View>
 
                     <LearnMoreCard/>
-                </View>
+                    <Footer navigation={navigation}/>
+                </SafeAreaView>
             </ScrollView>
         </ImageBackground>
     )
@@ -157,6 +171,21 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         justifyContent: 'center'
       },
+    funFactCard: {
+        backgroundColor: '#72C6B7',
+        borderRadius: 12,
+        borderWidth: 0,
+        borderColor: "#000",
+        width: "88%",
+        margin: '3%',
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 10 },
+        shadowOpacity: 0.25,
+        shadowRadius: 12,
+        height: 130,
+        flexBasis: 165,
+        marginLeft: '6%',
+    },
     productCard: {
         backgroundColor: '#FFA3A4',
         alignItems: 'center',
@@ -164,7 +193,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         borderWidth: 0,
         borderColor: "#000",
-        margin: 15,
+        margin: '3%',
         shadowColor: '#000',
         shadowOffset: { width: 4, height: 10 },
         shadowOpacity: 0.25,
@@ -177,27 +206,30 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         alignItems: 'center',
         justifyContent: 'center',
-        width: "92%",
+        width: "88%",
         height: 235,
         borderRadius: 12,
         borderWidth: 0,
         borderColor: "#000",
-        margin: 15,
+        marginTop: '3%',
+        marginLeft: '6%',  // 5%
+        marginBottom: '5%',
         shadowColor: '#000',
         shadowOffset: { width: 4, height: 10 },
         shadowOpacity: 0.25,
         shadowRadius: 12,
     },
     cardContainer: {
-        flex:1,
-        paddingHorizontal: 10,
-        paddingTop: 80,
+        flex: 1,
+        paddingHorizontal: '10%',
+        paddingTop: '40%',
+        marginBottom: 75,
     },
     containerRow: {
         flex: 1,
         flexDirection: 'row',
         flexWrap: "wrap",
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly'
     },
     didYouKnowText: {
         fontFamily: "Avenir",
@@ -229,6 +261,22 @@ const styles = StyleSheet.create({
         fontSize: 14,
         margin: 20,
     },
+    DYKText: {
+        fontFamily: "Avenir",
+        fontWeight: "800",
+        fontSize: 16,
+        margin: 20,
+        color: '#fff',
+        left: "3%"
+    },
+    DYKBodyText: {
+        fontFamily: "Avenir",
+        left: "8%",
+        fontWeight: "400",
+        paddingRight: "35%",
+        top: "-5%"
+
+    },
     visitButton: {
         backgroundColor: "#73C7B7",
         borderRadius: 8,
@@ -236,11 +284,9 @@ const styles = StyleSheet.create({
     productIcon: {
         marginBottom: 10
     },
-    paddyIcon:{
-        height: 97,
-        width: 75,
-        top: 10,
-        left: 250,
-        marginBottom: 22
+    paddyStyling: {
+        position: 'absolute',
+        left: "65%",
+        top: "12%"
     }
 });

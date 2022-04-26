@@ -6,7 +6,7 @@ import { MoodHappyIcon, MoodSadIcon, MoodNeutralIcon, MoodSickIcon, MoodAngryIco
 import { ExerciseBallSportIcon, ExerciseCardioIcon, ExerciseCycleSportIcon, ExerciseMartialArtsIcon, ExerciseRacketSportsIcon, ExerciseStrengthIcon, ExerciseWaterSportIcon, ExerciseWinterSportIcon, ExerciseYogaIcon} from '../../services/utils/calendaricons';
 import { VIEWS } from '../../services/utils/constants';
 import { FILTER_COLOURS, FILTER_TEXT_COLOURS } from '../../services/utils/constants';
-import { STACK_SCREENS } from '../CalendarNavigator';
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 
 // The component that is used by each day in the calendar
 export const DayComponent = ({ date, state, marking, selectedView, navigation }) => {
@@ -25,8 +25,12 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
         // for sleep it will be a number etc.
         let symptomAttribute = marking.symptoms[viewKey]
 
+        // If disabled
+        if (marking.disable) {
+            bgColor = FILTER_COLOURS.DISABLED;
+            textColor = FILTER_TEXT_COLOURS.DISABLED;
         // If it contains a working attribute
-        if (symptomAttribute) {
+        } else if (symptomAttribute) {
             
             let attribute = symptomAttribute
             
@@ -37,8 +41,10 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
                     break;
                 case 'exercise':
                     attribute = filterExercise(symptomAttribute.exercise_minutes)
-                    iconName = viewKey + symptomAttribute.exercise.toLowerCase()
-                    iconName = iconName.replace(/\s+/g, '')
+                    if (symptomAttribute.exercise) {
+                        iconName = viewKey + symptomAttribute.exercise.toLowerCase()
+                        iconName = iconName.replace(/\s+/g, '')
+                    }
 
                     break;
             }
@@ -66,7 +72,7 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
     }
 
     return(
-        <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}>
+        <TouchableOpacity disabled={bgColor === FILTER_COLOURS.DISABLED && textColor === FILTER_TEXT_COLOURS.DISABLED } onPress={() => {navigation.navigate(CALENDAR_STACK_SCREENS.LOG_SYMPTOMS, {"date": date})}}>
             <View style={styles.dayContainer} backgroundColor={bgColor}>
                 <Text style={{ color: textColor }}>
                     {date.day}    
