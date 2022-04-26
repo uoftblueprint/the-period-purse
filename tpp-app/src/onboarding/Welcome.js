@@ -30,10 +30,6 @@ const GetStarted = ({ navigation }) => {
       navigation.navigate(STACK_SCREENS.TERMS_AND_CONDITION)
   }
 
-    const causeJSError = () => {
-        throw new Error('THIS IS A CUSTOM UNHANDLED JS ERROR');
-    }
-
   return(
   <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
