@@ -142,8 +142,7 @@ function App() {
   }, [])
   if(preferences && preferences[0] && preferences[0][1])
     // tracking preferences have been set, go to main page
-    return (<Welcome></Welcome>);
-    // return (<MainNavigator></MainNavigator>);
+    return (<MainNavigator></MainNavigator>);
   else
     // tracking preferences have not been set, go to onboarding
     return (<Welcome></Welcome>);

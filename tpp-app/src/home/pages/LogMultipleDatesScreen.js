@@ -6,7 +6,6 @@ import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar} from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
-import { scrollDate } from './CalendarScreen';
 import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/utils/constants";
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
@@ -30,12 +29,9 @@ const DayComponent = ({props}) => {
     )
 }
 
-export const Calendar = ({ navigation, setSelectedDates, markedDates, currentDate }) => {
+export const Calendar = ({ navigation, setSelectedDates, markedDates }) => {
     return (
         <CalendarList
-        // Initially visible month. Default = now
-        current={currentDate}
-
         // Max amount of months allowed to scroll to the past. Default = 50
         pastScrollRange={12}
 
@@ -225,16 +221,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
             }
         }
         
-        let newDate = null;
-        if(selectedDates.length > 0) 
-            newDate = [selectedDates[0].year, selectedDates[0].month, selectedDates[0].day].join("-")
-        else if(deselectedDates.length > 0)
-            newDate = [deselectedDates[0].year, deselectedDates[0].month, deselectedDates[0].day].join("-")
-        
-        navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, { 
-            inputData: inputData,
-            newDate: newDate
-        });
+        navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
         await calculateAverages();
     }
 
@@ -280,14 +267,13 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 </View>
             </View>
             <View style={styles.calendar}>
-              <Calendar 
-                  numSelected={numSelected}
-                  setNumSelected={setNumSelected}
-                  navigation={navigation}
-                  setSelectedDates={setSelectedDates}
-                  markedDates={markedDates}
-                  currentDate={scrollDate ? scrollDate : getISODate(new Date())}
-              />
+                <Calendar
+                    numSelected={numSelected}
+                    setNumSelected={setNumSelected}
+                    navigation={navigation}
+                    setSelectedDates={setSelectedDates}
+                    markedDates={markedDates}
+                />
             </View>  
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
                 <SubmitIcon fill={'#181818'}/>

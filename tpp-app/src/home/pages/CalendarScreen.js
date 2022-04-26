@@ -10,15 +10,11 @@ import { getISODate } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
 
 const sideComponentWidth = 120
-export let scrollDate;
 
-export const Calendar = ({ navigation, marked, setYearInView, selectedView, currentDate }) => {
+export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 
     return (
         <CalendarList
-        // Initially visible month. Default = now
-        current={currentDate ? currentDate : scrollDate}
-
         // Max amount of months allowed to scroll to the past. Default = 50
         pastScrollRange={12}
 
@@ -30,7 +26,6 @@ export const Calendar = ({ navigation, marked, setYearInView, selectedView, curr
 
         // Check which months are currently in view
         onVisibleMonthsChange={(months) => {
-            scrollDate = months[0]['dateString']
             let currentYears = []
             months.forEach(month => {
                 let currentYear = parseInt(month['year'])
@@ -157,12 +152,7 @@ export default function CalendarScreen ({ route, navigation }) {
         }
     }
 
-    useEffect(() => {
-        if(route.params?.newDate && selectedView !== VIEWS.Flow)
-            setSelectedView(VIEWS.Flow)
-    }, [route.params?.newDate])
-
-    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
+    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (
         <SafeAreaView style={styles.container}>
             <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
@@ -171,15 +161,9 @@ export default function CalendarScreen ({ route, navigation }) {
                 {renderedArrow}
             </TouchableOpacity>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
-        <View style={styles.calendar}>
-            <Calendar 
-                navigation={navigation} 
-                marked={marked} 
-                setYearInView={setYearInView} 
-                selectedView={selectedView} 
-                currentDate={route.params?.newDate}
-            />
-        </View>
+            <View style={styles.calendar}>
+                <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
+            </View>
        </SafeAreaView>
     )
 }
