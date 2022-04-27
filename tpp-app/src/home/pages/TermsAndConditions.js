@@ -19,11 +19,11 @@ export default TermsAndConditionsScreen = ({navigation}) => {
                 <TouchableOpacity onPress={() => onClose()} style={styles.backIcon}>
                     <BackIcon fill={'#181818'}/>
                 </TouchableOpacity>
-                <Text style={styles.navbarText}>Terms and conditions</Text>
+                <Text style={styles.navbarText}>Terms and Conditions</Text>
             </View>
             
             <ScrollView style={styles.scrollContainer}>
-                <Text style={styles.title}>Terms and conditions</Text>
+                <Text style={styles.title}>Terms and Conditions</Text>
                 <View style={styles.line}/>
                 <RenderHtml source={source} contentWidth={width}/>
                     {/* <Text style={styles.titleText}>TERMS AND CONDITIONS</Text>

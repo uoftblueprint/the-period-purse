@@ -6,10 +6,10 @@ import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar} from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
-import Constants from 'expo-constants';
 import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/utils/constants";
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
+import Constants from 'expo-constants';
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -29,8 +29,7 @@ const DayComponent = ({props}) => {
     )
 }
 
-export const Calendar = ({ navigation, setSelectedDates, markedDates}) => {
-
+export const Calendar = ({ navigation, setSelectedDates, markedDates }) => {
     return (
         <CalendarList
         // Max amount of months allowed to scroll to the past. Default = 50
@@ -221,7 +220,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 console.log(error);
             }
         }
-
+        
         navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
         await calculateAverages();
     }
@@ -275,7 +274,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                     setSelectedDates={setSelectedDates}
                     markedDates={markedDates}
                 />
-            </View>
+            </View>  
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
                 <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>

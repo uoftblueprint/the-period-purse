@@ -42,7 +42,7 @@ export const InputBorderContainer = styled.View`
 export const InputContainer = styled.SafeAreaView`
   alignSelf: center;
   width: 50%;
-  height: 60px;
+  height: 8%;
   borderRadius: 10px;
   backgroundColor: #FFFFFF;
 `;

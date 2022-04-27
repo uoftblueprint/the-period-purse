@@ -117,7 +117,7 @@ const Selector = (props) => {
 
 
     return (
-        <View style={[{backgroundColor: '#FFFFFF'}, props.expanded && styles.elevatedSelector]}>
+        <View style={[{backgroundColor: '#fff'}, props.expanded && styles.elevatedSelector]}>
             {props.expanded &&
             <View style={[styles.selectorContainer, numTracked === 5 && styles.allSelectedContainer]}>
                  {iconData.map((icon, i) => {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         width: "100%",
         zIndex: 3,
-        marginTop: 30,
+        marginTop: 43,
         height: "7%",
     },
     selectedIcon: {
