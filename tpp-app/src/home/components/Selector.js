@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         width: "100%",
         zIndex: 3,
-        marginTop: 43,
+        marginTop: 47,
         height: "7%",
     },
     selectedIcon: {

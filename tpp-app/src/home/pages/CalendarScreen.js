@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
@@ -10,6 +10,8 @@ import { getISODate } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
 import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
+import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+
 
 const sideComponentWidth = 120
 
@@ -43,20 +45,20 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
         dayComponent={({date, state, marking}) => <DayComponent date={date} state={state} marking={marking} navigation={navigation} selectedView={selectedView}/>}
         
         theme={{
-            calendarBackground: '#ffffff',
+            calendarBackground: 'transparent',
             // Sun Mon Tue Wed Thu Fri Sat Bar
             textSectionTitleColor: '#000000',
-            todayTextColor: 'red',
+            todayTextColor: '#000000',
             dayTextColor: '#000000',
-            monthTextColor: 'red',
+            monthTextColor: '#000000',
             textDayFontFamily: 'Avenir',
             textMonthFontFamily: 'Avenir',
             textDayHeaderFontFamily: 'Avenir',
             textDayFontWeight: '500',
-            textMonthFontWeight: '400',
+            textMonthFontWeight: '600',
             textDayHeaderFontWeight: '800',
             textDayFontSize: 10,
-            textMonthFontSize: 14,
+            textMonthFontSize: 16,
             textDayHeaderFontSize: 10,
             'stylesheet.calendar.main': {
                 dayContainer: {
@@ -155,63 +157,79 @@ export default function CalendarScreen ({ route, navigation }) {
     }
 
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
-    return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.dropdown}>
-            <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
-                <Text style={styles.dropdownText}>{selectedView}</Text>
-                <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
-                {renderedArrow}
-            </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LEGEND_PAGE, {screen: CALENDAR_STACK_SCREENS.LEGEND_PAGE})}
-              style={styles.legend}>
-              <LegendButton></LegendButton>
-            </TouchableOpacity>
-            </View>
-            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
+    return (        
+    
+        <ImageBackground source={OnboardingBackground} style={styles.image}>
+            {/* <View style={styles.bruh}> */}
+            <SafeAreaView style={styles.container}>
+                <View style={styles.dropdown}>
+                <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
+                    <Text style={styles.dropdownText}>{selectedView}</Text>
+                    <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
+                    {renderedArrow}
+                </TouchableOpacity>
+                <TouchableOpacity 
+                onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LEGEND_PAGE, {screen: CALENDAR_STACK_SCREENS.LEGEND_PAGE})}
+                style={styles.legend}>
+                <LegendButton></LegendButton>
+                </TouchableOpacity>
+                </View>
+                <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
 
-            <View style={styles.calendar}>
-                <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
-            </View>
-       </SafeAreaView>
+                <View style={styles.calendar}>
+                    <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
+                </View>
+            </SafeAreaView>
+            {/* </View> */}
+       </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
+    bruh: {
+        backgroundColor: '#B9E0D8',
+
+    },
     dropdown: {
       margin: 10,
       backgroundColor: '#fff',
-      width: '100%'
+      width: '100%',
+    },
+    image: {
+        height: null,
+        width: null,
+        resizeMode: "cover",
+        overflow: "hidden",
+        flex: 1
     },
     legend: {
       position: 'absolute',
       right: 30,
     },
     calendar: {
-      marginBottom: '20%'
+      marginBottom: '20%',
     },
     container: {
         flex: 1,
         alignItems: 'stretch',
         justifyContent: 'flex-start',
-        backgroundColor: '#FFFFFF'
+        backgroundColor: 'transparent',
     },
     navbarContainer: {
         marginTop: 0,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#fff',
     },
     selectorItem:{
-        marginHorizontal: 10
+        marginHorizontal: 10,
     },
     horizContainer: {
         flex:1,
         alignSelf:'stretch',
         justifyContent: 'space-around',
-        flexDirection: "row"
+        flexDirection: "row",
     },
     dropdownText:{
         fontFamily: "Avenir",
