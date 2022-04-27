@@ -326,7 +326,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
           </View>
 
       </View>
-
+      
       <KeyboardAwareScrollView contentContainerStyle={styles.content} extraHeight={100} extraScrollHeight={120}>
       {/* SYMPTOM ACCORDIONS */}
       {symptoms.map((symptom, i) => {
@@ -341,6 +341,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
             />
         )}
       })}
+      <View style={styles.bg}></View>
       </KeyboardAwareScrollView>
 
       <View style={styles.saveButtonFloat}>
@@ -366,11 +367,16 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: '#FFF',
+        backgroundColor: 'transparent',
         width: '100%',
         height: '100%',
         flex: 1,
-
+    },
+    bg: {
+      width: '100%',
+      height: '100%',
+      backgroundColor: '#fff',
+      marginTop: 40,
     },
     saveButtonFloat: {
       backgroundColor: '#fff'
