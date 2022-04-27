@@ -100,7 +100,7 @@ export default function CalendarScreen ({ route, navigation }) {
                     const yearDataFromStorage = await GETYearData(year);
 
                     // If there's nothing logged for that year, we may still want to disable dates
-                    // Get an empty years
+                    // Get an empty year
                     currentYearData[year] = yearDataFromStorage ? yearDataFromStorage : initializeEmptyYear(year);
 
                     let newCachedYears = {}
