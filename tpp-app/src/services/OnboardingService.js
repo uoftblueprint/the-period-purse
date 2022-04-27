@@ -113,8 +113,8 @@ export const POSTSymptomsToTrack = async (flow, mood, sleep, cramps, exercise) =
  */
 export const POSTJoinedDate = async() => new Promise( async (resolve, reject) => {
     try {
-        await AsyncStorage.setItem('joinedDate', getISODate(new Date())).then(() => {
-            console.log(`Stored joinedDate as ${getISODate(new Date())}`)
+        await AsyncStorage.setItem(KEYS.JOINED_DATE, getISODate(new Date())).then(() => {
+            console.log(`Stored ${KEYS.JOINED_DATE} as ${getISODate(new Date())}`)
             resolve();
         });
     }
@@ -130,8 +130,8 @@ export const POSTJoinedDate = async() => new Promise( async (resolve, reject) =>
  */
  export const GETJoinedDate = async () => {   
     try {
-        const joinedDate = await AsyncStorage.getItem('joinedDate');
-        console.log(`Retrieved joinedDate as ${joinedDate}`);
+        const joinedDate = await AsyncStorage.getItem(KEYS.JOINED_DATE);
+        console.log(`Retrieved ${KEYS.JOINED_DATE} as ${joinedDate}`);
         return joinedDate;
     }
     catch (e) {
