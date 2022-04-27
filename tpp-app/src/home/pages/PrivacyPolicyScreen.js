@@ -4,9 +4,20 @@ import BackIcon from '../../../ios/tppapp/Images.xcassets/icons/back_icon.svg'
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 
 const EmailLink = () => {
-    return(<Text onPress={() => {
-        Linking.openURL("hello@periodpurse.com");
-    }} style={{...styles.standardText, color:"blue", textDecorationLine:"underline"}}>hello@periodpurse.com</Text>)
+    const openLink = () => {
+        
+            Linking.canOpenURL("mailto:hello@periodpurse.com").then(() => {
+                try{
+                    Linking.openURL("mailto:hello@periodpurse.com")
+                }catch(e){
+                    console.log("Email link: ", e);
+                }
+            });
+            
+       
+    }
+
+    return(<Text onPress={openLink} style={{...styles.standardText, color:"blue", textDecorationLine:"underline"}}>hello@periodpurse.com</Text>)
 }
 
 export default PrivacyPolicyScreen = ({navigation}) => {
