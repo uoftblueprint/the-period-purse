@@ -6,22 +6,25 @@ import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
-import { getISODate, getPastScrollLength } from '../../services/utils/helpers';
+import { getISODate, getMonthsDiff } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
+import { GETJoinedDate } from '../../services/OnboardingService';
 
-const sideComponentWidth = 120
-export let scrollDate;
-var monthsDiff;
-getPastScrollLength().then(res => { monthsDiff = res })
+export let scrollDate = getISODate(new Date());
 
-export const Calendar = ({ navigation, marked, setYearInView, selectedView, currentDate }) => {
+var joinedDate = ""; 
+GETJoinedDate().then(res => { joinedDate = res })
+const pastScroll = 12 + (getMonthsDiff(joinedDate))
+
+export const Calendar = ({ navigation, marked, setYearInView, selectedView, route }) => {
+    const jumpDate = route.params?.newDate ? route.params.newDate : getISODate(new Date());
     return (
         <CalendarList
         // Initially visible month. Default = now
-        current={currentDate}
+        current={jumpDate}
 
         // Max amount of months allowed to scroll to the past. Default = 50
-        pastScrollRange={monthsDiff}
+        pastScrollRange={pastScroll}
 
         // Max amount of months allowed to scroll to the future. Default = 50
         futureScrollRange={0}
@@ -160,7 +163,7 @@ export default function CalendarScreen ({ route, navigation }) {
 
     useEffect(() => {
         if(route.params?.newDate && selectedView !== VIEWS.Flow)
-            setSelectedView(VIEWS.Flow)
+            setSelectedView(VIEWS.Flow);
     }, [route.params?.newDate])
 
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
@@ -178,7 +181,7 @@ export default function CalendarScreen ({ route, navigation }) {
                 marked={marked} 
                 setYearInView={setYearInView} 
                 selectedView={selectedView} 
-                currentDate={route.params?.newDate}
+                route={route}
             />
         </View>
        </SafeAreaView>

@@ -123,3 +123,19 @@ export const POSTJoinedDate = async() => new Promise( async (resolve, reject) =>
         reject();
     }
 })
+
+/**
+ * Retrieves the date the user started using the app. 
+ * @returns a date string representing the date the user started using the app
+ */
+ export const GETJoinedDate = async () => {   
+    try {
+        const joinedDate = await AsyncStorage.getItem('joinedDate');
+        console.log(`Retrieved joinedDate as ${joinedDate}`);
+        return joinedDate;
+    }
+    catch (e) {
+        console.log(`GETJoinedDate error: ${JSON.stringify(e)}`);
+        reject();
+    }
+}

@@ -200,15 +200,17 @@ export const GETStoredYears = async () => {
 }
 
 /**
- * Calculates how many months the user is allowed to scroll back for calendars, 
- * given the criteria of 12 months before the date the user joined the app
- * @returns the number of months between today's date and the date user joined the app
+ * Calculates the number of months between today's date and date given by dateFromStr
+ * @param {String} dateFromStr string ("YYYY-MM-DD") representing the date to calculate from
+ * @returns the number of months between today's date and dateFromStr
  */
-export const getPastScrollLength = async () => {
-  let joinedDate = await AsyncStorage.getItem('joinedDate');
-  let parts = joinedDate.split('-')
-  let dateFrom = new Date(parts[0], parts[1] - 1, parts[2]); 
-  let dateTo = new Date()
-  return 12 + (dateTo.getMonth() - dateFrom.getMonth()) + 
-      (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
+export const getMonthsDiff = (dateFromStr) => {
+  if(dateFromStr) {
+    let parts = dateFromStr.split('-')
+    let dateFrom = new Date(parts[0], parts[1] - 1, parts[2]); 
+    let dateTo = new Date()
+    return (dateTo.getMonth() - dateFrom.getMonth()) + 
+        (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
+  }
+  return null;
 }

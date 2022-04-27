@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {View, StyleSheet, Text, TouchableOpacity, Alert, SafeAreaView, ScrollView} from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 import { CalendarList } from 'react-native-calendars';
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
-import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar, getPastScrollLength } from '../../services/utils/helpers';
+import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar, getMonthsDiff } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 import { scrollDate } from './CalendarScreen';
@@ -11,6 +11,7 @@ import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/ut
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
 import Constants from 'expo-constants';
+import { GETJoinedDate } from '../../services/OnboardingService';
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -30,20 +31,22 @@ const DayComponent = ({props}) => {
     )
 }
 
-var monthsDiff;
-getPastScrollLength().then(res => { monthsDiff = res })
+var joinedDate = ""; 
+GETJoinedDate().then(res => { joinedDate = res })
 
 export const Calendar = ({ navigation, setSelectedDates, markedDates, currentDate }) => {
+    const futureScroll = 1 + (getMonthsDiff(currentDate))
+    const pastScroll = 12 + (getMonthsDiff(joinedDate)) - (getMonthsDiff(currentDate))
     return (
         <CalendarList
         // Initially visible month. Default = now
         current={currentDate}
 
         // Max amount of months allowed to scroll to the past. Default = 50
-        pastScrollRange={monthsDiff}
+        pastScrollRange={pastScroll}
 
         // Max amount of months allowed to scroll to the future. Default = 50
-        futureScrollRange={1}
+        futureScrollRange={futureScroll}
 
         // Enable or disable scrolling of calendar list
         scrollEnabled={true}
@@ -289,7 +292,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                   navigation={navigation}
                   setSelectedDates={setSelectedDates}
                   markedDates={markedDates}
-                  currentDate={scrollDate ? scrollDate : getISODate(new Date())}
+                  currentDate={scrollDate}
               />
             </View>  
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
