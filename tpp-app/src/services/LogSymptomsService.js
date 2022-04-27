@@ -61,7 +61,7 @@ export const LogMultipleDayPeriod = async (datesToMark, datesToUnmark) => {
     if(datesToMark.length + datesToUnmark.length > 0){
         try {
             const allDates = datesToMark.concat(datesToUnmark);
-            const curYear = allDates[0].year;
+            const curYear = parseInt(allDates[0].year);
             const calendarData = await getCalendarByYear(curYear);
 
 
