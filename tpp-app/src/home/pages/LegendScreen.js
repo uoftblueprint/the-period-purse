@@ -36,7 +36,7 @@ export default function LegendScreen({navigation}){
             <ImageBackground source={background} style={styles.container}>
                 <Header navigation={navigation}/>
                 <SafeAreaView style={styles.legendView}>
-                    <FlowLegend style={styles.legendCard}></FlowLegend>
+                    <FlowLegend style={styles.legendTopCard}></FlowLegend>
                     <CrampLegend style={styles.legendCard}></CrampLegend>
                     <SleepLegend style={styles.legendCard}></SleepLegend>
                     <ExerciseLegend style={styles.legendCard}></ExerciseLegend>
@@ -58,6 +58,9 @@ const styles = StyleSheet.create({
     },
     legendButton: {
         marginRight: 5
+    },
+    legendTopCard: {
+        marginTop: 35,
     },
     legendCard: {
         marginTop: 15
