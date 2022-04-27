@@ -10,6 +10,7 @@ import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 import { POSTJoinedDate } from '../services/OnboardingService';
+import {BackButton} from "../home/components/BackButtonComponent";
 
 export const STACK_SCREENS = {
   GET_STARTED : "Get Started",
@@ -61,6 +62,13 @@ export default function Confirmation ({ route, navigation }) {
 
   return (
     <ImageBackground source={OnboardingBackground} style={styles.container}>
+      <BackButtonContainer>
+        <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
+          periodLength: periodLength,
+          periodStart: periodStart,
+          periodEnd: periodEnd
+        })}}/>
+      </BackButtonContainer>
       <PaddyIcon style={{alignSelf: "center"}}/>
       <Text style={styles.bigText}>You're all set!</Text>
       { periodLength && <View>
