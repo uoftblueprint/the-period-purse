@@ -2,11 +2,12 @@ import React, { useEffect, useState, useCallback } from 'react';
 import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ImageBackground} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png';
-import {ExpandedHistoryCard} from '../components/CycleHistory';
-import CycleService from '../../services/cycle/CycleService';
-import {GETStoredYears} from '../../services/utils/helpers';
-import {useFocusEffect} from '@react-navigation/native';
-import { set } from 'date-fns';
+import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
+import FlowLegend from "../../../ios/tppapp/Images.xcassets/icons/flow_legend.svg";
+import CrampLegend from "../../../ios/tppapp/Images.xcassets/icons/cramp_legend.svg";
+import SleepLegend from "../../../ios/tppapp/Images.xcassets/icons/sleep_legend.svg";
+import ExerciseLegend from "../../../ios/tppapp/Images.xcassets/icons/exercise_legend.svg";
+
 
 function Header({navigation}){
     return(
@@ -20,6 +21,7 @@ function Header({navigation}){
                 <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
             </TouchableOpacity>
         </View>
+        <LegendButton style={styles.legendButton}></LegendButton>
         <Text style={styles.headerText}> Legend </Text>
         <View style={styles.nonCenterComponent}><Text></Text></View>
     </View>
@@ -33,17 +35,12 @@ export default function LegendScreen({navigation}){
         <SafeAreaView style={styles.container}>
             <ImageBackground source={background} style={styles.container}>
                 <Header navigation={navigation}/>
-                {/* <SafeAreaView style={styles.cardContainer}>
-                    <View style={styles.buttonContainer}>
-                        {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>).reverse()}
-                    </View>
-                    <ExpandedHistoryCard 
-                        navigation={navigation} 
-                        intervals={currentIntervals[selectedYear]} 
-                        renderedYear={selectedYear}
-                        onPeriod={onPeriod}
-                    />
-                </SafeAreaView> */}
+                <SafeAreaView style={styles.legendView}>
+                    <FlowLegend style={styles.legendCard}></FlowLegend>
+                    <CrampLegend style={styles.legendCard}></CrampLegend>
+                    <SleepLegend style={styles.legendCard}></SleepLegend>
+                    <ExerciseLegend style={styles.legendCard}></ExerciseLegend>
+                </SafeAreaView>
             </ImageBackground>
         </SafeAreaView>
     )
@@ -55,26 +52,15 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'stretch',
     },
-    buttonContainer: {
-        flexDirection: 'row',
-        marginBottom: 17,
-        marginTop: 18
+    legendView: {
+        flex: 1,
+        alignItems: 'center'
     },
-    cardContainer: {
-        marginHorizontal: 16
-    },  
-    button: {
-        borderRadius: 10,
-        width: 62,
-        height: 34,
-        justifyContent: "center",
-        alignItems: "center",
-        marginRight: 9,
-        borderWidth: 0
+    legendButton: {
+        marginRight: 5
     },
-    buttonBorder: {
-        borderColor: "#C4C4C4",
-        borderWidth: 1,
+    legendCard: {
+        marginTop: 15
     },
     headerContainer: {
         backgroundColor: 'white',
