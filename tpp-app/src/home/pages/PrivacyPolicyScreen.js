@@ -54,7 +54,7 @@ Once your data is on your iCloud, the iCloud privacy policy applies. We invite y
 
 The app also includes some links to social media pages. If you click those links, these pages’ privacy policy applies. 
 `}</Text>
-                <Text style={styles.header}>{`\nIs my information protected?`}</Text>
+                <Text style={styles.header}>{`Is my information protected?`}</Text>
                 <Text style={styles.standardText}>{`We built this app so that you would feel comfortable tracking your periods on your phone. Not accessing it is the best way for us to protect it.`}</Text>
                 
                 <Text style={styles.header}>{`\nI am underage. Can I use this app?`}</Text>
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
 
     },
     title: {
-        fontSize: 28,
+        fontSize: 34,
         fontFamily: "avenir",
         fontWeight: "bold"
     },

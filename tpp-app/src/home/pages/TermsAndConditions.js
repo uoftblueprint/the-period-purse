@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         fontFamily: "avenir",
     },
     title: {
-        fontSize: 28,
+        fontSize: 34,
         fontFamily: "avenir",
         fontWeight: "bold"
     },
