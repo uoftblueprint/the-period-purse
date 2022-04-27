@@ -45,7 +45,7 @@ export default function PeriodLength ({ navigation }) {
           <KeyboardIconPref/>
           <TextInput 
             style={periodLength ? [styles.textinput, styles.output] : [styles.textinput, styles.input]} 
-            placeholder='Tap to input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+            placeholder='Tap to input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
             placeholderTextColor='#6D6E71'
             keyboardType="number-pad" 
             returnKeyType='done'
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     alignSelf: 'center',
-    left: '13%',
+    left: '14%',
     bottom: '24.7%'
   },
   dayText: {
