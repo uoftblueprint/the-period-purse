@@ -65,6 +65,7 @@ const Preferences = (props) => {
               // if tracking that symptom is set to true, append it to trackingPrefs
                 if (toTrack) {
                   let title = pref[0];
+                  let symptom;
                   switch(title) {
                     case TRACK_SYMPTOMS.MOOD:
                       symptom = 'mood'
@@ -146,49 +147,10 @@ const Preferences = (props) => {
     );
 }
 
-// const Socials = () => {
-//     return (
-//         <View style={styles.iconsContainer}>
-//             {
-//                 socialMediaIcons.map((socialMedia, i) => {
-//                     return <SocialMediaButton key={i} icon={socialMedia.component} url={socialMedia.url} />
-//                 })
-//             }
-//         </View>
-//     );
-// }
-
-// const TermsAndConditions = () => {
-//     const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
-//         Linking.openURL("https://www.google.com/");
-//     });
-
-//     return (
-//         <View styles={styles.termsAndConditionsContainer}>
-//             <View style={styles.copyright}>
-//                 <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
-//             </View>
-//             <View style={styles.terms}>
-//                 <TouchableOpacity onPress={openLink} style={styles.icon} >
-//                     <Text style={styles.termsText}> Terms and Privacy Policy. </Text>
-//                     <Text style={styles.lineText}> ______________________ </Text>
-//                 </TouchableOpacity>
-//             </View>
-//         </View>
-//     )
-// }
-
-const settingScreens = new Map([
-    ["Profile Information", STACK_SCREENS.PROFILE_INFORMATION],
-    ["Privacy Policy", STACK_SCREENS.PRIVACY_POLICY],
-    ["Log Out", STACK_SCREENS.LOG_OUT],
-    ["Delete Account", STACK_SCREENS.DELETE_ACCOUNT]
-])
-
 const SettingsStackButton = (props) => {
     console.log(props);
     return (
-    <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.DELETE_ACCOUNT)}>
+    <TouchableOpacity onPress={() => props.navigation.navigate(props.name)}>
         <SafeAreaView style={styles.optionView} >
 
         <Text style={styles.optionText}>{props.name}</Text>
@@ -484,12 +446,13 @@ return (
 }
 
 const SettingOptions = ({navigation}) => {
+    console.log(navigation);
     return (
         <SafeAreaView style={{top: "-8%"}}>
             <Text style={styles.heading}>Account settings </Text>
         {/*<SettingsStackButton name={"Profile Information"}  navigation={navigation} />*/}
         {/*<SettingsStackButton name={"Privacy Policy"}  navigation={navigation}/>*/}
-        {/*<SettingsStackButton name={"Log Out"} navigation={navigation}/>*/}
+        <SettingsStackButton name={STACK_SCREENS.BACK_UP_ACCOUNT} navigation={navigation}/>
         <SettingsStackButton name={STACK_SCREENS.DELETE_ACCOUNT} navigation={navigation} />
         </SafeAreaView>
     )

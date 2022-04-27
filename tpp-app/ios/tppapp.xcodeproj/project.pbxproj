@@ -332,7 +332,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = tppapp;
+				PRODUCT_BUNDLE_IDENTIFIER = XJ35T96G7B.org.name.tppapp;
 				PRODUCT_NAME = tppapp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -360,7 +360,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.name.tppapp;
+				PRODUCT_BUNDLE_IDENTIFIER = XJ35T96G7B.org.name.tppapp;
 				PRODUCT_NAME = tppapp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

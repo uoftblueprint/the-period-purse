@@ -35,7 +35,7 @@ const GetStarted = ({ navigation }) => {
       <Text style={styles.titleText}>Welcome!</Text>
       <View style={{height: 80}}></View>
       <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
-      <AppleSignin />
+      <AppleSignin navigation={navigation}/>
       <View style={styles.copyright}>
           <Text>{`By continuing, you accept the`}</Text>
       </View>

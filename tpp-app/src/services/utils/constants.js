@@ -150,3 +150,15 @@ export const LOG_SYMPTOMS_FREQ ={
   SEVEN: "seven"
 
 }
+
+export const APPLE_CREDENTIALS = {
+  USER_ID: "userId",
+  IDENTITY_TOKEN: "identityToken",
+  GIVEN_NAME: "givenName",
+  FAMILY_NAME: "familyName"
+}
+
+export const ICLOUD = {
+  BACKUP_KEYS: "backupKeys",
+  BACKUP_VALUES: "backupValues"
+}
