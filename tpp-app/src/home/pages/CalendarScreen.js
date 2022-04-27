@@ -8,6 +8,8 @@ import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
+import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 
 const sideComponentWidth = 120
 
@@ -161,7 +163,11 @@ export default function CalendarScreen ({ route, navigation }) {
                 <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
                 {renderedArrow}
             </TouchableOpacity>
-            <TouchableOpacity style={styles.legend}><Text>Bleh</Text></TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LEGEND_PAGE, {screen: CALENDAR_STACK_SCREENS.LEGEND_PAGE})}
+              style={styles.legend}>
+              <LegendButton></LegendButton>
+            </TouchableOpacity>
             </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
 
@@ -176,11 +182,11 @@ const styles = StyleSheet.create({
     dropdown: {
       margin: 10,
       backgroundColor: '#fff',
-
       width: '100%'
     },
     legend: {
-      position: 'absolute'
+      position: 'absolute',
+      right: 30,
     },
     calendar: {
       marginBottom: '20%'
