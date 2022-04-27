@@ -6,7 +6,7 @@ import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
-import { getISODate } from '../../services/utils/helpers';
+import {getISODate, initializeEmptyYear} from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
 
 const sideComponentWidth = 120
@@ -97,7 +97,11 @@ export default function CalendarScreen ({ route, navigation }) {
                 if (cachedYears[year] === undefined) {
 
                     let currentYearData = {}
-                    currentYearData[year] = await GETYearData(year)
+                    const yearDataFromStorage = await GETYearData(year);
+
+                    // If there's nothing logged for that year, we may still want to disable dates
+                    // Get an empty years
+                    currentYearData[year] = yearDataFromStorage ? yearDataFromStorage : initializeEmptyYear(year);
 
                     let newCachedYears = {}
                     newCachedYears[year] = true
