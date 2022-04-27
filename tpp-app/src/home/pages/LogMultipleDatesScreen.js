@@ -3,7 +3,7 @@ import {View, StyleSheet, Text, TouchableOpacity, Alert, SafeAreaView, ScrollVie
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 import { CalendarList } from 'react-native-calendars';
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
-import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar} from '../../services/utils/helpers';
+import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar, getPastScrollLength } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 import { scrollDate } from './CalendarScreen';
@@ -30,6 +30,9 @@ const DayComponent = ({props}) => {
     )
 }
 
+var monthsDiff;
+getPastScrollLength().then(res => { monthsDiff = res })
+
 export const Calendar = ({ navigation, setSelectedDates, markedDates, currentDate }) => {
     return (
         <CalendarList
@@ -37,7 +40,7 @@ export const Calendar = ({ navigation, setSelectedDates, markedDates, currentDat
         current={currentDate}
 
         // Max amount of months allowed to scroll to the past. Default = 50
-        pastScrollRange={12}
+        pastScrollRange={monthsDiff}
 
         // Max amount of months allowed to scroll to the future. Default = 50
         futureScrollRange={1}

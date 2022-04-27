@@ -1,14 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
-import { CrossButton, WideButton } from './components/ButtonComponents';
-import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
+import { WideButton } from './components/ButtonComponents';
+import { HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
 import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
+import { POSTJoinedDate } from '../services/OnboardingService';
 
 export const STACK_SCREENS = {
   GET_STARTED : "Get Started",
@@ -86,7 +87,10 @@ export default function Confirmation ({ route, navigation }) {
 
       <WideButton 
         title="Let's go!" color="#5A9F93" bottom="-8%"
-        onPress={() => navigation.navigate(STACK_SCREENS.MAIN_PAGE)}
+        onPress={() => {
+          POSTJoinedDate()
+          navigation.navigate(STACK_SCREENS.MAIN_PAGE)}
+        }
       />
     </ImageBackground>
   );

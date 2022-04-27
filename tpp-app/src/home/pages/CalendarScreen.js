@@ -6,21 +6,22 @@ import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
-import { getISODate } from '../../services/utils/helpers';
+import { getISODate, getPastScrollLength } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
 
 const sideComponentWidth = 120
 export let scrollDate;
+var monthsDiff;
+getPastScrollLength().then(res => { monthsDiff = res })
 
 export const Calendar = ({ navigation, marked, setYearInView, selectedView, currentDate }) => {
-
     return (
         <CalendarList
         // Initially visible month. Default = now
-        current={currentDate ? currentDate : scrollDate}
+        current={currentDate}
 
         // Max amount of months allowed to scroll to the past. Default = 50
-        pastScrollRange={12}
+        pastScrollRange={monthsDiff}
 
         // Max amount of months allowed to scroll to the future. Default = 50
         futureScrollRange={0}
