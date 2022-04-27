@@ -17,7 +17,7 @@ const getActiveRouteState = function (route) {
 }
 
 
-export const TabBarMiddleButton = ({ style, inOverlay }) => {
+export const TabBarMiddleButton = ({ style, inOverlay, customOnPress }) => {
   const navigation = useNavigation();
   const calendarShowing = useIsFocused();
 
@@ -41,7 +41,9 @@ export const TabBarMiddleButton = ({ style, inOverlay }) => {
         styles.middleButton
       ]}
       onPress={() => {
-        if (inOverlay) {
+        if (customOnPress) {
+          customOnPress()
+        } else if (inOverlay) {
           navigation.goBack();
         } else {
           calendarShowing && !overlayVisible
