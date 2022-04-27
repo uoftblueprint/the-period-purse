@@ -3,9 +3,13 @@ import {StyleSheet, Text, View, Image, SafeAreaView, ImageBackground} from 'reac
 import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
-
+import {GETFactCycle, POSTFactCycle } from "../info/InfoService"
+import { getFullCurrentDateString } from "../services/utils/helpers.js"
+import dykData from "../pages/DYKFacts.json"
 
 export default function DidYouKnow({ navigation }) {
+    let fact = getFact()
+    console.log(fact);
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -31,26 +35,24 @@ export default function DidYouKnow({ navigation }) {
  * Retrieves the fact that the user is supposed to see that day
  * @returns a string of the relevant fact
  */
- export function getFact() {
+ const getFact = async () => {
     // try to get the fact cycle array first
-    var fact_array = GETFactCycle();
+    var factArray = await GETFactCycle();
 
     // if the array is null, then this means we haven't initiatlized the fact cycle array
-    if (fact_array == null) {
+    if (factArray == null) {
         // initialize the fact cycle with POSTFactCycle
-        infoService.POSTFactCycle();
-        fact_array = GETFactCycle();
+        await POSTFactCycle();
+        factArray = GETFactCycle();
     }
 
     // if today's date and the stored date don't match, update
-    if (getFullCurrentDateString() != fact_array[0]) {
+    if (getFullCurrentDateString() != factArray[0]) {
         POSTFactCycle();
-        fact_array = GETFactCycle();
+        factArray = GETFactCycle();
     }
 
-    const dykData = require('../pages/DYKFacts.json');
-
-    return dykData[fact_array[1]]
+    return dykData[factArray[1]]
 }
 
 const styles = StyleSheet.create({

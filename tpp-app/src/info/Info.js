@@ -13,6 +13,7 @@ import discIcon from '../../ios/tppapp/Images.xcassets/icons/disc_icon.png'
 import { STACK_SCREENS } from './InfoNavigator';
 import { Footer } from '../services/utils/footer';
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
+import factsJSON from "../pages/DYKFacts.json"
 
 const LearnMoreCard = () => {
     return(
@@ -32,15 +33,7 @@ const LearnMoreCard = () => {
     )
 }
 
-const DidYouKnowCard = () => {
-    return(
-        <View>
-        <Text style={styles.didYouKnowText}>Did you know?</Text>
-        <Text style={styles.didYouKnowDescription}>{`${getFactShortened()}`}</Text>
-        <Image style={styles.paddyIcon} source={PadImageHappy}/>
-        </View>
-    )
-}
+
 
 const MenstrualProductCard = ({name, image, onPress}) =>{
     return(
@@ -53,30 +46,29 @@ const MenstrualProductCard = ({name, image, onPress}) =>{
     )
 }
 
-/**
- * Retrieves the fact that the user is supposed to see that day
- * @returns a string of the relevant fact, shortened to 90 characters
- */
-export function getFactShortened() {
-    // try to get the fact cycle array first
-    var fact_array = GETFactCycle();
+const getShortenFact = async () => {
+    var factCycle = await GETFactCycle();
+    if (factCycle) {
+        await POSTFactCycle() // POSTFact cycle iniaties fact cycle
 
-    // if the array is null, then this means we haven't initiatlized the fact cycle array
-    if (fact_array == null) {
-        // initialize the fact cycle with POSTFactCycle
-        POSTFactCycle();
-        fact_array = GETFactCycle();
+        factCycle = await GETFactCycle();
+        let fact = factsJSON[factCycle[0]].slice(84)
+        return (fact);
+    } else {
+        let storedFactCycle = await GETFactCycle();
+
+        if(storedFactCycle[0] != getFullCurrentDateString()){
+            await POSTFactCycle();
+            factCycle = await GETFactCycle();
+            let fact = factsJSON[factCycle[0]].slice(84);
+            return (fact);
+        } else {
+            let fact = factsJSON[storedFactCycle[0]].slice(84);
+            return (fact);
+        }
     }
+}
 
-    // if today's date and the stored date don't match, update
-    if (getFullCurrentDateString() != fact_array[0]) {
-        POSTFactCycle();
-        fact_array = GETFactCycle();
-    }
-
-    const dykData = require('../pages/DYKFacts.json');
-
-    return dykData[fact_array[1]].slice(87) + "..."
 const FunFactCard = ({ onPress }) =>{
     return (
         <TouchableOpacity style={styles.funFactCard} onPress={onPress}>
@@ -121,6 +113,7 @@ const cardData = [
 ]
 
 export default function Info ({ navigation }) {
+   
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <ScrollView>
@@ -155,6 +148,7 @@ export default function Info ({ navigation }) {
         </ImageBackground>
     )
 }
+
 
 const styles = StyleSheet.create({
     didYouKnowCard: {
