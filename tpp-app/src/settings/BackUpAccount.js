@@ -4,14 +4,21 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { DELETEAccountData } from '../services/SettingsService';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import {STACK_SCREENS} from "../onboarding/Confirmation";
-import { appleAuth } from '@invertase/react-native-apple-authentication';
+import {appleAuth, AppleButton} from '@invertase/react-native-apple-authentication';
+import {GETAppleIdentityToken, GETAppleUser} from "../services/AppleCredentialsService";
 
 export default function BackUpAccount ({props}) {
+    const [isSignedIn, setIsSignedIn] = useState(false);
+
     useEffect(() => {
         async function checkUserCredentialState() {
             // get current authentication state for user
+            const user = await GETAppleUser();
             // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-            const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+            const credentialState = await appleAuth.getCredentialStateForUser(user);
+            if (credentialState === appleAuth.State.AUTHORIZED) {
+                setIsSignedIn(true);
+            }
         }
         checkUserCredentialState();
     }, []);
@@ -20,7 +27,15 @@ export default function BackUpAccount ({props}) {
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <SafeAreaView>
                 <Text style={styles.heading}>Back Up Account</Text>
-
+                { isSignedIn && <TouchableOpacity style={styles.deleteButton}>
+                    <Text style={styles.deleteButtonText}> Back Up Account </Text>
+                </TouchableOpacity> }
+                { !isSignedIn && <AppleButton
+                    buttonStyle={AppleButton.Style.WHITE_OUTLINE}
+                    buttonType={AppleButton.Type.SIGN_IN}
+                    style={styles.appleSignin}
+                    onPress={() => onAppleButtonPress({navigation})}
+                /> }
             </SafeAreaView>
         </ImageBackground>
     )
@@ -60,5 +75,14 @@ const styles = StyleSheet.create({
         marginRight: 10,
         marginTop: -10,
         marginBottom: 75
+    },
+    appleSignin: {
+        alignItems: 'stretch',
+        justifyContent: 'center',
+        borderRadius: 10,
+        width: 330,
+        height: 52,
+        alignSelf: 'center',
+        margin: 10
     }
 });

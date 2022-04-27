@@ -6,7 +6,7 @@ import {GETBackupFromiCloud, POSTAppleIdentity, userHasiCloudBackupp} from "../s
 import {STACK_SCREENS} from "./Confirmation";
 
 
-async function onAppleButtonPress({navigation}) {
+export async function onAppleButtonPress({navigation}) {
     // performs login request
     const appleAuthRequestResponse = await appleAuth.performRequest({
       requestedOperation: appleAuth.Operation.LOGIN,

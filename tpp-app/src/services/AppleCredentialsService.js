@@ -41,6 +41,20 @@ export const GETAppleIdentityToken = async () => new Promise( async (resolve, re
 });
 
 /**
+ * Retrieve the user's token so we can authenticate them
+ */
+export const GETAppleUser = async () => new Promise( async (resolve, reject) => {
+    AsyncStorage.getItem(APPLE_CREDENTIALS.USER_ID)
+        .then((token) => {
+            console.log("Retrieved user's Apple user ID");
+            resolve(token);
+        }).catch((e) => {
+        console.log(`GETAppleUser error: ${JSON.stringify(e)}`);
+        reject();
+    });
+});
+
+/**
  * Backup account to iCloud
  */
 export const POSTBackupToiCloud = async () => new Promise( async (resolve, reject) => {
