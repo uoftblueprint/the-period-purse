@@ -160,9 +160,7 @@ export default function CalendarScreen ({ route, navigation }) {
     return (        
     
         <ImageBackground source={OnboardingBackground} style={styles.image}>
-            {/* <View style={styles.bruh}> */}
-            <SafeAreaView style={styles.container}>
-                <View style={styles.dropdown}>
+            <SafeAreaView style={styles.dropdown}>
                 <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
                     <Text style={styles.dropdownText}>{selectedView}</Text>
                     <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
@@ -173,57 +171,62 @@ export default function CalendarScreen ({ route, navigation }) {
                 style={styles.legend}>
                 <LegendButton></LegendButton>
                 </TouchableOpacity>
-                </View>
-                <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
-
-                <View style={styles.calendar}>
-                    <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
-                </View>
             </SafeAreaView>
-            {/* </View> */}
+            
+            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
+
+            <SafeAreaView style={styles.container}>
+            <View style={styles.calendar}>
+                <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
+            </View>            
+            </SafeAreaView>
        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
-    bruh: {
-        backgroundColor: '#B9E0D8',
-
-    },
     dropdown: {
-      margin: 10,
+      height: 50,
+      width: '100%',
       backgroundColor: '#fff',
       width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 0
     },
     image: {
-        height: null,
-        width: null,
+        height: '100%',
+        width: '100%',
         resizeMode: "cover",
         overflow: "hidden",
         flex: 1
     },
     legend: {
       position: 'absolute',
-      right: 30,
+      right: 20,
     },
     calendar: {
       marginBottom: '20%',
+      zIndex: 3
     },
     container: {
         flex: 1,
+        // paddingBottom: '30%',
         alignItems: 'stretch',
         justifyContent: 'flex-start',
         backgroundColor: 'transparent',
+        height: '100%'
     },
     navbarContainer: {
         marginTop: 0,
+        position: 'absolute',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
     },
     selectorItem:{
-        marginHorizontal: 10,
+        marginHorizontal: 10
     },
     horizContainer: {
         flex:1,
