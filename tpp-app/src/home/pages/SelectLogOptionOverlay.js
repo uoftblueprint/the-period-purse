@@ -30,7 +30,7 @@ export default function SelectLogOptionOverlay({ navigation }) {
                     year: today.getFullYear(),
                     month: today.getMonth() + 1,
                     day: today.getDate()
-                  }}
+                  }})}}
                 />
 
             <OptionButton
