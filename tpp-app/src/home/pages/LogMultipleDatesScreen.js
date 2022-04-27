@@ -10,6 +10,7 @@ import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/ut
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
 import Constants from 'expo-constants';
+import LoadingVisual from '../components/LoadingVisual';
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -92,6 +93,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     // const [selectedDates, setSelectedDates] = useState([]);
     const [numSelected, setNumSelected] = useState(0);
     const [markedDates, setMarkedDates] = useState({});
+    const [loaded, setLoaded] = useState(false);
     const DESELECTED_COLOR = '#FFFFFF';
     const SELECTED_COLOR = '#E44545';
 
@@ -139,6 +141,12 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
         populateMarkedDates();
     }, []);
+
+    useEffect(() => {
+        () => {
+            setLoaded(true);
+        }
+    }, [markedDates])
 
     const unsavedChanges = {
         title: "Unsaved changes",
@@ -249,37 +257,42 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         }
     }
 
+    if (loaded){
+        return (
+            <SafeAreaView style={styles.container}>
+                <View style={styles.navbarContainer}>
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.navbarContainer}>
+                    <TouchableOpacity onPress={() => onClose()} style={styles.close}>
+                    <CloseIcon fill={'#181818'}/>
+                    </TouchableOpacity>
+                    <View style={styles.navbarTextContainer}>
 
-                <TouchableOpacity onPress={() => onClose()} style={styles.close}>
-                  <CloseIcon fill={'#181818'}/>
-                </TouchableOpacity>
-                <View style={styles.navbarTextContainer}>
+                        <Text style={styles.navbarTitle}>Tap date to log period</Text>
+                        <Text style={styles.navbarSubTitle}>
+                            Selected dates will have their Flow level set to Medium
+                        </Text>
 
-                    <Text style={styles.navbarTitle}>Tap date to log period</Text>
-                    <Text style={styles.navbarSubTitle}>
-                        Selected dates will have their Flow level set to Medium
-                    </Text>
-
+                    </View>
                 </View>
-            </View>
-            <View style={styles.calendar}>
-                <Calendar
-                    numSelected={numSelected}
-                    setNumSelected={setNumSelected}
-                    navigation={navigation}
-                    setSelectedDates={setSelectedDates}
-                    markedDates={markedDates}
-                />
-            </View>  
-            <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
-                <SubmitIcon fill={'#181818'}/>
-            </TouchableOpacity>
-        </SafeAreaView>
-    )
+                <View style={styles.calendar}>
+                    <Calendar
+                        numSelected={numSelected}
+                        setNumSelected={setNumSelected}
+                        navigation={navigation}
+                        setSelectedDates={setSelectedDates}
+                        markedDates={markedDates}
+                    />
+                </View>  
+                <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
+                    <SubmitIcon fill={'#181818'}/>
+                </TouchableOpacity>
+            </SafeAreaView>
+        )
+
+    }
+    else{
+        return (<LoadingVisual/>)
+    }
 }
 
 const styles = StyleSheet.create({

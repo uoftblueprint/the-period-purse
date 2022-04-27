@@ -11,6 +11,7 @@ import BloodDrop from '../../../ios/tppapp/Images.xcassets/icons/flow_with_heart
 import Calendar from '../../../ios/tppapp/Images.xcassets/icons/menstruation_calendar.svg';
 import Paddy from '../../../ios/tppapp/Images.xcassets/icons/paddy.svg';
 import { Footer } from '../../services/utils/footer';
+import LoadingVisual from '../components/LoadingVisual';
 
 function InfoCard(props){
   return (
@@ -59,28 +60,30 @@ export default function CycleScreen ({navigation}){
   let [daysTillPeriod, setDaysTillPeriod] = useState(DEFAULTS.DAYS_TILL_PERIOD);
   let [intervals, setIntervals] = useState(DEFAULTS.INTERVALS);
   let [showTip, setShowTip] = useState(DEFAULTS.SHOW_TIP);
+  let [loaded, setLoaded] = useState(false);
 
   const tabBarHeight = useBottomTabBarHeight();
 
   useFocusEffect(React.useCallback(() => {
 
-     CycleService.GETPeriodDay().then(days => {
+
+     let gettingPeriod = CycleService.GETPeriodDay().then(days => {
        setPeriodDays(days);
        setShowTip(days <= 0);
      })
      .catch(() => {setPeriodDays(DEFAULTS.PERIOD_DAYS)});
 
-     CycleService.GETCycleDonutPercent().then(percent => {
+     let gettingCycle = CycleService.GETCycleDonutPercent().then(percent => {
        setCycleDonutPercent(percent * 100);
      })
      .catch(() => setCycleDonutPercent(DEFAULTS.CYCLE_DONUT_PERCENT));
 
-     CycleService.GETDaysSinceLastPeriodEnd().then(days => {
+     let gettingPeriodEndDays = CycleService.GETDaysSinceLastPeriodEnd().then(days => {
        setDaysSinceLastPeriod(days);
      })
      .catch(setDaysSinceLastPeriod(DEFAULTS.DAYS_SINCE_LAST_PERIOD));
 
-     CycleService.GETAveragePeriodLength().then(numDays => {
+     let gettingAveragePeriodLength = CycleService.GETAveragePeriodLength().then(numDays => {
        if(numDays){
          // Round to one decimal place
         setAvgPeriodLength(Math.round(numDays * 10) / 10);
@@ -91,7 +94,7 @@ export default function CycleScreen ({navigation}){
      })
      .catch(() => setAvgPeriodLength(DEFAULTS.AVG_PERIOD_LENGTH));
      
-     CycleService.GETAverageCycleLength().then(numDays => {
+     let gettingAverageCycleLength = CycleService.GETAverageCycleLength().then(numDays => {
        if(numDays){
          // Round to one decimal place
          setAvgCycleLength(Math.round(numDays * 10) / 10);
@@ -102,7 +105,7 @@ export default function CycleScreen ({navigation}){
      })
      .catch(() => setAvgCycleLength(DEFAULTS.AVG_CYCLE_LENGTH));
 
-     CycleService.GETPredictedDaysTillPeriod().then(numDays => {
+     let gettingPredictedDays = CycleService.GETPredictedDaysTillPeriod().then(numDays => {
        let toSet;
        if(numDays && numDays != -1){
          toSet = numDays;
@@ -120,12 +123,27 @@ export default function CycleScreen ({navigation}){
        setShowTip(false);
      });
      
-     CycleService.GETCycleHistoryByYear(new Date().getFullYear()).then(intervals =>{
+     let gettingCycleHistory = CycleService.GETCycleHistoryByYear(new Date().getFullYear()).then(intervals =>{
        setIntervals(intervals);
      })
      .catch(()=> {
        setIntervals(DEFAULTS.INTERVALS);
      })
+
+     Promise.all(
+       gettingPeriod,
+       gettingCycle,
+       gettingPeriodEndDays,
+       gettingAverageCycleLength,
+       gettingAveragePeriodLength,
+       gettingAverageCycleLength,
+       gettingPredictedDays,
+       gettingCycleHistory
+     ).then(
+      () => {
+        setLoaded(true);
+      }
+     )
 
   }, []));
 
@@ -137,6 +155,8 @@ export default function CycleScreen ({navigation}){
     marginBottom: 50
   }
   const cardContainerStyle = showTip ? Object.assign({}, styles.cardContainer, tipVisibleStyle) : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
+
+  if (loaded) {
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={background} style={styles.container}>    
@@ -174,9 +194,12 @@ export default function CycleScreen ({navigation}){
           </SafeAreaView>
         </ScrollView>
       </ImageBackground>
-    </SafeAreaView>
+    </SafeAreaView>);
 
-  )
+  } else {
+    return <LoadingVisual/>
+  }
+
 }
 
 const styles = StyleSheet.create({

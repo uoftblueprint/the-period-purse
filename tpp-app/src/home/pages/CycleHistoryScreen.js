@@ -6,7 +6,7 @@ import {ExpandedHistoryCard} from '../components/CycleHistory';
 import CycleService from '../../services/cycle/CycleService';
 import {GETStoredYears} from '../../services/utils/helpers';
 import {useFocusEffect} from '@react-navigation/native';
-import { set } from 'date-fns';
+import LoadingVisual from '../components/LoadingVisual';
 
 function Header({navigation}){
     return(
@@ -55,6 +55,7 @@ export default function CycleHistoryScreen({navigation}){
     let [selectedYear, setSelectedYear] = useState(currentYear);
     let [storedYears, setStoredYears] = useState(DEFAULTS.STORED_YEARS);
     let [onPeriod, setOnPeriod] = useState(DEFAULTS.ON_PERIOD);
+    let [loaded, setLoaded] = useState(false);
     
     useFocusEffect(
         useCallback(() => {
@@ -70,7 +71,7 @@ export default function CycleHistoryScreen({navigation}){
         .catch(() => setOnPeriod(DEFAULTS.ON_PERIOD))
     }, []));
 
-    //get intervals for all stored years
+    //get intervals for all stored years. Sequentially, this always occurs after the above effect
     useFocusEffect(
         useCallback(
         () => {
@@ -78,29 +79,44 @@ export default function CycleHistoryScreen({navigation}){
             for (const year of storedYears){
                 currentIntervals[year] = await CycleService.GETCycleHistoryByYear(year);
             }
-            setCurrentIntervals({...currentIntervals});
+            setCurrentIntervals({...currentIntervals})
         }
         storeYearsCycles();
     }, [storedYears]));
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <ImageBackground source={background} style={styles.container}>
-                <Header navigation={navigation}/>
-                <SafeAreaView style={styles.cardContainer}>
-                    <View style={styles.buttonContainer}>
-                        {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>).reverse()}
-                    </View>
-                    <ExpandedHistoryCard 
-                        navigation={navigation} 
-                        intervals={currentIntervals[selectedYear]} 
-                        renderedYear={selectedYear}
-                        onPeriod={onPeriod}
-                    />
-                </SafeAreaView>
-            </ImageBackground>
-        </SafeAreaView>
-    )
+    // Since the intervals are the "last" thing to be set, we know that when they change we are done loading
+    useEffect(
+        () => {
+            setLoaded(true)
+        }, [currentIntervals]
+    );
+
+    if(loaded){
+        return (
+            <SafeAreaView style={styles.container}>
+                <ImageBackground source={background} style={styles.container}>
+                    <Header navigation={navigation}/>
+                    <SafeAreaView style={styles.cardContainer}>
+                        <View style={styles.buttonContainer}>
+                            {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>).reverse()}
+                        </View>
+                        <ExpandedHistoryCard 
+                            navigation={navigation} 
+                            intervals={currentIntervals[selectedYear]} 
+                            renderedYear={selectedYear}
+                            onPeriod={onPeriod}
+                        />
+                    </SafeAreaView>
+                </ImageBackground>
+            </SafeAreaView>
+        )
+    } else {
+        console.log("Im loading")
+        return (
+            <LoadingVisual/>
+        )
+    }
+
 }
 
 const styles = StyleSheet.create({
