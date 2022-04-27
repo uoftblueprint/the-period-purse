@@ -92,6 +92,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     // const [selectedDates, setSelectedDates] = useState([]);
     const [numSelected, setNumSelected] = useState(0);
     const [markedDates, setMarkedDates] = useState({});
+    const [hasChanged, setHasChanged] = useState(false);
     const DESELECTED_COLOR = '#FFFFFF';
     const SELECTED_COLOR = '#E44545';
 
@@ -138,7 +139,14 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         }
 
         populateMarkedDates();
+        
     }, []);
+
+    useEffect(() => {
+        setHasChanged(Object.keys(markedDates).some(key =>
+            (markedDates[key].marked && !markedDates[key].originalMarked) || (!markedDates[key].marked && markedDates[key].originalMarked)));
+    
+    }, [numSelected])
 
     const unsavedChanges = {
         title: "Unsaved changes",
@@ -275,7 +283,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                     markedDates={markedDates}
                 />
             </View>  
-            <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
+            <TouchableOpacity disabled={!hasChanged} onPress={async() => {await onSubmit()}} style={{...styles.submitButton, opacity: hasChanged ? 1 : 0.5}}>
                 <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>
         </SafeAreaView>

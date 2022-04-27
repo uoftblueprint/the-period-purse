@@ -146,7 +146,6 @@ export default function CalendarScreen ({ route, navigation }) {
         if (toggleable) {
             if (selectedView === targetView) {
                 setSelectedView(VIEWS.Nothing);
-                console.log("bruh");
             } else {
                 console.log("Selected " + targetView)
                 setSelectedView(targetView);
