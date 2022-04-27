@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { WideButton } from './components/ButtonComponents';
 import { HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SETTutorial } from '../services/TutorialService';
 
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
@@ -90,9 +90,7 @@ export default function Confirmation ({ route, navigation }) {
       <WideButton
         title="Let's go!" color="#5A9F93" bottom="-8%"
         onPress={() => {
-          AsyncStorage.setItem('showTutorial', 'true')
-            .catch((e) => console.log("unable to set 'showTutorial' key to true", JSON.stringify(e)) )
-            .finally(() => navigation.navigate(STACK_SCREENS.MAIN_PAGE));
+          SETTutorial(true).finally(() => navigation.navigate(STACK_SCREENS.MAIN_PAGE));
         }}
       />
     </ImageBackground>

@@ -10,8 +10,8 @@ import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
+import { GETTutorial } from '../../services/TutorialService';
 
-const sideComponentWidth = 120
 
 export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 
@@ -142,11 +142,12 @@ export default function CalendarScreen ({ route, navigation }) {
             }
 
             // show tutorial overlay if coming from Confirmation screen, else ignore
-            AsyncStorage.getItem('showTutorial')
+            GETTutorial()
               .then((val) => {
+                // show tutorial overlay if coming from Confirmation screen, else ignore
                 if (val === 'true') navigation.navigate(CALENDAR_STACK_SCREENS.TUTORIAL)
               })
-              .catch((e) => console.log("unable to get 'showTutorial' key", JSON.stringify(e)))
+              .catch((e) => console.log('showTutorial failed', JSON.stringify(e)))
 
         }, [route.params?.inputData])
     )

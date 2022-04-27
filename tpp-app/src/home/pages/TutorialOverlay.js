@@ -1,17 +1,15 @@
 import React from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, StyleSheet, TouchableWithoutFeedback, Text, Image } from "react-native";
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { TabBarMiddleButton } from '../components/TabBarMiddleButton'
 import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
 import { CALENDAR_STACK_SCREENS } from "../CalendarNavigator";
+import { SETTutorial } from "../../services/TutorialService";
 
 
 export default function TutorialOverlay({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
-  // set 'showTutorial' key to false in backend
-  AsyncStorage.setItem('showTutorial', 'false')
-    .catch((e) => console.log("unable to set 'showTutorial' key to false", JSON.stringify(e)))
+  SETTutorial(false); // set 'showTutorial' key to false in backend
 
   return (
       <TouchableWithoutFeedback onPress={() => navigation.goBack()} >
