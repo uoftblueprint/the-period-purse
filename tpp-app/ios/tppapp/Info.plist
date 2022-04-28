@@ -51,5 +51,15 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSUbiquitousContainers</key>
+        <dict>
+            <key>iCLoud.tpp-app</key>
+            <dict>
+                <key>NSUbiquitousContainerIsDocumentScopePublic</key>
+                <true/>
+                <key>NSUbiquitousContainerName</key>
+                <string>iCloud.tpp-app</string>
+            </dict>
+        </dict>
 </dict>
 </plist>

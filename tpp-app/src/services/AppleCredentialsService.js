@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {APPLE_CREDENTIALS, ICLOUD} from "./utils/constants";
-import iCloudStorage from 'react-native-icloudstore';
+import * as iCloudStorage from 'react-native-cloud-store';
 
 /**
  * Save the user's token so we can authenticate them
@@ -11,13 +11,13 @@ import iCloudStorage from 'react-native-icloudstore';
  */
 export const POSTAppleIdentity = async (userId, givenName, familyName, token) => new Promise( async (resolve, reject) => {
     AsyncStorage.multiSet([
-        [APPLE_CREDENTIALS.USER_ID, userId],
-        [APPLE_CREDENTIALS.GIVEN_NAME, givenName],
-        [APPLE_CREDENTIALS.FAMILY_NAME, familyName],
-        [APPLE_CREDENTIALS.IDENTITY_TOKEN, token]
+        [APPLE_CREDENTIALS.USER_ID, JSON.stringify(userId)],
+        [APPLE_CREDENTIALS.GIVEN_NAME, JSON.stringify(givenName)],
+        [APPLE_CREDENTIALS.FAMILY_NAME, JSON.stringify(familyName)],
+        [APPLE_CREDENTIALS.IDENTITY_TOKEN, JSON.stringify(token)]
         ])
         .then(() => {
-            console.log("Saved user's Apple identity");
+            console.log(`Saved user's Apple identity as: ${userId}, ${givenName}, ${familyName}, ${token}`);
             resolve();
             })
         .catch((e) => {
@@ -33,7 +33,7 @@ export const GETAppleIdentityToken = async () => new Promise( async (resolve, re
     AsyncStorage.getItem(APPLE_CREDENTIALS.IDENTITY_TOKEN)
         .then((token) => {
             console.log("Retrieved user's Apple identity token");
-            resolve(token);
+            resolve(JSON.parse(token));
         }).catch((e) => {
             console.log(`GETAppleIdentityToken error: ${JSON.stringify(e)}`);
             reject();
@@ -47,7 +47,7 @@ export const GETAppleUser = async () => new Promise( async (resolve, reject) => 
     AsyncStorage.getItem(APPLE_CREDENTIALS.USER_ID)
         .then((token) => {
             console.log("Retrieved user's Apple user ID");
-            resolve(token);
+            resolve(JSON.parse(token));
         }).catch((e) => {
         console.log(`GETAppleUser error: ${JSON.stringify(e)}`);
         reject();
@@ -63,15 +63,18 @@ export const POSTBackupToiCloud = async () => new Promise( async (resolve, rejec
         const keys = await AsyncStorage.getAllKeys();
         const values = await AsyncStorage.multiGet(keys);
 
+        console.log(keys, values);
+
         if (keys.length !== values.length) {
             throw new Error("Bad Async Storage content: Mismatch of keys and values");
         }
 
         // Save keys and values to iCloud
-        await iCloudStorage.multiSet([
-            [ICLOUD.BACKUP_KEYS, keys],
-            [ICLOUD.BACKUP_VALUES, values]
-        ]);
+        await iCloudStorage.kvSetItem(
+            ICLOUD.BACKUP_KEYS, JSON.stringify(keys));
+
+        await iCloudStorage.kvSetItem(
+            ICLOUD.BACKUP_VALUES, JSON.stringify(values));
         resolve();
     } catch (e) {
         console.log(`POSTBackupToiCloud error: ${JSON.stringify(e)}`);
@@ -83,48 +86,54 @@ export const POSTBackupToiCloud = async () => new Promise( async (resolve, rejec
  * Check if iCloud has backed up data
  * @returns boolean indicating whether the user has a backup of M. Nation data in their iCloud
  */
-export const userHasiCloudBackupp = async () => new Promise(async(resolve, reject) => {
-    iCloudStorage.multiGet([ICLOUD.BACKUP_KEYS, ICLOUD.BACKUP_VALUES])
-        .then(async ([backupKeys, backupValues]) => {
-            if (backupKeys.length === backupValues.length) {
-                resolve(true);
-            } else {
-                // Bad iCloud storage data, just clear it
-                await iCloudStorage.clear();
-                resolve(false);
-            }
-        }).catch((e) => {
-            console.log(`userHasiCloudBackupp error: ${JSON.stringify(e)}`);
-            reject();
-    });
+export const userHasiCloudBackup = async () => new Promise(async(resolve, reject) => {
+    // try {
+        console.log(iCloudStorage);
+        const keys = JSON.parse(await iCloudStorage.kvGetItem(ICLOUD.BACKUP_KEYS));
+        console.log(keys);
+        const values = JSON.parse(await iCloudStorage.kvGetItem(ICLOUD.BACKUP_VALUES));
+        console.log(values);
+        if (keys.length === values.length) {
+            resolve(true);
+        } else {
+            resolve(false);
+        }
+    // } catch (e) {
+    //     console.log(`userHasiCloudBackup error: ${JSON.stringify(e)}`);
+    //     reject();
+    // }
 });
 
 /**
  * Retrieve Backup from iCloud and enter it into AsyncStorage
  */
 export const GETBackupFromiCloud = async () => new Promise( async (resolve, reject) => {
-    iCloudStorage.multiGet([ICLOUD.BACKUP_KEYS, ICLOUD.BACKUP_VALUES])
-        .then(async ([backupKeys, backupValues]) => {
-            if (backupKeys.length !== backupValues.length) {
-                throw new Error("Bad iCloud Storage backup content: Mismatch of keys and values");
-            }
+    try {
+        const keys = await iCloudStorage.kvGetItem(ICLOUD.BACKUP_KEYS);
+        const values = await iCloudStorage.kvGetItem(ICLOUD.BACKUP_VALUES);
 
-            // Clear AsyncStorage
-            await AsyncStorage.clear();
+        console.log(keys, values);
 
-            const listOfKeyValues = [];
-            backupKeys.forEach((key, index) => {
-                listOfKeyValues.push([key, backupValues[index]]);
-            });
+        if (keys.length !== values.length) {
+            throw new Error("Bad iCloud Storage backup content: Mismatch of keys and values");
+        }
 
-            // Use MultiSet to store backup from iCloud in AsyncStorage
-            await AsyncStorage.multiSet([listOfKeyValues]);
+        // Clear AsyncStorage
+        await AsyncStorage.clear();
 
-            resolve();
-        })
-        .catch(() => {
-            console.log(`GETBackupFromiCloud error: ${JSON.stringify(e)}`);
-            reject();
+        const listOfKeyValues = [];
+        keys.forEach((key, index) => {
+            listOfKeyValues.push([key, values[index]]);
         });
+
+        // Use MultiSet to store backup from iCloud in AsyncStorage
+        await AsyncStorage.multiSet([listOfKeyValues]);
+
+        resolve();
+
+    } catch (e) {
+        console.log(`GETBackupFromiCloud error: ${JSON.stringify(e)}`);
+        reject();
+    }
 });
 

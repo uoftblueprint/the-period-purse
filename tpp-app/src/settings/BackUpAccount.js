@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, ImageBackground, TouchableOpacity, Alert} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { DELETEAccountData } from '../services/SettingsService';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
-import {STACK_SCREENS} from "../onboarding/Confirmation";
 import {appleAuth, AppleButton} from '@invertase/react-native-apple-authentication';
 import {GETAppleIdentityToken, GETAppleUser} from "../services/AppleCredentialsService";
 
@@ -34,7 +32,7 @@ export default function BackUpAccount ({props}) {
                     buttonStyle={AppleButton.Style.WHITE_OUTLINE}
                     buttonType={AppleButton.Type.SIGN_IN}
                     style={styles.appleSignin}
-                    onPress={() => onAppleButtonPress({navigation})}
+                    onPress={() => onAppleButtonPress({ navigation: props.navigation, comingFromSettings: true})}
                 /> }
             </SafeAreaView>
         </ImageBackground>

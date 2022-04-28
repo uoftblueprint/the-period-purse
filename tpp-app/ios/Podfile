@@ -18,4 +18,6 @@ target 'tppapp' do
   #     flipper_post_install(installer)
   #   end
   # end
+  pod 'react-native-cloud-store', :path => '../node_modules/react-native-cloud-store'
+
 end

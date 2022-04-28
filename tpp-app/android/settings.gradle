@@ -1,4 +1,8 @@
 rootProject.name = 'tppapp'
+include ':react-native-cloud-store'
+project(':react-native-cloud-store').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-cloud-store/android')
+include ':react-native-cloud-store'
+project(':react-native-cloud-store').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-cloud-store/android')
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()

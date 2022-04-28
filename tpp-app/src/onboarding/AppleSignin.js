@@ -2,11 +2,17 @@ import React, { useEffect } from 'react';
 import { AppleButton } from '@invertase/react-native-apple-authentication';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 import {Alert, StyleSheet, View} from "react-native";
-import {GETBackupFromiCloud, POSTAppleIdentity, userHasiCloudBackupp} from "../services/AppleCredentialsService";
+import {
+    GETBackupFromiCloud,
+    POSTAppleIdentity,
+    userHasiCloudBackup,
+    userHasiCloudBackupp
+} from "../services/AppleCredentialsService";
 import {STACK_SCREENS} from "./Confirmation";
+import {STACK_SCREENS as SETTINGS_STACK_SCREEN } from "../settings/SettingsNavigator";
+import * as iCloudStorage from 'react-native-cloud-store';
 
-
-export async function onAppleButtonPress({navigation}) {
+export async function onAppleButtonPress({navigation, comingFromSettings}) {
     // performs login request
     const appleAuthRequestResponse = await appleAuth.performRequest({
       requestedOperation: appleAuth.Operation.LOGIN,
@@ -22,30 +28,43 @@ export async function onAppleButtonPress({navigation}) {
     // use credentialState response to ensure the user is authenticated
     if (credentialState === appleAuth.State.AUTHORIZED) {
       // user is authenticated, save their apple auth related fields
+      console.log(appleAuthRequestResponse);
       await POSTAppleIdentity(appleAuthRequestResponse.user, appleAuthRequestResponse.fullName.givenName, appleAuthRequestResponse.fullName.familyName, appleAuthRequestResponse.identityToken);
 
       // Check if they have an existing file in their iCloud for M. Nation
       // If yes, ask if they want to load up their backed up data
-      if (await userHasiCloudBackupp()) {
-          Alert.alert(
-              "Use Backup",
-              "Would you like to use your backed up data for this app?", [
-                  {
-                      text: "No",
-                      style: "cancel",
-                      // Proceed to quick start
-                      onPress: () => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)
-                  }, {
-                      text: "Yes",
-                      style: "default",
-                      // Retrieve their backup
-                      onPress: async () => await GETBackupFromiCloud() // TODO
-                  }
-              ]
-          );
+      if (await userHasiCloudBackup()) {
+          // Coming from Settings' Backup Account
+          if (comingFromSettings) {
+              console.log("Merge backup");
+
+          // Coming from Welcome screen
+          } else {
+              Alert.alert(
+                  "Use Backup",
+                  "Would you like to use your backed up data for this app?", [
+                      {
+                          text: "No",
+                          style: "cancel",
+                          // Proceed to quick start
+                          onPress: () => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)
+                      }, {
+                          text: "Yes",
+                          style: "default",
+                          // Retrieve their backup
+                          onPress: async () => await GETBackupFromiCloud()
+                      }
+                  ]
+              );
+          }
+
       // If no, proceed to quick start
       } else {
-          navigation.navigate(STACK_SCREENS.PERIOD_LENGTH);
+          if (comingFromSettings) {
+              navigation.navigate(SETTINGS_STACK_SCREEN.BACK_UP_ACCOUNT);
+          } else {
+              navigation.navigate(STACK_SCREENS.PERIOD_LENGTH);
+          }
       }
     }
 }
@@ -64,7 +83,7 @@ export default function AppleSignin({navigation}) {
                 buttonStyle={AppleButton.Style.WHITE_OUTLINE}
                 buttonType={AppleButton.Type.SIGN_IN}
                 style={styles.appleSignin}
-                onPress={() => onAppleButtonPress({navigation})}
+                onPress={() => onAppleButtonPress({ navigation: navigation, comingFromSettings: false})}
             />
         </View>
     )
