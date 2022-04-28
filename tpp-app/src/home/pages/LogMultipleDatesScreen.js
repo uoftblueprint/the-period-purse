@@ -144,7 +144,9 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
     useEffect(() => {
         () => {
-            setLoaded(true);
+            if(markedDates){
+                setLoaded(true);
+            }
         }
     }, [markedDates])
 

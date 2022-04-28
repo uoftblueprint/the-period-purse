@@ -18,6 +18,7 @@ import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
 import PrivacyPolicyScreen from './src/home/pages/PrivacyPolicyScreen';
 import TermsAndConditions from './src/home/pages/TermsAndConditions';
+import { StartLoadScreen } from './src/home/pages/StartLoadScreen';
 
 
 export const STACK_SCREENS = {
@@ -133,19 +134,7 @@ export function MainNavigator() {
 }
 
 function App() {
-  const [preferences, setPreferences] = useState(null)
-  useEffect(() => {
-     async function getPreferences() {
-       setPreferences(await GETAllTrackingPreferences());
-     }
-     getPreferences();
-  }, [])
-  if(preferences && preferences[0] && preferences[0][1])
-    // tracking preferences have been set, go to main page
-    return (<MainNavigator></MainNavigator>);
-  else
-    // tracking preferences have not been set, go to onboarding
-    return (<Welcome></Welcome>);
+  return (<StartLoadScreen/>);
 }
 
 

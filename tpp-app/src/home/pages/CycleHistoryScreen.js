@@ -87,7 +87,9 @@ export default function CycleHistoryScreen({navigation}){
     // Since the intervals are the "last" thing to be set, we know that when they change we are done loading
     useEffect(
         () => {
-            setLoaded(true)
+            if(!DEFAULTS.INTERVALS){
+                setLoaded(true)
+            }
         }, [currentIntervals]
     );
 

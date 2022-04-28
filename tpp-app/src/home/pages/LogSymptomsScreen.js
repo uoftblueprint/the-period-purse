@@ -48,7 +48,8 @@ const symptoms = ['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes']; // or
 
 
 export default function LogSymptomsScreen({ navigation, route }) {
-  const [trackingPrefs, setPrefs] = useState(['notes']); // list of symptoms to track, default is always 'notes'
+  const initialPrefs = ['notes'];
+  const [trackingPrefs, setPrefs] = useState(initialPrefs); // list of symptoms to track, default is always 'notes'
   const [loaded, setLoaded] = useState(false);
 
   // Set trackingPrefs when component mounts
@@ -89,7 +90,9 @@ export default function LogSymptomsScreen({ navigation, route }) {
   }, [])
 
   useEffect( () => {
-    setLoaded(true);
+    if(trackingPrefs != initialPrefs){
+      setLoaded(true);
+    }
   }, [trackingPrefs])
 
   // function to get symptoms from async storage
