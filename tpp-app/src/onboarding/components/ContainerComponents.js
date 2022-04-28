@@ -15,7 +15,7 @@ export const BackButtonContainer = styled.SafeAreaView`
   borderRadius: 10px;
   position: absolute; 
   left: 10px;
-  top: 10px;
+  top: 5%;
   flexDirection: row
 `;
 
