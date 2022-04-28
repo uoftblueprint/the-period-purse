@@ -6,18 +6,16 @@ import { getFullCurrentDateString } from "../services/utils/helpers.js"
  * Retrieves an array containing the last date the user accessed the info screen and the fact number they saw
  * @returns returns a promise resolving in an array with format ["2022-1-1", "1"]
  */
-export const GETFactCycle = async () => new Promise(async (resolve, reject) => {
+ export const GETFactCycle = async () => new Promise(async (resolve, reject) => {
     try {
-     if (await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM) == null) {
+        let thing = await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM);
+        console.log(`This thing is wrong: ${thing}`)
+     if (thing == null) {
         resolve(null);
      } else {
-         value = await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM).then((value) => {
-             console.log("Retrieved Fact Cycle Date and Number");
-             resolve(value);
-         }).catch(() => {
-             console.log("Failed to retrieve Fact Cycle Date and Number");
-             reject(null);
-         })
+         value = await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM);
+         console.log("Retrieved Fact Cycle Date and Number");
+         resolve(value);
      }
     } catch (e) {
         console.log(`GETFactCycle error: ${JSON.stringify(e)}`)
