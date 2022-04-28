@@ -41,7 +41,18 @@ export const POSTFactCycle = async () => new Promise(async (resolve, reject) => 
             newDate = getFullCurrentDateString()
             if (newDate != GETFactCycle()[0]) { // update dateand fact only if the current date does not match the stored date
                 var previousFactNum = await GETFactCycle()[1]
-                var newFactNum = toString(parseInt(previousFactNum) + 1);
+                console.log(`This is previous fact number: ${previousFactNum}`)
+                var newFactNum;
+
+                if(!previousFactNum) { // if for some reason, the previous fact number is null, randomly generate a number
+                    newFactNum = (Math.floor(Math.random() * (28 - 1 + 1)) + 1).toString();
+                    console.log(`This is a randomly generated newFactNumber fact number: ${newFactNum}`)
+                } else {
+                    newFactNum = (parseInt(previousFactNum, 10) + 1).toString();
+                    console.log(`This is a calculated newFactNumber fact number: ${newFactNum}`)
+                }
+
+                console.log(`This is newFactNumber fact number: ${newFactNum}`)
                 const value = [newDate, newFactNum]
                 
                 await AsyncStorage.mergeItem(FACT_NUM.FACT_CYCLE_NUM, JSON.stringify(value)).then(() =>{
