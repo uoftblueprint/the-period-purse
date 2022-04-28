@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FACT_CYCLE } from '../services/utils/constants.js'
+import { FACT_NUM } from '../services/utils/constants.js'
 import { getFullCurrentDateString } from "../services/utils/helpers.js"
 
 /**
@@ -8,12 +8,12 @@ import { getFullCurrentDateString } from "../services/utils/helpers.js"
  */
  export const GETFactCycle = async () => new Promise(async (resolve, reject) => {
     try {
-        let thing = await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM);
+        let thing = await AsyncStorage.getItem(FACT_NUM.FACT_CYCLE_NUM);
         console.log(`This thing is wrong: ${thing}`)
      if (thing == null) {
         resolve(null);
      } else {
-         value = await AsyncStorage.getItem(FACT_CYCLE.FACT_CYCLE_NUM);
+         value = await AsyncStorage.getItem(FACT_NUM.FACT_CYCLE_NUM);
          console.log("Retrieved Fact Cycle Date and Number");
          resolve(value);
      }
