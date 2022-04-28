@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity, ImageBackground, SafeAreaView} from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import padIcon from '../../ios/tppapp/Images.xcassets/icons/pad_icon.png';
@@ -6,7 +6,6 @@ import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png
 import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon.png';
 import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
 import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png'
-import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
 import { GETFactCycle, POSTFactCycle } from "./InfoService"
 import { getFullCurrentDateString } from "../services/utils/helpers.js"
 import discIcon from '../../ios/tppapp/Images.xcassets/icons/disc_icon.png'
@@ -46,37 +45,12 @@ const MenstrualProductCard = ({name, image, onPress}) =>{
     )
 }
 
-const getShortenFact = async () => {
-    var factCycle = await GETFactCycle();
-    if (!factCycle) {
-        await POSTFactCycle().then(async () => { 
-            factCycle = await GETFactCycle(); 
-            let fact = factsJSON[factCycle[0]].slice(84)
-            return (fact); 
-       }) // POSTFact cycle iniaties fact cycle
-    } else {
-        let storedFactCycle = await GETFactCycle();
-
-        if(storedFactCycle[0] != getFullCurrentDateString()){
-            await POSTFactCycle().then(async () => {
-                factCycle = await GETFactCycle();
-                let fact = factsJSON[factCycle[0]].slice(84);
-                return (fact);
-            });
-     
-        } else {
-            let fact = factsJSON[storedFactCycle[0]].slice(84);
-            return (fact);
-        }
-    }
-}
-
-const FunFactCard = ({ onPress }) =>{
+const FunFactCard = ({ bodyText, onPress }) =>{
     return (
         <TouchableOpacity style={styles.funFactCard} onPress={onPress}>
             <PaddyIcon style={styles.paddyStyling} height={"75%"}/>
             <Text style={styles.DYKText}>Did you know?</Text>
-            <Text style={styles.DYKBodyText}>Only 46% of Canadians feel comfortable talking about periods. Periods rank lower in... </Text>
+            <Text style={styles.DYKBodyText}>{bodyText}... </Text>
         </TouchableOpacity>
     )
 }
@@ -115,12 +89,40 @@ const cardData = [
 ]
 
 export default function Info ({ navigation }) {
-   
+    const [factCycleArray, setFactCycleArray] = useState([]);
+    useEffect(() => {
+        async function retrieveFactCycle() {
+            var factArray = await GETFactCycle()
+            setFactCycleArray(factArray);
+            console.log(`${factArray}`)
+
+            if (!factArray){
+                await POSTFactCycle().then(async () => {
+                    factArray = await GETFactCycle();
+                    setFactCycleArray(factArray);
+                })
+            }
+        if (getFullCurrentDateString() != factArray[0]) {
+            POSTFactCycle().then(async () => {
+            factArray = await GETFactCycle();
+            setFactCycleArray(factArray)
+        });
+        }    
+        }
+        retrieveFactCycle()
+    }, [])
+
+
+    let factWhole = factsJSON[factCycleArray[1]]
+    console.log(`This is factCycleArray number on Info Page: ${factCycleArray[1]}`)
+    let fact = factWhole.slice(0, 84)
+    console.log(`This is fact on Info Page: ${fact}`)
+
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <ScrollView>
                 <SafeAreaView style={styles.cardContainer}>
-                    <FunFactCard onPress={() => navigation.navigate(STACK_SCREENS.FUN_FACT)}/>
+                    <FunFactCard bodyText={fact} onPress={() => navigation.navigate(STACK_SCREENS.FUN_FACT)}/>
                     <Text style={{
                         ...styles.productText,
                         textAlign: 'left',
