@@ -1,6 +1,8 @@
 # The Period Purse
 
-The Period Purse strives to achieve menstrual equity by providing people who menstruate with access to free menstrual products, and to reduce the stigma surrounding periods through public education and advocacy. [website](https://www.theperiodpurse.com/)
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+
+The Period Purse strives to achieve menstrual equity by providing people who menstruate with access to free menstrual products, and to reduce the stigma surrounding periods through public education and advocacy. This is their [website](https://www.theperiodpurse.com/).
 
 ## For Developers
 
@@ -57,126 +59,11 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 * After switching debuggers and/or turning on/off debug mode, you may need to reload the app (try via metro & via the app) for the debugger to work.
 * If you're seeing the error message below, try restarting metro. If that doesn't fix it, then try rebuilding. ![image](https://user-images.githubusercontent.com/63024415/152467585-ce12bd5b-2c37-42a4-8363-1c9e78bbedb3.png)
 
-
-<a name="svg-color-change"></a>
-# SVG Color Change
-The `.svgrrc` file, found at the root of the project. The version of it at the time of writing is
-```
-{
-  "replaceAttrValues": {
-    "black": "{props.fill}"
-  }
-}
-```
-Essentially, we are telling `svg-react-native-transformer` to replace the color "black" in a .svg file we import with the `fill` property of the React Component that corresponds to the .svg file. You need to have the line `fill="black"` in the `path` tag.
-
-This means you must set `fill` to `"black"` for any .svg file for which you want to change colours programatically.
-
-**NOTE** that if you do this, you must have a `fill` property for your corresponding React Component, or else `fill` defaults to `none` and the svg won't show up.
-
-
-See [this](https://github.com/kristerkari/react-native-svg-transformer#changing-svg-fill-color-in-js-code) for further explanation.
-
-### Usage Example
-Assume the .svg file below is saved as "logo.svg"
-```html
-  <svg fill="black"> </svg>
-```
-
-Import your .svg file inside a React component:
-
-```javascript
-import Logo from "./logo.svg";
-```
-
-You can then use your image as a component:
-
-```javascript
-<Logo fill={"#ff0000"} />
-```
-
-and the `fill` property in the svg file is functionally replaced by `#ff0000` when rendered. You can also set other properties like `width`, `height`, etc. You can also style it, as normal.
-
-
 <a name="setup-windows-linux"></a>
 # Setup Local Environment (Windows/Linux)
 
 ## Windows
-Coming soon
+Menstruation Nation does not support development on Windows. You may choose to create a virtual machine with a tutorial like this: [video](https://www.youtube.com/watch?v=Q55e2Tz-818)
 
 ## Linux
 Follow this [tutorial](https://www.youtube.com/watch?v=c30RLycIpVY)
-
-<a name="errors"></a>
-# Common Setup Errors
-1. When trying to run project using ```npm run ios```, I see "Error: EMFILE: too many open files"
- - Ensure you have ```brew``` installed and run ```brew install watchmen```
- - Source: https://stackoverflow.com/questions/58675179/error-emfile-too-many-open-files-react-native-cli
-
-2. When trying to run project using ```npm run ios```, I see "error: unable to find utility 'simctl', not a developer tool or in PATH"
- - Go to ```Xcode > Preferences > Locations``` and assign the Command Line tools.
- - Source: https://stackoverflow.com/questions/29108172/how-do-i-fix-the-xcrun-unable-to-find-simctl-error
-
-3. Ran ```npm run ios```, and you get 'error Failed to build iOS project. We ran "xcodebuild" command but it exited with error code 65'.
-- If you don't have ```cocoapods``` installed, install it with ```sudo gem install cocoapods```. Then follow these steps:
-  1. run ```cd ios```
-  2. run ```pod install```
-  3. run ```cd ..```
-  4. delete _build_ folder
-  5. run ```npm run ios```
-- Source: https://stackoverflow.com/questions/55235825/error-failed-to-build-ios-project-we-ran-xcodebuild-command-but-it-exited-wit
-
-4. When I try to open the app on the simulator I see "Invariant Violation: requireNativeComponent: "RNCSafeAreaProvider" was not found in the UIManager"
-- Stop running the app. Close the simulator, terminate the running instance.
-- Run command ```npx pod-install ios```
-- Restart app with ```npm run ios```
-- Source: https://stackoverflow.com/questions/61967017/invariant-violation-requirenativecomponent-rncsafeareaprovider-was-not-found
-
-  <details>
-  <summary>Manually link <code>RNCSafeAreaProvider</code></summary>
-  <ul>
-  <li>If it&#39;s still not working, double check the output from <code>npx pod-install ios</code>. Specifically look for this line: &quot;Auto-linking React Native modules for target `tppapp`: RNGestureHandler, RNReanimated, and RNScreens&quot;.</li>
-  <li>If RNCSafeAreaProvider is not included in that list, it means that we will have to manually link it. In your Podfile in <code>/ios</code>, add the following line to Line 12, under <code>use_react_native!</code>:<pre><code class="lang-ruby">pod <span class="hljs-string">'react-native-safe-area-context'</span>, :<span class="hljs-function"><span class="hljs-params">path</span> =&gt;</span> <span class="hljs-string">'../node_modules/react-native-safe-area-context'</span>
-  </code></pre>
-  </li>
-  <li>Reinstall your pods with <code>npx pod-install ios</code> from the <code>tpp-app</code> directory.</li>
-  <li>Restart the app with <code>npm run ios</code>. The error should be gone.</li>
-  <li>Source: <a href="https://github.com/th3rdwave/react-native-safe-area-context#linking-in-react-native--060-1">https://github.com/th3rdwave/react-native-safe-area-context#linking-in-react-native--060-1</a></li>
-  </ul>
-  </details>
-
-<br>
-
-5. When I try to open the app on the simulator I see: “Invariant Violation: “main” has not been registered”
-- Delete "react-native-gesture-handler" from package.json
-- Go into node_modules folder and delete the react-native-gesture-handler folder manually
-- Run command ```npm install react-native gesture-handler``` and then ```expo install react-native-safe-area-context```
-- Rebuild node_modules folder using ```yarn install```
-- Finally, re-install pods with command ```npx pod-install ios```
-- Source: https://stackoverflow.com/questions/62649381/invariant-violation-main-has-not-been-registered
-
-6. I see error "CocoaPodsError: Command `pod install` failed. Cause: pod exited with non-zero code: 1"
-- reinstall package managers in Rosetta 2
-- Run command ```npm audit fix```
-- replace contents of index.json with
-```
-import 'react-native-gesture-handler';
-import { registerRootComponent } from 'expo';
-import { AppRegistry } from 'react-native';
-
-import App from './App';
-
-AppRegistry.registerComponent('main', () => App);
-```
-
-7. When I try to run the app, I see "error Failed to launch the app on simulator, An error was encountered processing the command (domain=com.apple.CoreSimulator.SimError, code=405): Unable to lookup in current state: Shutdown."
-- Make sure the simulator is closed, then run ```npm run ios``` again
-- If that doesn't work, run ```npx react-native run-ios --simulator="iPhone 8"```, or any other model besides the one you just tried to simulate
-- Source: https://stackoverflow.com/questions/69312343/build-error-domain-com-apple-coresimulator-simerror-code-405
-
-<a name="vm-errors"></a>
-# VM Specific Errors
-1. You run ```npm run ios```, and the simulator doesn't launch. See error below
-
-![image](https://user-images.githubusercontent.com/22108651/140632364-a3bdaf36-33d2-4d5c-9dce-4d2fd1ec1656.png)
-- Increase RAM allocated to the VM, or change which model you are simulating to on that requires less RAM
