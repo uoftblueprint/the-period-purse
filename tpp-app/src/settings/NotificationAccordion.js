@@ -3,9 +3,9 @@ import {View, TouchableOpacity, Text, StyleSheet, LayoutAnimation } from "react-
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { POSTRemindLogPeriodFreq, POSTRemindLogSymptomsFreq } from '../services/SettingsService';
+import { POSTRemindLogPeriodFreq, POSTRemindLogSymptomsFreq, POSTRemindLogPeriodTime, POSTRemindLogSymptomsTime } from '../services/SettingsService';
 
-const Accordion = (props) => {
+const NotificationAccordion = (props) => {
     const [expanded, setExpanded] = useState(false)
 
     function toggleExpand() {
@@ -42,7 +42,7 @@ const PickerTab = (props) => {
             picker = <PeriodTimePicker selectedText={props.selectedText} time={props.time} meridian={props.meridian} setTime={props.setTime} setTimeMeridian={props.setTimeMeridian}/>
             break;
         case "symptomTime":
-            picker = <SymptomTimePicker time={props.time} meridian={props.meridian} setTime={props.setTime} setTimeMeridian={props.setTimeMeridian}/>
+            picker = <SymptomTimePicker selectedText={props.selectedText} time={props.time} meridian={props.meridian} setTime={props.setTime} setTimeMeridian={props.setTimeMeridian}/>
             break;
         case "days":
             picker = <SchedulingPicker selectedText={props.selectedText} setSelectedText={props.setSelectedText}/>
@@ -103,10 +103,11 @@ const SymptomTimePicker = (props) => {
     <Picker  
     selectedValue={props.time}
     onValueChange={(itemValue) =>
-    props.setTime(itemValue)
+    {props.setTime(itemValue), POSTRemindLogSymptomsTime(itemValue + " " + props.meridian)}
+    
     }
     style={styles.timePickerTimeWidth}>
-     <Picker.Item 
+    <Picker.Item 
     label={"1:00"}
     value={"1:00"} 
     />
@@ -155,10 +156,10 @@ const SymptomTimePicker = (props) => {
     value={"12:00"} 
     />
     </Picker>
-    <Picker  
+        <Picker  
             selectedValue={props.meridian}
             onValueChange={(itemValue) =>
-            props.setTimeMeridian(itemValue)
+            {props.setTimeMeridian(itemValue), POSTRemindLogSymptomsTime(props.time + " " + itemValue)}
             }
             style={styles.timePickerMeridianWidth}>
             <Picker.Item 
@@ -169,7 +170,7 @@ const SymptomTimePicker = (props) => {
             label={"PM"}
             value={"PM"} 
             />
-            </Picker>
+        </Picker>
     </View>
 )
 }
@@ -187,7 +188,7 @@ return(
     <Picker  
     selectedValue={props.time}
     onValueChange={(itemValue) =>
-    props.setTime(itemValue)}
+    {props.setTime(itemValue), POSTRemindLogPeriodTime(itemValue + " " + props.meridian)}}
     style={styles.timePickerTimeWidth}>
      <Picker.Item 
     label={"1:00"}
@@ -241,7 +242,7 @@ return(
     <Picker  
             selectedValue={props.meridian}
             onValueChange={(itemValue) =>
-            props.setTimeMeridian(itemValue)}
+            {props.setTimeMeridian(itemValue), POSTRemindLogPeriodTime(props.time + " " + itemValue)}}
             style={styles.timePickerMeridianWidth}>
             <Picker.Item 
             label={"AM"}
@@ -352,4 +353,4 @@ const styles =  StyleSheet.create({
       },
 })
 
-export default Accordion
+export default NotificationAccordion

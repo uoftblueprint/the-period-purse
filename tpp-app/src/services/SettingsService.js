@@ -149,7 +149,7 @@ export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (
 
 export const GETRemindLogSymptoms = async () => new Promise(async (resolve, reject) => {
     try {
-        AsyncStorage.getItem(REMINDERS.REMIND_LOG_SYMPTOMS)
+        await AsyncStorage.getItem(REMINDERS.REMIND_LOG_SYMPTOMS)
             .then((value) => {
                 console.log(`Retrieved RemindLogSymptoms boolean`);
                 resolve(value != null ? JSON.parse(value) : null);
@@ -167,7 +167,7 @@ export const GETRemindLogSymptoms = async () => new Promise(async (resolve, reje
  */
 export const POSTRemindLogPeriodFreq = async (advanceDays) => new Promise(async (resolve, reject) => {
     try {
-        AsyncStorage.setItem(REMINDERS.LOG_PERIOD_DAYS, JSON.stringify(advanceDays))
+        AsyncStorage.setItem(REMINDERS.LOG_PERIOD_DAYS, advanceDays)
             .then(() => {
                 console.log("Posted the number of days in advance to send log period reminder");
                 resolve();
@@ -184,13 +184,13 @@ export const POSTRemindLogPeriodFreq = async (advanceDays) => new Promise(async 
  */
 export const GETRemindLogPeriodFreq = async () => new Promise(async (resolve, reject) => {
     try {
-        AsyncStorage.getItem(REMINDERS.LOG_PERIOD_DAYS)
+        await AsyncStorage.getItem(REMINDERS.LOG_PERIOD_DAYS)
             .then((value) => {
                 console.log("Retrieved the number of days in advance to send log period reminder");
                 resolve(value);
             });
     } catch (e) {
-        console.log(`POSTRemindLogPeriodFreq error: ${JSON.stringify(e)}`)
+        console.log(`GETRemindLogPeriodFreq error: ${JSON.stringify(e)}`)
         reject();
     }
 });
@@ -203,7 +203,7 @@ export const GETRemindLogPeriodFreq = async () => new Promise(async (resolve, re
  */
 export const POSTRemindLogPeriodTime = async (time) => new Promise(async (resolve, reject) => {
     try {
-        AsyncStorage.setItem(REMINDERS.LOG_PERIOD_TIME, JSON.stringify(time))
+        AsyncStorage.setItem(REMINDERS.LOG_PERIOD_TIME, time)
             .then(() => {
                 console.log("Posted time to send log period reminder");
                 resolve();
@@ -220,7 +220,7 @@ export const POSTRemindLogPeriodTime = async (time) => new Promise(async (resolv
  */
 export const GETRemindLogPeriodTime = async () => new Promise(async (resolve, reject) => {
     try {
-        AsyncStorage.getItem(REMINDERS.LOG_PERIOD_TIME)
+        await AsyncStorage.getItem(REMINDERS.LOG_PERIOD_TIME)
             .then((value) => {
                 console.log("Retrieved the time to log period reminder");
                 resolve(value);
@@ -238,7 +238,7 @@ export const GETRemindLogPeriodTime = async () => new Promise(async (resolve, re
  */
 export const POSTRemindLogSymptomsFreq = async (freq) => new Promise(async (resolve, reject) => {
     try {
-        AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_DAYS, JSON.stringify(freq))
+        AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_DAYS, (freq))
             .then(() => {
                 console.log("Posted log symptoms reminder frequency");
                 resolve();
@@ -255,7 +255,7 @@ export const POSTRemindLogSymptomsFreq = async (freq) => new Promise(async (reso
  */
 export const GETRemindLogSymptomsFreq = async () => new Promise(async (resolve, reject) => {
     try {
-        AsyncStorage.get(REMINDERS.LOG_SYMPTOMS_DAYS)
+        await AsyncStorage.getItem(REMINDERS.LOG_SYMPTOMS_DAYS)
             .then((value) => {
                 console.log("Retrieved log symptoms reminder frequency");
                 resolve(value);
@@ -274,7 +274,7 @@ export const GETRemindLogSymptomsFreq = async () => new Promise(async (resolve, 
  */
 export const POSTRemindLogSymptomsTime = async (time) => new Promise(async (resolve, reject) => {
     try {
-        AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_TIME, JSON.stringify(time))
+        AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_TIME, time)
             .then(() => {
                 console.log("Posted log symptoms reminder time");
                 resolve();
@@ -291,7 +291,7 @@ export const POSTRemindLogSymptomsTime = async (time) => new Promise(async (reso
  */
 export const GETRemindLogSymptomsTime = async () => new Promise(async (resolve, reject) => {
     try {
-        AsyncStorage.setItem(REMINDERS.LOG_SYMPTOMS_TIME)
+        await AsyncStorage.getItem(REMINDERS.LOG_SYMPTOMS_TIME)
             .then((value) => {
                 console.log("Retrieved log symptoms reminder time");
                 resolve(value);
