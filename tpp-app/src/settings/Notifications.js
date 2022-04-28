@@ -7,7 +7,7 @@ import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenB
 
 
 export default function Notifications () {
-    const [remindPeriodFreq, setRemindPeriodFreq] = useState("2 days");
+    const [remindPeriodFreq, setRemindPeriodFreq] = useState("2");
     const [remindPeriodTime, setRemindPeriodTime] = useState("10:00");
     const [remindPeriodTimeMeridian, setRemindPeriodTimeMeridian] = useState("AM");
     const [remindSymptomsFreq, setRemindSymptomsFreq] = useState("Every day");
@@ -69,13 +69,13 @@ useEffect(() => {
                 borderBottomWidth: 1,
                 }}/>
 
-            <Accordion title={"How many days in advance"} selectedText={remindPeriodFreq} type={"days"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/> 
+            <Accordion title={"How many days in advance"} selectedText={remindPeriodFreq} setSelectedText={setRemindPeriodFreq} type={"days"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/> 
             <View
             style={{
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
                 }}/>
-            <Accordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} type={"periodTime"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
+            <Accordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} time={remindPeriodTime} meridian={remindPeriodTimeMeridian} setTime={setRemindPeriodTime} setTimeMeridian={setRemindPeriodTimeMeridian}  type={"periodTime"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
             <View
             style={{
                 borderBottomColor: '#CFCFCF',
@@ -87,13 +87,13 @@ useEffect(() => {
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
                 }}/>
-            <Accordion title={"Repeat"} selectedText={remindSymptomsFreq}  type={"howOften"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/> 
+            <Accordion title={"Repeat"} selectedText={remindSymptomsFreq} setSelectedText={setRemindSymptomsFreq} type={"howOften"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/> 
             <View
             style={{
                 borderBottomColor: '#CFCFCF',
                 borderBottomWidth: 1,
                 }}/>
-            <Accordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} type={"symptomTime"} pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>   
+            <Accordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} time={remindSymptomsTime} meridian={remindSymptomsTimeMeridian} setTime={setRemindSymptomsTime} setTimeMeridian={setRemindSymptomsTimeMeridian} type={"symptomTime"} pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>   
             <View
             style={{
                 borderBottomColor: '#CFCFCF',
