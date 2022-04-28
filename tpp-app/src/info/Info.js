@@ -48,12 +48,12 @@ const MenstrualProductCard = ({name, image, onPress}) =>{
 
 const getShortenFact = async () => {
     var factCycle = await GETFactCycle();
-    if (factCycle) {
-        await POSTFactCycle() // POSTFact cycle iniaties fact cycle
-
-        factCycle = await GETFactCycle();
-        let fact = factsJSON[factCycle[0]].slice(84)
-        return (fact);
+    if (!factCycle) {
+        await POSTFactCycle().then(() => { 
+            factCycle = await GETFactCycle(); 
+            let fact = factsJSON[factCycle[0]].slice(84)
+            return (fact); 
+       }) // POSTFact cycle iniaties fact cycle
     } else {
         let storedFactCycle = await GETFactCycle();
 
