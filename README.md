@@ -15,13 +15,10 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 - [Setup Local Environment (Mac)](#setup-local-environment-mac)
 - [Installing Debugger](#installing-debugger)
   - [Running Debugger Notes](#running-debugger-notes)
-- [SVG Color Change](#svg-color-change)
-    - [Usage Example](#usage-example)
 - [Setup Local Environment (Windows/Linux)](#setup-local-environment-windowslinux)
   - [Windows](#windows)
   - [Linux](#linux)
 - [Common Setup Errors](#common-setup-errors)
-- [VM Specific Errors](#vm-specific-errors)
 
 <a name="setup-mac"></a>
 # Setup Local Environment (Mac)
@@ -44,21 +41,6 @@ The [wiki](https://github.com/uoftblueprint/the-period-purse/wiki) has a lot of 
 
 <img width="378" alt="Screen Shot 2021-10-27 at 11 46 38 AM" src="https://user-images.githubusercontent.com/35851484/139100763-95605bfc-a224-401b-9f17-b3a5e0a3f3fb.png">
 
-<a name="debugger"></a>
-# Installing Debugger
-1. Install Homebrew
-2. run ```brew install --cask react-native-debugger```
-3. Run project using ```npm run ios```
-4. After simulator launches, go to "Device" > "Shake" to launch debugger
-![image](https://user-images.githubusercontent.com/22108651/150660743-7a188d88-300d-4a12-8cfb-ef2712d0e506.png)
-5. Launch the react-native debugger (It's a separate application that's not the browser) ![image](https://user-images.githubusercontent.com/63024415/152467946-b8ec8bef-a747-4039-b6f5-92b276ea8003.png)
-6. Call ```showAsyncStorageContentInDev()``` in the react-native debugger console to see async storage
-
-## Running Debugger Notes
-* You need to close the debugger in your browser so you can use RND (React Native Debugger)
-* After switching debuggers and/or turning on/off debug mode, you may need to reload the app (try via metro & via the app) for the debugger to work.
-* If you're seeing the error message below, try restarting metro. If that doesn't fix it, then try rebuilding. ![image](https://user-images.githubusercontent.com/63024415/152467585-ce12bd5b-2c37-42a4-8363-1c9e78bbedb3.png)
-
 <a name="setup-windows-linux"></a>
 # Setup Local Environment (Windows/Linux)
 
@@ -67,3 +49,7 @@ Menstruation Nation does not support development on Windows. You may choose to c
 
 ## Linux
 Follow this [tutorial](https://www.youtube.com/watch?v=c30RLycIpVY)
+
+<a name="errors"></a>
+# Common Setup Errors
+Please check out the [wiki](https://github.com/uoftblueprint/the-period-purse/wiki/Common-Setup-Errors)
