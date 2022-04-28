@@ -6,6 +6,7 @@ import SelectLogOptionOverlay from './pages/SelectLogOptionOverlay';
 import LogMultipleDatesScreen from './pages/LogMultipleDatesScreen';
 import CycleHistoryScreen from './pages/CycleHistoryScreen';
 import TutorialOverlay from './pages/TutorialOverlay'
+import LegendScreen from './pages/LegendScreen';
 
 // Create a navigation stack that can be used to access other pages
 // Stack begins first page at CalendarScreen. This is done so that the global
@@ -20,7 +21,8 @@ export const CALENDAR_STACK_SCREENS = {
     CYCLE_HISTORY: "CycleHistoryScreen",
     CYCLE_PAGE: "Cycle",
     CALENDAR_PAGE: "Calendar",
-    TUTORIAL: "TutorialOverlay"
+    TUTORIAL: "TutorialOverlay",
+    LEGEND_PAGE: "Legend"
 };
 
 export default function CalendarNavigator() {
@@ -42,6 +44,7 @@ export default function CalendarNavigator() {
             <Stack.Screen name={CALENDAR_STACK_SCREENS.LOG_SYMPTOMS} component={LogSymptomsScreen} options={{ presentation: 'fullScreenModal' }}/>
             <Stack.Screen name={CALENDAR_STACK_SCREENS.LOG_MULTIPLE_DATES} component={LogMultipleDatesScreen} options={{ presentation: 'fullScreenModal' }}/>
             <Stack.Screen name={CALENDAR_STACK_SCREENS.CYCLE_HISTORY} component={CycleHistoryScreen}/>
+            <Stack.Screen name={CALENDAR_STACK_SCREENS.LEGEND_PAGE} component={LegendScreen}/>
         </Stack.Navigator>
     )
 }
