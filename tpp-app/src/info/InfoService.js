@@ -8,18 +8,14 @@ import { getFullCurrentDateString } from "../services/utils/helpers.js"
  */
  export const GETFactCycle = async () => new Promise(async (resolve, reject) => {
     try {
-        let thing = await AsyncStorage.getItem(FACT_NUM.FACT_CYCLE_NUM);
-        console.log(`This thing is wrong: ${thing}`)
-     if (thing == null) {
-        resolve(null);
-     } else {
-         value = await AsyncStorage.getItem(FACT_NUM.FACT_CYCLE_NUM);
-         console.log("Retrieved Fact Cycle Date and Number");
-         resolve(value);
-     }
+         AsyncStorage.getItem(FACT_NUM.FACT_CYCLE_NUM).then((array) => {
+            console.log(`Retrieved Fact Cycle Date and Number: ${array}`);
+            console.log(`This thing is wrong: ${array}`)
+            resolve(array != null ? JSON.parse(array) : null);
+        });  
     } catch (e) {
         console.log(`GETFactCycle error: ${JSON.stringify(e)}`)
-        reject(null);
+        reject();
     }
 });
 
@@ -33,22 +29,22 @@ export const POSTFactCycle = async () => new Promise(async (resolve, reject) => 
     try {
         if (await GETFactCycle() == null) { // if there is currently no fact/date array stored
             const value = [getFullCurrentDateString(), "1"];
-            await AsyncStorage.setItem(FACT_CYCLE.FACT_CYCLE_NUM, JSON.stringify(value)).catch(() => {
+            await AsyncStorage.setItem(FACT_NUM.FACT_CYCLE_NUM, JSON.stringify(value)).catch(() => {
                 console.log("GETFactCycle error: failed to instantiate FACT_CYCLE_NUM")
                 reject();
             }).then(() => {
-                console.log("Instantiated Fact Cylce Number")
+                console.log("Instantiated Fact Cycle Number")
                 resolve();
             })
         } else {
             // get the current date
             newDate = getFullCurrentDateString()
             if (newDate != GETFactCycle()[0]) { // update dateand fact only if the current date does not match the stored date
-                previousFactNum = GETFactCycle()[1]
-                newFactNum = toString(parseInt(previousFactNum) + 1);
+                var previousFactNum = await GETFactCycle()[1]
+                var newFactNum = toString(parseInt(previousFactNum) + 1);
                 const value = [newDate, newFactNum]
                 
-                await AsyncStorage.mergeItem(FACT_CYCLE.FACT_CYCLE_NUM, JSON.stringify(value)).then(() =>{
+                await AsyncStorage.mergeItem(FACT_NUM.FACT_CYCLE_NUM, JSON.stringify(value)).then(() =>{
                     console.log("Updated Fact Cycle Number");
                     resolve();
                 }).catch(() => {

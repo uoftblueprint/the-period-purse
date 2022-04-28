@@ -36,6 +36,7 @@ export default function DidYouKnow({ navigation }) {
     let fact = dykData[factCycleArray[1]]
     console.log(`This is factCycleArray: ${factCycleArray[1]}`)
     console.log(`This is fact: ${fact}`)
+
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -48,7 +49,7 @@ export default function DidYouKnow({ navigation }) {
             <Text style={styles.titleText}>Did you know?</Text>
                 {"\n"}
                 {"\n"}
-                Only 46% of Canadians feel comfortable talking about periods. Periods rank lower in comfortability to talk about than politics, sex, and Sexually Transmitted Infections (STIs).
+               {fact}
             </Text>
 
             </SafeAreaView>
