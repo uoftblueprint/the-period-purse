@@ -42,12 +42,11 @@ export default function DidYouKnow({ navigation }) {
     // if the array is null, then this means we haven't initiatlized the fact cycle array
     if (factArray == null) {
         // initialize the fact cycle with POSTFactCycle
-        await POSTFactCycle().then(() => {
-            factArray = GETFactCycle();
+        await POSTFactCycle().then( async () => {
+            factArray = await GETFactCycle();
         });
         
     }
-
     // if today's date and the stored date don't match, update
     if (getFullCurrentDateString() != factArray[0]) {
         POSTFactCycle().then(() => {

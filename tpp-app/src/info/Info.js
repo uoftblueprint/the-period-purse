@@ -49,7 +49,7 @@ const MenstrualProductCard = ({name, image, onPress}) =>{
 const getShortenFact = async () => {
     var factCycle = await GETFactCycle();
     if (!factCycle) {
-        await POSTFactCycle().then(() => { 
+        await POSTFactCycle().then(async () => { 
             factCycle = await GETFactCycle(); 
             let fact = factsJSON[factCycle[0]].slice(84)
             return (fact); 
@@ -58,10 +58,12 @@ const getShortenFact = async () => {
         let storedFactCycle = await GETFactCycle();
 
         if(storedFactCycle[0] != getFullCurrentDateString()){
-            await POSTFactCycle();
-            factCycle = await GETFactCycle();
-            let fact = factsJSON[factCycle[0]].slice(84);
-            return (fact);
+            await POSTFactCycle().then(async () => {
+                factCycle = await GETFactCycle();
+                let fact = factsJSON[factCycle[0]].slice(84);
+                return (fact);
+            });
+     
         } else {
             let fact = factsJSON[storedFactCycle[0]].slice(84);
             return (fact);
