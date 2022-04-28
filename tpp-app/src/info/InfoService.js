@@ -32,10 +32,7 @@ import { getFullCurrentDateString } from "../services/utils/helpers.js"
 export const POSTFactCycle = async () => new Promise(async (resolve, reject) => {
     try {
         if (await GETFactCycle() == null) { // if there is currently no fact/date array stored
-            const value = [];
-            date = getFullCurrentDateString();
-            value[0] = date;
-            value[1] = "1";
+            const value = [getFullCurrentDateString(), "1"];
             await AsyncStorage.setItem(FACT_CYCLE.FACT_CYCLE_NUM, JSON.stringify(value)).catch(() => {
                 console.log("GETFactCycle error: failed to instantiate FACT_CYCLE_NUM")
                 reject();
