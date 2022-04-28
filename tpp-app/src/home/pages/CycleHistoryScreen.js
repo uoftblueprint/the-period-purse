@@ -113,7 +113,6 @@ export default function CycleHistoryScreen({navigation}){
             </SafeAreaView>
         )
     } else {
-        console.log("Im loading")
         return (
             <LoadingVisual/>
         )

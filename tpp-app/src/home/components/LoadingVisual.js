@@ -1,10 +1,6 @@
 import React from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
-/**
- * 
- * @returns styled indicator for showing that we are loading something
- */
 export default function LoadingVisual (){
     // general use pattern is to use Promise.all for all backend calls. and stop rendering this when done
     return (
