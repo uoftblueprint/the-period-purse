@@ -34,8 +34,8 @@ export default function DidYouKnow({ navigation }) {
     }, [])
 
     let fact = dykData[factCycleArray[1]]
-    console.log(`This is factCycleArray: ${factCycleArray[1]}`)
-    console.log(`This is fact: ${fact}`)
+    console.log(`This is factCycleArray number on DYK page: ${factCycleArray[1]}`)
+    console.log(`This is fact on DYK page: ${fact}`)
 
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
@@ -56,33 +56,6 @@ export default function DidYouKnow({ navigation }) {
         </ImageBackground>
     )
 }
-
-
-/**
- * Retrieves the fact that the user is supposed to see that day
- * @returns a string of the relevant fact
- */
-//  const getFact = async () => {
-//     // try to get the fact cycle array first
-//     var factArray = await GETFactCycle();
-
-//     // if the array is null, then this means we haven't initiatlized the fact cycle array
-//     if (factArray == null) {
-//         // initialize the fact cycle with POSTFactCycle
-//         await POSTFactCycle().then( async () => {
-//             factArray = await GETFactCycle();
-//         });
-        
-//     }
-//     // if today's date and the stored date don't match, update
-//     if (getFullCurrentDateString() != factArray[0]) {
-//         POSTFactCycle().then(() => {
-//             factArray = GETFactCycle();
-//         });
-//     }
-
-//     return dykData[factArray[1]]
-// }
 
 const styles = StyleSheet.create({
     container: {
