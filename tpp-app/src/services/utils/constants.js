@@ -59,13 +59,13 @@ export const FILTER_COLOURS = {
     BAD: "#DD8502",
     TERRIBLE: "#B85A04",
     GOOD: "#FFD363",
-    NONE: "#FFE6A6",  
+    NONE: "#FFE6A6",
   },
   EXERCISE: {
     HEAVY: '#2F5B54',
     MEDIUM: '#5A9F93',
     LIGHT: '#7BCFC0',
-    LITTLE: '#B9E0D8'   
+    LITTLE: '#B9E0D8'
   },
   SLEEP: {
     HEAVY: '#133364',
@@ -89,7 +89,7 @@ export const FILTER_TEXT_COLOURS = {
     BAD: "#000",
     TERRIBLE: "#000",
     GOOD: "#000",
-    NONE: "#000",  
+    NONE: "#000",
   },
   EXERCISE: {
     HEAVY: '#FFF',
@@ -148,5 +148,6 @@ export const LOG_SYMPTOMS_FREQ ={
   THREE: "three",
   FIVE: "five",
   SEVEN: "seven"
-
 }
+
+export const TUTORIAL_KEY = 'showTutorial'; // key for backend value that returns 'true' if user needs to see tutorial

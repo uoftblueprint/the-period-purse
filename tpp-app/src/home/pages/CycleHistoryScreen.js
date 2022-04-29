@@ -14,7 +14,7 @@ function Header({navigation}){
         <View
         style={[styles.nonCenterComponent]}
         >
-            <TouchableOpacity 
+            <TouchableOpacity
                 onPress={() =>navigation.goBack()}
             >
                 <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
@@ -32,7 +32,7 @@ function YearButton({year, selectedYear, setSelectedYear}){
     let textColor = year === selectedYear ? "#FFFFFF" : "#C4C4C4";
     let border = year === selectedYear ? null : styles.buttonBorder;
     return (
-        <TouchableOpacity 
+        <TouchableOpacity
             onPress={() => setSelectedYear(year)}
             style= {[styles.button, border, {backgroundColor: backgroundColor}]}
         >
@@ -56,7 +56,7 @@ export default function CycleHistoryScreen({navigation}){
     let [storedYears, setStoredYears] = useState(DEFAULTS.STORED_YEARS);
     let [onPeriod, setOnPeriod] = useState(DEFAULTS.ON_PERIOD);
     let [loaded, setLoaded] = useState(false);
-    
+
     useFocusEffect(
         useCallback(() => {
         GETStoredYears().then(
@@ -64,7 +64,7 @@ export default function CycleHistoryScreen({navigation}){
                 setStoredYears(years);
             }
         )
-        .catch(() => setStoredYears(DEFAULTS.STORED_YEARS)) 
+        .catch(() => setStoredYears(DEFAULTS.STORED_YEARS))
         CycleService.GETPeriodDay().then(days => {
             setOnPeriod(days !== 0 );
         })
@@ -100,11 +100,11 @@ export default function CycleHistoryScreen({navigation}){
                     <Header navigation={navigation}/>
                     <SafeAreaView style={styles.cardContainer}>
                         <View style={styles.buttonContainer}>
-                            {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>).reverse()}
+                            {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>)}
                         </View>
-                        <ExpandedHistoryCard 
-                            navigation={navigation} 
-                            intervals={currentIntervals[selectedYear]} 
+                        <ExpandedHistoryCard
+                            navigation={navigation}
+                            intervals={currentIntervals[selectedYear]}
                             renderedYear={selectedYear}
                             onPeriod={onPeriod}
                         />
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         marginHorizontal: 16
-    },  
+    },
     button: {
         borderRadius: 10,
         width: 62,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     nonCenterComponent: {
         flex: 1,
     },
-    headerText: { 
+    headerText: {
         fontFamily: "Avenir",
         fontSize: 20,
         fontStyle: "normal",
