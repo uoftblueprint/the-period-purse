@@ -6,12 +6,9 @@ import {ExpandedHistoryCard} from '../components/CycleHistory';
 import CycleService from '../../services/cycle/CycleService';
 import {GETStoredYears} from '../../services/utils/helpers';
 import {useFocusEffect} from '@react-navigation/native';
-<<<<<<< HEAD
 import LoadingVisual from '../components/LoadingVisual';
-=======
 import { set } from 'date-fns';
 import ErrorFallback from "../../error/error-boundary";
->>>>>>> develop
 
 function Header({navigation}){
     return(
@@ -92,7 +89,7 @@ export default function CycleHistoryScreen({navigation}){
     // Since the intervals are the "last" thing to be set, we know that when they change we are done loading
     useEffect(
         () => {
-            if(!DEFAULTS.INTERVALS){
+            if(currentIntervals !== DEFAULTS.INTERVALS){
                 setLoaded(true)
             }
         }, [currentIntervals]
