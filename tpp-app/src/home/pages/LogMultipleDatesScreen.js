@@ -130,6 +130,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                                 });
                             });
                             setMarkedDates(allMarkedDates);
+                            setLoaded(true);
                         })
                         .catch((error) => {
                             console.log(`GETCycleHistoryByYear error: ${JSON.stringify(error)}`);
@@ -142,14 +143,6 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
         populateMarkedDates();
     }, []);
-
-    useEffect(() => {
-        () => {
-            if(markedDates){
-                setLoaded(true);
-            }
-        }
-    }, [markedDates])
 
     const unsavedChanges = {
         title: "Unsaved changes",
