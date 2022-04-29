@@ -10,7 +10,7 @@ import { getFullCurrentDateString } from "../services/utils/helpers.js"
     try {
          AsyncStorage.getItem(FACT_NUM.FACT_CYCLE_NUM).then((array) => {
             console.log(`Retrieved Fact Cycle Date and Number: ${array}`);
-            console.log(`This thing is wrong: ${array}`)
+            console.log(`GETFactCycle got this array: ${array}`)
             resolve(array != null ? JSON.parse(array) : null);
         });  
     } catch (e) {

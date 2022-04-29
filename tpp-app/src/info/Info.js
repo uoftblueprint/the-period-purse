@@ -94,7 +94,7 @@ export default function Info ({ navigation }) {
         async function retrieveFactCycle() {
             var factArray = await GETFactCycle()
             setFactCycleArray(factArray);
-            console.log(`${factArray}`)
+            console.log(`This is setting factCycleArray on the InfoPage: ${factArray}`)
 
             if (!factArray){
                 await POSTFactCycle().then(async () => {
@@ -114,8 +114,12 @@ export default function Info ({ navigation }) {
 
 
     let factWhole = factsJSON[factCycleArray[1]]
+    console.log(`This is factCycleArray on Info page: ${factCycleArray}`)
     console.log(`This is factCycleArray number on Info Page: ${factCycleArray[1]}`)
-    let fact = factWhole.slice(0, 84)
+    var fact = "Getting fact"
+    if(factWhole){
+        fact = factWhole.slice(0, 84)
+    }
     console.log(`This is fact on Info Page: ${fact}`)
 
     return (
