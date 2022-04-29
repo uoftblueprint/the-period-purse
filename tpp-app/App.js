@@ -125,7 +125,7 @@ export function MainNavigator() {
 
   return (
       <NavigationContainer ref={navigationRef} independent={true}>
-        <Stack.Navigator intialRouteName="footer" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name={STACK_SCREENS.MAIN_PAGE} component={MainPage}/>
           <Stack.Screen name={STACK_SCREENS.PRIVACY_POLICY} component={PrivacyPolicyScreen}/>
           <Stack.Screen name={STACK_SCREENS.TERMS_AND_CONDITION} component={TermsAndConditions}/>

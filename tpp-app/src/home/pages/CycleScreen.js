@@ -14,12 +14,13 @@ import { Footer } from '../../services/utils/footer';
 import ErrorFallback from "../../error/error-boundary";
 
 function InfoCard(props){
+  let DefaultText = <Text style={styles.messageForDefault}>Please start logging to learn more. </Text>;
   return (
     <View style={[styles.card, {backgroundColor: props.backgroundColor}]}>
       <View style={styles.infoCardInternal}>
         <Text style={styles.header}>{props.header}</Text>
-        <SafeAreaView style={[styles.rowContainer, styles.daysRow, {justifyContent: "space-between"}]}>
-          <Text style={styles.daysText}>{props.days} Days</Text>
+        <SafeAreaView style={[styles.infoCardRow, styles.daysRow]}>
+          {props.days === 0 ? DefaultText : <Text style={styles.daysText}>{props.days} Days</Text> }
           <SafeAreaView style={styles.whiteBackground}>
             {props.children}
           </SafeAreaView>
@@ -187,6 +188,17 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center'
   },
+  messageForDefault: {
+    fontFamily: "Avenir",
+    fontSize: 11,
+    fontWeight: "400",
+    lineHeight: 12,
+    letterSpacing: -0.30000001192092896,
+    textAlign: "left",
+    width: 70,
+    color: "#000000"
+  },
+
   cardContainer: {
       flex: 1,
       marginHorizontal: 16,
@@ -197,6 +209,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center'
+  },
+  infoCardRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   infoCardContainer:{
     justifyContent: 'space-between'
@@ -265,7 +282,8 @@ const styles = StyleSheet.create({
     transform: [{scale:0.4}]
   },
   infoCardInternal: {
-    marginHorizontal: 10,
+    marginLeft: "5%",
+    marginRight: "15%"
   },
   element: {
      marginVertical: "7%"

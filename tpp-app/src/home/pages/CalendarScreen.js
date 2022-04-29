@@ -1,4 +1,5 @@
-import { View, StyleSheet, SafeAreaView, TouchableOpacity, Text } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, StyleSheet, SafeAreaView, TouchableOpacity, Text, } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
@@ -9,8 +10,10 @@ import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
 import ErrorFallback from "../../error/error-boundary";
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
+import { GETTutorial } from '../../services/TutorialService';
+import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
 
-const sideComponentWidth = 120
 
 export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 
@@ -40,7 +43,7 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
         // Enable or disable vertical scroll indicator. Default = false
         showScrollIndicator={true}
         dayComponent={({date, state, marking}) => <DayComponent date={date} state={state} marking={marking} navigation={navigation} selectedView={selectedView}/>}
-        
+
         theme={{
             calendarBackground: '#ffffff',
             // Sun Mon Tue Wed Thu Fri Sat Bar
@@ -75,7 +78,7 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
             }
         }}
 
-        markedDates={marked} 
+        markedDates={marked}
         />
     )
 }
@@ -83,7 +86,7 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 // Calendar Screen component that can be accessed by other functions
 export default function CalendarScreen ({ route, navigation }) {
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
-    const [selectedView, setSelectedView] = useState(VIEWS.Nothing);
+    const [selectedView, setSelectedView] = useState(VIEWS.Flow);
     const [yearInView, setYearInView] = useState([])
 
     const [cachedYears, setCachedYears] = useState({})
@@ -114,7 +117,7 @@ export default function CalendarScreen ({ route, navigation }) {
                                 let date = new Date(year, i, j + 1)
                                 let isoDate = getISODate(date);
                                 let symptomData = monthArray[i][j]
-        
+
                                 // Add it into the marked state, which then updates the calendar
                                 newMarkedData[isoDate] = {
                                     symptoms: symptomData,
@@ -124,19 +127,29 @@ export default function CalendarScreen ({ route, navigation }) {
                         }
                     }
                     setMarked(markedState => ({...markedState, ...newMarkedData}));
-                } 
+                }
             }
         }
 
         fetchYearData()
-    }, [yearInView]) 
+    }, [yearInView])
 
     useFocusEffect(
         useCallback(() => {
+
+            // set newly marked calendar dates with changed symptoms
             let newMarkedData = route.params?.inputData
             if (newMarkedData) {
                 setMarked(markedState => ({...markedState, ...newMarkedData}));
             }
+
+            // show tutorial overlay if coming from Confirmation screen, else ignore
+            GETTutorial()
+              .then((val) => {
+                // show tutorial overlay if coming from Confirmation screen, else ignore
+                if (val === 'true') navigation.navigate(CALENDAR_STACK_SCREENS.TUTORIAL)
+              })
+              .catch((e) => console.log('showTutorial failed', JSON.stringify(e)))
 
         }, [route.params?.inputData])
     )
@@ -145,9 +158,7 @@ export default function CalendarScreen ({ route, navigation }) {
         if (toggleable) {
             if (selectedView === targetView) {
                 setSelectedView(VIEWS.Nothing);
-                console.log("bruh");
             } else {
-                console.log("Selected " + targetView)
                 setSelectedView(targetView);
             }
         }
@@ -157,12 +168,20 @@ export default function CalendarScreen ({ route, navigation }) {
     return (
     <ErrorFallback>
         <SafeAreaView style={styles.container}>
+            <View style={styles.dropdown}>
             <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
                 <Text style={styles.dropdownText}>{selectedView}</Text>
                 <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
                 {renderedArrow}
             </TouchableOpacity>
-            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LEGEND_PAGE, {screen: CALENDAR_STACK_SCREENS.LEGEND_PAGE})}
+              style={styles.legend}>
+              <LegendButton></LegendButton>
+            </TouchableOpacity>
+            </View>
+            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={setSelectedView}/>
+
             <View style={styles.calendar}>
                 <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
             </View>
@@ -172,6 +191,15 @@ export default function CalendarScreen ({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+    dropdown: {
+      margin: 10,
+      backgroundColor: '#fff',
+      width: '100%'
+    },
+    legend: {
+      position: 'absolute',
+      right: 30,
+    },
     calendar: {
       marginBottom: '20%'
     },
