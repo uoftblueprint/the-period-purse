@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, StyleSheet, SafeAreaView, TouchableOpacity, Text, } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
@@ -8,10 +9,11 @@ import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
+import { GETTutorial } from '../../services/TutorialService';
 import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 
-const sideComponentWidth = 120
 
 export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 
@@ -41,7 +43,7 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
         // Enable or disable vertical scroll indicator. Default = false
         showScrollIndicator={true}
         dayComponent={({date, state, marking}) => <DayComponent date={date} state={state} marking={marking} navigation={navigation} selectedView={selectedView}/>}
-        
+
         theme={{
             calendarBackground: '#ffffff',
             // Sun Mon Tue Wed Thu Fri Sat Bar
@@ -76,7 +78,7 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
             }
         }}
 
-        markedDates={marked} 
+        markedDates={marked}
         />
     )
 }
@@ -115,7 +117,7 @@ export default function CalendarScreen ({ route, navigation }) {
                                 let date = new Date(year, i, j + 1)
                                 let isoDate = getISODate(date);
                                 let symptomData = monthArray[i][j]
-        
+
                                 // Add it into the marked state, which then updates the calendar
                                 newMarkedData[isoDate] = {
                                     symptoms: symptomData,
@@ -125,23 +127,42 @@ export default function CalendarScreen ({ route, navigation }) {
                         }
                     }
                     setMarked(markedState => ({...markedState, ...newMarkedData}));
-                } 
+                }
             }
         }
 
         fetchYearData()
-    }, [yearInView]) 
+    }, [yearInView])
 
     useFocusEffect(
         useCallback(() => {
+
+            // set newly marked calendar dates with changed symptoms
             let newMarkedData = route.params?.inputData
             if (newMarkedData) {
                 setMarked(markedState => ({...markedState, ...newMarkedData}));
             }
 
+            // show tutorial overlay if coming from Confirmation screen, else ignore
+            GETTutorial()
+              .then((val) => {
+                // show tutorial overlay if coming from Confirmation screen, else ignore
+                if (val === 'true') navigation.navigate(CALENDAR_STACK_SCREENS.TUTORIAL)
+              })
+              .catch((e) => console.log('showTutorial failed', JSON.stringify(e)))
+
         }, [route.params?.inputData])
     )
 
+    const toggleSelectedView = (targetView, toggleable) => {
+        if (toggleable) {
+            if (selectedView === targetView) {
+                setSelectedView(VIEWS.Nothing);
+            } else {
+                setSelectedView(targetView);
+            }
+        }
+    }
 
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (

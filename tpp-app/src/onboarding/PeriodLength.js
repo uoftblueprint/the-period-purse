@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, ImageBackground, TextInput, Text, SafeAreaView, KeyboardAvoidingView } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, ImageBackground, TextInput, Text, SafeAreaView, KeyboardAvoidingView, View, TouchableOpacity } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
 import { BackButton } from '../home/components/BackButtonComponent';
@@ -14,12 +14,13 @@ import KeyboardIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_keyboar
 
 export default function PeriodLength ({ navigation }) {
   const [periodLength, setPeriodLength] = useState(null)
+  const textInputRef = useRef();
 
   function KeyboardIconPref() {
     if(periodLength)
       return (<Text style={styles.dayText}>days</Text>);
     else
-      return (<KeyboardIcon style={styles.icon}/>);
+      return (<KeyboardIcon/>);
   }
 
   return (
@@ -41,21 +42,25 @@ export default function PeriodLength ({ navigation }) {
             This will help us make our {'\n'} reminders more accurate
           </BodyText>
 
-          <SafeAreaView style={styles.inputContainer}/>
-          <KeyboardIconPref/>
-          <TextInput 
-            style={periodLength ? [styles.textinput, styles.output] : [styles.textinput, styles.input]} 
-            placeholder='Tap to input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-            placeholderTextColor='#6D6E71'
-            keyboardType="number-pad" 
-            returnKeyType='done'
-            onChangeText={(periodLength) => setPeriodLength(periodLength)}
-          />
+          <SafeAreaView style={styles.inputContainer}>
+            <TouchableOpacity onPress={() => textInputRef.current.focus()} style={styles.coverContainer}>
+              <TextInput
+                ref={textInputRef}
+                style={[styles.textinput, periodLength ? styles.output : styles.input]}
+                placeholder='Tap to input&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                placeholderTextColor='#6D6E71'
+                keyboardType="number-pad"
+                returnKeyType='done'
+                onChangeText={(periodLength) => setPeriodLength(periodLength)}
+              />
+              <View style={styles.rightMargin}><KeyboardIconPref/></View>
+            </TouchableOpacity>
+          </SafeAreaView>
         </SafeAreaView>
 
         <TwoButtonContainer>
           <SkipButton title="Skip" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: null })}/>
-          <NextButton title="Next" onPress={() => 
+          <NextButton title="Next" onPress={() =>
             {
               POSTInitialPeriodLength(parseInt(periodLength));
               navigation.navigate(STACK_SCREENS.PERIOD_START, { periodLength: periodLength });
@@ -65,7 +70,7 @@ export default function PeriodLength ({ navigation }) {
 
       </KeyboardAvoidingView>
     </ImageBackground>
-   
+
   );
 }
 
@@ -78,35 +83,25 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: "Avenir",
     fontSize: 17,
-    alignSelf: 'center',
-  },
-  icon: {
-    alignSelf: 'center',
-    left: '13%',
-    bottom: '24.7%'
   },
   dayText: {
     fontFamily: "System",
     fontSize: 18,
     color: "#000000",
-    bottom: "25%",
-    left: "13%"
   },
   output: {
     fontFamily: "System",
-    fontSize: 36,
+    fontSize: 30,
     fontWeight: '600',
-    alignSelf: 'center',
-    bottom: "30.5%"
   },
   textinput: {
     borderColor: "transparent",
     width: "50%",
     borderWidth: 1,
     borderRadius: 10,
-    height: "8%",
+    height: "100%",
     textAlign: "center",
-    bottom: "29.6%"
+    marginRight: 5
   },
   inputContainer: {
     position: "relative",
@@ -114,6 +109,20 @@ const styles = StyleSheet.create({
     width: "50%",
     borderRadius: 10,
     height: "8%",
-    bottom: "20%"
-  }
+    bottom: "20%",
+  },
+  rightMargin: {
+    height: 30,
+    width: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  coverContainer: {
+    width: '100%',
+    height: '100%',
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
