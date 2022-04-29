@@ -12,6 +12,7 @@ import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 import { POSTJoinedDate } from '../services/OnboardingService';
+import ErrorFallback from "../error/error-boundary";
 import {BackButton} from "../home/components/BackButtonComponent";
 
 export const STACK_SCREENS = {
@@ -63,6 +64,7 @@ export default function Confirmation ({ route, navigation }) {
   }
 
   return (
+  <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
         <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
@@ -103,6 +105,7 @@ export default function Confirmation ({ route, navigation }) {
         }}
       />
     </ImageBackground>
+  </ErrorFallback>
   );
 }
 

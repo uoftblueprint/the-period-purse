@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet, Text, useWindowDimensions, TouchableOpaci
 import RenderHtml from 'react-native-render-html';
 import BackIcon from '../../../ios/tppapp/Images.xcassets/icons/back_icon.svg'
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import ErrorFallback from "../../error/error-boundary";
 
 const source = {html: `<ol style="font-family: Avenir;font-Size: 14px;">
 <li>
@@ -18,6 +19,7 @@ export default TermsAndConditionsScreen = ({navigation}) => {
     }
 
     return(
+      <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.containter}>
             <View style={styles.navbarContainer}>
                 <TouchableOpacity onPress={() => onClose()} style={styles.backIcon}>
@@ -79,6 +81,7 @@ You can also contact us through the feedback form available on our Site.
 
             </ScrollView>
         </ImageBackground>
+  </ErrorFallback>
     );
 }
 

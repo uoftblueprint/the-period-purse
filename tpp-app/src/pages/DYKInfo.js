@@ -3,27 +3,30 @@ import {StyleSheet, Text, View, Image, SafeAreaView, ImageBackground} from 'reac
 import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import ErrorFallback from "../error/error-boundary";
 
 
 export default function DidYouKnow({ navigation }) {
     return (
-        <ImageBackground source={OnboardingBackground} style={styles.container}>
-            <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-             <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
-                <Image
-                source= {PadImageHappy}
-                style={styles.image}
-                    />
-            <Text style={styles.bodyText}>
-            <Text style={styles.titleText}>Did you know?</Text>
-                {"\n"}
-                {"\n"}
-                Only 46% of Canadians feel comfortable talking about periods. Periods rank lower in comfortability to talk about than politics, sex, and Sexually Transmitted Infections (STIs).
-            </Text>
+        <ErrorFallback>
+            <ImageBackground source={OnboardingBackground} style={styles.container}>
+                <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                 <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
+                    <Image
+                    source= {PadImageHappy}
+                    style={styles.image}
+                        />
+                <Text style={styles.bodyText}>
+                <Text style={styles.titleText}>Did you know?</Text>
+                    {"\n"}
+                    {"\n"}
+                    Only 46% of Canadians feel comfortable talking about periods. Periods rank lower in comfortability to talk about than politics, sex, and Sexually Transmitted Infections (STIs).
+                </Text>
 
-            </SafeAreaView>
-        </ImageBackground>
-    )
+                </SafeAreaView>
+            </ImageBackground>
+        </ErrorFallback>
+            )
 }
 
 const styles = StyleSheet.create({

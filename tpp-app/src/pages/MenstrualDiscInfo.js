@@ -1,12 +1,14 @@
 import React from 'react';
 import {StyleSheet, Text, Image, ImageBackground, SafeAreaView} from 'react-native';
 import { BackButton } from '../home/components/BackButtonComponent';
-import DiscImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/disc_image.png';
+import DiscImage from '../../ios/tppapp/Images.xcassets/InfoPageImages/menstrual-disk.svg';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { BackButtonContainer } from '../onboarding/components/ContainerComponents';
+import ErrorFallback from "../error/error-boundary";
 
 export default function MenstrualDiscInfo({ navigation }) {
     return (
+    <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <SafeAreaView pointer-events="box-only" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <BackButtonContainer>
@@ -33,7 +35,8 @@ export default function MenstrualDiscInfo({ navigation }) {
 
             </SafeAreaView>
         </ImageBackground>
-    )
+    </ErrorFallback>
+        )
 }
 
 const styles = StyleSheet.create({

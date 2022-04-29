@@ -4,9 +4,11 @@ import TamponImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/tampo
 import { BackButton } from '../home/components/BackButtonComponent';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { BackButtonContainer } from '../onboarding/components/ContainerComponents';
+import ErrorFallback from "../error/error-boundary";
 
 export default function TamponInfo({ navigation }) {
     return (
+    <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <SafeAreaView pointer-events="box-only" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <BackButtonContainer>
@@ -35,6 +37,7 @@ export default function TamponInfo({ navigation }) {
                 </Text>
             </SafeAreaView>
         </ImageBackground>
+    </ErrorFallback>
     )
 }
 
