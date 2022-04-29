@@ -8,11 +8,13 @@ import { BodyText, TitleText } from './components/TextComponents';
 import { BackButtonContainer } from './components/ContainerComponents';
 import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_shape.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar3.svg";
+import ErrorFallback from "../error/error-boundary";
 
 export default function Backup ({ route, navigation }) {
   const { periodLength, periodStart, periodEnd, trackingPreferences } = route.params;
 
   return (
+  <ErrorFallback>
     <ImageBackground  source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
         <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
@@ -45,6 +47,7 @@ export default function Backup ({ route, navigation }) {
       </SafeAreaView>
 
     </ImageBackground>
+  </ErrorFallback>
   );
 }
 

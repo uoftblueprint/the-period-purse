@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from './utils/constants'
 import { initializeEmptyYear, isValidDate, getCalendarByYear, getSymptomsFromCalendar } from './utils/helpers'
 import { Symptoms } from './utils/models';
+import {errorAlertModal} from "../error/errorAlertModal";
 
 
 /**
@@ -42,6 +43,7 @@ export const POSTsymptomsForDate = async (day, month, year, symptoms) => new Pro
             });
     } catch (e) {
         console.log(`POSTsymptomsForDate error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject("Something went wrong. Please try again later.");
         return;
     }
@@ -110,21 +112,8 @@ export const LogMultipleDayPeriod = async (datesToMark, datesToUnmark) => {
 
         } catch (error) {
             console.log("error with multiselect:",error);
+            errorAlertModal();
         }
     }
 
-}
-
-// TODO implement helper function
-const postSymptomsForYear = async (calendarData, year) => {
-    if(calendarData[year]){
-
-        await AsyncStorage.setItem(year.toString(), JSON.stringify(calendarData[year]))
-        // .then(() => resolve())
-        // .catch((e) => {
-        //     console.log(JSON.stringify(e));
-        //     reject(`Unable to mergeItem and post symptoms for multiselect.`);
-        // });
-        
-    }
 }

@@ -7,9 +7,11 @@ import { WideButton, UnderlineButton } from './components/ButtonComponents';
 import { BackButtonContainer, PageTitleContainer, TextButtonContainer } from './components/ContainerComponents';
 import { PageTitle } from './components/TextComponents'
 import PaddyIcon from '../../ios/tppapp/Images.xcassets/icons/paddy.svg';
+import ErrorFallback from "../error/error-boundary";
 
 export default function Success ({ navigation }) {
   return (
+  <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
         <BackButton onPress={() => {navigation.navigate(STACK_SCREENS.PASSWORD)}}/>
@@ -30,6 +32,7 @@ export default function Success ({ navigation }) {
         <WideButton title="OK" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.MAIN_PAGE)}/>
       </SafeAreaView>
     </ImageBackground>
+  </ErrorFallback>
   );
 }
 

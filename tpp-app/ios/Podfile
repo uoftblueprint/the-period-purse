@@ -18,6 +18,8 @@ target 'tppapp' do
   #     flipper_post_install(installer)
   #   end
   # end
+
   pod 'RNICloudStore', :path => '../node_modules/react-native-icloudstore'
+  pod 'react-native-restart', :path => '../node_modules/react-native-restart'
 
 end
