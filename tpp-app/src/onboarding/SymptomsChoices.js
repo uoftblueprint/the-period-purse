@@ -16,6 +16,7 @@ import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_s
 import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/symptoms_track_img.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar3.svg";
 import FlowDeselected from "../../ios/tppapp/Images.xcassets/icons/flow_deselected.svg";
+import ErrorFallback from "../error/error-boundary";
 
 let WHITE = "#FFFFFF"  // button is not selected
 let TEAL = "#73C7B7"  // button is selected
@@ -42,6 +43,7 @@ export default function SymptomsChoices ({ route, navigation }) {
   }
 
   return (
+  <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
         <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.PERIOD_START, {
@@ -109,6 +111,7 @@ export default function SymptomsChoices ({ route, navigation }) {
           disabled={[mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
       </TwoButtonContainer>
     </ImageBackground>
+  </ErrorFallback>
   );
 }
 

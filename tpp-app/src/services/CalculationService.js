@@ -1,10 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL, KEYS} from "./utils/constants";
-import subDays from 'date-fns/subDays';
-import addDays from 'date-fns/addDays';
-import {getCalendarByYear, getDaysDiffInclusive, getSymptomsFromCalendar} from "./utils/helpers";
+import { getDaysDiffInclusive } from "./utils/helpers";
 import CycleService from "./cycle/CycleService";
 import { GETStoredYears } from "./utils/helpers";
+import {errorAlertModal} from "../error/errorAlertModal";
 
 /**
  * Calculates the average period length given a completeHistory of their period intervals
@@ -76,6 +75,7 @@ export const calculateAverages = async () => new Promise( async (resolve, reject
             })
             .catch((e) => {
                 console.log(`GETStoredYears error: ${JSON.stringify(error)}`);
+                errorAlertModal();
                 reject();
             });
 });

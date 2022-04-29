@@ -10,6 +10,7 @@ import discIcon from '../../ios/tppapp/Images.xcassets/icons/disc_icon.png'
 import { STACK_SCREENS } from './InfoNavigator';
 import { Footer } from '../services/utils/footer';
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
+import ErrorFallback from "../error/error-boundary";
 
 const LearnMoreCard = () => {
     return(
@@ -83,6 +84,7 @@ const cardData = [
 
 export default function Info ({ navigation }) {
     return (
+     <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <ScrollView>
                 <SafeAreaView style={styles.cardContainer}>
@@ -98,22 +100,23 @@ export default function Info ({ navigation }) {
                         Tap to learn more about period products.
                     </Text>
 
-                    <View style={styles.containerRow}>
-                        {cardData.map((card, i) => { return (
-                            <MenstrualProductCard
-                                key={i}
-                                name={card.name}
-                                image={card.image}
-                                onPress={() => navigation.navigate(card.screen)}
-                            />
-                        )})}
-                    </View>
+                        <View style={styles.containerRow}>
+                            {cardData.map((card, i) => { return (
+                                <MenstrualProductCard
+                                    key={i}
+                                    name={card.name}
+                                    image={card.image}
+                                    onPress={() => navigation.navigate(card.screen)}
+                                />
+                            )})}
+                        </View>
 
-                    <LearnMoreCard/>
-                    <Footer navigation={navigation}/>
-                </SafeAreaView>
-            </ScrollView>
-        </ImageBackground>
+                        <LearnMoreCard/>
+                        <Footer navigation={navigation}/>
+                    </SafeAreaView>
+                </ScrollView>
+            </ImageBackground>
+        </ErrorFallback>
     )
 }
 

@@ -9,6 +9,7 @@ import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/utils/constants";
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
+import ErrorFallback from "../../error/error-boundary";
 import Constants from 'expo-constants';
 import LoadingVisual from '../components/LoadingVisual';
 
@@ -230,7 +231,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 console.log(error);
             }
         }
-        
+
         navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
         await calculateAverages();
     }
@@ -260,12 +261,14 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     }
 
     if (loaded){
-        return (
+
+    return (
+        <ErrorFallback>
             <SafeAreaView style={styles.container}>
                 <View style={styles.navbarContainer}>
 
                     <TouchableOpacity onPress={() => onClose()} style={styles.close}>
-                    <CloseIcon fill={'#181818'}/>
+                      <CloseIcon fill={'#181818'}/>
                     </TouchableOpacity>
                     <View style={styles.navbarTextContainer}>
 
@@ -276,20 +279,22 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
                     </View>
                 </View>
-                <View style={styles.calendar}>
-                    <Calendar
-                        numSelected={numSelected}
-                        setNumSelected={setNumSelected}
-                        navigation={navigation}
-                        setSelectedDates={setSelectedDates}
-                        markedDates={markedDates}
-                    />
-                </View>  
-                <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
-                    <SubmitIcon fill={'#181818'}/>
-                </TouchableOpacity>
-            </SafeAreaView>
-        )
+
+            <View style={styles.calendar}>
+                <Calendar
+                    numSelected={numSelected}
+                    setNumSelected={setNumSelected}
+                    navigation={navigation}
+                    setSelectedDates={setSelectedDates}
+                    markedDates={markedDates}
+                />
+            </View>
+            <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
+                <SubmitIcon fill={'#181818'}/>
+            </TouchableOpacity>
+        </SafeAreaView>
+  </ErrorFallback>
+    )
 
     }
     else{

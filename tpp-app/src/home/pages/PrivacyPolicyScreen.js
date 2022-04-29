@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ScrollView, StyleSheet, Text, useWindowDimensions, TouchableOpacity, ImageBackground, Linking} from 'react-native';
 import BackIcon from '../../../ios/tppapp/Images.xcassets/icons/back_icon.svg'
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import ErrorFallback from "../../error/error-boundary";
 
 const EmailLink = () => {
     const openLink = () => {
@@ -27,6 +28,7 @@ export default PrivacyPolicyScreen = ({navigation}) => {
     }
 
     return(
+      <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.containter}>
             <View style={styles.navbarContainer}>
                 <TouchableOpacity onPress={() => onClose()} style={styles.backIcon}>
@@ -80,6 +82,7 @@ The app also includes some links to social media pages. If you click those links
                 
             </ScrollView>
         </ImageBackground>
+     </ErrorFallback>
     );
 }
 

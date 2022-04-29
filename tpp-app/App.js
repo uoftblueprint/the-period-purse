@@ -19,6 +19,8 @@ import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
 import PrivacyPolicyScreen from './src/home/pages/PrivacyPolicyScreen';
 import TermsAndConditions from './src/home/pages/TermsAndConditions';
 import { StartLoadScreen } from './src/home/pages/StartLoadScreen';
+import { setJSExceptionHandler, setNativeExceptionHandler } from 'react-native-exception-handler';
+import {errorAlertModal} from "./src/error/errorAlertModal";
 
 
 export const STACK_SCREENS = {
@@ -132,6 +134,21 @@ export function MainNavigator() {
       </NavigationContainer>
   );
 }
+
+const errorHandler = (e, isFatal) => {
+    if (isFatal) {
+        errorAlertModal();
+    } else {
+        console.log(e); // So that we can see it in the ADB logs in case of Android if needed
+    }
+};
+
+setJSExceptionHandler(errorHandler, true);
+
+setNativeExceptionHandler((errorString) => {
+    console.log('setNativeExceptionHandler');
+});
+
 
 function App() {
   return (<StartLoadScreen/>);

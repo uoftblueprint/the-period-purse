@@ -6,7 +6,12 @@ import {ExpandedHistoryCard} from '../components/CycleHistory';
 import CycleService from '../../services/cycle/CycleService';
 import {GETStoredYears} from '../../services/utils/helpers';
 import {useFocusEffect} from '@react-navigation/native';
+<<<<<<< HEAD
 import LoadingVisual from '../components/LoadingVisual';
+=======
+import { set } from 'date-fns';
+import ErrorFallback from "../../error/error-boundary";
+>>>>>>> develop
 
 function Header({navigation}){
     return(
@@ -94,24 +99,26 @@ export default function CycleHistoryScreen({navigation}){
     );
 
     if(loaded){
-        return (
-            <SafeAreaView style={styles.container}>
-                <ImageBackground source={background} style={styles.container}>
-                    <Header navigation={navigation}/>
-                    <SafeAreaView style={styles.cardContainer}>
-                        <View style={styles.buttonContainer}>
-                            {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>)}
-                        </View>
-                        <ExpandedHistoryCard
-                            navigation={navigation}
-                            intervals={currentIntervals[selectedYear]}
-                            renderedYear={selectedYear}
-                            onPeriod={onPeriod}
-                        />
-                    </SafeAreaView>
-                </ImageBackground>
-            </SafeAreaView>
-        )
+            return (
+            <ErrorFallback>
+                <SafeAreaView style={styles.container}>
+                    <ImageBackground source={background} style={styles.container}>
+                        <Header navigation={navigation}/>
+                        <SafeAreaView style={styles.cardContainer}>
+                            <View style={styles.buttonContainer}>
+                                {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>)}
+                            </View>
+                            <ExpandedHistoryCard
+                                navigation={navigation}
+                                intervals={currentIntervals[selectedYear]}
+                                renderedYear={selectedYear}
+                                onPeriod={onPeriod}
+                            />
+                        </SafeAreaView>
+                    </ImageBackground>
+                </SafeAreaView>
+        </ErrorFallback>
+            )
     } else {
         return (
             <LoadingVisual/>

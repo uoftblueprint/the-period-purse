@@ -12,6 +12,7 @@ import Calendar from '../../../ios/tppapp/Images.xcassets/icons/menstruation_cal
 import Paddy from '../../../ios/tppapp/Images.xcassets/icons/paddy.svg';
 import { Footer } from '../../services/utils/footer';
 import LoadingVisual from '../components/LoadingVisual';
+import ErrorFallback from "../../error/error-boundary";
 
 function InfoCard(props){
   let DefaultText = <Text style={styles.messageForDefault}>Please start logging to learn more. </Text>;
@@ -94,7 +95,7 @@ export default function CycleScreen ({navigation}){
        }
      })
      .catch(() => setAvgPeriodLength(DEFAULTS.AVG_PERIOD_LENGTH));
-     
+
      let gettingAverageCycleLength = CycleService.GETAverageCycleLength().then(numDays => {
        if(numDays){
          // Round to one decimal place
@@ -123,7 +124,7 @@ export default function CycleScreen ({navigation}){
        setDaysTillPeriod(DEFAULTS.DAYS_TILL_PERIOD);
        setShowTip(false);
      });
-     
+
      let gettingCycleHistory = CycleService.GETCycleHistoryByYear(new Date().getFullYear()).then(intervals =>{
        setIntervals(intervals);
      })
@@ -159,8 +160,9 @@ export default function CycleScreen ({navigation}){
 
   if (loaded) {
   return (
+  <ErrorFallback>
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={background} style={styles.container}>    
+      <ImageBackground source={background} style={styles.container}>
         {/* View that contains all the relevant cards */}
         <ScrollView>
           {/* Period Notification (Period in X days) */}
@@ -170,9 +172,9 @@ export default function CycleScreen ({navigation}){
               <Paddy style={styles.paddyIcon}/>
             </PeriodNotification>
             )}
-            <CycleCard 
-              periodDays={periodDays} 
-              daysSinceLastPeriod={daysSinceLastPeriod} 
+            <CycleCard
+              periodDays={periodDays}
+              daysSinceLastPeriod={daysSinceLastPeriod}
               cycleDonutPercent={cycleDonutPercent}
               showTip={showTip}
             />
@@ -184,8 +186,8 @@ export default function CycleScreen ({navigation}){
                 <Calendar fill="red" style={styles.icon}/>
               </InfoCard>
             </SafeAreaView>
-            <MinimizedHistoryCard 
-              navigation={navigation} 
+            <MinimizedHistoryCard
+              navigation={navigation}
               intervals={intervals}
               onPeriod={periodDays !=0}
             />
@@ -195,7 +197,9 @@ export default function CycleScreen ({navigation}){
           </SafeAreaView>
         </ScrollView>
       </ImageBackground>
-    </SafeAreaView>);
+    </SafeAreaView>
+  </ErrorFallback>
+  )
 
   } else {
     return <LoadingVisual/>

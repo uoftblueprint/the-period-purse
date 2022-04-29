@@ -13,6 +13,7 @@ import { TRACK_SYMPTOMS } from "../../services/utils/constants";
 import { CALENDAR_STACK_SCREENS } from "../CalendarNavigator";
 import { getISODate } from '../../services/utils/helpers';
 import { calculateAverages } from "../../services/CalculationService";
+import ErrorFallback from "../../error/error-boundary";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import LoadingVisual from "../components/LoadingVisual";
 
@@ -288,12 +289,10 @@ export default function LogSymptomsScreen({ navigation, route }) {
   }
 
   if (loaded){
-    return (
-      <SafeAreaView style={styles.screen}>
-      {/* <ScrollView style={styles.content}> */}
 
-        {/* HEADER NAV */}
-        <View style={styles.navbarContainer}>
+  return (
+    <ErrorFallback>
+    <SafeAreaView style={styles.screen}>
 
             {/* CLOSE BUTTON */}
             <TouchableOpacity
@@ -334,7 +333,6 @@ export default function LogSymptomsScreen({ navigation, route }) {
               }
             </View>
 
-        </View>
 
         <KeyboardAwareScrollView contentContainerStyle={styles.content} extraHeight={100} extraScrollHeight={120}>
         {/* SYMPTOM ACCORDIONS */}
@@ -369,6 +367,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
       {/* </ScrollView> */}
 
       </SafeAreaView>
+    </ErrorFallback>
 
     );
   }

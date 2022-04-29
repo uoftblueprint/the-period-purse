@@ -7,8 +7,9 @@ import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
-import { getISODate } from '../../services/utils/helpers';
+import {getISODate, initializeEmptyYear} from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
+import ErrorFallback from "../../error/error-boundary";
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import LoadingVisual from '../components/LoadingVisual';
 import { GETTutorial } from '../../services/TutorialService';
@@ -106,7 +107,11 @@ export default function CalendarScreen ({ route, navigation }) {
                 if (cachedYears[year] === undefined) {
 
                     let currentYearData = {}
-                    currentYearData[year] = await GETYearData(year)
+                    const yearDataFromStorage = await GETYearData(year);
+
+                    // If there's nothing logged for that year, we may still want to disable dates
+                    // Get an empty year
+                    currentYearData[year] = yearDataFromStorage ? yearDataFromStorage : initializeEmptyYear(year);
 
                     let newCachedYears = {}
                     newCachedYears[year] = true
@@ -170,6 +175,7 @@ export default function CalendarScreen ({ route, navigation }) {
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     if (loaded){
         return (
+        <ErrorFallback>
             <SafeAreaView style={styles.container}>
                 <View style={styles.dropdown}>
                 <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
@@ -188,13 +194,13 @@ export default function CalendarScreen ({ route, navigation }) {
                 <View style={styles.calendar}>
                     <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
                 </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </ErrorFallback>
         )
     }
     else {
         return (<LoadingVisual/>)
     }
-
 }
 
 const styles = StyleSheet.create({
