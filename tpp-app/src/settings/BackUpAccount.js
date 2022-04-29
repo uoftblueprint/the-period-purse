@@ -31,7 +31,6 @@ export default function BackUpAccount ({ navigation }) {
         // Get user's last saved backup time
         async function getLastBackupDateTime() {
             const lastBackupTime = await GETLastSavedBackupTime();
-            console.log(lastBackupTime);
             setLastBackupDateTime(lastBackupTime ? new Date(lastBackupTime).toDateString() + " at " + new Date(lastBackupTime).toLocaleTimeString() : "Never");
         }
 
@@ -88,7 +87,6 @@ const styles = StyleSheet.create({
     bgImage: {
         flex: 1,
         alignItems: 'stretch',
-        justifyContent: 'center'
     },
     buttonText: {
         color: '#fff',
@@ -104,9 +102,7 @@ const styles = StyleSheet.create({
         letterSpacing: -0.3,
         marginLeft: "7.5%",
         marginBottom: "5%",
-        top: "-100%",
         lineHeight: 20,
-        left: 0
     },
     body: {
         fontFamily: "Avenir",
@@ -115,14 +111,12 @@ const styles = StyleSheet.create({
         letterSpacing: -0.3,
         marginBottom: "5%",
         marginLeft: "7.5%",
-        top: "-100%"
     },
     lastBackupText: {
         fontFamily: "Avenir",
         fontWeight: "500",
-        position: 'absolute',
         marginLeft: "7.5%",
-        top: "-5%",
+        paddingTop: "5%",
         color: '#6D6E71'
     },
     textContainer: {
@@ -139,7 +133,6 @@ const styles = StyleSheet.create({
         width: 330,
         height: 52,
         alignSelf: 'center',
-        margin: 10
     },
     buttonContainer: {
         width: "85%",
@@ -149,6 +142,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         left: "7.5%",
-        top: "-100%"
     }
 });
