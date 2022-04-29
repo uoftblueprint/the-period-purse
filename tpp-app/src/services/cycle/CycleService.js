@@ -22,9 +22,9 @@ import {errorAlertModal} from "../../error/errorAlertModal";
  */
 async function getLastPeriodsEnd(finalPeriodStart, calendar = null){
   try {
-    var current = finalPeriodStart;
-    var yesterday = subDays(current, 1);
-    var twoDaysEarlier = subDays(current, 2);
+    let current = finalPeriodStart;
+    let yesterday = subDays(current, 1);
+    let twoDaysEarlier = subDays(current, 2);
 
     if (!calendar) {
       calendar = await getCalendarByYear(current.getFullYear());
@@ -34,14 +34,14 @@ async function getLastPeriodsEnd(finalPeriodStart, calendar = null){
     let yesterdaySymptoms = new Symptoms();
     let twoDaysEarlierSymptoms = new Symptoms()
 
-    var noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null);
-    var noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null);
-    var flowTwoDaysEarlier = (twoDaysEarlierSymptoms.flow !== null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE)
+    let noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null);
+    let noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null);
+    let flowTwoDaysEarlier = (twoDaysEarlierSymptoms.flow !== null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE);
 
 
     while (!(noFlowToday && noFlowYesterday && flowTwoDaysEarlier)) {
 
-      var tomorrow = addDays(current, 1);
+      const tomorrow = addDays(current, 1);
       twoDaysEarlier = yesterday;
       yesterday = current;
       current = tomorrow;
@@ -75,7 +75,7 @@ async function isOnPeriod (calendar = null) {
   try {
     let current = await this.GETMostRecentPeriodStartDate(calendar) // most recent period start date
 
-    var yesterday = subDays(current, 1);
+    const yesterday = subDays(current, 1);
 
     if (!calendar) {
       calendar = await getCalendarByYear(current)
@@ -84,8 +84,8 @@ async function isOnPeriod (calendar = null) {
     let yesterdaySymptoms = getSymptomsFromCalendar(calendar, yesterday.getDate(), yesterday.getMonth(), yesterday.getFullYear());
 
 
-    var noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null);
-    var noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null);
+    const noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null);
+    const noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null);
 
     if (noFlowYesterday && noFlowToday) {
       return false
@@ -107,9 +107,9 @@ export{isOnPeriod}
  */
 async function getFirstPeriodStart(firstPeriodEnd, calendar = null){
   try {
-    var current = firstPeriodEnd;
-    var tomorrow = addDays(current, 1);
-    var twoDaysLater = addDays(current, 2);
+    let current = firstPeriodEnd;
+    let tomorrow = addDays(current, 1);
+    let twoDaysLater = addDays(current, 2);
     if (!calendar) {
       calendar = await getCalendarByYear(current.getFullYear());
     }
@@ -118,14 +118,14 @@ async function getFirstPeriodStart(firstPeriodEnd, calendar = null){
     let tomorrowSymptoms = new Symptoms();
     let twoDaysLaterSymptoms = new Symptoms()
 
-    var noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null);
-    var noFlowTomorrow = (tomorrowSymptoms.flow === FLOW_LEVEL.NONE || tomorrowSymptoms.flow === null);
-    var flowTwoDaysLater = (twoDaysLaterSymptoms.flow !== null && twoDaysLaterSymptoms.flow !== FLOW_LEVEL.NONE)
+    let noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null);
+    let noFlowTomorrow = (tomorrowSymptoms.flow === FLOW_LEVEL.NONE || tomorrowSymptoms.flow === null);
+    let flowTwoDaysLater = (twoDaysLaterSymptoms.flow !== null && twoDaysLaterSymptoms.flow !== FLOW_LEVEL.NONE);
 
 
     while (!(noFlowToday && noFlowTomorrow && flowTwoDaysLater)) {
 
-      var yesterday = subDays(current, 1);
+      const yesterday = subDays(current, 1);
       twoDaysLater = tomorrow;
       tomorrow = current;
       current = yesterday;
@@ -154,8 +154,8 @@ async function getFirstPeriodStart(firstPeriodEnd, calendar = null){
 async function isPeriodStart(date, calendar){
 
   try {
-    var yesterday = subDays(date, 1);
-    var twoDaysEarlier = subDays(date, 2);
+    const yesterday = subDays(date, 1);
+    const twoDaysEarlier = subDays(date, 2);
 
     let dateSymptoms = getSymptomsFromCalendar(calendar, date.getDate(), date.getMonth() + 1, date.getFullYear());
     let yesterdaySymptoms = getSymptomsFromCalendar(calendar, yesterday.getDate(), yesterday.getMonth() + 1, yesterday.getFullYear());
@@ -163,9 +163,9 @@ async function isPeriodStart(date, calendar){
 
 
     // search for _ _ X where _ is no period or not logged, and X is period
-    var flowToday = (dateSymptoms.flow !== null && dateSymptoms.flow !== FLOW_LEVEL.NONE);
-    var noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null);
-    var noFlowTwoDaysEarlier = (twoDaysEarlierSymptoms.flow === FLOW_LEVEL.NONE || twoDaysEarlierSymptoms.flow === null);
+    const flowToday = (dateSymptoms.flow !== null && dateSymptoms.flow !== FLOW_LEVEL.NONE);
+    const noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null);
+    const noFlowTwoDaysEarlier = (twoDaysEarlierSymptoms.flow === FLOW_LEVEL.NONE || twoDaysEarlierSymptoms.flow === null);
 
     return (flowToday && noFlowYesterday && noFlowTwoDaysEarlier);
   } catch (e) {
@@ -248,7 +248,7 @@ const CycleService = {
   GETPeriodDay: async function (calendar = null){
 
     try {
-      var date = new Date()
+      const date = new Date();
       if (!calendar) {
         calendar = await getCalendarByYear(date.getFullYear());
       }
@@ -271,8 +271,8 @@ const CycleService = {
     */
   GETDaysSinceLastPeriodEnd: async function (){
     try {
-      var curr = new Date()
-      var days = 0;
+      let curr = new Date();
+      let days = 0;
 
       let calendar = await getCalendarByYear(curr.getFullYear());
 
@@ -308,7 +308,7 @@ const CycleService = {
    */
   GETMostRecentPeriodStartDate: async function (calendar = null) {
     try {
-      var date = new Date()
+      const date = new Date();
 
 
       if (!calendar) {
@@ -352,6 +352,7 @@ const CycleService = {
    * @return {Promise} an object that contains intervals of the user's period (start & length) in that year in reverse chronological order
    */
   GETCycleHistoryByYear: async function(year) {
+    let periodDays;
     let intervals = []
     let endOfYear = new Date(year,11,31);
     let isYearsLastPeriod = true;
@@ -367,11 +368,11 @@ const CycleService = {
 
     try {
       // Search backwards until date switches to the previous year
-      var periodEnd = null;
-      var periodStart = null;
+      let periodEnd = null;
+      let periodStart = null;
 
-      var isPeriodEnd = false;
-      var isLastPeriodStart = true;
+      let isPeriodEnd = false;
+      let isLastPeriodStart = true;
 
       for (let i =periods.length - 1; i>= 0; i--){
 
@@ -389,12 +390,12 @@ const CycleService = {
             //handle special case for the last period, since it could possibly span multiple years
             periodStart = periods[i];
             periodEnd = await getLastPeriodsEnd(periodStart);
-            var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
+            periodDays = getDaysDiffInclusive(periodEnd, periodStart);
             intervals.push({"start": periodStart, "periodDays": periodDays});
           }
           else if(periodEnd && periodStart){
             //general case for any period besides first or last in the year
-            var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
+            periodDays = getDaysDiffInclusive(periodEnd, periodStart);
             intervals.push({"start": periodStart, "periodDays": periodDays});
           }
           isLastPeriodStart = false;
@@ -412,7 +413,7 @@ const CycleService = {
 
       //check if the first period is not already in intervals, in which case we know it's the case where the first period spans 2 different years
       if(!intervals.some(interval => isSameDay(interval.start, periodStart))){
-        var periodDays = getDaysDiffInclusive(periodEnd, periodStart);
+        periodDays = getDaysDiffInclusive(periodEnd, periodStart);
         intervals.push({"start": periodStart, "periodDays": periodDays});
       }
 

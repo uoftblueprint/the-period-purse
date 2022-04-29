@@ -24,7 +24,7 @@ export default function PeriodStart ({ route, navigation }) {
 
   const onDismiss = React.useCallback(() => {
     setOpen(false);
-    setRange({ undefined, undefined });
+    setRange({ startDate: undefined, endDate: undefined });
   }, [setOpen]);
 
   const onConfirm = React.useCallback(
@@ -68,8 +68,8 @@ export default function PeriodStart ({ route, navigation }) {
   function getCustomDateString(date) {
     if(!date)
       return null;
-    var month = date.getMonth() + 1  // month starts at 0
-    var day = date.getDate()
+    const month = date.getMonth() + 1;  // month starts at 0
+    const day = date.getDate();
     return [date.getFullYear(), (month > 9 ? '' : '0') + month, (day > 9 ? '' : '0') + day].join('-') 
   }
 
