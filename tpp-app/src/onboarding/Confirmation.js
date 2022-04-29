@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { WideButton } from './components/ButtonComponents';
-import { HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
+import {BackButtonContainer, HorizontalLine, SymptomIconContainer} from './components/ContainerComponents';
 import { SETTutorial } from '../services/TutorialService';
 
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";

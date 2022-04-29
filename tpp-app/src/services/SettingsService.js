@@ -240,7 +240,7 @@ export const POSTRemindLogSymptomsFreq = async (freq) => new Promise(async (reso
  */
 export const GETRemindLogSymptomsFreq = async () => new Promise(async (resolve, reject) => {
     try {
-        AsyncStorage.get(REMINDERS.LOG_SYMPTOMS_DAYS)
+        AsyncStorage.getItem(REMINDERS.LOG_SYMPTOMS_DAYS)
             .then((value) => {
                 console.log("Retrieved log symptoms reminder frequency");
                 resolve(value);
