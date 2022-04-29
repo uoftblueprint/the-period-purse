@@ -25,7 +25,7 @@ const NotificationAccordion = (props) => {
             expanded &&
             <View style={styles.child}>
                 
-            <PickerTab pickerType={props.type} selectedText={props.selectedText} setSelectedText={props.setSelectedText} time={props.time} meridian={props.meridian} setTime={props.setTime} setTimeMeridian={props.setTimeMeridian}/>
+            <PickerTab pickerType={props.type} selectedText={props.selectedText} setSelectedText={props.setSelectedText} time={props.time} meridian={props.meridian} setTime={props.setTime} setTimeMeridian={props.setTimeMeridian} pickerDataValues={props.pickerDataValues} pickerDataFunctions={props.pickerDataFunctions}/>
             </View>
         }
     </SafeAreaView>

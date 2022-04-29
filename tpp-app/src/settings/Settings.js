@@ -10,7 +10,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Footer } from '../services/utils/footer';
 import { ScrollView } from 'react-native-gesture-handler';
-import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, POSTRemindLogPeriod, POSTRemindLogSymptoms, POSTUpdateOnePreference } from '../services/SettingsService';
+import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, GETRemindLogSymptomsFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsTime, POSTRemindLogSymptoms, POSTUpdateOnePreference } from '../services/SettingsService';
 import {TRACK_SYMPTOMS, VIEWS} from '../services/utils/constants'
 import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
@@ -291,29 +291,34 @@ useEffect(() => {
 // get the frequencies
 useEffect(() => {
     async function getFreqTimes() {
+        console.log("working")
+
         let storedPeriodFreq = await GETRemindLogPeriodFreq();
         let storedSymptomFreq = await GETRemindLogSymptomsFreq();
         let storedPeriodTime = await GETRemindLogPeriodTime();
         let storedSymptomTime = await GETRemindLogSymptomsTime();
+        console.log("working1")
 
         if (storedPeriodFreq) {
             setRemindPeriodFreq(storedPeriodFreq);
         }
 
         if (storedSymptomFreq) {
-            setRemindSymptomsFreq(storedPeriodFreq);
+            setRemindSymptomsFreq(storedSymptomFreq);
         }
 
         if (storedPeriodTime) {
-            setRemindPeriodTime(storedPeriodTime.slice(0, storedPeriodTime.length - 2));
-            setRemindPeriodTimeMeridian(storedPeriodTime.slice(-2));
-
+            let parsedTime = storedPeriodTime.split(" ")
+            setRemindPeriodTime(parsedTime[0]);
+            setRemindPeriodTimeMeridian(parsedTime[1]);
         }
 
-        if(storedSymptomTime) {
-            setRemindSymptomsTime(storedSymptomTime.slice(0, storedSymptomTime.length - 2));
-            setRemindSymptomsTimeMeridian(storedSymptomTime.slice(-2));
+        if (storedSymptomTime) {
+            let parsedTime = storedSymptomTime.split(" ")
+            setRemindSymptomsTime(parsedTime[0]);
+            setRemindSymptomsTimeMeridian(parsedTime[1]);
         }
+
 // [periodFreq, periodTime, periodMerdian, symptomsFreq, symptomsTime, symptomsMerdian], same pattern for setting functions
         setNotificationSettingsValues([remindPeriodFreq, remindPeriodTime, remindPeriodTimeMeridian,
                                         remindSymptomsFreq, remindSymptomsTime, remindSymptomsTimeMeridian]);
@@ -426,7 +431,7 @@ useEffect(() => {
 
     const getCorrectDate = (daysAdded, time) => {
         // takes a string time and parses it
-        const timeToSet = time.split("")
+        const timeToSet = time.split(":")
         let hour = parseInt(timeToSet[0].split(":")[0])
         let minute = parseInt(timeToSet[0].split(":")[1])
 
@@ -437,8 +442,8 @@ useEffect(() => {
         // return date;
         const date = new Date();
         date.setDate(date.getDate());
-        date.setHours(10);
-        date.setMinutes(40);
+        date.setHours(hour);
+        date.setMinutes(minute);
         console.log("DATE SET", date);
         return date;
     };
