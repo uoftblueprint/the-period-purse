@@ -10,7 +10,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Footer } from '../services/utils/footer';
 import { ScrollView } from 'react-native-gesture-handler';
-import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, POSTRemindLogPeriod, POSTRemindLogSymptoms, POSTUpdateOnePreference } from '../services/SettingsService';
+import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, POSTRemindLogSymptoms, POSTUpdateOnePreference, GETRemindLogSymptomsFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsTime } from '../services/SettingsService';
 import {TRACK_SYMPTOMS, VIEWS} from '../services/utils/constants'
 import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
@@ -46,7 +46,7 @@ const SocialMediaButton = (props) => {
 
 const Preferences = (props) => {
     let WHITE = '#FFFFFF'
-    let TEAL = "#73C7B7" 
+    let TEAL = "#73C7B7"
 
     const [flow, trackFlow] = useState('#FFFFFF');
     const [mood, trackMood] = useState('#FFFFFF');
@@ -192,15 +192,15 @@ const SettingsStackButton = (props) => {
         <SafeAreaView style={styles.optionView} >
 
         <Text style={styles.optionText}>{props.name}</Text>
-        <View>   
+        <View>
             <Icon
                     name="arrow-back-ios"
                     size={24}
                     color="#5A9F93"
                     style={{transform: [{rotateY: '180deg'}],}}
                     /></View>
-     
-       
+
+
 
         </SafeAreaView>
         <View
@@ -214,7 +214,7 @@ const SettingsStackButton = (props) => {
 }
 
 const NotificationsButton = (props) => {
-return( 
+return(
 <View>
 <View style={styles.reminderTextBox}>
     <Text style={styles.remindText}>{props.text}</Text>
@@ -227,7 +227,7 @@ return(
             left: "-10%"
         }}
     />
-   
+
 </View>
 <Text style={styles.remindSubtext}>{props.subtext}</Text>
          <View
@@ -245,7 +245,7 @@ const NotificationSettings = (props) => {
     const [remindSymptomsEnabled, setRemindSymptomsEnabled] = useState(false);
     const [numberOfDaysUntilPeriod, setNumberOfDaysUntilPeriod] = useState(0);
 
-// needed for Notification Page 
+// needed for Notification Page
     const [remindPeriodFreq, setRemindPeriodFreq] = useState("2 days");
     const [remindPeriodTime, setRemindPeriodTime] = useState("10:00");
     const [remindPeriodTimeMeridian, setRemindPeriodTimeMeridian] = useState("AM");
@@ -253,14 +253,14 @@ const NotificationSettings = (props) => {
     const [remindSymptomsTime, setRemindSymptomsTime] = useState("10:00");
     const [remindSymptomsTimeMeridian, setRemindSymptomsTimeMeridian] = useState("AM");
 
-// get the days until period 
+// get the days until period
     useFocusEffect(React.useCallback(() => {
         CycleService.GETPredictedDaysTillPeriod().then(numDays => {
             let toSet;
             if(numDays && numDays != -1){
               toSet = numDays;
             }
-            else{ 
+            else{
               toSet = 0
             }
             setNumberOfDaysUntilPeriod(toSet)
@@ -268,10 +268,10 @@ const NotificationSettings = (props) => {
           .catch(() => {
             setDaysTillPeriod(0);
           });
-   
+
      }, []));
 
-// get whether the switches need to be turned on 
+// get whether the switches need to be turned on
 useEffect(() => {
     async function getRemindPeriodEnabled () {
         let remindPeriod = await GETRemindLogPeriod()
@@ -320,7 +320,7 @@ useEffect(() => {
 
         setNotificationSettingFunctions([setRemindPeriodFreq, setRemindPeriodTime, setRemindPeriodTimeMeridian,
                                         setRemindSymptomsFreq, setRemindSymptomsTime, setRemindSymptomsTimeMeridian]);
-                        
+
     }
     getFreqTimes();
 }, []);
@@ -329,7 +329,7 @@ useEffect(() => {
         setRemindPeriodEnabled(!remindPeriodEnabled)
         // POSTRemindLogPeriod(remindPeriodEnabled); // post here
         let daysAheadStr = remindPeriodFreq.split(" ")[0]
-        
+
         let daysAhead = parseInt(daysAheadStr);
         console.log("334", remindPeriodEnabled);
         if(!remindPeriodEnabled){
@@ -344,19 +344,19 @@ useEffect(() => {
                     repeats: true
                 })
             // }
-            
+
         } else {
             PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
         }
-    }; 
-    const toggleSymptomsSwitch = () => { // post here 
+    };
+    const toggleSymptomsSwitch = () => { // post here
 
-        setRemindSymptomsEnabled(!remindSymptomsEnabled);    
+        setRemindSymptomsEnabled(!remindSymptomsEnabled);
         POSTRemindLogSymptoms(remindSymptomsEnabled);
-        
+
         if (remindSymptomsEnabled) {
             console.log("REMIND1", remindPeriodFreq);
-            // Schedule a reoccuring notification 
+            // Schedule a reoccuring notification
             switch (remindPeriodFreq) {
                 case "Every day":
                     PushNotificationIOS.addNotificationRequest({
@@ -443,25 +443,25 @@ useEffect(() => {
         return date;
     };
 return (
-  
+
     <SafeAreaView style={{top: "-5%"}}>
         <Text style={styles.heading}>Notifications</Text>
-        <NotificationsButton 
-            text={"Remind me to log period"} 
-            subtext={`${remindPeriodFreq} before at ${remindPeriodTime + " " + remindPeriodTimeMeridian}`} 
-            toggle={togglePeriodSwitch} 
+        <NotificationsButton
+            text={"Remind me to log period"}
+            subtext={`${remindPeriodFreq} before at ${remindPeriodTime + " " + remindPeriodTimeMeridian}`}
+            toggle={togglePeriodSwitch}
             enabled={remindPeriodEnabled} />
         <NotificationsButton
             text={"Remind me to log symptoms"}
-            subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`} 
+            subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`}
             toggle={toggleSymptomsSwitch}
             enabled={remindSymptomsEnabled}/>
-  <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}> 
+  <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}>
     <View>
-    
+
      <SafeAreaView style={styles.notificationSettingsView} >
     <Text style={styles.optionText}>Customize notifications</Text>
-    <View>   
+    <View>
      <Icon
             name="arrow-back-ios"
             size={24}
@@ -609,7 +609,7 @@ const styles = StyleSheet.create({
     },
     reminderTextBox : {
         flexDirection: 'row',
-        justifyContent: 'space-between', 
+        justifyContent: 'space-between',
         padding: "3%",
         height: 72,
         left: 0
@@ -658,5 +658,5 @@ const styles = StyleSheet.create({
     termsText: {
         color: "#5A9F93",
     },
-    
+
 });

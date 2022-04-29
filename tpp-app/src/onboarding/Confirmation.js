@@ -2,7 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { WideButton } from './components/ButtonComponents';
-import { HorizontalLine, SymptomIconContainer, BackButtonContainer } from './components/ContainerComponents';
+import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
+import { SETTutorial } from '../services/TutorialService';
+
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
@@ -41,7 +43,7 @@ export default function Confirmation ({ route, navigation }) {
       iconComponents.push(<SleepIcon key="sleep" style={styles.icon}/>);
     if(trackingPreferences[3])  // cramps
       iconComponents.push(<CrampsIcon key="cramps" style={styles.icon}/>);
-    if(trackingPreferences[4])  // exercise 
+    if(trackingPreferences[4])  // exercise
       iconComponents.push(<ExerciseIcon key="exercise" style={styles.icon}/>);
     return (<SymptomIconContainer>{iconComponents}</SymptomIconContainer>);
   }
@@ -54,7 +56,7 @@ export default function Confirmation ({ route, navigation }) {
   }
 
   function Length() {
-    if(periodLength) 
+    if(periodLength)
       return (<Text style={styles.text}>{periodLength} days</Text>);
     else
       return (null);
@@ -93,12 +95,12 @@ export default function Confirmation ({ route, navigation }) {
       </View>
       <HorizontalLine></HorizontalLine>
 
-      <WideButton 
+      <WideButton
         title="Let's go!" color="#5A9F93" bottom="-8%"
         onPress={() => {
-          POSTJoinedDate()
-          navigation.navigate(STACK_SCREENS.MAIN_PAGE)}
-        }
+          POSTJoinedDate();
+          SETTutorial(true).finally(() => navigation.navigate(STACK_SCREENS.MAIN_PAGE));
+        }}
       />
     </ImageBackground>
   );
