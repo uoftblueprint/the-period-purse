@@ -12,7 +12,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import { GETTutorial } from '../../services/TutorialService';
 import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
-import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 
 
 export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
