@@ -89,7 +89,7 @@ export default function CycleHistoryScreen({navigation}){
                 <Header navigation={navigation}/>
                 <SafeAreaView style={styles.cardContainer}>
                     <View style={styles.buttonContainer}>
-                        {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>).reverse()}
+                        {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>)}
                     </View>
                     <ExpandedHistoryCard 
                         navigation={navigation} 
