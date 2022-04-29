@@ -4,7 +4,7 @@ import { appleAuth } from '@invertase/react-native-apple-authentication';
 import {Alert, StyleSheet, View} from "react-native";
 import {
     GETBackupFromiCloud,
-    POSTAppleIdentity,
+    POSTAppleIdentity, POSTBackupToiCloud,
     userHasiCloudBackup
 } from "../services/AppleService";
 import {STACK_SCREENS} from "./Confirmation";
@@ -35,7 +35,22 @@ export async function onAppleButtonPress({navigation, comingFromSettings}) {
           // Coming from Settings' Backup Account
           if (comingFromSettings) {
               // replace icloud with AsyncStorage
-              console.log("Merge backup");
+              await POSTBackupToiCloud()
+                  .then(() => {
+                      Alert.alert(
+                          "Backup Successful",
+                          "Your data has been backed up to your iCloud!", [
+                              {
+                                  text: "OK",
+                                  style: "default",
+                                  onPress: () => navigation.goBack()
+                              }
+                          ]
+                      );
+                  })
+                  .catch((e) => {
+                      console.log(e);
+                  });
 
           // Coming from Welcome screen
           } else {

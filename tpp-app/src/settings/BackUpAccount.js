@@ -4,9 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import {appleAuth, AppleButton} from '@invertase/react-native-apple-authentication';
 import {
-    GETAppleIdentityToken,
     GETAppleUser,
-    GETBackupFromiCloud, GETLastSavedBackupTime,
+    GETLastSavedBackupTime,
     POSTBackupToiCloud
 } from "../services/AppleService";
 import {onAppleButtonPress} from "../onboarding/AppleSignin";
