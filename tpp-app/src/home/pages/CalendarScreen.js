@@ -9,6 +9,7 @@ import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import {getISODate, initializeEmptyYear} from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
+import ErrorFallback from "../../error/error-boundary";
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import { GETTutorial } from '../../services/TutorialService';
 import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
@@ -169,6 +170,7 @@ export default function CalendarScreen ({ route, navigation }) {
 
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (
+    <ErrorFallback>
         <SafeAreaView style={styles.container}>
             <View style={styles.dropdown}>
             <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
@@ -187,7 +189,8 @@ export default function CalendarScreen ({ route, navigation }) {
             <View style={styles.calendar}>
                 <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
             </View>
-       </SafeAreaView>
+        </SafeAreaView>
+    </ErrorFallback>
     )
 }
 

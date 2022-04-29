@@ -7,6 +7,7 @@ import CycleService from '../../services/cycle/CycleService';
 import {GETStoredYears} from '../../services/utils/helpers';
 import {useFocusEffect} from '@react-navigation/native';
 import { set } from 'date-fns';
+import ErrorFallback from "../../error/error-boundary";
 
 function Header({navigation}){
     return(
@@ -84,6 +85,7 @@ export default function CycleHistoryScreen({navigation}){
     }, [storedYears]));
 
     return (
+     <ErrorFallback>
         <SafeAreaView style={styles.container}>
             <ImageBackground source={background} style={styles.container}>
                 <Header navigation={navigation}/>
@@ -100,6 +102,7 @@ export default function CycleHistoryScreen({navigation}){
                 </SafeAreaView>
             </ImageBackground>
         </SafeAreaView>
+  </ErrorFallback>
     )
 }
 

@@ -11,6 +11,7 @@ import BloodDrop from '../../../ios/tppapp/Images.xcassets/icons/flow_with_heart
 import Calendar from '../../../ios/tppapp/Images.xcassets/icons/menstruation_calendar.svg';
 import Paddy from '../../../ios/tppapp/Images.xcassets/icons/paddy.svg';
 import { Footer } from '../../services/utils/footer';
+import ErrorFallback from "../../error/error-boundary";
 
 function InfoCard(props){
   let DefaultText = <Text style={styles.messageForDefault}>Please start logging to learn more. </Text>;
@@ -139,6 +140,7 @@ export default function CycleScreen ({navigation}){
   }
   const cardContainerStyle = showTip ? Object.assign({}, styles.cardContainer, tipVisibleStyle) : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
   return (
+  <ErrorFallback>
     <SafeAreaView style={styles.container}>
       <ImageBackground source={background} style={styles.container}>    
         {/* View that contains all the relevant cards */}
@@ -176,7 +178,7 @@ export default function CycleScreen ({navigation}){
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
-
+  </ErrorFallback>
   )
 }
 

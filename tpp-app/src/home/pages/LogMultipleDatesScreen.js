@@ -9,6 +9,7 @@ import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/utils/constants";
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
+import ErrorFallback from "../../error/error-boundary";
 import Constants from 'expo-constants';
 
 const DayComponent = ({props}) => {
@@ -251,21 +252,22 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.navbarContainer}>
+        <ErrorFallback>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.navbarContainer}>
 
-                <TouchableOpacity onPress={() => onClose()} style={styles.close}>
-                  <CloseIcon fill={'#181818'}/>
-                </TouchableOpacity>
-                <View style={styles.navbarTextContainer}>
+                    <TouchableOpacity onPress={() => onClose()} style={styles.close}>
+                      <CloseIcon fill={'#181818'}/>
+                    </TouchableOpacity>
+                    <View style={styles.navbarTextContainer}>
 
-                    <Text style={styles.navbarTitle}>Tap date to log period</Text>
-                    <Text style={styles.navbarSubTitle}>
-                        Selected dates will have their Flow level set to Medium
-                    </Text>
+                        <Text style={styles.navbarTitle}>Tap date to log period</Text>
+                        <Text style={styles.navbarSubTitle}>
+                            Selected dates will have their Flow level set to Medium
+                        </Text>
 
+                    </View>
                 </View>
-            </View>
             <View style={styles.calendar}>
                 <Calendar
                     numSelected={numSelected}
@@ -279,6 +281,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>
         </SafeAreaView>
+  </ErrorFallback>
     )
 }
 
