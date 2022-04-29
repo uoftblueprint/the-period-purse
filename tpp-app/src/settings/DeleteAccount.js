@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         left: "7.5%",
-        top: "-90%"
+        top: "-100%"
     },
     deleteButtonText: {
         color: '#FFF',
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         letterSpacing: -0.3,
         marginLeft: "7.5%",
         marginBottom: "5%",
-        top: "-90%",
+        top: "-100%",
         lineHeight: 20,
         left: 0
     },
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         letterSpacing: -0.3,
         marginBottom: "5%",
         marginLeft: "7.5%",
-        top: "-90%"
+        top: "-100%"
     },
     textContainer: {
         justifyContent: 'space-evenly',

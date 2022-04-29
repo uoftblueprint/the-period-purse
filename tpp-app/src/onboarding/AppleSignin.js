@@ -5,12 +5,10 @@ import {Alert, StyleSheet, View} from "react-native";
 import {
     GETBackupFromiCloud,
     POSTAppleIdentity,
-    userHasiCloudBackup,
-    userHasiCloudBackupp
-} from "../services/AppleCredentialsService";
+    userHasiCloudBackup
+} from "../services/AppleService";
 import {STACK_SCREENS} from "./Confirmation";
 import {STACK_SCREENS as SETTINGS_STACK_SCREEN } from "../settings/SettingsNavigator";
-import * as iCloudStorage from 'react-native-cloud-store';
 
 export async function onAppleButtonPress({navigation, comingFromSettings}) {
     // performs login request
@@ -30,12 +28,13 @@ export async function onAppleButtonPress({navigation, comingFromSettings}) {
       // user is authenticated, save their apple auth related fields
       console.log(appleAuthRequestResponse);
       await POSTAppleIdentity(appleAuthRequestResponse.user, appleAuthRequestResponse.fullName.givenName, appleAuthRequestResponse.fullName.familyName, appleAuthRequestResponse.identityToken);
-
+      console.log("comingFromSettings", comingFromSettings);
       // Check if they have an existing file in their iCloud for M. Nation
       // If yes, ask if they want to load up their backed up data
       if (await userHasiCloudBackup()) {
           // Coming from Settings' Backup Account
           if (comingFromSettings) {
+              // replace icloud with AsyncStorage
               console.log("Merge backup");
 
           // Coming from Welcome screen
@@ -52,7 +51,10 @@ export async function onAppleButtonPress({navigation, comingFromSettings}) {
                           text: "Yes",
                           style: "default",
                           // Retrieve their backup
-                          onPress: async () => await GETBackupFromiCloud()
+                          onPress: async () =>
+                              GETBackupFromiCloud().then(() => {
+                                  navigation.navigate(STACK_SCREENS.MAIN_PAGE);
+                              })
                       }
                   ]
               );

@@ -159,6 +159,6 @@ export const APPLE_CREDENTIALS = {
 }
 
 export const ICLOUD = {
-  BACKUP_KEYS: "backupKeys",
-  BACKUP_VALUES: "backupValues"
+  BACKUP_KEY: "tpp-backup",
+  LAST_SAVED_TIME: "lastSavedTime"
 }
