@@ -293,7 +293,8 @@ export default function LogSymptomsScreen({ navigation, route }) {
   return (
     <ErrorFallback>
     <SafeAreaView style={styles.screen}>
-
+        {/* HEADER NAV */}
+        <View style={styles.navbarContainer}>
             {/* CLOSE BUTTON */}
             <TouchableOpacity
               onPress={() => {
@@ -332,7 +333,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
                 : <View opacity={0}><DateArrow/></View>
               }
             </View>
-
+        </View>
 
         <KeyboardAwareScrollView contentContainerStyle={styles.content} extraHeight={100} extraScrollHeight={120}>
         {/* SYMPTOM ACCORDIONS */}
