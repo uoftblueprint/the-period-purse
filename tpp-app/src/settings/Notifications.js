@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import Accordion from './NotificationAccordion'
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import ErrorFallback from "../error/error-boundary";
 
 
 export default function Notifications () {
@@ -57,52 +58,54 @@ useEffect(() => {
 }, []);
 
     return (
-        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
-                        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>  
-        <SafeAreaView>
-        <View style={{top: -90}}>
+        <ErrorFallback>
+            <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+                            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <SafeAreaView>
+            <View style={{top: -90}}>
 
-            <NotificationStack name={"Remind me to log period"}/>
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
+                <NotificationStack name={"Remind me to log period"}/>
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
 
-            <Accordion title={"How many days in advance"} selectedText={remindPeriodFreq} type={"days"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/> 
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-            <Accordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} type={"periodTime"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-            <NotificationStack name={"Remind me to log symptoms"}/>
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-            <Accordion title={"Repeat"} selectedText={remindSymptomsFreq}  type={"howOften"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/> 
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-            <Accordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} type={"symptomTime"} pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>   
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-        </View>
-        </SafeAreaView>
-        </ScrollView>
-        </ImageBackground>
+                <Accordion title={"How many days in advance"} selectedText={remindPeriodFreq} type={"days"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
+                <Accordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} type={"periodTime"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
+                <NotificationStack name={"Remind me to log symptoms"}/>
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
+                <Accordion title={"Repeat"} selectedText={remindSymptomsFreq}  type={"howOften"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
+                <Accordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} type={"symptomTime"} pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
+            </View>
+            </SafeAreaView>
+            </ScrollView>
+            </ImageBackground>
+        </ErrorFallback>
     )
 }                
 

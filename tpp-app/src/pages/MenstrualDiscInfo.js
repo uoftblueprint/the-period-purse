@@ -3,9 +3,11 @@ import {StyleSheet, Text, View, Image, ImageBackground, SafeAreaView} from 'reac
 import { BackButton } from '../home/components/BackButtonComponent';
 import DiscImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/disc_image.png';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import ErrorFallback from "../error/error-boundary";
 
 export default function MenstrualDiscInfo({ navigation }) {
     return (
+    <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
@@ -30,7 +32,8 @@ export default function MenstrualDiscInfo({ navigation }) {
 
             </SafeAreaView>
         </ImageBackground>
-    )
+    </ErrorFallback>
+        )
 }
 
 const styles = StyleSheet.create({

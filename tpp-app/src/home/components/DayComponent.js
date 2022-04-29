@@ -23,7 +23,7 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
         // Basically whatever special value that is attached to the specific key in the Symptoms object
         // i.e. for flow it would be HEAVY/MEDIUM/LIGHT
         // for sleep it will be a number etc.
-        let symptomAttribute = marking.symptoms[viewKey]
+        let symptomAttribute = marking.symptoms ? marking.symptoms[viewKey] : null;
 
         // If disabled
         if (marking.disable) {
@@ -63,8 +63,8 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
 
             renderedIcon = createElement(ICON_TYPES[iconName], {
                 style: styles.dayIcon,
-                width: ICON_SIZE.height,
-                height: ICON_SIZE.width,
+                width: ICON_SIZE.width,
+                height: ICON_SIZE.height,
                 fill: textColor
             })
             
