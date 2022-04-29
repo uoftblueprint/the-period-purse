@@ -16,7 +16,7 @@ export default function PeriodUnderwearInfo({navigation}) {
                     source= {UnderwearImage}
                     style={styles.image}
                         />
-                    <Text style={styles.titleText}>Period {"\n"} Underwears</Text>
+                    <Text style={styles.titleText}>Period {"\n"} Underwear</Text>
 
                     <Text style={styles.bodyText}>
                     Quick, your period is “OMW”- period underwear has you covered. Wow, the first period
