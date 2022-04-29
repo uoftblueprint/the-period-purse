@@ -11,6 +11,7 @@ import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
 import ErrorFallback from "../../error/error-boundary";
 import Constants from 'expo-constants';
+import LoadingVisual from '../components/LoadingVisual';
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -93,6 +94,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     // const [selectedDates, setSelectedDates] = useState([]);
     const [numSelected, setNumSelected] = useState(0);
     const [markedDates, setMarkedDates] = useState({});
+    const [loaded, setLoaded] = useState(false);
     const DESELECTED_COLOR = '#FFFFFF';
     const SELECTED_COLOR = '#E44545';
 
@@ -140,6 +142,14 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
         populateMarkedDates();
     }, []);
+
+    useEffect(() => {
+        () => {
+            if(markedDates){
+                setLoaded(true);
+            }
+        }
+    }, [markedDates])
 
     const unsavedChanges = {
         title: "Unsaved changes",
@@ -221,7 +231,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 console.log(error);
             }
         }
-        
+
         navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
         await calculateAverages();
     }
@@ -250,6 +260,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         }
     }
 
+    if (loaded){
 
     return (
         <ErrorFallback>
@@ -268,6 +279,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
 
                     </View>
                 </View>
+
             <View style={styles.calendar}>
                 <Calendar
                     numSelected={numSelected}
@@ -276,13 +288,18 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                     setSelectedDates={setSelectedDates}
                     markedDates={markedDates}
                 />
-            </View>  
+            </View>
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
                 <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>
         </SafeAreaView>
   </ErrorFallback>
     )
+
+    }
+    else{
+        return (<LoadingVisual/>)
+    }
 }
 
 const styles = StyleSheet.create({

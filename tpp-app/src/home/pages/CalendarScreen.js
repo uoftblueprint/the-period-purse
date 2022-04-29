@@ -11,6 +11,7 @@ import {getISODate, initializeEmptyYear} from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
 import ErrorFallback from "../../error/error-boundary";
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
+import LoadingVisual from '../components/LoadingVisual';
 import { GETTutorial } from '../../services/TutorialService';
 import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
 
@@ -91,9 +92,14 @@ export default function CalendarScreen ({ route, navigation }) {
 
     const [cachedYears, setCachedYears] = useState({})
     const [marked, setMarked] = useState({})
+    const [loaded, setLoaded] = useState(false);
+
+
 
     useEffect(() => {
         async function fetchYearData() {
+
+            let promises = [];
             // Whenever the user scrolls and changes what year is in view
             for(let year of yearInView) {
 
@@ -109,7 +115,7 @@ export default function CalendarScreen ({ route, navigation }) {
 
                     let newCachedYears = {}
                     newCachedYears[year] = true
-                    setCachedYears(cachedState => ({...cachedState, ...newCachedYears}))
+                    promises.push(setCachedYears(cachedState => ({...cachedState, ...newCachedYears})))
 
                     let newMarkedData = {}
                     // We know that this data is now in the variable, so now attempt
@@ -130,9 +136,16 @@ export default function CalendarScreen ({ route, navigation }) {
                             }
                         }
                     }
-                    setMarked(markedState => ({...markedState, ...newMarkedData}));
+                    promises.push(setMarked(markedState => ({...markedState, ...newMarkedData})));
                 }
             }
+
+            Promise.all(promises).then(
+                () => {
+                    setLoaded(true);
+                }
+            )
+
         }
 
         fetchYearData()
@@ -158,40 +171,36 @@ export default function CalendarScreen ({ route, navigation }) {
         }, [route.params?.inputData])
     )
 
-    const toggleSelectedView = (targetView, toggleable) => {
-        if (toggleable) {
-            if (selectedView === targetView) {
-                setSelectedView(VIEWS.Nothing);
-            } else {
-                setSelectedView(targetView);
-            }
-        }
-    }
 
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
-    return (
-    <ErrorFallback>
-        <SafeAreaView style={styles.container}>
-            <View style={styles.dropdown}>
-            <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
-                <Text style={styles.dropdownText}>{selectedView}</Text>
-                <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
-                {renderedArrow}
-            </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LEGEND_PAGE, {screen: CALENDAR_STACK_SCREENS.LEGEND_PAGE})}
-              style={styles.legend}>
-              <LegendButton></LegendButton>
-            </TouchableOpacity>
-            </View>
-            <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={setSelectedView}/>
+    if (loaded){
+        return (
+        <ErrorFallback>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.dropdown}>
+                <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
+                    <Text style={styles.dropdownText}>{selectedView}</Text>
+                    <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
+                    {renderedArrow}
+                </TouchableOpacity>
+                <TouchableOpacity
+                onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LEGEND_PAGE, {screen: CALENDAR_STACK_SCREENS.LEGEND_PAGE})}
+                style={styles.legend}>
+                <LegendButton></LegendButton>
+                </TouchableOpacity>
+                </View>
+                <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={setSelectedView}/>
 
-            <View style={styles.calendar}>
-                <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
-            </View>
-        </SafeAreaView>
-    </ErrorFallback>
-    )
+                <View style={styles.calendar}>
+                    <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
+                </View>
+            </SafeAreaView>
+        </ErrorFallback>
+        )
+    }
+    else {
+        return (<LoadingVisual/>)
+    }
 }
 
 const styles = StyleSheet.create({
