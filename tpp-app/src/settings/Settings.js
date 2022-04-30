@@ -356,7 +356,7 @@ useEffect(() => {
                 if (!remindPeriodEnabled) {
                     PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
                 } else {
-                    await GETPredictedDaysTillPeriod()
+                    await CycleService.GETPredictedDaysTillPeriod();
                 }
             });
 
@@ -621,7 +621,7 @@ const styles = StyleSheet.create({
         color: '#6D6E71',
         left: 4,
         zIndex:0,
-
+        width: 300,
     },
 
     iconsContainer: {

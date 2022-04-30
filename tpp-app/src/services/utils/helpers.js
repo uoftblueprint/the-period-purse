@@ -203,17 +203,13 @@ export const getCorrectDate = (daysAdded, time) => {
   // takes a string time and parses it
   const timeToSet = time.split(":")
   let hour = parseInt(timeToSet[0].split(":")[0])
-  let minute = parseInt(timeToSet[0].split(":")[1])
+  console.log(hour);
 
-  // const date = new Date();
-  // date.setDate(date.getDate() + daysAdded);
-  // date.setHours(hour);
-  // date.setMinutes(minute);
-  // return date;
   const date = new Date();
-  date.setDate(date.getDate());
+  date.setDate(date.getDate() + daysAdded);
   date.setHours(hour);
-  date.setMinutes(minute);
+  date.setMinutes(0);
+  date.setSeconds(0);
   console.log("DATE SET", date);
   return date;
 };
