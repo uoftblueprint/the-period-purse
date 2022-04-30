@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, Image, ImageBackground, View, TouchableOpacity } from 'react-native';
+import {StyleSheet, Text, Image, ImageBackground, View, TouchableOpacity, Button} from 'react-native';
 import MNationIcon from '../../ios/tppapp/Images.xcassets/SplashScreen.imageset/splashscreen.png'
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { NavigationContainer } from '@react-navigation/native';
@@ -18,10 +18,11 @@ import { STACK_SCREENS } from './Confirmation';
 import AppleSignin from './AppleSignin';
 import PrivacyPolicyScreen from '../home/pages/PrivacyPolicyScreen';
 import TermsAndConditions from '../home/pages/TermsAndConditions';
+import ErrorFallback from "../error/error-boundary";
 
 // Get Start Page Component
 const GetStarted = ({ navigation }) => {
-  
+
   const openPrivacyPolicy = () => {
     navigation.navigate(STACK_SCREENS.PRIVACY_POLICY)
   }
@@ -30,6 +31,7 @@ const GetStarted = ({ navigation }) => {
   }
 
   return(
+  <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <Image style={styles.appIcon} source={MNationIcon}/>
       <Text style={styles.titleText}>Welcome!</Text>
@@ -45,10 +47,11 @@ const GetStarted = ({ navigation }) => {
           </TouchableOpacity>
           <Text style={styles.textLink}> and </Text>
           <TouchableOpacity onPress={openPrivacyPolicy} style={styles.textLink} >
-              <Text style={styles.termsText}>Privacy Policy. </Text>
+              <Text style={styles.termsText}>Privacy Policy </Text>
           </TouchableOpacity>
       </View>
     </ImageBackground>
+  </ErrorFallback>
   )
 };
 
@@ -102,12 +105,12 @@ export default function Welcome() {
         name={STACK_SCREENS.CONFIRMATION}
         component={Confirmation}
       />
-      <Stack.Screen 
-        name={STACK_SCREENS.PRIVACY_POLICY} 
+      <Stack.Screen
+        name={STACK_SCREENS.PRIVACY_POLICY}
         component={PrivacyPolicyScreen}
       />
-      <Stack.Screen 
-        name={STACK_SCREENS.TERMS_AND_CONDITION} 
+      <Stack.Screen
+        name={STACK_SCREENS.TERMS_AND_CONDITION}
         component={TermsAndConditions}
       />
       </Stack.Navigator>

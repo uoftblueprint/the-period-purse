@@ -6,6 +6,8 @@ import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenB
 import {GETFactCycle, POSTFactCycle } from "../info/InfoService"
 import { getFullCurrentDateString } from "../services/utils/helpers.js"
 import dykData from "../pages/DYKFacts.json"
+import ErrorFallback from "../error/error-boundary";
+
 
 export default function DidYouKnow({ navigation }) {
     const [factCycleDate, setFactCycleDate] = useState(""); // 0th index
@@ -56,23 +58,24 @@ export default function DidYouKnow({ navigation }) {
     console.log(`This is fact on DYK page: ${retrievedFact}`)
 
     return (
-        <ImageBackground source={OnboardingBackground} style={styles.container}>
-            <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-             <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
-                <Image
-                source= {PadImageHappy}
-                style={styles.image}
-                    />
-            <Text style={styles.bodyText}>
-            <Text style={styles.titleText}>Did you know?</Text>
-                {"\n"}
-                {"\n"}
-               {fact}
-            </Text>
-
-            </SafeAreaView>
-        </ImageBackground>
-    )
+        <ErrorFallback>
+            <ImageBackground source={OnboardingBackground} style={styles.container}>
+                <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                 <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
+                    <Image
+                    source= {PadImageHappy}
+                    style={styles.image}
+                        />
+                <Text style={styles.bodyText}>
+                <Text style={styles.titleText}>Did you know?</Text>
+                    {"\n"}
+                    {"\n"}
+                   {fact}
+                </Text>
+                </SafeAreaView>
+            </ImageBackground>
+        </ErrorFallback>
+            )
 }
 
 const styles = StyleSheet.create({

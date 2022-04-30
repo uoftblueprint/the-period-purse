@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ImageBackground, ScrollView, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import {Card, Text} from 'react-native-elements';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
@@ -8,7 +8,6 @@ import { NextButton, SymptomsChoicesButton, SkipButton } from './components/Butt
 import { BodyText, TitleText } from './components/TextComponents';
 import { TwoButtonContainer, BackButtonContainer, SymptomsButtonContainer } from './components/ContainerComponents';
 import { POSTSymptomsToTrack } from '../services/OnboardingService';
-import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
@@ -17,6 +16,7 @@ import BackgroundShape from "../../ios/tppapp/Images.xcassets/icons/background_s
 import CalendarIcon from "../../ios/tppapp/Images.xcassets/icons/symptoms_track_img.svg";
 import BarIcon from "../../ios/tppapp/Images.xcassets/icons/onboard_bar3.svg";
 import FlowDeselected from "../../ios/tppapp/Images.xcassets/icons/flow_deselected.svg";
+import ErrorFallback from "../error/error-boundary";
 
 let WHITE = "#FFFFFF"  // button is not selected
 let TEAL = "#73C7B7"  // button is selected
@@ -24,15 +24,11 @@ export default function SymptomsChoices ({ route, navigation }) {
   const { periodLength, periodStart, periodEnd } = route.params;
 
   // checks for button selection are based on the background color 
-  const [flow, setFlow] = useState(TEAL);
   const [sleep, setSleep] = useState(WHITE);
   const [mood, setMood] = useState(WHITE);
   const [cramp, setCramp] = useState(WHITE);
   const [exercise, setExercise] = useState(WHITE);
 
-  const handleFlow = () => { 
-    flow == WHITE ? setFlow(TEAL) : setFlow(WHITE);
-  }
   const handleSleep = () => { 
     sleep == WHITE ? setSleep(TEAL) : setSleep(WHITE);
   }
@@ -47,6 +43,7 @@ export default function SymptomsChoices ({ route, navigation }) {
   }
 
   return (
+  <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
         <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.PERIOD_START, {
@@ -55,18 +52,18 @@ export default function SymptomsChoices ({ route, navigation }) {
       </BackButtonContainer>
       
       <SafeAreaView pointerEvents="none" style={{ alignItems: 'center' }}>
-        <BackgroundShape style={{ top: 65 }}/>
-        <CalendarIcon width='250' height='250' style={{ bottom: "34%" }}/>
-        <BarIcon style={{ bottom: "33%" }}/>
+        <BackgroundShape style={{ top: 100 }}/>
+        <CalendarIcon width='250' height='250' style={{ bottom: "30%" }}/>
+        <BarIcon style={{ bottom: "31%" }}/>
         <TitleText style={{ bottom: "30%" }}>
           What symptoms do you {'\n'} want to track?
         </TitleText>
-        <BodyText style={{ bottom: "29%" }}>
+        <BodyText style={{ bottom: "31%" }}>
           You can change these anytime in your settings. {'\n'}
         </BodyText>
         <Card containerStyle={[styles.card]}>
           <FlowDeselected style={styles.image}/>
-          <Text style={{marginTop: '3%', marginLeft: '28%', marginRight: '4%', fontSize: 14.5}}>By default, we'll always track your period flow. Choose up to four other symptoms to track.</Text>
+          <Text style={{marginLeft: '28%', marginRight: '4%', fontSize: 14.5}}>By default, we'll always track your period flow. Choose up to four other symptoms to track.</Text>
         </Card>
       </SafeAreaView>
 
@@ -85,7 +82,7 @@ export default function SymptomsChoices ({ route, navigation }) {
         </SafeAreaView>
       </SymptomsButtonContainer>
 
-      <TwoButtonContainer>
+      <TwoButtonContainer style={{bottom: "3%"}}>
         <SkipButton title="Skip" onPress={async () => {
           POSTSymptomsToTrack(true, false, false, false, false)
               .then(() => {
@@ -111,9 +108,10 @@ export default function SymptomsChoices ({ route, navigation }) {
                   });
                 });
           }}
-          disabled={[flow, mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
+          disabled={[mood, sleep, cramp, exercise].some((element) => element == TEAL) ? false : true}/>
       </TwoButtonContainer>
     </ImageBackground>
+  </ErrorFallback>
   );
 }
 
@@ -135,10 +133,10 @@ const styles = StyleSheet.create({
     top: "30%"
   },
   card: {
-    bottom: '30%',
+    bottom: '33%',
     borderRadius: 12,
     width: '88%',
-    height: '11%',
+    height: '9%',
     borderWidth: 0,
     shadowColor: 'rgba(0,0,0, 0.0)', // Remove Shadow for iOS
     shadowOffset: { height: 0, width: 0 },
@@ -148,6 +146,7 @@ const styles = StyleSheet.create({
   },
   image: {
     position: 'absolute', 
-    marginLeft: '2%'
+    top: "-10%",
+    marginLeft: '2%',
   },
 });

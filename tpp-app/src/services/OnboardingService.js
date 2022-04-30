@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FLOW_LEVEL, TRACK_SYMPTOMS, KEYS } from './utils/constants.js'
-import { initializeEmptyYear } from "./utils/helpers.js"
+import { initializeEmptyYear, getISODate } from "./utils/helpers.js"
 import { Symptoms } from './utils/models.js';
+import {errorAlertModal} from "../error/errorAlertModal";
 
 /**
  * Initializes user's initial period length and average period length. 
@@ -22,6 +23,7 @@ export const POSTInitialPeriodLength = async (periodLength) => new Promise( asyn
         }
     } catch (e) {
         console.log(`POSTInitialPeriodLength error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 })
@@ -73,6 +75,7 @@ export const POSTInitialPeriodStart = async (periodStart, periodEnd) => new Prom
     }
     catch (e) {
         console.log(`POSTInitialPeriodStart error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 })
@@ -103,6 +106,40 @@ export const POSTSymptomsToTrack = async (flow, mood, sleep, cramps, exercise) =
         }
     } catch (e) {
         console.log(`POSTSymptomsToTrack error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 })
+
+/**
+ * Stores the date the user started using the app. 
+ * @returns a promise resolving when the set operation is complete 
+ */
+export const POSTJoinedDate = async() => new Promise( async (resolve, reject) => {
+    try {
+        await AsyncStorage.setItem(KEYS.JOINED_DATE, getISODate(new Date())).then(() => {
+            console.log(`Stored ${KEYS.JOINED_DATE} as ${getISODate(new Date())}`)
+            resolve();
+        });
+    }
+    catch (e) {
+        console.log(`POSTJoinedDate error: ${JSON.stringify(e)}`);
+        reject();
+    }
+})
+
+/**
+ * Retrieves the date the user started using the app. 
+ * @returns a date string representing the date the user started using the app
+ */
+ export const GETJoinedDate = async () => {   
+    try {
+        const joinedDate = await AsyncStorage.getItem(KEYS.JOINED_DATE);
+        console.log(`Retrieved ${KEYS.JOINED_DATE} as ${joinedDate}`);
+        return joinedDate;
+    }
+    catch (e) {
+        console.log(`GETJoinedDate error: ${JSON.stringify(e)}`);
+        reject();
+    }
+}

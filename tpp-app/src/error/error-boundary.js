@@ -1,25 +1,57 @@
 import * as React from "react";
 // import { ErrorBoundary } from "react-error-boundary";
-import { View, StyleSheet, TouchableHighlight, Text } from "react-native";
+import {View, StyleSheet, TouchableHighlight, Text, SafeAreaView, ImageBackground} from "react-native";
 import Warning from '../../ios/tppapp/Images.xcassets/icons/warning.svg';
+import OnboardingBackground
+    from "../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png";
 
-export default function ErrorFallback({error, resetErrorBoundary}) {
-    return (
-            <View role="alert" style={styles.errorContainer}>
-                <View style={styles.errorIcon}>
-                    <Warning/>
-                </View>
-                <Text style={styles.errorTitle}>Whoops</Text>
-                <Text style={styles.errorText}>Something went wrong. Please try again, or close the app and reopen it.</Text>
-                <TouchableHighlight underlayColor={'#EEEEEE'} style={styles.tryAgainButton}
-                                    onPress={() => { resetErrorBoundary() }}>
-                    <Text>Try Again</Text>
-                </TouchableHighlight>
-            </View>
-    )
-}
+export default class ErrorFallback extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+
+    componentDidCatch(error, errorInfo) {
+        // Catch errors in any components below and re-render with error message
+        console.log("ErrorFallback occurred with error: ", error, errorInfo);
+        this.setState({ hasError: true });
+    }
+
+    resetErrorBoundary() {
+        this.setState({ hasError: false });
+    }
+
+    render() {
+        if (this.state.hasError) {
+            // Error path
+            return (
+                <ImageBackground source={OnboardingBackground} style={styles.container}>
+                    <SafeAreaView role="alert" style={styles.errorContainer}>
+                        <View style={styles.errorIcon}>
+                            <Warning/>
+                        </View>
+                        <Text style={styles.errorTitle}>Whoops</Text>
+                        <Text style={styles.errorText}>Something went wrong. {"\n\n"} Please try again, or close the app and reopen it.</Text>
+                        {/*If the issue persists, please contact .... TODO Is there a support email they can contact? Ask Jana */}
+                        <TouchableHighlight underlayColor={'#EEEEEE'} style={styles.tryAgainButton}
+                                            onPress={() => { this.resetErrorBoundary() }}>
+                            <Text>Try Again</Text>
+                        </TouchableHighlight>
+                    </SafeAreaView>
+                </ImageBackground>
+            )
+        }
+        // Normally, just render children
+        return this.props.children;
+    }
+    }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        height: "100%",
+        width: "100%"
+    },
     errorContainer: {
         alignItems: 'center'
     },
@@ -65,7 +97,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         width: 129,
         height: 45,
-        top: 475,
+        top: 495,
         backgroundColor: '#FFFFFF',
         borderColor: '#000000',
         borderWidth: 2,

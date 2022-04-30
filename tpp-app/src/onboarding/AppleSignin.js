@@ -62,9 +62,6 @@ const styles = StyleSheet.create({
     marginTop: 50
   },
   appleSignin: {
-    width: 160,
-    height: 45,
-    alignSelf: 'center',
     alignItems: 'stretch', 
     justifyContent: 'center',
     borderRadius: 10,
