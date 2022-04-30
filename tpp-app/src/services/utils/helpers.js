@@ -214,13 +214,14 @@ export const getMonthsDiff = (dateFromStr) => {
         (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
   }
   return null;
-  
+}
+
 /** 
 * Gets the full current date as a string in the format of "2022-1-1"
 * @returns a string representing the current date
 */
 
-export function getFullCurrentDateString() {
+export function getFullCurrentDateString(){
  const d = new Date();
  const year = d.getFullYear()
  const month = d.getMonth()
@@ -229,5 +230,4 @@ export function getFullCurrentDateString() {
  const fullDateArray  = [year, month, day]
 
  return fullDateArray.join("-")
-}
 }

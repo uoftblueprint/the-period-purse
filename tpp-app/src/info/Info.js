@@ -11,7 +11,9 @@ import { STACK_SCREENS } from './InfoNavigator';
 import { Footer } from '../services/utils/footer';
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import ErrorFallback from "../error/error-boundary";
-import factsJSON from "../pages/DYKFacts.json"
+import factsJSON from "../pages/DYKFacts.json";
+import { GETFactCycle, POSTFactCycle } from "./InfoService";
+import { getFullCurrentDateString } from "../services/utils/helpers.js";
 
 
 const LearnMoreCard = () => {
@@ -107,7 +109,7 @@ export default function Info ({ navigation }) {
                             setFactCycleDate(rePostedFactArray[0]);
                             setFactCycleNum(rePostedFactArray[1]);
                             factWhole = factsJSON[rePostedFactArray[1]]
-                            console.log(`This is fact on Info Page 108: ${factWhole}`)
+                            console.log(`This is fact on Info Page 112: ${factWhole}`)
                             setRetrievedFact(factWhole.slice(0, 84));
                         })
                       
@@ -117,13 +119,13 @@ export default function Info ({ navigation }) {
                 if (getFullCurrentDateString() !== factArray[0]) {
                     POSTFactCycle().then(async () => {
                         GETFactCycle().then((rePostedFactArray) => {
-                        console.log(`This is factCycleArray on Info line 118: ${rePostedFactArray}`)
+                        console.log(`This is factCycleArray on Info line 122: ${rePostedFactArray}`)
                         setFactCycleDate(rePostedFactArray[0]);
                         setFactCycleNum(rePostedFactArray[1]);
 
-                        console.log(`This is factCycleArray number on Info Page 122: ${rePostedFactArray[1]}`)
+                        console.log(`This is factCycleArray number on Info Page 126: ${rePostedFactArray[1]}`)
                         factWhole = factsJSON[rePostedFactArray[1]]
-                        console.log(`This is fact on Info Page 124: ${factWhole}`)
+                        console.log(`This is fact on Info Page 128: ${factWhole}`)
 
                         setRetrievedFact(factWhole.slice(0, 84));
 
@@ -133,8 +135,8 @@ export default function Info ({ navigation }) {
                 } else {
                     setFactCycleNum(factArray[1]);
                     factWhole = factsJSON[factArray[1]]
-                    console.log(`This is factCycleNum on Info page 134: ${factCycleNum}`)
-                    console.log(`This is fact on Info Page 135: ${factWhole}`)
+                    console.log(`This is factCycleNum on Info page 138: ${factCycleNum}`)
+                    console.log(`This is fact on Info Page 139: ${factWhole}`)
 
                     setRetrievedFact(factWhole.slice(0, 84));
                 }
@@ -145,8 +147,8 @@ export default function Info ({ navigation }) {
         retrieveFactCycle()
     }, [])
 
-    console.log(`This is factCycleNum on Info page 146: ${factCycleNum}`)
-    console.log(`This is fact on Info Page 147: ${retrievedFact}`)
+    console.log(`This is factCycleNum on Info page 150: ${factCycleNum}`)
+    console.log(`This is fact on Info Page 151: ${retrievedFact}`)
 
     return (
      <ErrorFallback>
