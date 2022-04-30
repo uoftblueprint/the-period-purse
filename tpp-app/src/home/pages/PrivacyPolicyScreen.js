@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, ImageBackground, Linking} from 'react-native';
+import { View, ScrollView, StyleSheet, Text, SafeAreaView, TouchableOpacity, ImageBackground, Linking} from 'react-native';
+import BackIcon from '../../../ios/tppapp/Images.xcassets/icons/back_icon.svg'
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import ErrorFallback from "../../error/error-boundary";
 
 const EmailLink = () => {
     const openLink = () => {
@@ -26,8 +28,11 @@ export default PrivacyPolicyScreen = ({navigation}) => {
     }
 
     return(
-        <ImageBackground source={OnboardingBackground} style={styles.containter}>            
-            <ScrollView style={styles.scrollContainer}>
+      <ErrorFallback>
+        <ImageBackground source={OnboardingBackground} style={styles.containter}>
+            
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={{paddingBottom: 60}}>
+            <SafeAreaView>
                 <Text style={styles.title}>Privacy Policy</Text>
                 <View style={styles.line}/>
 
@@ -69,16 +74,16 @@ The app also includes some links to social media pages. If you click those links
                 <Text style={styles.header}>{`\nQuestions and contact information`}</Text>
                 <Text style={{...styles.standardText, marginBottom:50}}>Any question? Just email us: <EmailLink/>.</Text>
                 
-                
+                </SafeAreaView>
             </ScrollView>
         </ImageBackground>
+     </ErrorFallback>
     );
 }
 
 const styles = StyleSheet.create({
     containter: {
         flex:1,
-        marginBottom: 75,
     },
     scrollContainer: {
         padding: 20,

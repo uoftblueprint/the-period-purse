@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import PlusSign from '../../../ios/tppapp/Images.xcassets/icons/plus_sign.svg';
 import CalendarIcon from '../../../ios/tppapp/Images.xcassets/icons/calendar_icon.svg';
-import {STACK_SCREENS} from "../../info/InfoNavigator";
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 
 
 /** Recursive function to get the current active screen state through nested navigators */
@@ -17,7 +17,7 @@ const getActiveRouteState = function (route) {
 }
 
 
-export const TabBarMiddleButton = ({ style, inOverlay }) => {
+export const TabBarMiddleButton = ({ style, inOverlay, customOnPress }) => {
   const navigation = useNavigation();
   const calendarShowing = useIsFocused();
 
@@ -27,7 +27,7 @@ export const TabBarMiddleButton = ({ style, inOverlay }) => {
 
   // check if the SelectLogOption overlay is visible
   const activeRoute = getActiveRouteState(navigation.getState());
-  let overlayVisible = activeRoute?.state?.routes?.some((screen) => screen["name"] === STACK_SCREENS.SELECT_LOG_OPTION);
+  let overlayVisible = activeRoute?.state?.routes?.some((screen) => screen["name"] === CALENDAR_STACK_SCREENS.SELECT_LOG_OPTION);
 
   return (
     <TouchableOpacity
@@ -41,12 +41,14 @@ export const TabBarMiddleButton = ({ style, inOverlay }) => {
         styles.middleButton
       ]}
       onPress={() => {
-        if (inOverlay) {
+        if (customOnPress) {
+          customOnPress()
+        } else if (inOverlay) {
           navigation.goBack();
         } else {
           calendarShowing && !overlayVisible
-            ? navigation.navigate('MiddleButton', { screen: 'SelectLogOption' })
-            : navigation.navigate('MiddleButton', { screen: 'Calendar' })
+            ? navigation.navigate(CALENDAR_STACK_SCREENS.SELECT_LOG_OPTION)
+            : navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE)
         }
       }}
     >

@@ -1,15 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity, ImageBackground, SafeAreaView} from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
-import padIcon from '../../ios/tppapp/Images.xcassets/icons/pad_icon.png';
-import tamponsIcon from '../../ios/tppapp/Images.xcassets/icons/tampons_icon.png';
-import underwearIcon from '../../ios/tppapp/Images.xcassets/icons/underwear_icon.png';
-import cupIcon from '../../ios/tppapp/Images.xcassets/icons/cup_icon.png';
-import clothPadIcon from '../../ios/tppapp/Images.xcassets/icons/clothpad_icon.png'
-import discIcon from '../../ios/tppapp/Images.xcassets/icons/disc_icon.png'
+import PadIcon from '../../ios/tppapp/Images.xcassets/InfoPageImages/pad-small.svg';
+import TamponsIcon from '../../ios/tppapp/Images.xcassets/InfoPageImages/tampons-small.svg';
+import UnderwearIcon from '../../ios/tppapp/Images.xcassets/InfoPageImages/underwear-small.svg';
+import CupIcon from '../../ios/tppapp/Images.xcassets/InfoPageImages/cup-small.svg';
+import ClothPadIcon from '../../ios/tppapp/Images.xcassets/InfoPageImages/clothpad-small.svg';
+import DiscIcon from '../../ios/tppapp/Images.xcassets/InfoPageImages/menstrual-disk-small.svg';
 import { STACK_SCREENS } from './InfoNavigator';
 import { Footer } from '../services/utils/footer';
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
+import ErrorFallback from "../error/error-boundary";
 
 const LearnMoreCard = () => {
     return(
@@ -32,7 +33,9 @@ const LearnMoreCard = () => {
 const MenstrualProductCard = ({ onPress, name, image }) =>{
     return (
         <TouchableOpacity style={styles.productCard} onPress={onPress}>
-            <Image style={styles.productIcon} source={image}/>
+            <View style={styles.productIcon}>
+                {image}
+            </View>
             <Text style={styles.productText}>{name}</Text>
         </TouchableOpacity>
     )
@@ -51,38 +54,39 @@ const FunFactCard = ({ onPress }) =>{
 const cardData = [
     {
         name: "Period" + "\n" + "Underwear",
-        image: underwearIcon,
+        image: <UnderwearIcon/>,
         screen: STACK_SCREENS.PERIOD_UNDERWEARS
     },
     {
         name: "Menstrual Cup",
-        image: cupIcon,
+        image: <CupIcon/>,
         screen: STACK_SCREENS.MENSTRUAL_CUPS
     },
     {
         name: "Pads",
-        image: padIcon,
+        image: <PadIcon/>,
         screen: STACK_SCREENS.PADS
     },
     {
         name: "Cloth Pad",
-        image: clothPadIcon,
+        image: <ClothPadIcon/>,
         screen: STACK_SCREENS.CLOTH_PADS
     },
     {
         name: "Tampons",
-        image: tamponsIcon,
+        image: <TamponsIcon/>,
         screen: STACK_SCREENS.TAMPONS
     },
     {
         name: "Menstrual Disc",
-        image: discIcon,
+        image: <DiscIcon/>,
         screen: STACK_SCREENS.DISC
     }
 ]
 
 export default function Info ({ navigation }) {
     return (
+     <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <ScrollView>
                 <SafeAreaView style={styles.cardContainer}>
@@ -98,22 +102,23 @@ export default function Info ({ navigation }) {
                         Tap to learn more about period products.
                     </Text>
 
-                    <View style={styles.containerRow}>
-                        {cardData.map((card, i) => { return (
-                            <MenstrualProductCard
-                                key={i}
-                                name={card.name}
-                                image={card.image}
-                                onPress={() => navigation.navigate(card.screen)}
-                            />
-                        )})}
-                    </View>
+                        <View style={styles.containerRow}>
+                            {cardData.map((card, i) => { return (
+                                <MenstrualProductCard
+                                    key={i}
+                                    name={card.name}
+                                    image={card.image}
+                                    onPress={() => navigation.navigate(card.screen)}
+                                />
+                            )})}
+                        </View>
 
-                    <LearnMoreCard/>
-                    <Footer navigation={navigation}/>
-                </SafeAreaView>
-            </ScrollView>
-        </ImageBackground>
+                        <LearnMoreCard/>
+                        <Footer navigation={navigation}/>
+                    </SafeAreaView>
+                </ScrollView>
+            </ImageBackground>
+        </ErrorFallback>
     )
 }
 

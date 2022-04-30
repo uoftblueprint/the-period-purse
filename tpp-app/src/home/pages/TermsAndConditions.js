@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ScrollView, StyleSheet, Text, useWindowDimensions, ImageBackground} from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import ErrorFallback from "../../error/error-boundary";
 
 const source = {html: `<ol style="font-family: Avenir;font-Size: 14px;">
 <li>
@@ -17,8 +18,12 @@ export default TermsAndConditionsScreen = ({navigation}) => {
     }
 
     return(
-        <ImageBackground source={OnboardingBackground} style={styles.containter}>            
-            <ScrollView style={styles.scrollContainer}>
+      <ErrorFallback>
+        
+        <ImageBackground source={OnboardingBackground} style={styles.containter}>
+            
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={{paddingBottom: 60}}>
+            <SafeAreaView>
                 <Text style={styles.title}>Terms and Conditions</Text>
                 <View style={styles.line}/>
        
@@ -64,27 +69,24 @@ You can also contact us through the feedback form available on our Site.
                 `}</Text>
 
                 <Text style={{...styles.standardText, marginBottom: 50}}>{`Effective Date: 14th day of April, 2022`}</Text>
-                
-
-
-                    
-
+                </SafeAreaView>
             </ScrollView>
         </ImageBackground>
+        
+  </ErrorFallback>
     );
 }
 
 const styles = StyleSheet.create({
     containter: {
-        flex:1,
-        marginBottom: 75,
+        flex: 1,
     },
     scrollContainer: {
         padding: 20,
     },
     header:{
         fontFamily: "Avenir",
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: "bold",
     },  
     standardText: {
