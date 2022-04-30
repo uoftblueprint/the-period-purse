@@ -110,12 +110,17 @@ export const POSTRemindLogPeriod = async (enableRemind) => new Promise(async (re
  * Retrieves whether the user wants a remind to log period
  * @returns a promise resolving in a boolean when the get operation is complete
  */
-export const GETRemindLogPeriod = async () => new Promise(async(resolve, reject) => {
+ export const GETRemindLogPeriod = async () => new Promise(async(resolve, reject) => {
     try {
         AsyncStorage.getItem(REMINDERS.REMIND_LOG_PERIOD)
-            .then((value) => {
+            .then(async (value) => {
                 console.log(`Retrieved RemindLogPeriod boolean`);
-                resolve(value != null ? JSON.parse(value) : null);
+                if (value !== null) {
+                    resolve(JSON.parse(value));
+                } else {
+                    await POSTRemindLogSymptoms(false);
+                    resolve(false);
+                }
             });
     } catch (e) {
         console.log(`GETRemindLogPeriod error: ${JSON.stringify(e)}`);
@@ -147,12 +152,17 @@ export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (
  * @returns a promise resolving in a boolean when the get operation is complete
  */
 
-export const GETRemindLogSymptoms = async () => new Promise(async (resolve, reject) => {
+ export const GETRemindLogSymptoms = async () => new Promise(async (resolve, reject) => {
     try {
         await AsyncStorage.getItem(REMINDERS.REMIND_LOG_SYMPTOMS)
-            .then((value) => {
+            .then(async (value) => {
                 console.log(`Retrieved RemindLogSymptoms boolean`);
-                resolve(value != null ? JSON.parse(value) : null);
+                if (value !== null) {
+                    resolve(JSON.parse(value));
+                } else {
+                    await POSTRemindLogSymptoms(false);
+                    resolve(false);
+                }
             });
     } catch (e) {
         console.log(`GETRemindLogSymptoms error: ${JSON.stringify(e)}`);

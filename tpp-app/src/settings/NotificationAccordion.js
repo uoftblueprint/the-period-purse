@@ -73,16 +73,12 @@ const FrequencyPicker = props => {
     value={"Every day"} 
     />
     <Picker.Item 
-    label={"First day of the week"}
-    value={"First day of the week"} 
+    label={"Every week"}
+    value={"Every week"} 
     />
     <Picker.Item 
-    label={"First day of the month"}
-    value={"First day of the month"} 
-    />
-    <Picker.Item 
-    label={"Only during period"}
-    value={"Only during period"} 
+    label={"Every month"}
+    value={"Every month"} 
     />
         </Picker>
     </View>
@@ -319,15 +315,15 @@ const styles =  StyleSheet.create({
     dropDownLeftText : {
         flex: 1,
         justifyContent: 'center',
-
         fontFamily: 'Avenir',
         fontWeight: '400',
         fontSize: 16,
         height: 34,
-        lineHeight: 34
+        lineHeight: 34,
+        flexBasis: 100,
+        width: 'auto',
     },
     dropDownRightText : {
-
         fontFamily: 'Avenir',
         fontWeight: '800',
         fontSize: 16,
@@ -337,6 +333,8 @@ const styles =  StyleSheet.create({
         textAlign: 'right',
         flex: 1,
         justifyContent: 'center',
+        width: 'auto',
+
     },
 
     child:{

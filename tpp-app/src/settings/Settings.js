@@ -10,11 +10,12 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Footer } from '../services/utils/footer';
 import { ScrollView } from 'react-native-gesture-handler';
-import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, GETRemindLogSymptomsFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsTime, POSTRemindLogSymptoms, POSTUpdateOnePreference } from '../services/SettingsService';
+import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, GETRemindLogSymptomsFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsTime, POSTRemindLogSymptoms, POSTRemindLogPeriod, POSTUpdateOnePreference } from '../services/SettingsService';
 import {TRACK_SYMPTOMS, VIEWS} from '../services/utils/constants'
 import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
 import {STACK_SCREENS} from './SettingsNavigator.js';
+import { getCorrectDate } from '../services/utils/helpers';
 
 const PreferenceButton = (props) => {
     return (
@@ -223,6 +224,7 @@ return(
         value={props.enabled}
         trackColor={{true: "#72C6B7"}}
         style={{
+            zIndex: 1,
             top: "5%",
             left: "-10%"
         }}
@@ -288,33 +290,25 @@ const NotificationSettings = (props) => {
         ])
     )
 
-// get whether the switches need to be turned on 
-useEffect(() => {
-    async function getRemindPeriodEnabled () {
-        let remindPeriod = await GETRemindLogPeriod()
-        setRemindPeriodEnabled(remindPeriod != null ? remindPeriod : false);
-    }
-    getRemindPeriodEnabled();
-}, []);
-
-useEffect(() => {
-    async function getRemindSymptomsEnabled () {
-        let remindSymptoms = await GETRemindLogSymptoms()
-        setRemindSymptomsEnabled(remindSymptoms != null ? remindSymptoms : false);
-    }
-    getRemindSymptomsEnabled();
-}, [])
 
 // get the frequencies
 useEffect(() => {
+    async function getRemindPeriodEnabled () {
+        let remindPeriod = await GETRemindLogPeriod();
+        console.log(313, remindPeriod);
+        setRemindPeriodEnabled(remindPeriod);
+    }
+    async function getRemindSymptomsEnabled () {
+        let remindSymptoms = await GETRemindLogSymptoms();
+        console.log(318, remindSymptoms);
+        setRemindSymptomsEnabled(remindSymptoms);
+    }
     async function getFreqTimes() {
-        console.log("working")
 
         let storedPeriodFreq = await GETRemindLogPeriodFreq();
         let storedSymptomFreq = await GETRemindLogSymptomsFreq();
         let storedPeriodTime = await GETRemindLogPeriodTime();
         let storedSymptomTime = await GETRemindLogSymptomsTime();
-        console.log("working1")
 
         if (storedPeriodFreq) {
             setRemindPeriodFreq(storedPeriodFreq);
@@ -345,164 +339,139 @@ useEffect(() => {
                         
     }
     getFreqTimes();
+    getRemindPeriodEnabled();
+    getRemindSymptomsEnabled();
 }, []);
 
-    const togglePeriodSwitch = () => {
-        setRemindPeriodEnabled(!remindPeriodEnabled)
-        // POSTRemindLogPeriod(remindPeriodEnabled); // post here
-        let daysAheadStr = remindPeriodFreq.split(" ")[0]
-        
-        let daysAhead = parseInt(daysAheadStr);
-        console.log("334", remindPeriodEnabled);
-        if(!remindPeriodEnabled){
-            console.log("REMIND 0");
-            // if (numberOfDaysUntilPeriod > daysAhead) { // if the number of days until period is less than days ahead, then we can't schedule notification
-                PushNotificationIOS.addNotificationRequest({
-                    id: 'remindperiod',
-                    title: 'Period Reminder!',
-                    body: `Your period is predicted to come in ${daysAheadStr} days.`,
-                    badge: 1,
-                    fireDate: getCorrectDate((numberOfDaysUntilPeriod - daysAhead), remindPeriodTime),
-                    repeats: true
-                })
-            // }
-            
-        } else {
-            PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
-        }
-    }; 
-    const toggleSymptomsSwitch = () => { // post here 
-
-        setRemindSymptomsEnabled(!remindSymptomsEnabled);    
-        POSTRemindLogSymptoms(remindSymptomsEnabled);
-        
-        if (remindSymptomsEnabled) {
-            console.log("REMIND1", remindPeriodFreq);
-            // Schedule a reoccuring notification 
-            switch (remindPeriodFreq) {
-                case "Every day":
-                    PushNotificationIOS.addNotificationRequest({
-                        id: 'remindsymptoms',
-                        title: 'Daily Log Reminder',
-                        body: 'Daily reminder to log your symptoms!',
-                        badge: 1,
-                        fireDate: getCorrectDate(1, remindSymptomsTime),
-                        repeats: true,
-                        repeatsComponent: {
-                            hour: true,
-                            minute: true,
-                        },
-                    });
-                    break;
-                case "Every week":
-                    PushNotificationIOS.addNotificationRequest({
-                        id: 'remindsymptoms',
-                        title: 'Weekly Log Reminder',
-                        body: 'Weekly reminder to log your symptoms!',
-                        badge: 1,
-                        fireDate: getCorrectDate(7, remindSymptomsTime),
-                        repeats: true,
-                        repeatsComponent: {
-                            hour: true,
-                            minute: true,
-                        },
-                    });
-                    break;
-                case "Every month":
-                    PushNotificationIOS.addNotificationRequest({
-                        id: 'remindsymptoms',
-                        title: 'Monthly Log Reminder',
-                        body: 'Monthly reminder to log your symptoms!',
-                        badge: 1,
-                        fireDate: getCorrectDate(30, remindSymptomsTime),
-                        repeats: true,
-                        repeatsComponent: {
-                            hour: true,
-                            minute: true,
-                        },
-                    });
-                    break;
-                case "Only during period":
-                    if (CycleService.isOnPeriod) {
-                        PushNotificationIOS.addNotificationRequest({
-                        id: 'remindsymptoms',
-                        title: 'Symptom Logging Reminder',
-                        body: 'Reminder to log your period!',
-                        badge: 1,
-                        fireDate: getCorrectDate(1, remindSymptomsTime),
-                        repeats: true,
-                        repeatsComponent: {
-                            hour: true,
-                            minute: true,
-                        },
-                    });
+    const togglePeriodSwitch = async () => {
+        console.log(379, remindPeriodEnabled)
+        POSTRemindLogPeriod(!remindPeriodEnabled)
+            .then(async () => {
+                setRemindPeriodEnabled(!remindPeriodEnabled);
+                console.log(383, remindPeriodEnabled);
+                if (!remindPeriodEnabled) {
+                    PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
+                } else {
+                    await GETPredictedDaysTillPeriod()
                 }
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms'])
-        }
-    }
+            });
 
-    const getCorrectDate = (daysAdded, time) => {
-        // takes a string time and parses it
-        const timeToSet = time.split(":")
-        let hour = parseInt(timeToSet[0].split(":")[0])
-        let minute = parseInt(timeToSet[0].split(":")[1])
-
-        // const date = new Date();
-        // date.setDate(date.getDate() + daysAdded);
-        // date.setHours(hour);
-        // date.setMinutes(minute);
-        // return date;
-        const date = new Date();
-        date.setDate(date.getDate());
-        date.setHours(hour);
-        date.setMinutes(minute);
-        console.log("DATE SET", date);
-        return date;
     };
-return (
-  
-    <SafeAreaView style={{top: "-5%"}}>
-        <Text style={styles.heading}>Notifications</Text>
-        <NotificationsButton 
-            text={"Remind me to log period"} 
-            subtext={`${remindPeriodFreq} before at ${remindPeriodTime + " " + remindPeriodTimeMeridian}`} 
-            toggle={togglePeriodSwitch} 
-            enabled={remindPeriodEnabled} />
-        <NotificationsButton
-            text={"Remind me to log symptoms"}
-            subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`} 
-            toggle={toggleSymptomsSwitch}
-            enabled={remindSymptomsEnabled}/>
-  <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}> 
-    <View>
-    
-     <SafeAreaView style={styles.notificationSettingsView} >
-    <Text style={styles.optionText}>Customize notifications</Text>
-    <View>   
-     <Icon
-            name="arrow-back-ios"
-            size={24}
-            color="#5A9F93"
-            style={{transform: [{rotateY: '180deg'}],}}
-            />
-    </View>
-    </SafeAreaView>
-    <View
-        style={{
-        borderBottomColor: '#CFCFCF',
-        borderBottomWidth: 1,
-        top: "15%"
-        }}/>
-       </View>
-       </TouchableOpacity>
-    </SafeAreaView>
+    const toggleSymptomsSwitch = async () => { // post here 
+        POSTRemindLogSymptoms(!remindSymptomsEnabled)
+            .then(() => {
+                setRemindSymptomsEnabled(!remindSymptomsEnabled);
+                console.log(415, remindSymptomsEnabled);
+                if (remindSymptomsEnabled) {
+                    console.log("REMIND1", remindPeriodFreq);
+                    // Schedule a reoccuring notification
 
-)
+                    // Parsing
+
+                    const hour = remindSymptomsTime.split(" ")[0].split(":")[0];
+                    const amOrPm = remindSymptomsTime.split(" ")[1];
+                    let remindTime;
+                    if (amOrPm === "PM" && hour !== "12") {
+                        // add 12 hours
+                        remindTime = JSON.stringify(parseInt(hour) + 12) + ":00";
+                    } else if (hour === "12") {
+                        remindTime = "0:00";
+                    } else {
+                        remindTime = hour + ":00";
+                    }
+
+                    switch (remindPeriodFreq) {
+                        case "Every day":
+                            PushNotificationIOS.addNotificationRequest({
+                                id: 'remindsymptoms',
+                                title: 'Daily Log Reminder',
+                                body: 'Daily reminder to log your symptoms!',
+                                badge: 1,
+                                fireDate: getCorrectDate(1, remindTime),
+                                repeats: true,
+                                repeatsComponent: {
+                                    hour: true,
+                                    minute: true,
+                                },
+                            });
+                            break;
+                        case "Every week":
+                            PushNotificationIOS.addNotificationRequest({
+                                id: 'remindsymptoms',
+                                title: 'Weekly Log Reminder',
+                                body: 'Weekly reminder to log your symptoms!',
+                                badge: 1,
+                                fireDate: getCorrectDate(7, remindTime),
+                                repeats: true,
+                                repeatsComponent: {
+                                    dayOfWeek: true,
+                                    hour: true,
+                                    minute: true,
+                                },
+                            });
+                            break;
+                        case "Every month":
+                            PushNotificationIOS.addNotificationRequest({
+                                id: 'remindsymptoms',
+                                title: 'Monthly Log Reminder',
+                                body: 'Monthly reminder to log your symptoms!',
+                                badge: 1,
+                                fireDate: getCorrectDate(30, remindTime),
+                                repeats: true,
+                                repeatsComponent: {
+                                    month: true,
+                                    hour: true,
+                                    minute: true,
+                                },
+                            });
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms'])
+                }
+            });
+    };
+    return (
+  
+        <SafeAreaView style={{top: "-5%"}}>
+            <Text style={styles.heading}>Notifications</Text>
+            <NotificationsButton 
+                text={"Remind me to log period"} 
+                subtext={`${remindPeriodFreq} before at ${remindPeriodTime + " " + remindPeriodTimeMeridian}`} 
+                toggle={togglePeriodSwitch} 
+                enabled={remindPeriodEnabled} />
+            <NotificationsButton
+                text={"Remind me to log symptoms"}
+                subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`} 
+                toggle={toggleSymptomsSwitch}
+                enabled={remindSymptomsEnabled}/>
+    <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}> 
+        <View>
+        
+        <SafeAreaView style={styles.notificationSettingsView} >
+        <Text style={styles.optionText}>Customize notifications</Text>
+        <View>   
+        <Icon
+                name="arrow-back-ios"
+                size={24}
+                color="#5A9F93"
+                style={{transform: [{rotateY: '180deg'}],}}
+                />
+        </View>
+        </SafeAreaView>
+        <View
+            style={{
+            borderBottomColor: '#CFCFCF',
+            borderBottomWidth: 1,
+            top: "15%"
+            }}/>
+        </View>
+        </TouchableOpacity>
+        </SafeAreaView>
+
+    )
 }
 
 const SettingOptions = ({navigation}) => {
@@ -628,7 +597,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         height: 34,
         lineHeight: 34,
-        left: -10
+        left: -10,
+        zIndex:0,
+
     },
     reminderTextBox : {
         flexDirection: 'row',
@@ -644,7 +615,9 @@ const styles = StyleSheet.create({
         lineHeight: 34,
         top: "-30%",
         color: '#6D6E71',
-        left: 4
+        left: 4,
+        zIndex:0,
+
     },
 
     iconsContainer: {
