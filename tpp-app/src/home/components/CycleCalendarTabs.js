@@ -30,7 +30,8 @@ export default function HomeNavigator() {
               },
               tabBarStyle: {
                 height: "7%",
-                justifyContent: 'center'
+                justifyContent: 'center',
+                backgroundColor: 'transparent'
               }
             }}
           >
