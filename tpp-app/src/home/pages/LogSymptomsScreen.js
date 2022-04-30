@@ -349,7 +349,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
               />
           )}
         })}
-        // Covers up the gray background of styles.screen 
+        {/* Covers up the gray background of styles.screen  */}
         <View style={styles.bg}></View>
         </KeyboardAwareScrollView>
 

@@ -6,8 +6,9 @@ import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
-import {getISODate, initializeEmptyYear} from '../../services/utils/helpers';
+import { getISODate, getMonthsDiff, initializeEmptyYear } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
+import { GETJoinedDate } from '../../services/OnboardingService';
 import ErrorFallback from "../../error/error-boundary";
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
@@ -15,13 +16,20 @@ import LoadingVisual from '../components/LoadingVisual';
 import { GETTutorial } from '../../services/TutorialService';
 import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
 
+export let scrollDate = getISODate(new Date());
 
-export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
-
+export const Calendar = ({ navigation, marked, setYearInView, selectedView, route }) => {
+    const jumpDate = route.params?.newDate ? route.params.newDate : getISODate(new Date());
+    let joinedDate = ""; 
+    GETJoinedDate().then(res => { joinedDate = res })
+    const pastScroll = 12 + (getMonthsDiff(joinedDate))
     return (
         <CalendarList
+        // Initially visible month. Default = now
+        current={jumpDate}
+
         // Max amount of months allowed to scroll to the past. Default = 50
-        pastScrollRange={12}
+        pastScrollRange={pastScroll}
 
         // Max amount of months allowed to scroll to the future. Default = 50
         futureScrollRange={0}
@@ -31,6 +39,7 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 
         // Check which months are currently in view
         onVisibleMonthsChange={(months) => {
+            scrollDate = months[0]['dateString']
             let currentYears = []
             months.forEach(month => {
                 let currentYear = parseInt(month['year'])
@@ -171,8 +180,12 @@ export default function CalendarScreen ({ route, navigation }) {
         }, [route.params?.inputData])
     )
 
+    useEffect(() => {
+        if(route.params?.newDate && selectedView !== VIEWS.Flow)
+            setSelectedView(VIEWS.Flow);
+    }, [route.params?.newDate])
 
-    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
+    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
     if (loaded){
         return (
         <ErrorFallback>
@@ -194,7 +207,13 @@ export default function CalendarScreen ({ route, navigation }) {
 
                 <SafeAreaView style={styles.container}>
                     <View style={styles.calendar}>
-                        <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
+                        <Calendar 
+                        navigation={navigation} 
+                        marked={marked} 
+                        setYearInView={setYearInView} 
+                        selectedView={selectedView} 
+                        route={route}
+                        />
                     </View>
                 </SafeAreaView>
             </ImageBackground>
