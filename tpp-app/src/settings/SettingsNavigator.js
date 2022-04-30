@@ -6,12 +6,12 @@ import Notifications from './Notifications';
 const Stack = createNativeStackNavigator();
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeleteAccount from "./DeleteAccount";
+import BackUpAccount from "./BackUpAccount";
 
 export const STACK_SCREENS = {
   SETTINGS: "Settings",
   NOTIFICATIONS: "Notifications",
-  PROFILE_INFORMATION: "Profile Information",
-  PRIVACY_POLCIY: "Privacy Policy",
+  BACK_UP_ACCOUNT: "Back Up Account",
   DELETE_ACCOUNT: "Delete Account"
 }
 export default function SettingsNavigator({navigation}) {
@@ -33,6 +33,7 @@ export default function SettingsNavigator({navigation}) {
               //     <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
               // </TouchableOpacity>)}}
               />
+              <Stack.Screen name={STACK_SCREENS.BACK_UP_ACCOUNT} component={BackUpAccount} />
               <Stack.Screen name={STACK_SCREENS.DELETE_ACCOUNT} component={DeleteAccount} />
         </Stack.Navigator>
     )

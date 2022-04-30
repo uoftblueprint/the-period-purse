@@ -54,6 +54,9 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
             if (viewKey !== 'mood') {
                 bgColor = FILTER_COLOURS[viewKey.toUpperCase()][attribute.toUpperCase()]
                 textColor = FILTER_TEXT_COLOURS[viewKey.toUpperCase()][attribute.toUpperCase()]
+            } else {
+                bgColor = FILTER_COLOURS.NOFILTER;
+                textColor = FILTER_TEXT_COLOURS.NOFILTER;
             }
             
             // Get Icon
@@ -68,6 +71,9 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
                 fill: textColor
             })
             
+        } else {
+            bgColor = FILTER_COLOURS.NOFILTER;
+            textColor = FILTER_TEXT_COLOURS.NOFILTER;
         }
     }
 

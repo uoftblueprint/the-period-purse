@@ -73,7 +73,8 @@ export const FILTER_COLOURS = {
     LIGHT: '#467CCD',
     LITTLE: '#92B8F0',
   },
-  DISABLED: "#EEEEEE"
+  DISABLED: "#EEEEEE",
+  NOFILTER: "#FFFFFF"
 }
 
 export const FILTER_TEXT_COLOURS = {
@@ -103,7 +104,8 @@ export const FILTER_TEXT_COLOURS = {
     LIGHT: '#FFF',
     LITTLE: '#000',
   },
-  DISABLED: '#AAAAAA'
+  DISABLED: '#AAAAAA',
+  NOFILTER: '#000000'
 }
 
 export const VIEWS = {
@@ -121,7 +123,8 @@ export const KEYS = {
   INITIAL_PERIOD_LENGTH: "initialPeriodLength",
   SELECTED_YEAR: "selectedYear",
   SELECTED_MONTH: "selectedMonth",
-  SELECTED_VIEW: "selectedView"
+  SELECTED_VIEW: "selectedView",
+  JOINED_DATE: "joinedDate",
 }
 
 export const REMINDERS = {
@@ -148,6 +151,18 @@ export const LOG_SYMPTOMS_FREQ ={
   THREE: "three",
   FIVE: "five",
   SEVEN: "seven"
+}
+
+export const APPLE_CREDENTIALS = {
+  USER_ID: "userId",
+  IDENTITY_TOKEN: "identityToken",
+  GIVEN_NAME: "givenName",
+  FAMILY_NAME: "familyName"
+}
+
+export const ICLOUD = {
+  BACKUP_KEY: "tpp-backup",
+  LAST_SAVED_TIME: "lastSavedTime"
 }
 
 export const TUTORIAL_KEY = 'showTutorial'; // key for backend value that returns 'true' if user needs to see tutorial

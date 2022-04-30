@@ -37,7 +37,7 @@ const GetStarted = ({ navigation }) => {
       <Text style={styles.titleText}>Welcome!</Text>
       <View style={{height: 80}}></View>
       <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
-      <AppleSignin />
+      <AppleSignin navigation={navigation}/>
       <View style={styles.copyright}>
           <Text>{`By continuing, you accept the`}</Text>
       </View>
@@ -108,10 +108,34 @@ export default function Welcome() {
       <Stack.Screen
         name={STACK_SCREENS.PRIVACY_POLICY}
         component={PrivacyPolicyScreen}
+        options={{title: "Privacy Policy",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
+          }}
       />
       <Stack.Screen
         name={STACK_SCREENS.TERMS_AND_CONDITION}
         component={TermsAndConditions}
+        options={{title: "Terms and Conditions",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
+          }}
       />
       </Stack.Navigator>
     </NavigationContainer>

@@ -34,13 +34,13 @@ export default function PeriodLength ({ navigation }) {
 
         <SafeAreaView pointerEvents="box-none" style={{ alignItems: 'center' }}>
           <BackgroundShape style={{ top: 40 }}/>
-          <PeriodLengthIcon width='130' height='130' style={{ bottom: '32%' }}/>
-          <BarIcon style={{ bottom: '25%'}}/>
+          <PeriodLengthIcon width='130' height='130' style={{ bottom: '35%' }}/>
+          <BarIcon style={{ bottom: '27%'}}/>
 
-          <TitleText style={{ bottom: '23%' }}>
+          <TitleText style={{ bottom: '25%' }}>
             How long does your {'\n'} period usually last?
           </TitleText>
-          <BodyText style={{ bottom: "23%" }}>
+          <BodyText style={{ bottom: "25%" }}>
             This will help us make our {'\n'} reminders more accurate
           </BodyText>
 
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     width: "50%",
     borderRadius: 10,
     height: "8%",
-    bottom: "20%",
+    bottom: "23%",
   },
   rightMargin: {
     height: 30,
