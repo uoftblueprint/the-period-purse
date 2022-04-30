@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'stretch',
+        backgroundColor: '#fff'
     },
     legendView: {
         flex: 1,

@@ -20,7 +20,9 @@ export default TermsAndConditionsScreen = ({navigation}) => {
 
     return(
       <ErrorFallback>
+        
         <ImageBackground source={OnboardingBackground} style={styles.containter}>
+            
             <View style={styles.navbarContainer}>
                 <TouchableOpacity onPress={() => onClose()} style={styles.backIcon}>
                     <BackIcon fill={'#181818'}/>
@@ -28,7 +30,8 @@ export default TermsAndConditionsScreen = ({navigation}) => {
                 <Text style={styles.navbarText}>Terms and Conditions</Text>
             </View>
             
-            <ScrollView style={styles.scrollContainer}>
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={{paddingBottom: 60}}>
+            <SafeAreaView>
                 <Text style={styles.title}>Terms and Conditions</Text>
                 <View style={styles.line}/>
        
@@ -74,21 +77,17 @@ You can also contact us through the feedback form available on our Site.
                 `}</Text>
 
                 <Text style={{...styles.standardText, marginBottom: 50}}>{`Effective Date: 14th day of April, 2022`}</Text>
-                
-
-
-                    
-
+                </SafeAreaView>
             </ScrollView>
         </ImageBackground>
+        
   </ErrorFallback>
     );
 }
 
 const styles = StyleSheet.create({
     containter: {
-        flex:1,
-        marginBottom: 75,
+        flex: 1,
     },
     scrollContainer: {
         padding: 20,

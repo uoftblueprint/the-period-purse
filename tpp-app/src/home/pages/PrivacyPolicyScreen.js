@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, useWindowDimensions, TouchableOpacity, ImageBackground, Linking} from 'react-native';
+import { View, ScrollView, StyleSheet, Text, SafeAreaView, TouchableOpacity, ImageBackground, Linking} from 'react-native';
 import BackIcon from '../../../ios/tppapp/Images.xcassets/icons/back_icon.svg'
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import ErrorFallback from "../../error/error-boundary";
@@ -37,7 +37,8 @@ export default PrivacyPolicyScreen = ({navigation}) => {
                 <Text style={styles.navbarText}>Privacy Policy</Text>
             </View>
             
-            <ScrollView style={styles.scrollContainer}>
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={{paddingBottom: 60}}>
+            <SafeAreaView>
                 <Text style={styles.title}>Privacy Policy</Text>
                 <View style={styles.line}/>
 
@@ -79,7 +80,7 @@ The app also includes some links to social media pages. If you click those links
                 <Text style={styles.header}>{`\nQuestions and contact information`}</Text>
                 <Text style={{...styles.standardText, marginBottom:50}}>Any question? Just email us: <EmailLink/>.</Text>
                 
-                
+                </SafeAreaView>
             </ScrollView>
         </ImageBackground>
      </ErrorFallback>
@@ -89,7 +90,6 @@ The app also includes some links to social media pages. If you click those links
 const styles = StyleSheet.create({
     containter: {
         flex:1,
-        marginBottom: 75,
     },
     scrollContainer: {
         padding: 20,
