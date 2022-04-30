@@ -179,6 +179,10 @@ export default function CalendarScreen ({ route, navigation }) {
         }, [route.params?.inputData])
     )
 
+    useEffect(() => {
+        if(route.params?.newDate && selectedView !== VIEWS.Flow)
+            setSelectedView(VIEWS.Flow);
+    }, [route.params?.newDate])
 
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
     if (loaded){
