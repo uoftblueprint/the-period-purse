@@ -35,7 +35,6 @@ export default function Confirmation ({ route, navigation }) {
 
   function IconPref() {
     let iconComponents = []
-    console.log();
     if(trackingPreferences[0])  // flow
       iconComponents.push(<FlowIcon key="flow" style={styles.icon}/>);
     if(trackingPreferences[1])  // mood

@@ -153,4 +153,16 @@ export const LOG_SYMPTOMS_FREQ ={
   SEVEN: "seven"
 }
 
+export const APPLE_CREDENTIALS = {
+  USER_ID: "userId",
+  IDENTITY_TOKEN: "identityToken",
+  GIVEN_NAME: "givenName",
+  FAMILY_NAME: "familyName"
+}
+
+export const ICLOUD = {
+  BACKUP_KEY: "tpp-backup",
+  LAST_SAVED_TIME: "lastSavedTime"
+}
+
 export const TUTORIAL_KEY = 'showTutorial'; // key for backend value that returns 'true' if user needs to see tutorial
