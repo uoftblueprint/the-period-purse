@@ -30,12 +30,6 @@ export default PrivacyPolicyScreen = ({navigation}) => {
     return(
       <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.containter}>
-            <View style={styles.navbarContainer}>
-                <TouchableOpacity onPress={() => onClose()} style={styles.backIcon}>
-                    <BackIcon fill={'#181818'}/>
-                </TouchableOpacity>
-                <Text style={styles.navbarText}>Privacy Policy</Text>
-            </View>
             
             <ScrollView style={styles.scrollContainer} contentContainerStyle={{paddingBottom: 60}}>
             <SafeAreaView>
@@ -74,7 +68,7 @@ The app also includes some links to social media pages. If you click those links
                 <Text style={styles.header}>{`\nI am underage. Can I use this app?`}</Text>
                 <Text style={styles.standardText}>{`From a privacy standpoint, you can use this app whichever your age is, because your data stays with you. `}</Text>
                 
-                <Text style={styles.header}>{`\nDChanges to this privacy policy`}</Text>
+                <Text style={styles.header}>{`\nChanges to this privacy policy`}</Text>
                 <Text style={styles.standardText}>{`If any of the above were to change, we will update this document to inform you.`}</Text>
                 
                 <Text style={styles.header}>{`\nQuestions and contact information`}</Text>
@@ -93,31 +87,6 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         padding: 20,
-    },
-    backIcon: {
-        height: 40,
-        width: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'absolute',
-        left: 18,
-        bottom: 10
-
-    },
-    navbarContainer: {
-        paddingTop: 60,
-        paddingBottom: 20,
-        position: 'relative',
-        flexDirection: 'row',
-        backgroundColor: "#FFFFFF",
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    navbarText: {
-        fontSize: 20,
-        fontFamily: "avenir",
-
     },
     title: {
         fontSize: 34,

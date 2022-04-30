@@ -128,8 +128,32 @@ export function MainNavigator() {
       <NavigationContainer ref={navigationRef} independent={true}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name={STACK_SCREENS.MAIN_PAGE} component={MainPage}/>
-          <Stack.Screen name={STACK_SCREENS.PRIVACY_POLICY} component={PrivacyPolicyScreen}/>
-          <Stack.Screen name={STACK_SCREENS.TERMS_AND_CONDITION} component={TermsAndConditions}/>
+          <Stack.Screen name={STACK_SCREENS.PRIVACY_POLICY} component={PrivacyPolicyScreen} 
+          options={{title: "Privacy Policy",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
+          }}/>
+          <Stack.Screen name={STACK_SCREENS.TERMS_AND_CONDITION} component={TermsAndConditions} 
+          options={{title: "Terms and Conditions",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
+          }} />
         </Stack.Navigator>
       </NavigationContainer>
   );
