@@ -90,33 +90,34 @@ const cardData = [
 
 export default function Info ({ navigation }) {
     const [factCycleArray, setFactCycleArray] = useState([]);
+
+    var fact = "Getting fact"
+    var factWhole;
     useEffect(() => {
         async function retrieveFactCycle() {
-            var factArray = await GETFactCycle()
+            let factArray = await GETFactCycle()
             setFactCycleArray(factArray);
             console.log(`This is setting factCycleArray on the InfoPage: ${factArray}`)
 
             if (!factArray){
-                await POSTFactCycle().then(async () => {
-                    factArray = await GETFactCycle();
+                POSTFactCycle().then(async () => {
+                    let factArray = await GETFactCycle();
                     setFactCycleArray(factArray);
+                   
                 })
             }
         if (getFullCurrentDateString() != factArray[0]) {
             POSTFactCycle().then(async () => {
-            factArray = await GETFactCycle();
+            let factArray = await GETFactCycle();
             setFactCycleArray(factArray)
         });
         }    
         }
         retrieveFactCycle()
     }, [])
-
-
-    let factWhole = factsJSON[factCycleArray[1]]
+    factWhole = factsJSON[factCycleArray[1]]
     console.log(`This is factCycleArray on Info page: ${factCycleArray}`)
     console.log(`This is factCycleArray number on Info Page: ${factCycleArray[1]}`)
-    var fact = "Getting fact"
     if(factWhole){
         fact = factWhole.slice(0, 84)
     }

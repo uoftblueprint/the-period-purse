@@ -27,7 +27,7 @@ import { getFullCurrentDateString } from "../services/utils/helpers.js"
 
 export const POSTFactCycle = async () => new Promise(async (resolve, reject) => {
     try {
-        if (await GETFactCycle() == null) { // if there is currently no fact/date array stored
+        if (await GETFactCycle() === null) { // if there is currently no fact/date array stored
             const value = [getFullCurrentDateString(), "1"];
             await AsyncStorage.setItem(FACT_NUM.FACT_CYCLE_NUM, JSON.stringify(value)).catch(() => {
                 console.log("GETFactCycle error: failed to instantiate FACT_CYCLE_NUM")
@@ -39,7 +39,7 @@ export const POSTFactCycle = async () => new Promise(async (resolve, reject) => 
         } else {
             // get the current date
             newDate = getFullCurrentDateString()
-            if (newDate != GETFactCycle()[0]) { // update dateand fact only if the current date does not match the stored date
+            if (newDate != await GETFactCycle()[0]) { // update dateand fact only if the current date does not match the stored date
                 var previousFactNum = await GETFactCycle()[1]
                 console.log(`This is previous fact number: ${previousFactNum}`)
                 var newFactNum;
@@ -55,13 +55,13 @@ export const POSTFactCycle = async () => new Promise(async (resolve, reject) => 
                 console.log(`This is newFactNumber fact number: ${newFactNum}`)
                 const value = [newDate, newFactNum]
                 
-                await AsyncStorage.mergeItem(FACT_NUM.FACT_CYCLE_NUM, JSON.stringify(value)).then(() =>{
+                await AsyncStorage.setItem(FACT_NUM.FACT_CYCLE_NUM, JSON.stringify(value)).then(() =>{
                     console.log("Updated Fact Cycle Number");
                     resolve();
                 }).catch(() => {
                     console.log("GETFactCycle error: failed to mergeItem FACT_CYCLE_NUM")
                     reject();
-                })
+                    })
             }
         }
     } catch (e) {
