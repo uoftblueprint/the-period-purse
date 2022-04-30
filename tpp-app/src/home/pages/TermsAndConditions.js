@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, useWindowDimensions, ImageBackground} from 'react-native';
+import { View, ScrollView, StyleSheet, Text, useWindowDimensions, ImageBackground, SafeAreaView} from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import ErrorFallback from "../../error/error-boundary";
