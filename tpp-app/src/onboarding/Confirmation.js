@@ -1,14 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
-import { CrossButton, WideButton } from './components/ButtonComponents';
+import { WideButton } from './components/ButtonComponents';
 import { BackButtonContainer, HorizontalLine, SymptomIconContainer } from './components/ContainerComponents';
+import { SETTutorial } from '../services/TutorialService';
+
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import FlowIcon from "../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
 import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
+import ErrorFallback from "../error/error-boundary";
 import {BackButton} from "../home/components/BackButtonComponent";
 
 export const STACK_SCREENS = {
@@ -40,7 +43,7 @@ export default function Confirmation ({ route, navigation }) {
       iconComponents.push(<SleepIcon key="sleep" style={styles.icon}/>);
     if(trackingPreferences[3])  // cramps
       iconComponents.push(<CrampsIcon key="cramps" style={styles.icon}/>);
-    if(trackingPreferences[4])  // exercise 
+    if(trackingPreferences[4])  // exercise
       iconComponents.push(<ExerciseIcon key="exercise" style={styles.icon}/>);
     return (<SymptomIconContainer>{iconComponents}</SymptomIconContainer>);
   }
@@ -53,13 +56,14 @@ export default function Confirmation ({ route, navigation }) {
   }
 
   function Length() {
-    if(periodLength) 
+    if(periodLength)
       return (<Text style={styles.text}>{periodLength} days</Text>);
     else
       return (null);
   }
 
   return (
+  <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <BackButtonContainer>
         <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.SYMPTOMS_CHOICES, {
@@ -92,11 +96,14 @@ export default function Confirmation ({ route, navigation }) {
       </View>
       <HorizontalLine></HorizontalLine>
 
-      <WideButton 
+      <WideButton
         title="Let's go!" color="#5A9F93" bottom="-8%"
-        onPress={() => navigation.navigate(STACK_SCREENS.MAIN_PAGE)}
+        onPress={() => {
+          SETTutorial(true).finally(() => navigation.navigate(STACK_SCREENS.MAIN_PAGE));
+        }}
       />
     </ImageBackground>
+  </ErrorFallback>
   );
 }
 

@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FLOW_LEVEL, TRACK_SYMPTOMS, KEYS } from './utils/constants.js'
 import { initializeEmptyYear } from "./utils/helpers.js"
 import { Symptoms } from './utils/models.js';
+import {errorAlertModal} from "../error/errorAlertModal";
 
 /**
  * Initializes user's initial period length and average period length. 
@@ -22,6 +23,7 @@ export const POSTInitialPeriodLength = async (periodLength) => new Promise( asyn
         }
     } catch (e) {
         console.log(`POSTInitialPeriodLength error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 })
@@ -73,6 +75,7 @@ export const POSTInitialPeriodStart = async (periodStart, periodEnd) => new Prom
     }
     catch (e) {
         console.log(`POSTInitialPeriodStart error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 })
@@ -103,6 +106,7 @@ export const POSTSymptomsToTrack = async (flow, mood, sleep, cramps, exercise) =
         }
     } catch (e) {
         console.log(`POSTSymptomsToTrack error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 })

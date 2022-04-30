@@ -9,7 +9,9 @@ import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
 import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/utils/constants";
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
+import ErrorFallback from "../../error/error-boundary";
 import Constants from 'expo-constants';
+import LoadingVisual from '../components/LoadingVisual';
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -92,6 +94,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     // const [selectedDates, setSelectedDates] = useState([]);
     const [numSelected, setNumSelected] = useState(0);
     const [markedDates, setMarkedDates] = useState({});
+    const [loaded, setLoaded] = useState(false);
     const DESELECTED_COLOR = '#FFFFFF';
     const SELECTED_COLOR = '#E44545';
 
@@ -127,6 +130,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                                 });
                             });
                             setMarkedDates(allMarkedDates);
+                            setLoaded(true);
                         })
                         .catch((error) => {
                             console.log(`GETCycleHistoryByYear error: ${JSON.stringify(error)}`);
@@ -220,7 +224,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                 console.log(error);
             }
         }
-        
+
         navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
         await calculateAverages();
     }
@@ -249,23 +253,26 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         }
     }
 
+    if (loaded){
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.navbarContainer}>
+        <ErrorFallback>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.navbarContainer}>
 
-                <TouchableOpacity onPress={() => onClose()} style={styles.close}>
-                  <CloseIcon fill={'#181818'}/>
-                </TouchableOpacity>
-                <View style={styles.navbarTextContainer}>
+                    <TouchableOpacity onPress={() => onClose()} style={styles.close}>
+                      <CloseIcon fill={'#181818'}/>
+                    </TouchableOpacity>
+                    <View style={styles.navbarTextContainer}>
 
-                    <Text style={styles.navbarTitle}>Tap date to log period</Text>
-                    <Text style={styles.navbarSubTitle}>
-                        Selected dates will have their Flow level set to Medium
-                    </Text>
+                        <Text style={styles.navbarTitle}>Tap date to log period</Text>
+                        <Text style={styles.navbarSubTitle}>
+                            Selected dates will have their Flow level set to Medium
+                        </Text>
 
+                    </View>
                 </View>
-            </View>
+
             <View style={styles.calendar}>
                 <Calendar
                     numSelected={numSelected}
@@ -274,12 +281,18 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                     setSelectedDates={setSelectedDates}
                     markedDates={markedDates}
                 />
-            </View>  
+            </View>
             <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
                 <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>
         </SafeAreaView>
+  </ErrorFallback>
     )
+
+    }
+    else{
+        return (<LoadingVisual/>)
+    }
 }
 
 const styles = StyleSheet.create({
