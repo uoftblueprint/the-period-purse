@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground, SafeAreaView} from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.svg';
@@ -271,6 +271,22 @@ const NotificationSettings = (props) => {
    
      }, []));
 
+     useFocusEffect(
+        useCallback(() => {
+    
+            console.log("YUH", props.route.params?.remindPeriodFreq,
+                props.route.params?.remindPeriodTime,
+                props.route.params?.remindSymptomsFreq,
+                props.route.params?.remindSymptomsTime);
+    
+        }, [
+            props.route.params?.remindPeriodFreq,
+            props.route.params?.remindPeriodTime,
+            props.route.params?.remindSymptomsFreq,
+            props.route.params?.remindSymptomsTime
+        ])
+    )
+
 // get whether the switches need to be turned on 
 useEffect(() => {
     async function getRemindPeriodEnabled () {
@@ -499,14 +515,14 @@ const SettingOptions = ({navigation}) => {
         </SafeAreaView>
     )
 }
-export default function Settings ({ navigation }) {
+export default function Settings ({ route, navigation }) {
     return (
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <ScrollView>
                 <SafeAreaView style={styles.container}>
                     <View style={{ marginLeft: "5%" }}>
                     <Preferences/>
-                    <NotificationSettings navigation={navigation}/>
+                    <NotificationSettings route={route} navigation={navigation}/>
                     <SettingOptions navigation={navigation}/>
                     </View>
                 <Footer navigation={navigation}/>
@@ -589,8 +605,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Avenir',
         fontWeight: "800",
-        lineHeight: 34,
-        textAlign: 'left'
+        lineHeight: 22,
+        textAlign: 'left',
+        paddingBottom: 15,
     },
     optionView:{
         paddingTop: "15%",

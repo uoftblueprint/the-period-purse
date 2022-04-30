@@ -3,11 +3,14 @@ import {View,  Text, StyleSheet, ImageBackground} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import NotificationAccordion from './NotificationAccordion'
+import { BackButton } from '../home/components/BackButtonComponent';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { GETRemindLogPeriodFreq, GETRemindLogSymptomsFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsTime } from '../services/SettingsService';
+import { BackButtonContainer } from '../onboarding/components/ContainerComponents';
+import { STACK_SCREENS } from './SettingsNavigator';
 
 
-export default function Notifications () {
+export default function Notifications ( {navigation} ) {
     const [remindPeriodFreq, setRemindPeriodFreq] = useState("2");
     const [remindPeriodTime, setRemindPeriodTime] = useState("10:00");
     const [remindPeriodTimeMeridian, setRemindPeriodTimeMeridian] = useState("AM");
@@ -62,49 +65,63 @@ export default function Notifications () {
 
 
     return (
-        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
-                        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>  
-        <SafeAreaView>
-        <View style={{top: -90}}>
+            <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <SafeAreaView>
+                <View style={styles.navbar}>
+                    <BackButtonContainer style={[styles.navitem, styles.backbutton]}>
+                        <BackButton title="" onPress={() => {
+                            navigation.navigate(STACK_SCREENS.SETTINGS, {
+                                remindPeriodFreq: remindPeriodFreq,
+                                remindPeriodTime: remindPeriodTime,
+                                remindSymptomsFreq: remindSymptomsFreq,
+                                remindSymptomsTime: remindSymptomsTime
+                            });
+                        }}/>
+                    </BackButtonContainer>
+                    <Text style={[styles.navitem, styles.title]}>Notifications</Text>
+                    <View style={styles.navitem}></View>
+                </View>
+            <View style={{top: "2%"}}>
 
-            <NotificationStack name={"Remind me to log period"} header={"We'll remind you when your period is coming."}/>
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
+                <NotificationStack name={"Remind me to log period"} header={"We'll remind you when your period is coming."}/>
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
 
-            <NotificationAccordion title={"How many days in advance"} selectedText={remindPeriodFreq} setSelectedText={setRemindPeriodFreq} type={"days"}/> 
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-            <NotificationAccordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} time={remindPeriodTime} meridian={remindPeriodTimeMeridian} setTime={setRemindPeriodTime} setTimeMeridian={setRemindPeriodTimeMeridian}  type={"periodTime"}/>
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-            <NotificationStack name={"Remind me to log symptoms"} header={"We'll remind you to log your symptoms. "}/>
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-            <NotificationAccordion title={"Repeat"} selectedText={remindSymptomsFreq} setSelectedText={setRemindSymptomsFreq} type={"howOften"}/> 
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-            <NotificationAccordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} time={remindSymptomsTime} meridian={remindSymptomsTimeMeridian} setTime={setRemindSymptomsTime} setTimeMeridian={setRemindSymptomsTimeMeridian} type={"symptomTime"}/>   
-            <View
-            style={{
-                borderBottomColor: '#CFCFCF',
-                borderBottomWidth: 1,
-                }}/>
-        </View>
+                <NotificationAccordion title={"How many days in advance"} selectedText={remindPeriodFreq} setSelectedText={setRemindPeriodFreq} type={"days"}/> 
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
+                <NotificationAccordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} time={remindPeriodTime} meridian={remindPeriodTimeMeridian} setTime={setRemindPeriodTime} setTimeMeridian={setRemindPeriodTimeMeridian}  type={"periodTime"}/>
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
+                <NotificationStack name={"Remind me to log symptoms"} header={"We'll remind you to log your symptoms. "}/>
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
+                <NotificationAccordion title={"Repeat"} selectedText={remindSymptomsFreq} setSelectedText={setRemindSymptomsFreq} type={"howOften"}/> 
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
+                <NotificationAccordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} time={remindSymptomsTime} meridian={remindSymptomsTimeMeridian} setTime={setRemindSymptomsTime} setTimeMeridian={setRemindSymptomsTimeMeridian} type={"symptomTime"}/>   
+                <View
+                style={{
+                    borderBottomColor: '#CFCFCF',
+                    borderBottomWidth: 1,
+                    }}/>
+            </View>
         </SafeAreaView>
         </ScrollView>
         </ImageBackground>
@@ -113,26 +130,34 @@ export default function Notifications () {
 
 const NotificationStack = (props) => {
     return (
-
         <SafeAreaView style={styles.rowContainer} >
             <Text style={styles.optionText}>{props.name}</Text>
             <Text style={styles.optionHeader}>{props.header}</Text>
         </SafeAreaView>
-      
     )
 }
 
 const styles = StyleSheet.create({   
     bgImage: {
-    flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'center'
-  },
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'center'
+    },    
     rowContainer: {
+        zIndex:0
+    },
+    backbutton: {
+        zIndex:1,
+    },
+    navbar: {
         flexDirection: 'column',
-        display: 'flex',
-        justifyContent: 'space-between',
-        bottom: -10,
+        alignItems: 'center',      
+    },
+    navitem: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+
     },
     dropDownTextBox: {
         flexDirection: 'row',
@@ -181,4 +206,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
+    title: {
+        top: 20,
+        fontSize: 16,
+        fontFamily: 'Avenir',
+        fontWeight: "800",
+    }
 });

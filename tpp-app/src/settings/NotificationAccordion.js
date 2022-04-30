@@ -16,7 +16,7 @@ const NotificationAccordion = (props) => {
     return (
     <SafeAreaView style={styles.container}>
         <TouchableOpacity ref={this.accordion} style={styles.dropDownTextBox} onPress={()=>toggleExpand()}>
-            <Text style={[styles.dropDownLeftText]}>{props.title}</Text>
+            <Text style={styles.dropDownLeftText}>{props.title}</Text>
             <Text style={styles.dropDownRightText}>{props.selectedText}</Text>
             <Icon name={expanded ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} size={30} color={"#5A9F93"} />
         </TouchableOpacity>
@@ -73,12 +73,12 @@ const FrequencyPicker = props => {
     value={"Every day"} 
     />
     <Picker.Item 
-    label={"Every week"}
-    value={"Every week"} 
+    label={"First day of the week"}
+    value={"First day of the week"} 
     />
     <Picker.Item 
-    label={"Every month"}
-    value={"Every month"} 
+    label={"First day of the month"}
+    value={"First day of the month"} 
     />
     <Picker.Item 
     label={"Only during period"}
@@ -317,6 +317,9 @@ const styles =  StyleSheet.create({
         backgroundColor: 'rgba(255, 255, 255, 0.5)'
     },
     dropDownLeftText : {
+        flex: 1,
+        justifyContent: 'center',
+
         fontFamily: 'Avenir',
         fontWeight: '400',
         fontSize: 16,
@@ -324,13 +327,18 @@ const styles =  StyleSheet.create({
         lineHeight: 34
     },
     dropDownRightText : {
+
         fontFamily: 'Avenir',
         fontWeight: '800',
         fontSize: 16,
         lineHeight: 34,   
         color: "#5A9F93",
-        right: -50
+
+        textAlign: 'right',
+        flex: 1,
+        justifyContent: 'center',
     },
+
     child:{
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
         padding:16,

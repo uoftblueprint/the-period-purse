@@ -16,7 +16,7 @@ export const STACK_SCREENS = {
 }
 export default function SettingsNavigator({navigation}) {
     return(
-        <Stack.Navigator intialRouteName="Settings" screenOptions={{ headerShown: true,
+        <Stack.Navigator intialRouteName="Settings" screenOptions={{ headerShown: false,
             headerStyle: {height: 200},
             headerTitleStyle: {
               fontWeight: "800",
