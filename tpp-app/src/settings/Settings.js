@@ -248,7 +248,7 @@ const NotificationSettings = (props) => {
     const [numberOfDaysUntilPeriod, setNumberOfDaysUntilPeriod] = useState(0);
 
 // needed for Notification Page 
-    const [remindPeriodFreq, setRemindPeriodFreq] = useState("2 days");
+    const [remindPeriodFreq, setRemindPeriodFreq] = useState("2");
     const [remindPeriodTime, setRemindPeriodTime] = useState("10:00");
     const [remindPeriodTimeMeridian, setRemindPeriodTimeMeridian] = useState("AM");
     const [remindSymptomsFreq, setRemindSymptomsFreq] = useState("Every day");
@@ -275,12 +275,19 @@ const NotificationSettings = (props) => {
 
      useFocusEffect(
         useCallback(() => {
-            setRemindPeriodFreq(props.route.params?.remindPeriodFreq)
-            setRemindPeriodTime(props.route.params?.remindPeriodTime)
-            setRemindSymptomsFreq(props.route.params?.remindSymptomsFreq)
-            setRemindSymptomsTime(props.route.params?.remindSymptomsTime)
-            setRemindPeriodTimeMeridian(props.route.params?.remindPeriodTimeMeridian)
-            setRemindSymptomsTimeMeridian(props.route.params?.remindSymptomsTimeMeridian)
+            
+            if (props.route.params?.remindPeriodFreq) 
+                setRemindPeriodFreq(props.route.params?.remindPeriodFreq)
+            if (props.route.params?.remindPeriodTime)
+                setRemindPeriodTime(props.route.params?.remindPeriodTime)
+            if (props.route.params?.remindSymptomsFreq)
+                setRemindSymptomsFreq(props.route.params?.remindSymptomsFreq)
+            if (props.route.params?.remindSymptomsTime)
+                setRemindSymptomsTime(props.route.params?.remindSymptomsTime)
+            if (props.route.params?.remindPeriodTimeMeridian)
+                setRemindPeriodTimeMeridian(props.route.params?.remindPeriodTimeMeridian)
+            if (props.route.params?.remindSymptomsTimeMeridian)
+                setRemindSymptomsTimeMeridian(props.route.params?.remindSymptomsTimeMeridian)
 
         }, [
             props.route.params?.remindPeriodFreq,
@@ -305,10 +312,14 @@ useEffect(() => {
     }
     async function getFreqTimes() {
 
+        console.log(remindPeriodFreq)
+
         let storedPeriodFreq = await GETRemindLogPeriodFreq();
         let storedSymptomFreq = await GETRemindLogSymptomsFreq();
         let storedPeriodTime = await GETRemindLogPeriodTime();
         let storedSymptomTime = await GETRemindLogSymptomsTime();
+
+        console.log(remindPeriodFreq)
 
         if (storedPeriodFreq) {
             setRemindPeriodFreq(storedPeriodFreq);
@@ -329,13 +340,6 @@ useEffect(() => {
             setRemindSymptomsTime(parsedTime[0]);
             setRemindSymptomsTimeMeridian(parsedTime[1]);
         }
-
-// [periodFreq, periodTime, periodMerdian, symptomsFreq, symptomsTime, symptomsMerdian], same pattern for setting functions
-        setNotificationSettingsValues([remindPeriodFreq, remindPeriodTime, remindPeriodTimeMeridian,
-                                        remindSymptomsFreq, remindSymptomsTime, remindSymptomsTimeMeridian]);
-
-        setNotificationSettingFunctions([setRemindPeriodFreq, setRemindPeriodTime, setRemindPeriodTimeMeridian,
-                                        setRemindSymptomsFreq, setRemindSymptomsTime, setRemindSymptomsTimeMeridian]);
                         
     }
     getFreqTimes();
