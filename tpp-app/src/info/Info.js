@@ -90,44 +90,57 @@ const cardData = [
 
 export default function Info ({ navigation }) {
     const [factCycleArray, setFactCycleArray] = useState([]);
+    const [retrievedFact, setRetrievedFact] = useState("Getting Fact");
 
-    var fact = "Getting fact"
-    var factWhole;
     useEffect(() => {
-        async function retrieveFactCycle() {
-            let factArray = await GETFactCycle()
+        const retrieveFactCycle = async () => {
+            var factWhole;
+            let factArray = await GETFactCycle(); 
             setFactCycleArray(factArray);
-            console.log(`This is setting factCycleArray on the InfoPage: ${factArray}`)
+            console.log(`This is setting factCycleArray on the InfoPage 1: ${factArray}`)
 
             if (!factArray){
                 POSTFactCycle().then(async () => {
                     let factArray = await GETFactCycle();
+                    console.log(`This is factCycleArray on Info page: ${factCycleArray}`)
                     setFactCycleArray(factArray);
-                   
+
+                    console.log(`This is factCycleArray number on Info Page: ${factCycleArray[1]}`)
+                    factWhole = factsJSON[factCycleArray[1]]
+                    console.log(`This is fact on Info Page: ${factWhole}`)
+                    setRetrievedFact(factWhole.slice(0, 84));
                 })
             }
+            
         if (getFullCurrentDateString() != factArray[0]) {
             POSTFactCycle().then(async () => {
             let factArray = await GETFactCycle();
+            console.log(`This is factCycleArray on Info page 2: ${factCycleArray}`)
             setFactCycleArray(factArray)
+
+            console.log(`This is factCycleArray number on Info Page: ${factCycleArray[1]}`)
+            factWhole = factsJSON[factCycleArray[1]]
+            console.log(`This is fact on Info Page: ${factWhole}`)
+
+            setRetrievedFact(factWhole.slice(0, 84));
         });
         }    
         }
         retrieveFactCycle()
     }, [])
-    factWhole = factsJSON[factCycleArray[1]]
-    console.log(`This is factCycleArray on Info page: ${factCycleArray}`)
-    console.log(`This is factCycleArray number on Info Page: ${factCycleArray[1]}`)
-    if(factWhole){
-        fact = factWhole.slice(0, 84)
-    }
-    console.log(`This is fact on Info Page: ${fact}`)
+   
+    // console.log(`This is factCycleArray on Info page: ${factCycleArray}`)
+    // console.log(`This is factCycleArray number on Info Page: ${factCycleArray[1]}`)
+    // if(factWhole){
+    //     fact = factWhole.slice(0, 84)
+    // }
+    console.log(`This is fact on Info Page: ${retrievedFact}`)
 
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <ScrollView>
                 <SafeAreaView style={styles.cardContainer}>
-                    <FunFactCard bodyText={fact} onPress={() => navigation.navigate(STACK_SCREENS.FUN_FACT)}/>
+                    <FunFactCard bodyText={retrievedFact} onPress={() => navigation.navigate(STACK_SCREENS.FUN_FACT)}/>
                     <Text style={{
                         ...styles.productText,
                         textAlign: 'left',
