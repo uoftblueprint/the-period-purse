@@ -8,34 +8,52 @@ import { getFullCurrentDateString } from "../services/utils/helpers.js"
 import dykData from "../pages/DYKFacts.json"
 
 export default function DidYouKnow({ navigation }) {
-    const [factCycleArray, setFactCycleArray] = useState([]);
+    const [factCycleDate, setFactCycleDate] = useState(""); // 0th index
+    const [factCycleNum, setFactCycleNum] = useState(1); // number of fact
+    const [retrievedFact, setRetrievedFact] = useState("Getting Fact");
     useEffect(() => {
         async function retrieveFactCycle() {
-            var factArray = await GETFactCycle()
-            setFactCycleArray(factArray);
-            console.log(`${factArray}`)
+           let factWhole;
+            GETFactCycle().then((factArray) => {
+                console.log(19, factArray);
+                factWhole = dykData[factCycleNum];
+                setRetrievedFact(factWhole.slice(0, 84));
 
-            if (!factArray){
-                await POSTFactCycle().then(async () => {
-                    factArray = await GETFactCycle();
-                    console.log(`${factArray}`)
-                    setFactCycleArray(factArray);
-                })
-            }
-        if (getFullCurrentDateString() != factArray[0]) {
-            POSTFactCycle().then(async () => {
-            factArray = await GETFactCycle();
-            console.log(`${factArray}`)
-            setFactCycleArray(factArray)
-        });
-        }    
+                if (!factArray){
+                    POSTFactCycle().then(async () => {
+                        let factArray = await GETFactCycle();
+                        setFactCycleDate(factArray[0]);
+                        setFactCycleNum(factArray[1]);
+                        factWhole = dykData[factCycleNum]
+                        console.log(`This is fact on DYKpage 29: ${factWhole}`)
+                        setRetrievedFact(factWhole);
+                    })
+                }
+
+                setFactCycleDate(factArray[0]);
+                setFactCycleNum(factArray[1]);
+
+                if (getFullCurrentDateString() !== factCycleDate) {
+                    POSTFactCycle().then(async () => {
+                        let factArray = await GETFactCycle();
+                        console.log(`This is factArray on DYK 40: ${factArray}`)
+                        setFactCycleDate(factArray[0]);
+                        setFactCycleNum(factArray[1]);
+
+                        factWhole = dykData[factCycleNum]
+                        console.log(`This is factWhole on DYK 45: ${factWhole}`)
+
+                        setRetrievedFact(factWhole);
+                    });
+                }
+            }); 
         }
         retrieveFactCycle()
     }, [])
 
-    let fact = dykData[factCycleArray[1]]
-    console.log(`This is factCycleArray number on DYK page: ${factCycleArray[1]}`)
-    console.log(`This is fact on DYK page: ${fact}`)
+    let fact = dykData[factCycleNum]
+    console.log(`This is factCycleArray number on DYK page: ${factCycleNum}`)
+    console.log(`This is fact on DYK page: ${retrievedFact}`)
 
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
