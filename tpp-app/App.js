@@ -135,8 +135,10 @@ export function MainNavigator() {
             headerTitleStyle: {
               fontWeight: "800",
               fontSize: 20,
-              fontFamily: "Avenir"
-            }
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93"
           }}/>
           <Stack.Screen name={STACK_SCREENS.TERMS_AND_CONDITION} component={TermsAndConditions} 
           options={{title: "Terms and Conditions",
@@ -145,8 +147,10 @@ export function MainNavigator() {
             headerTitleStyle: {
               fontWeight: "800",
               fontSize: 20,
-              fontFamily: "Avenir"
-            }
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93"
           }} />
         </Stack.Navigator>
       </NavigationContainer>

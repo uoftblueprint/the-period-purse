@@ -13,10 +13,6 @@ You are solely responsible for your account and the security and privacy of your
 export default TermsAndConditionsScreen = ({navigation}) => {
     const {width} = useWindowDimensions();
 
-    const onClose = () => {
-        navigation.goBack();
-    }
-
     return(
       <ErrorFallback>
         
