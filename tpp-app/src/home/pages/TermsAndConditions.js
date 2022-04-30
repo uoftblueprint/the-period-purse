@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, useWindowDimensions, TouchableOpacity, ImageBackground, SafeAreaView} from 'react-native';
+import { View, ScrollView, StyleSheet, Text, useWindowDimensions, ImageBackground} from 'react-native';
 import RenderHtml from 'react-native-render-html';
-import BackIcon from '../../../ios/tppapp/Images.xcassets/icons/back_icon.svg'
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 
 const source = {html: `<ol style="font-family: Avenir;font-Size: 14px;">
@@ -18,14 +17,7 @@ export default TermsAndConditionsScreen = ({navigation}) => {
     }
 
     return(
-        <ImageBackground source={OnboardingBackground} style={styles.containter}>
-            <View style={styles.navbarContainer}>
-                <TouchableOpacity onPress={() => onClose()} style={styles.backIcon}>
-                    <BackIcon fill={'#181818'}/>
-                </TouchableOpacity>
-                <Text style={styles.navbarText}>Terms and Conditions</Text>
-            </View>
-            
+        <ImageBackground source={OnboardingBackground} style={styles.containter}>            
             <ScrollView style={styles.scrollContainer}>
                 <Text style={styles.title}>Terms and Conditions</Text>
                 <View style={styles.line}/>
@@ -92,36 +84,12 @@ const styles = StyleSheet.create({
     },
     header:{
         fontFamily: "Avenir",
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: "bold",
     },  
     standardText: {
         fontFamily: "Avenir",
         fontSize: 14,
-    },
-    backIcon: {
-        height: 40,
-        width: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'absolute',
-        left: 18,
-        bottom: 10
-
-    },
-    navbarContainer: {
-        paddingTop: 60,
-        paddingBottom: 20,
-        position: 'relative',
-        flexDirection: 'row',
-        backgroundColor: "#FFFFFF",
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    navbarText: {
-        fontSize: 20,
-        fontFamily: "avenir",
     },
     title: {
         fontSize: 34,

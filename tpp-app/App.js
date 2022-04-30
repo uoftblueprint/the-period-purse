@@ -125,8 +125,26 @@ export function MainNavigator() {
       <NavigationContainer ref={navigationRef} independent={true}>
         <Stack.Navigator intialRouteName="footer" screenOptions={{ headerShown: false }}>
           <Stack.Screen name={STACK_SCREENS.MAIN_PAGE} component={MainPage}/>
-          <Stack.Screen name={STACK_SCREENS.PRIVACY_POLICY} component={PrivacyPolicyScreen}/>
-          <Stack.Screen name={STACK_SCREENS.TERMS_AND_CONDITION} component={TermsAndConditions}/>
+          <Stack.Screen name={STACK_SCREENS.PRIVACY_POLICY} component={PrivacyPolicyScreen} 
+          options={{title: "Private Policy",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir"
+            }
+          }}/>
+          <Stack.Screen name={STACK_SCREENS.TERMS_AND_CONDITION} component={TermsAndConditions} 
+          options={{title: "Terms and Conditions",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir"
+            }
+          }} />
         </Stack.Navigator>
       </NavigationContainer>
   );

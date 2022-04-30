@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, useWindowDimensions, TouchableOpacity, ImageBackground, Linking} from 'react-native';
-import BackIcon from '../../../ios/tppapp/Images.xcassets/icons/back_icon.svg'
+import { View, ScrollView, StyleSheet, Text, ImageBackground, Linking} from 'react-native';
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 
 const EmailLink = () => {
@@ -27,14 +26,7 @@ export default PrivacyPolicyScreen = ({navigation}) => {
     }
 
     return(
-        <ImageBackground source={OnboardingBackground} style={styles.containter}>
-            <View style={styles.navbarContainer}>
-                <TouchableOpacity onPress={() => onClose()} style={styles.backIcon}>
-                    <BackIcon fill={'#181818'}/>
-                </TouchableOpacity>
-                <Text style={styles.navbarText}>Privacy Policy</Text>
-            </View>
-            
+        <ImageBackground source={OnboardingBackground} style={styles.containter}>            
             <ScrollView style={styles.scrollContainer}>
                 <Text style={styles.title}>Privacy Policy</Text>
                 <View style={styles.line}/>
@@ -90,31 +82,6 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         padding: 20,
-    },
-    backIcon: {
-        height: 40,
-        width: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'absolute',
-        left: 18,
-        bottom: 10
-
-    },
-    navbarContainer: {
-        paddingTop: 60,
-        paddingBottom: 20,
-        position: 'relative',
-        flexDirection: 'row',
-        backgroundColor: "#FFFFFF",
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    navbarText: {
-        fontSize: 20,
-        fontFamily: "avenir",
-
     },
     title: {
         fontSize: 34,
