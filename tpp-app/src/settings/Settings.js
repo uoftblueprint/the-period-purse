@@ -273,12 +273,13 @@ const NotificationSettings = (props) => {
 
      useFocusEffect(
         useCallback(() => {
-    
-            console.log("YUH", props.route.params?.remindPeriodFreq,
-                props.route.params?.remindPeriodTime,
-                props.route.params?.remindSymptomsFreq,
-                props.route.params?.remindSymptomsTime);
-    
+            setRemindPeriodFreq(props.route.params?.remindPeriodFreq)
+            setRemindPeriodTime(props.route.params?.remindPeriodTime)
+            setRemindSymptomsFreq(props.route.params?.remindSymptomsFreq)
+            setRemindSymptomsTime(props.route.params?.remindSymptomsTime)
+            setRemindPeriodTimeMeridian(props.route.params?.remindPeriodTimeMeridian)
+            setRemindSymptomsTimeMeridian(props.route.params?.remindSymptomsTimeMeridian)
+
         }, [
             props.route.params?.remindPeriodFreq,
             props.route.params?.remindPeriodTime,

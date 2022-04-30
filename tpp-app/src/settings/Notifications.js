@@ -75,7 +75,9 @@ export default function Notifications ( {navigation} ) {
                                 remindPeriodFreq: remindPeriodFreq,
                                 remindPeriodTime: remindPeriodTime,
                                 remindSymptomsFreq: remindSymptomsFreq,
-                                remindSymptomsTime: remindSymptomsTime
+                                remindSymptomsTime: remindSymptomsTime,
+                                remindPeriodTimeMeridian: remindPeriodTimeMeridian,
+                                remindSymptomsTimeMeridian: remindSymptomsTimeMeridian,
                             });
                         }}/>
                     </BackButtonContainer>
