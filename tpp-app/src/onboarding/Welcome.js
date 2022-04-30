@@ -117,7 +117,8 @@ export default function Welcome() {
               fontFamily: "Avenir",
               color: "black"
             },
-            headerTintColor:"#5A9F93"
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
           }}
       />
       <Stack.Screen
@@ -132,7 +133,8 @@ export default function Welcome() {
               fontFamily: "Avenir",
               color: "black"
             },
-            headerTintColor:"#5A9F93"
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
           }}
       />
       </Stack.Navigator>
