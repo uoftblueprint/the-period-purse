@@ -63,7 +63,7 @@ The app also includes some links to social media pages. If you click those links
                 <Text style={styles.header}>{`\nI am underage. Can I use this app?`}</Text>
                 <Text style={styles.standardText}>{`From a privacy standpoint, you can use this app whichever your age is, because your data stays with you. `}</Text>
                 
-                <Text style={styles.header}>{`\nDChanges to this privacy policy`}</Text>
+                <Text style={styles.header}>{`\nChanges to this privacy policy`}</Text>
                 <Text style={styles.standardText}>{`If any of the above were to change, we will update this document to inform you.`}</Text>
                 
                 <Text style={styles.header}>{`\nQuestions and contact information`}</Text>
