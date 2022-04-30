@@ -299,9 +299,10 @@ const styles = StyleSheet.create({
     height: 50,
     display: "flex",
     alignItems: 'center',
+    right: -18
   },
   icon: {
-        transform: [{scale:0.7}]
+        transform: [{scale:0.7}],
   },
   paddyIcon: {
     transform: [{scale:0.4}]
