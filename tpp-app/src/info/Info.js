@@ -108,7 +108,7 @@ export default function Info ({ navigation }) {
                         GETFactCycle().then((rePostedFactArray) => {
                             setFactCycleDate(rePostedFactArray[0]);
                             setFactCycleNum(rePostedFactArray[1]);
-                            factWhole = factsJSON[rePostedArray[1]]
+                            factWhole = factsJSON[rePostedFactArray[1]]
                             console.log(`This is fact on Info Page 111: ${factWhole}`)
                             setRetrievedFact(factWhole.slice(0, 84));
                         })
