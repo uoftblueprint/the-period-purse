@@ -1,16 +1,19 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, ImageBackground, SafeAreaView} from 'react-native';
+import {StyleSheet, Text, Image, ImageBackground, SafeAreaView} from 'react-native';
 import TamponImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/tampons-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import { BackButtonContainer } from '../onboarding/components/ContainerComponents';
 import ErrorFallback from "../error/error-boundary";
 
 export default function TamponInfo({ navigation }) {
     return (
     <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.container}>
-            <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <View style={styles.arrowPosition}><BackButton onPress={() => navigation.goBack()}/></View>
+            <SafeAreaView pointer-events="box-only" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <BackButtonContainer>
+                    <BackButton title="" onPress={() => navigation.goBack()}/>
+                </BackButtonContainer>
                     <Image
                     source= {TamponImage}
                     style={styles.image}
@@ -45,43 +48,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
       },
     image: {
-        position: 'absolute', 
-        width: 212, 
-        height: 117, 
-        left: 97, 
-        top: "20%",
-        bottom: 560
+        width: "50%",
+        height: "15%",
+        marginBottom: "6%"
     },
     titleText: {
-        position: 'absolute',
         textAlign: 'center',
         fontFamily: 'Avenir',
-        left: '6.37%',
-        right: '6.37%',
-        top: '37%',
-        bottom: '15.15%',
+        marginBottom: "3%",
         fontWeight: '800',
         fontSize: 34,
-        lineHeight: 46,
-        letterSpacing: -0.02
+        lineHeight: 40
     },
     bodyText: {
-           position: 'absolute',
-           textAlign: 'center',
-           fontFamily: 'Avenir',
-           fontSize: 14,
-           lineHeight: 19,
-           letterSpacing: -0.3,
-           left: '14.13%',
-           right: '14.13%',
-           top: '45.94%',
-           bottom: '-12.44%'},
-    arrowPosition: {
-            position: 'absolute',
-            left: 17.05,
-            right: 348.5,
-            top: 54.51,
-            bottom: 741.52
-        }
-    
+        textAlign: 'center',
+        fontFamily: 'Avenir',
+        fontSize: 16,
+        lineHeight: 18,
+        letterSpacing: -0.3,
+        paddingLeft: "10%",
+        paddingRight: "10%"
+    },
 });

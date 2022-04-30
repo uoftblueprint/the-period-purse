@@ -208,4 +208,22 @@ export const GETStoredYears = async () => {
         console.log(e);
         errorAlertModal();
     }
+
+    return storedYears;
+}
+
+/**
+ * Calculates the number of months between today's date and date given by dateFromStr
+ * @param {String} dateFromStr string ("YYYY-MM-DD") representing the date to calculate from
+ * @returns the number of months between today's date and dateFromStr
+ */
+export const getMonthsDiff = (dateFromStr) => {
+  if(dateFromStr) {
+    let parts = dateFromStr.split('-')
+    let dateFrom = new Date(parts[0], parts[1] - 1, parts[2]); 
+    let dateTo = new Date()
+    return (dateTo.getMonth() - dateFrom.getMonth()) + 
+        (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
+  }
+  return null;
 }

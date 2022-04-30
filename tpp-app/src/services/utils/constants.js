@@ -121,7 +121,8 @@ export const KEYS = {
   INITIAL_PERIOD_LENGTH: "initialPeriodLength",
   SELECTED_YEAR: "selectedYear",
   SELECTED_MONTH: "selectedMonth",
-  SELECTED_VIEW: "selectedView"
+  SELECTED_VIEW: "selectedView",
+  JOINED_DATE: "joinedDate",
 }
 
 export const REMINDERS = {
