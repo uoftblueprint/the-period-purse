@@ -39,15 +39,21 @@ export const POSTFactCycle = async () => new Promise(async (resolve, reject) => 
         } else {
             // get the current date
             newDate = getFullCurrentDateString()
-            if (newDate != await GETFactCycle()[0]) { // update dateand fact only if the current date does not match the stored date
-                var previousFactNum = await GETFactCycle()[1]
+            let storedFactArray = await GETFactCycle()
+            if (newDate != storedFactArray[0]) { // update dateand fact only if the current date does not match the stored date
+                console.log(`This is the date that POSTFactCylce got: ${storedFactArray[0]}`)
+                let previousFactNum = storedFactArray[1]
                 console.log(`This is previous fact number: ${previousFactNum}`)
                 var newFactNum;
 
                 if(!previousFactNum) { // if for some reason, the previous fact number is null, randomly generate a number
                     newFactNum = (Math.floor(Math.random() * (28 - 1 + 1)) + 1).toString();
                     console.log(`This is a randomly generated newFactNumber fact number: ${newFactNum}`)
-                } else {
+                } else if ((parseInt(previousFactNum, 10) == 28)) {
+                    newFactNum = "1";
+                    console.log(`Returned to the first fact in fact cycle`);
+                }
+                else {
                     newFactNum = (parseInt(previousFactNum, 10) + 1).toString();
                     console.log(`This is a calculated newFactNumber fact number: ${newFactNum}`)
                 }
