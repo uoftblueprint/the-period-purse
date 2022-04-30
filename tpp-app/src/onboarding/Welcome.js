@@ -108,7 +108,7 @@ export default function Welcome() {
       <Stack.Screen
         name={STACK_SCREENS.PRIVACY_POLICY}
         component={PrivacyPolicyScreen}
-        options={{title: "Private Policy",
+        options={{title: "Privacy Policy",
             headerShown: true,
             headerStyle: {height: 200},
             headerTitleStyle: {
