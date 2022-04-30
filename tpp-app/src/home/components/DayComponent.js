@@ -23,7 +23,7 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
         // Basically whatever special value that is attached to the specific key in the Symptoms object
         // i.e. for flow it would be HEAVY/MEDIUM/LIGHT
         // for sleep it will be a number etc.
-        let symptomAttribute = marking.symptoms[viewKey]
+        let symptomAttribute = marking.symptoms ? marking.symptoms[viewKey] : null;
 
         // If disabled
         if (marking.disable) {
@@ -54,6 +54,9 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
             if (viewKey !== 'mood') {
                 bgColor = FILTER_COLOURS[viewKey.toUpperCase()][attribute.toUpperCase()]
                 textColor = FILTER_TEXT_COLOURS[viewKey.toUpperCase()][attribute.toUpperCase()]
+            } else {
+                bgColor = FILTER_COLOURS.NOFILTER;
+                textColor = FILTER_TEXT_COLOURS.NOFILTER;
             }
             
             // Get Icon
@@ -63,11 +66,14 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
 
             renderedIcon = createElement(ICON_TYPES[iconName], {
                 style: styles.dayIcon,
-                width: ICON_SIZE.height,
-                height: ICON_SIZE.width,
+                width: ICON_SIZE.width,
+                height: ICON_SIZE.height,
                 fill: textColor
             })
             
+        } else {
+            bgColor = FILTER_COLOURS.NOFILTER;
+            textColor = FILTER_TEXT_COLOURS.NOFILTER;
         }
     }
 
@@ -102,11 +108,11 @@ function filterSleep(minutes) {
     let sleepScore = minutes / 60
     let attribute;
 
-    if (sleepScore >= 8) {
+    if (sleepScore > 10) {
         attribute = 'HEAVY'
-    } else if (sleepScore >= 6.5) {
+    } else if (sleepScore >= 8) {
         attribute = 'MEDIUM'
-    } else if (sleepScore >= 5) {
+    } else if (sleepScore >= 6) {
         attribute = 'LIGHT'
     } else {
         attribute = 'LITTLE'
@@ -124,11 +130,11 @@ function filterExercise(minutes) {
 
     let attribute;
 
-    if (minutes > 120) {
+    if (minutes > 60) {
         attribute = 'HEAVY'
-    } else if (minutes > 90) {
+    } else if (minutes >= 40) {
         attribute = 'MEDIUM'
-    } else if (minutes > 60) {
+    } else if (minutes >= 20) {
         attribute = 'LIGHT'
     } else {
         attribute = 'LITTLE'

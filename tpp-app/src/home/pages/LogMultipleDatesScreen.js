@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import {View, StyleSheet, Text, TouchableOpacity, Alert, SafeAreaView, ScrollView} from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg'
 import { CalendarList } from 'react-native-calendars';
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
-import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar} from '../../services/utils/helpers';
+import {getCalendarByYear, getISODate, GETStoredYears, getSymptomsFromCalendar, getMonthsDiff } from '../../services/utils/helpers';
 import { LogMultipleDayPeriod } from '../../services/LogSymptomsService';
 import SubmitIcon from '../../../ios/tppapp/Images.xcassets/icons/checkmark';
+import { scrollDate } from './CalendarScreen';
 import {FILTER_COLOURS, FILTER_TEXT_COLOURS, FLOW_LEVEL} from "../../services/utils/constants";
 import {GETYearData} from "../../services/CalendarService";
 import { calculateAverages } from "../../services/CalculationService";
+import ErrorFallback from "../../error/error-boundary";
 import Constants from 'expo-constants';
+import { GETJoinedDate } from '../../services/OnboardingService';
+import LoadingVisual from '../components/LoadingVisual';
 
 const DayComponent = ({props}) => {
     const {onPress, date, marking} = props;
@@ -29,14 +33,21 @@ const DayComponent = ({props}) => {
     )
 }
 
-export const Calendar = ({ navigation, setSelectedDates, markedDates }) => {
+export const Calendar = ({ navigation, setSelectedDates, markedDates, currentDate }) => {
+    let joinedDate = ""; 
+    GETJoinedDate().then(res => { joinedDate = res })
+    const futureScroll = 1 + (getMonthsDiff(currentDate))
+    const pastScroll = 12 + (getMonthsDiff(joinedDate)) - (getMonthsDiff(currentDate))
     return (
         <CalendarList
+        // Initially visible month. Default = now
+        current={currentDate}
+
         // Max amount of months allowed to scroll to the past. Default = 50
-        pastScrollRange={12}
+        pastScrollRange={pastScroll}
 
         // Max amount of months allowed to scroll to the future. Default = 50
-        futureScrollRange={1}
+        futureScrollRange={futureScroll}
 
         // Enable or disable scrolling of calendar list
         scrollEnabled={true}
@@ -94,6 +105,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     const [markedDates, setMarkedDates] = useState({});
     const [hasChanged, setHasChanged] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [loaded, setLoaded] = useState(false);
     const DESELECTED_COLOR = '#FFFFFF';
     const SELECTED_COLOR = '#E44545';
 
@@ -129,6 +141,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                                 });
                             });
                             setMarkedDates(allMarkedDates);
+                            setLoaded(true);
                         })
                         .catch((error) => {
                             console.log(`GETCycleHistoryByYear error: ${JSON.stringify(error)}`);
@@ -246,7 +259,58 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     };
 
 
-    
+    const onSubmit = async() => {
+        let selectedDates = [];
+        let deselectedDates = [];
+
+        Object.keys(markedDates).map(date => {
+            // Dates that were not selected before that have been marked as selected
+            if (markedDates[date].marked && !markedDates[date].originalMarked) {
+                const processed = date.split("-");
+                const data = {year: processed[0], month: processed[1], day: processed[2]};
+
+                selectedDates.push(data);
+
+            // Dates that were selected before that have been marked as unselected
+            } else if (!markedDates[date].marked && markedDates[date].originalMarked) {
+                const processed = date.split("-");
+                const data = {year: processed[0], month: processed[1], day: processed[2]};
+
+                deselectedDates.push(data);
+            }
+        });
+
+        let inputData = {}
+
+        if(selectedDates.length + deselectedDates.length > 0){
+            try {
+                await LogMultipleDayPeriod(selectedDates, deselectedDates);
+                for (let date of selectedDates.concat(deselectedDates)) {
+                    let cal = await getCalendarByYear(date.year);
+                    let submitSymp = getSymptomsFromCalendar(cal, date.day, date.month, date.year);
+                    let dateObject = new Date(date.year, date.month - 1, date.day)
+                    inputData[getISODate(dateObject)] = {
+                      symptoms: submitSymp
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        
+        let newDate = null;
+        if(selectedDates.length > 0) 
+            newDate = [selectedDates[0].year, selectedDates[0].month, selectedDates[0].day].join("-")
+        else if(deselectedDates.length > 0)
+            newDate = [deselectedDates[0].year, deselectedDates[0].month, deselectedDates[0].day].join("-")
+        
+        navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, { 
+            inputData: inputData,
+            newDate: newDate
+        });
+      
+        await calculateAverages();
+    }
 
     const alertPopup = (info) =>  {
         Alert.alert(
@@ -272,37 +336,47 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         }
     }
 
+    if (loaded){
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.navbarContainer}>
+        <ErrorFallback>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.navbarContainer}>
 
-                <TouchableOpacity onPress={() => onClose()} style={styles.close}>
-                  <CloseIcon fill={'#181818'}/>
-                </TouchableOpacity>
-                <View style={styles.navbarTextContainer}>
+                    <TouchableOpacity onPress={() => onClose()} style={styles.close}>
+                      <CloseIcon fill={'#181818'}/>
+                    </TouchableOpacity>
+                    <View style={styles.navbarTextContainer}>
 
-                    <Text style={styles.navbarTitle}>Tap date to log period</Text>
-                    <Text style={styles.navbarSubTitle}>
-                        Selected dates will have their Flow level set to Medium
-                    </Text>
+                        <Text style={styles.navbarTitle}>Tap date to log period</Text>
+                        <Text style={styles.navbarSubTitle}>
+                            Selected dates will have their Flow level set to Medium
+                        </Text>
 
+                    </View>
                 </View>
-            </View>
+
             <View style={styles.calendar}>
-                <Calendar
-                    numSelected={numSelected}
-                    setNumSelected={setNumSelected}
-                    navigation={navigation}
-                    setSelectedDates={setSelectedDates}
-                    markedDates={markedDates}
-                />
+              <Calendar 
+                  numSelected={numSelected}
+                  setNumSelected={setNumSelected}
+                  navigation={navigation}
+                  setSelectedDates={setSelectedDates}
+                  markedDates={markedDates}
+                  currentDate={scrollDate}
+              />
             </View>  
             <TouchableOpacity disabled={!hasChanged} onPress={() => setSubmitting(true)} style={{...styles.submitButton, opacity: hasChanged ? 1 : 0.5}}>
                 <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>
         </SafeAreaView>
+  </ErrorFallback>
     )
+
+    }
+    else{
+        return (<LoadingVisual/>)
+    }
 }
 
 const styles = StyleSheet.create({
