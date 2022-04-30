@@ -103,6 +103,8 @@ export default function LogMultipleDatesScreen ({ navigation }) {
     // const [selectedDates, setSelectedDates] = useState([]);
     const [numSelected, setNumSelected] = useState(0);
     const [markedDates, setMarkedDates] = useState({});
+    const [hasChanged, setHasChanged] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const DESELECTED_COLOR = '#FFFFFF';
     const SELECTED_COLOR = '#E44545';
@@ -151,7 +153,69 @@ export default function LogMultipleDatesScreen ({ navigation }) {
         }
 
         populateMarkedDates();
+        
     }, []);
+
+    useEffect(() => {
+        setHasChanged(Object.keys(markedDates).some(key =>
+            (markedDates[key].marked && !markedDates[key].originalMarked) || (!markedDates[key].marked && markedDates[key].originalMarked)));
+    
+    }, [numSelected])
+
+    useEffect(() => {
+        if(!submitting){
+            return;
+        }
+
+        const onSubmit = async() => {
+            let selectedDates = [];
+            let deselectedDates = [];
+    
+            Object.keys(markedDates).map(date => {
+                // Dates that were not selected before that have been marked as selected
+                if (markedDates[date].marked && !markedDates[date].originalMarked) {
+                    const processed = date.split("-");
+                    const data = {year: processed[0], month: processed[1], day: processed[2]};
+    
+                    selectedDates.push(data);
+    
+                // Dates that were selected before that have been marked as unselected
+                } else if (!markedDates[date].marked && markedDates[date].originalMarked) {
+                    const processed = date.split("-");
+                    const data = {year: processed[0], month: processed[1], day: processed[2]};
+    
+                    deselectedDates.push(data);
+                }
+            });
+    
+            let inputData = {}
+    
+            if(selectedDates.length + deselectedDates.length > 0){
+                try {
+                    await LogMultipleDayPeriod(selectedDates, deselectedDates);
+                    for (let date of selectedDates.concat(deselectedDates)) {
+                        let cal = await getCalendarByYear(date.year);
+                        let submitSymp = getSymptomsFromCalendar(cal, date.day, date.month, date.year);
+                        let dateObject = new Date(date.year, date.month - 1, date.day)
+                        inputData[getISODate(dateObject)] = {
+                          symptoms: submitSymp
+                        }
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            setSubmitting(false);
+            navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData});
+            await calculateAverages();
+            
+        }
+
+        onSubmit();
+
+
+    }, [submitting])
+
 
     const unsavedChanges = {
         title: "Unsaved changes",
@@ -302,7 +366,7 @@ export default function LogMultipleDatesScreen ({ navigation }) {
                   currentDate={scrollDate}
               />
             </View>  
-            <TouchableOpacity onPress={async() => {await onSubmit()}} style={styles.submitButton}>
+            <TouchableOpacity disabled={!hasChanged} onPress={() => setSubmitting(true)} style={{...styles.submitButton, opacity: hasChanged ? 1 : 0.5}}>
                 <SubmitIcon fill={'#181818'}/>
             </TouchableOpacity>
         </SafeAreaView>

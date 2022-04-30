@@ -180,6 +180,16 @@ export default function CalendarScreen ({ route, navigation }) {
         }, [route.params?.inputData])
     )
 
+    const toggleSelectedView = (targetView, toggleable) => {
+        if (toggleable) {
+            if (selectedView === targetView) {
+                setSelectedView(VIEWS.Nothing);
+            } else {
+                console.log("Selected " + targetView)
+                setSelectedView(targetView);
+            }
+        }
+    }
     useEffect(() => {
         if(route.params?.newDate && selectedView !== VIEWS.Flow)
             setSelectedView(VIEWS.Flow);
