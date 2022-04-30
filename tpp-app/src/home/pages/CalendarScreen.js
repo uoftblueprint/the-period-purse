@@ -1,4 +1,4 @@
-import { View, StyleSheet, SafeAreaView, TouchableOpacity, Text } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
@@ -8,6 +8,8 @@ import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
 import { getISODate } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
+import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 
 const sideComponentWidth = 120
 
@@ -155,12 +157,20 @@ export default function CalendarScreen ({ route, navigation }) {
     const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
     return (
         <SafeAreaView style={styles.container}>
+            <View style={styles.dropdown}>
             <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
                 <Text style={styles.dropdownText}>{selectedView}</Text>
                 <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
                 {renderedArrow}
             </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LEGEND_PAGE, {screen: CALENDAR_STACK_SCREENS.LEGEND_PAGE})}
+              style={styles.legend}>
+              <LegendButton></LegendButton>
+            </TouchableOpacity>
+            </View>
             <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} toggleSelectedView={toggleSelectedView}/>
+
             <View style={styles.calendar}>
                 <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
             </View>
@@ -169,6 +179,15 @@ export default function CalendarScreen ({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+    dropdown: {
+      margin: 10,
+      backgroundColor: '#fff',
+      width: '100%'
+    },
+    legend: {
+      position: 'absolute',
+      right: 30,
+    },
     calendar: {
       marginBottom: '20%'
     },
