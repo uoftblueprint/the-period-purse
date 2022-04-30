@@ -99,17 +99,13 @@ export default function Info ({ navigation }) {
             GETFactCycle().then((factArray) => {
                 console.log(100, factArray);
 
-                // factWhole = factsJSON[factCycleNum];  
-                // console.log(`This is fact on Info Page 102: ${factWhole}`)
-                // setRetrievedFact(factWhole.slice(0, 84));
-
                 if (!factArray){
                     POSTFactCycle().then(async () => {
                         GETFactCycle().then((rePostedFactArray) => {
                             setFactCycleDate(rePostedFactArray[0]);
                             setFactCycleNum(rePostedFactArray[1]);
                             factWhole = factsJSON[rePostedFactArray[1]]
-                            console.log(`This is fact on Info Page 111: ${factWhole}`)
+                            console.log(`This is fact on Info Page 108: ${factWhole}`)
                             setRetrievedFact(factWhole.slice(0, 84));
                         })
                       
@@ -119,13 +115,13 @@ export default function Info ({ navigation }) {
                 if (getFullCurrentDateString() !== factArray[0]) {
                     POSTFactCycle().then(async () => {
                         GETFactCycle().then((rePostedFactArray) => {
-                        console.log(`This is factCycleArray on Info line 119: ${rePostedFactArray}`)
+                        console.log(`This is factCycleArray on Info line 118: ${rePostedFactArray}`)
                         setFactCycleDate(rePostedFactArray[0]);
                         setFactCycleNum(rePostedFactArray[1]);
 
-                        console.log(`This is factCycleArray number on Info Page 124: ${rePostedFactArray[1]}`)
+                        console.log(`This is factCycleArray number on Info Page 122: ${rePostedFactArray[1]}`)
                         factWhole = factsJSON[rePostedFactArray[1]]
-                        console.log(`This is fact on Info Page 125: ${factWhole}`)
+                        console.log(`This is fact on Info Page 124: ${factWhole}`)
 
                         setRetrievedFact(factWhole.slice(0, 84));
 
@@ -135,8 +131,8 @@ export default function Info ({ navigation }) {
                 } else {
                     setFactCycleNum(factArray[1]);
                     factWhole = factsJSON[factArray[1]]
-                    console.log(`This is factCycleNum on Info page 135: ${factCycleNum}`)
-                    console.log(`This is fact on Info Page 136: ${factWhole}`)
+                    console.log(`This is factCycleNum on Info page 134: ${factCycleNum}`)
+                    console.log(`This is fact on Info Page 135: ${factWhole}`)
 
                     setRetrievedFact(factWhole.slice(0, 84));
                 }
@@ -147,8 +143,8 @@ export default function Info ({ navigation }) {
         retrieveFactCycle()
     }, [])
 
-    console.log(`This is factCycleNum on Info page 145: ${factCycleNum}`)
-    console.log(`This is fact on Info Page 146: ${retrievedFact}`)
+    console.log(`This is factCycleNum on Info page 146: ${factCycleNum}`)
+    console.log(`This is fact on Info Page 147: ${retrievedFact}`)
 
     return (
         <ImageBackground source={OnboardingBackground} style={styles.container}>
