@@ -11,7 +11,7 @@ import { getFullCurrentDateString } from "../services/utils/helpers.js"
          AsyncStorage.getItem(FACT_NUM.FACT_CYCLE_NUM).then((array) => {
             console.log(`Retrieved Fact Cycle Date and Number: ${array}`);
             console.log(`GETFactCycle got this array: ${array}`)
-            resolve(array != null ? JSON.parse(array) : null);
+            resolve(array != null ? JSON.parse(array) : ["2022-1-1", "1"]);
         });  
     } catch (e) {
         console.log(`GETFactCycle error: ${JSON.stringify(e)}`)

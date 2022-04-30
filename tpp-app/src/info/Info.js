@@ -89,42 +89,47 @@ const cardData = [
 ]
 
 export default function Info ({ navigation }) {
-    const [factCycleArray, setFactCycleArray] = useState([]);
+    const [factCycleDate, setFactCyleDate] = useState(""); // 0th index
+    const [factCycleNum, setFactCycleNum] = useState(1); // number of fact
     const [retrievedFact, setRetrievedFact] = useState("Getting Fact");
 
     useEffect(() => {
         const retrieveFactCycle = async () => {
-            var factWhole;
-            let factArray = await GETFactCycle(); 
-            setFactCycleArray(factArray);
-            console.log(`This is setting factCycleArray on the InfoPage 1: ${factArray}`)
+            let factWhole;
+            GETFactCycle().then((factArray) => {
+                console.log(99, factArray);
+                setFactCyleDate(factArray[0]);
+                setFactCycleNum(factArray[1]);
+                factWhole = factsJSON[factCycleNum];
+                setRetrievedFact(factWhole.slice(0, 84));
 
-            if (!factArray){
-                POSTFactCycle().then(async () => {
-                    let factArray = await GETFactCycle();
-                    console.log(`This is factCycleArray on Info page: ${factCycleArray}`)
-                    setFactCycleArray(factArray);
+                if (!factArray){
+                    POSTFactCycle().then(async () => {
+                        let factArray = await GETFactCycle();
+                        setFactCyleDate(factArray[0]);
+                        setFactCycleNum(factArray[1]);
+                        factWhole = factsJSON[factCycleNum]
+                        console.log(`This is fact on Info Page: ${factWhole}`)
+                        setRetrievedFact(factWhole.slice(0, 84));
+                    })
+                }
 
-                    console.log(`This is factCycleArray number on Info Page: ${factCycleArray[1]}`)
-                    factWhole = factsJSON[factCycleArray[1]]
-                    console.log(`This is fact on Info Page: ${factWhole}`)
-                    setRetrievedFact(factWhole.slice(0, 84));
-                })
-            }
-            
-        if (getFullCurrentDateString() != factArray[0]) {
-            POSTFactCycle().then(async () => {
-            let factArray = await GETFactCycle();
-            console.log(`This is factCycleArray on Info page 2: ${factCycleArray}`)
-            setFactCycleArray(factArray)
+                if (getFullCurrentDateString() !== factArray[0]) {
+                    POSTFactCycle().then(async () => {
+                        let factArray = await GETFactCycle();
+                        console.log(`This is factCycleArray on Info page 2: ${factCycleArray}`)
+                        setFactCycleArray(factArray)
 
-            console.log(`This is factCycleArray number on Info Page: ${factCycleArray[1]}`)
-            factWhole = factsJSON[factCycleArray[1]]
-            console.log(`This is fact on Info Page: ${factWhole}`)
+                        console.log(`This is factCycleArray number on Info Page: ${factCycleArray[1]}`)
+                        factWhole = factsJSON[factCycleArray[1]]
+                        console.log(`This is fact on Info Page: ${factWhole}`)
 
-            setRetrievedFact(factWhole.slice(0, 84));
-        });
-        }    
+                        setRetrievedFact(factWhole.slice(0, 84));
+                    });
+                }
+            });
+
+
         }
         retrieveFactCycle()
     }, [])
