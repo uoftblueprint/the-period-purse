@@ -33,10 +33,9 @@ const DayComponent = ({props}) => {
     )
 }
 
-var joinedDate = ""; 
-GETJoinedDate().then(res => { joinedDate = res })
-
 export const Calendar = ({ navigation, setSelectedDates, markedDates, currentDate }) => {
+    let joinedDate = ""; 
+    GETJoinedDate().then(res => { joinedDate = res })
     const futureScroll = 1 + (getMonthsDiff(currentDate))
     const pastScroll = 12 + (getMonthsDiff(joinedDate)) - (getMonthsDiff(currentDate))
     return (

@@ -17,12 +17,11 @@ import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.
 
 export let scrollDate = getISODate(new Date());
 
-var joinedDate = ""; 
-GETJoinedDate().then(res => { joinedDate = res })
-const pastScroll = 12 + (getMonthsDiff(joinedDate))
-
 export const Calendar = ({ navigation, marked, setYearInView, selectedView, route }) => {
     const jumpDate = route.params?.newDate ? route.params.newDate : getISODate(new Date());
+    let joinedDate = ""; 
+    GETJoinedDate().then(res => { joinedDate = res })
+    const pastScroll = 12 + (getMonthsDiff(joinedDate))
     return (
         <CalendarList
         // Initially visible month. Default = now
