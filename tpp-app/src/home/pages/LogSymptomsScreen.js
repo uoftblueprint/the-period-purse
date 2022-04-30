@@ -349,6 +349,8 @@ export default function LogSymptomsScreen({ navigation, route }) {
               />
           )}
         })}
+        // Covers up the gray background of styles.screen 
+        <View style={styles.bg}></View>
         </KeyboardAwareScrollView>
 
         <View style={styles.saveButtonFloat}>
@@ -379,7 +381,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: 'transparent',
+        backgroundColor: '#EFEFF4',
         width: '100%',
         height: '100%',
         flex: 1,
