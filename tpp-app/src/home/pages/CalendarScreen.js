@@ -1,5 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, StyleSheet, SafeAreaView, TouchableOpacity, Text, } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CalendarList } from 'react-native-calendars';
 import { DayComponent } from '../components/DayComponent'
@@ -7,21 +6,30 @@ import Selector, {SelectedIcon} from '../components/Selector';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { GETYearData } from '../../services/CalendarService';
 import { VIEWS } from '../../services/utils/constants';
-import {getISODate, initializeEmptyYear} from '../../services/utils/helpers';
+import { getISODate, getMonthsDiff, initializeEmptyYear } from '../../services/utils/helpers';
 import { useFocusEffect } from '@react-navigation/native';
+import { GETJoinedDate } from '../../services/OnboardingService';
 import ErrorFallback from "../../error/error-boundary";
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
+import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import LoadingVisual from '../components/LoadingVisual';
 import { GETTutorial } from '../../services/TutorialService';
 import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
 
+export let scrollDate = getISODate(new Date());
 
-export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
-
+export const Calendar = ({ navigation, marked, setYearInView, selectedView, route }) => {
+    const jumpDate = route.params?.newDate ? route.params.newDate : getISODate(new Date());
+    let joinedDate = ""; 
+    GETJoinedDate().then(res => { joinedDate = res })
+    const pastScroll = 12 + (getMonthsDiff(joinedDate))
     return (
         <CalendarList
+        // Initially visible month. Default = now
+        current={jumpDate}
+
         // Max amount of months allowed to scroll to the past. Default = 50
-        pastScrollRange={12}
+        pastScrollRange={pastScroll}
 
         // Max amount of months allowed to scroll to the future. Default = 50
         futureScrollRange={0}
@@ -31,6 +39,7 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
 
         // Check which months are currently in view
         onVisibleMonthsChange={(months) => {
+            scrollDate = months[0]['dateString']
             let currentYears = []
             months.forEach(month => {
                 let currentYear = parseInt(month['year'])
@@ -46,20 +55,20 @@ export const Calendar = ({navigation, marked, setYearInView, selectedView}) => {
         dayComponent={({date, state, marking}) => <DayComponent date={date} state={state} marking={marking} navigation={navigation} selectedView={selectedView}/>}
 
         theme={{
-            calendarBackground: '#ffffff',
+            calendarBackground: 'transparent',
             // Sun Mon Tue Wed Thu Fri Sat Bar
             textSectionTitleColor: '#000000',
-            todayTextColor: 'red',
+            todayTextColor: '#000000',
             dayTextColor: '#000000',
-            monthTextColor: 'red',
+            monthTextColor: '#000000',
             textDayFontFamily: 'Avenir',
             textMonthFontFamily: 'Avenir',
             textDayHeaderFontFamily: 'Avenir',
             textDayFontWeight: '500',
-            textMonthFontWeight: '400',
+            textMonthFontWeight: '600',
             textDayHeaderFontWeight: '800',
             textDayFontSize: 10,
-            textMonthFontSize: 14,
+            textMonthFontSize: 16,
             textDayHeaderFontSize: 10,
             'stylesheet.calendar.main': {
                 dayContainer: {
@@ -171,30 +180,53 @@ export default function CalendarScreen ({ route, navigation }) {
         }, [route.params?.inputData])
     )
 
+    const toggleSelectedView = (targetView, toggleable) => {
+        if (toggleable) {
+            if (selectedView === targetView) {
+                setSelectedView(VIEWS.Nothing);
+            } else {
+                console.log("Selected " + targetView)
+                setSelectedView(targetView);
+            }
+        }
+    }
+    useEffect(() => {
+        if(route.params?.newDate && selectedView !== VIEWS.Flow)
+            setSelectedView(VIEWS.Flow);
+    }, [route.params?.newDate])
 
-    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24}/>
+    const renderedArrow = dropdownExpanded ? <Icon name="keyboard-arrow-up" size={24}/> : <Icon name="keyboard-arrow-down" size={24} />
     if (loaded){
         return (
         <ErrorFallback>
-            <SafeAreaView style={styles.container}>
-                <View style={styles.dropdown}>
-                <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
-                    <Text style={styles.dropdownText}>{selectedView}</Text>
-                    <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
-                    {renderedArrow}
-                </TouchableOpacity>
-                <TouchableOpacity
-                onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LEGEND_PAGE, {screen: CALENDAR_STACK_SCREENS.LEGEND_PAGE})}
-                style={styles.legend}>
-                <LegendButton></LegendButton>
-                </TouchableOpacity>
-                </View>
+            <ImageBackground source={OnboardingBackground} style={styles.image}>
+                <SafeAreaView style={styles.dropdown}>
+                    <TouchableOpacity onPress={() => setDropdownExpanded(!dropdownExpanded)} style={styles.navbarContainer}>
+                        <Text style={styles.dropdownText}>{selectedView}</Text>
+                        <SelectedIcon selectedView={selectedView} style={styles.selectorItem}/>
+                        {renderedArrow}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.LEGEND_PAGE, {screen: CALENDAR_STACK_SCREENS.LEGEND_PAGE})}
+                    style={styles.legend}>
+                    <LegendButton></LegendButton>
+                    </TouchableOpacity>
+                </SafeAreaView>
+                
                 <Selector expanded={dropdownExpanded} views={VIEWS} selectedView={selectedView} setSelectedView={setSelectedView}/>
 
-                <View style={styles.calendar}>
-                    <Calendar navigation={navigation} marked={marked} setYearInView={setYearInView} selectedView={selectedView}/>
-                </View>
-            </SafeAreaView>
+                <SafeAreaView style={styles.container}>
+                    <View style={styles.calendar}>
+                        <Calendar 
+                        navigation={navigation} 
+                        marked={marked} 
+                        setYearInView={setYearInView} 
+                        selectedView={selectedView} 
+                        route={route}
+                        />
+                    </View>
+                </SafeAreaView>
+            </ImageBackground>
         </ErrorFallback>
         )
     }
@@ -205,29 +237,44 @@ export default function CalendarScreen ({ route, navigation }) {
 
 const styles = StyleSheet.create({
     dropdown: {
-      margin: 10,
+      height: 50,
+      width: '100%',
       backgroundColor: '#fff',
-      width: '100%'
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 0
+    },
+    image: {
+        height: '100%',
+        width: '100%',
+        resizeMode: "cover",
+        overflow: "hidden",
+        flex: 1
     },
     legend: {
       position: 'absolute',
-      right: 30,
+      right: 20,
     },
     calendar: {
-      marginBottom: '20%'
+      marginBottom: '20%',
+      zIndex: 3
     },
     container: {
         flex: 1,
+        // paddingBottom: '30%',
         alignItems: 'stretch',
         justifyContent: 'flex-start',
-        backgroundColor: '#FFFFFF'
+        backgroundColor: 'transparent',
+        height: '100%'
     },
     navbarContainer: {
         marginTop: 0,
+        position: 'absolute',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#fff',
     },
     selectorItem:{
         marginHorizontal: 10
@@ -236,7 +283,7 @@ const styles = StyleSheet.create({
         flex:1,
         alignSelf:'stretch',
         justifyContent: 'space-around',
-        flexDirection: "row"
+        flexDirection: "row",
     },
     dropdownText:{
         fontFamily: "Avenir",

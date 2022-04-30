@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, useWindowDimensions, TouchableOpacity, ImageBackground, SafeAreaView} from 'react-native';
+import { View, ScrollView, StyleSheet, Text, useWindowDimensions, ImageBackground, SafeAreaView} from 'react-native';
 import RenderHtml from 'react-native-render-html';
-import BackIcon from '../../../ios/tppapp/Images.xcassets/icons/back_icon.svg'
 import OnboardingBackground from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import ErrorFallback from "../../error/error-boundary";
 
@@ -14,21 +13,13 @@ You are solely responsible for your account and the security and privacy of your
 export default TermsAndConditionsScreen = ({navigation}) => {
     const {width} = useWindowDimensions();
 
-    const onClose = () => {
-        navigation.goBack();
-    }
-
     return(
       <ErrorFallback>
+        
         <ImageBackground source={OnboardingBackground} style={styles.containter}>
-            <View style={styles.navbarContainer}>
-                <TouchableOpacity onPress={() => onClose()} style={styles.backIcon}>
-                    <BackIcon fill={'#181818'}/>
-                </TouchableOpacity>
-                <Text style={styles.navbarText}>Terms and Conditions</Text>
-            </View>
             
-            <ScrollView style={styles.scrollContainer}>
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={{paddingBottom: 60}}>
+            <SafeAreaView>
                 <Text style={styles.title}>Terms and Conditions</Text>
                 <View style={styles.line}/>
        
@@ -74,21 +65,17 @@ You can also contact us through the feedback form available on our Site.
                 `}</Text>
 
                 <Text style={{...styles.standardText, marginBottom: 50}}>{`Effective Date: 14th day of April, 2022`}</Text>
-                
-
-
-                    
-
+                </SafeAreaView>
             </ScrollView>
         </ImageBackground>
+        
   </ErrorFallback>
     );
 }
 
 const styles = StyleSheet.create({
     containter: {
-        flex:1,
-        marginBottom: 75,
+        flex: 1,
     },
     scrollContainer: {
         padding: 20,
@@ -101,30 +88,6 @@ const styles = StyleSheet.create({
     standardText: {
         fontFamily: "Avenir",
         fontSize: 14,
-    },
-    backIcon: {
-        height: 40,
-        width: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'absolute',
-        left: 18,
-        bottom: 10
-
-    },
-    navbarContainer: {
-        paddingTop: 60,
-        paddingBottom: 20,
-        position: 'relative',
-        flexDirection: 'row',
-        backgroundColor: "#FFFFFF",
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    navbarText: {
-        fontSize: 20,
-        fontFamily: "avenir",
     },
     title: {
         fontSize: 34,

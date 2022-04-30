@@ -156,7 +156,10 @@ export default function CycleScreen ({navigation}){
   const tipVisibleStyle = {
     marginBottom: 50
   }
-  const cardContainerStyle = showTip ? Object.assign({}, styles.cardContainer, tipVisibleStyle) : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
+
+  const cardContainerStyle = showTip && daysTillPeriod <= 7 ?
+      Object.assign({}, styles.cardContainer, tipVisibleStyle) :
+      Object.assign({}, styles.cardContainer, tipInvisibleStyle);
 
   if (loaded) {
   return (
@@ -167,7 +170,7 @@ export default function CycleScreen ({navigation}){
         <ScrollView>
           {/* Period Notification (Period in X days) */}
           <SafeAreaView style={cardContainerStyle}>
-            {showTip && (
+            {showTip && daysTillPeriod <= 7 && (
             <PeriodNotification daysTillPeriod={daysTillPeriod}>
               <Paddy style={styles.paddyIcon}/>
             </PeriodNotification>
@@ -176,7 +179,7 @@ export default function CycleScreen ({navigation}){
               periodDays={periodDays}
               daysSinceLastPeriod={daysSinceLastPeriod}
               cycleDonutPercent={cycleDonutPercent}
-              showTip={showTip}
+              showTip={showTip && daysTillPeriod <= 7}
             />
             <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
               <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
@@ -299,9 +302,10 @@ const styles = StyleSheet.create({
     height: 50,
     display: "flex",
     alignItems: 'center',
+    right: -18
   },
   icon: {
-        transform: [{scale:0.7}]
+        transform: [{scale:0.7}],
   },
   paddyIcon: {
     transform: [{scale:0.4}]

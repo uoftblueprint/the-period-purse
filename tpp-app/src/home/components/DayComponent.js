@@ -54,6 +54,9 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
             if (viewKey !== 'mood') {
                 bgColor = FILTER_COLOURS[viewKey.toUpperCase()][attribute.toUpperCase()]
                 textColor = FILTER_TEXT_COLOURS[viewKey.toUpperCase()][attribute.toUpperCase()]
+            } else {
+                bgColor = FILTER_COLOURS.NOFILTER;
+                textColor = FILTER_TEXT_COLOURS.NOFILTER;
             }
             
             // Get Icon
@@ -68,6 +71,9 @@ export const DayComponent = ({ date, state, marking, selectedView, navigation })
                 fill: textColor
             })
             
+        } else {
+            bgColor = FILTER_COLOURS.NOFILTER;
+            textColor = FILTER_TEXT_COLOURS.NOFILTER;
         }
     }
 
@@ -102,11 +108,11 @@ function filterSleep(minutes) {
     let sleepScore = minutes / 60
     let attribute;
 
-    if (sleepScore >= 8) {
+    if (sleepScore > 10) {
         attribute = 'HEAVY'
-    } else if (sleepScore >= 6.5) {
+    } else if (sleepScore >= 8) {
         attribute = 'MEDIUM'
-    } else if (sleepScore >= 5) {
+    } else if (sleepScore >= 6) {
         attribute = 'LIGHT'
     } else {
         attribute = 'LITTLE'
@@ -124,11 +130,11 @@ function filterExercise(minutes) {
 
     let attribute;
 
-    if (minutes > 120) {
+    if (minutes > 60) {
         attribute = 'HEAVY'
-    } else if (minutes > 90) {
+    } else if (minutes >= 40) {
         attribute = 'MEDIUM'
-    } else if (minutes > 60) {
+    } else if (minutes >= 20) {
         attribute = 'LIGHT'
     } else {
         attribute = 'LITTLE'

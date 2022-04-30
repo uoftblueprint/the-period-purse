@@ -293,7 +293,8 @@ export default function LogSymptomsScreen({ navigation, route }) {
   return (
     <ErrorFallback>
     <SafeAreaView style={styles.screen}>
-
+        {/* HEADER NAV */}
+        <View style={styles.navbarContainer}>
             {/* CLOSE BUTTON */}
             <TouchableOpacity
               onPress={() => {
@@ -332,7 +333,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
                 : <View opacity={0}><DateArrow/></View>
               }
             </View>
-
+        </View>
 
         <KeyboardAwareScrollView contentContainerStyle={styles.content} extraHeight={100} extraScrollHeight={120}>
         {/* SYMPTOM ACCORDIONS */}
@@ -348,6 +349,8 @@ export default function LogSymptomsScreen({ navigation, route }) {
               />
           )}
         })}
+        {/* Covers up the gray background of styles.screen  */}
+        <View style={styles.bg}></View>
         </KeyboardAwareScrollView>
 
         <View style={styles.saveButtonFloat}>
@@ -378,11 +381,16 @@ export default function LogSymptomsScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#EFEFF4',
         width: '100%',
         height: '100%',
         flex: 1,
-
+    },
+    bg: {
+      width: '100%',
+      height: '100%',
+      backgroundColor: '#fff',
+      marginTop: 40,
     },
     saveButtonFloat: {
       backgroundColor: '#fff'

@@ -73,7 +73,8 @@ export const FILTER_COLOURS = {
     LIGHT: '#467CCD',
     LITTLE: '#92B8F0',
   },
-  DISABLED: "#EEEEEE"
+  DISABLED: "#EEEEEE",
+  NOFILTER: "#FFFFFF"
 }
 
 export const FILTER_TEXT_COLOURS = {
@@ -103,7 +104,8 @@ export const FILTER_TEXT_COLOURS = {
     LIGHT: '#FFF',
     LITTLE: '#000',
   },
-  DISABLED: '#AAAAAA'
+  DISABLED: '#AAAAAA',
+  NOFILTER: '#000000'
 }
 
 export const VIEWS = {
@@ -121,7 +123,8 @@ export const KEYS = {
   INITIAL_PERIOD_LENGTH: "initialPeriodLength",
   SELECTED_YEAR: "selectedYear",
   SELECTED_MONTH: "selectedMonth",
-  SELECTED_VIEW: "selectedView"
+  SELECTED_VIEW: "selectedView",
+  JOINED_DATE: "joinedDate",
 }
 
 export const REMINDERS = {

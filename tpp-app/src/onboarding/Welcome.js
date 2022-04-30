@@ -108,10 +108,34 @@ export default function Welcome() {
       <Stack.Screen
         name={STACK_SCREENS.PRIVACY_POLICY}
         component={PrivacyPolicyScreen}
+        options={{title: "Privacy Policy",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
+          }}
       />
       <Stack.Screen
         name={STACK_SCREENS.TERMS_AND_CONDITION}
         component={TermsAndConditions}
+        options={{title: "Terms and Conditions",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
+          }}
       />
       </Stack.Navigator>
     </NavigationContainer>

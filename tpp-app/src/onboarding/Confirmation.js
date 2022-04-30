@@ -11,6 +11,7 @@ import SleepIcon from "../../ios/tppapp/Images.xcassets/icons/sleep.svg";
 import MoodIcon from "../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../ios/tppapp/Images.xcassets/icons/cramps.svg";
+import { POSTJoinedDate } from '../services/OnboardingService';
 import ErrorFallback from "../error/error-boundary";
 import {BackButton} from "../home/components/BackButtonComponent";
 
@@ -98,6 +99,7 @@ export default function Confirmation ({ route, navigation }) {
       <WideButton
         title="Let's go!" color="#5A9F93" bottom="-8%"
         onPress={() => {
+          POSTJoinedDate();
           SETTutorial(true).finally(() => navigation.navigate(STACK_SCREENS.MAIN_PAGE));
         }}
       />
