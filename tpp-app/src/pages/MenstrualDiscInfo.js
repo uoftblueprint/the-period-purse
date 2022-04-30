@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, Image, ImageBackground, SafeAreaView} from 'react-native';
+import {StyleSheet, Text, Image, ImageBackground, SafeAreaView, View} from 'react-native';
 import { BackButton } from '../home/components/BackButtonComponent';
 import DiscImage from '../../ios/tppapp/Images.xcassets/InfoPageImages/menstrual-disk.svg';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
@@ -14,10 +14,9 @@ export default function MenstrualDiscInfo({ navigation }) {
                 <BackButtonContainer>
                     <BackButton title="" onPress={() => navigation.goBack()}/>
                 </BackButtonContainer>
-                    <Image
-                    source= {DiscImage}
-                    style={styles.image}
-                        />
+                    <View style={styles.image}>
+                        <DiscImage/>
+                    </View>
                 <Text style={styles.titleText}>Menstrual Disc</Text>
 
                 <Text style={styles.bodyText}>
