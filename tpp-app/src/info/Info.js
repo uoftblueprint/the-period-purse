@@ -119,7 +119,7 @@ export default function Info ({ navigation }) {
                         setFactCycleNum(rePostedFactArray[1]);
                         factWhole = factsJSON[rePostedFactArray[1]]
 
-                        setRetrievedFact(factWhole.slice(0,  Math.floor(factWhole.length / 2)));
+                        setRetrievedFact(factWhole.slice(0, Math.floor(factWhole.length / 2)));
 
                         })
                     });
@@ -127,7 +127,7 @@ export default function Info ({ navigation }) {
                     setFactCycleNum(factArray[1]);
                     factWhole = factsJSON[factArray[1]]
 
-                    setRetrievedFact(factWhole.slice(0,  Math.floor(factWhole.length / 2)));
+                    setRetrievedFact(factWhole.slice(0, Math.floor(factWhole.length / 2)));
                 }
                 }
     
