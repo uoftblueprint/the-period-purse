@@ -20,6 +20,8 @@ export let scrollDate = getISODate(new Date());
 
 export const Calendar = ({ navigation, marked, setYearInView, selectedView, route }) => {
     const jumpDate = route.params?.newDate ? route.params.newDate : getISODate(new Date());
+    console.log(jumpDate[9]);
+    console.log("THIS IS JUMP DDATE ^^^^");
     let joinedDate = ""; 
     GETJoinedDate().then(res => { joinedDate = res })
     const pastScroll = 12 + (getMonthsDiff(joinedDate))
@@ -32,7 +34,7 @@ export const Calendar = ({ navigation, marked, setYearInView, selectedView, rout
         pastScrollRange={pastScroll}
 
         // Max amount of months allowed to scroll to the future. Default = 50
-        futureScrollRange={0}
+        futureScrollRange={jumpDate.slice(8, 10) === '01' ? 1 : 0 }
 
         // Enable or disable scrolling of calendar list
         scrollEnabled={true}
