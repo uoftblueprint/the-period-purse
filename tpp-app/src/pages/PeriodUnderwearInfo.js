@@ -1,36 +1,42 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
+import {StyleSheet, Text, Image, ImageBackground, SafeAreaView} from 'react-native';
 import UnderwearImage from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/underwear-clear-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import { BackButtonContainer } from '../onboarding/components/ContainerComponents';
+import ErrorFallback from "../error/error-boundary";
 
 export default function PeriodUnderwearInfo({navigation}) {
     return (
+      <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.container}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <View style={styles.arrowPosition}><BackButton  onPress={() => navigation.goBack()}/></View>
-                
+
+            <SafeAreaView pointer-events="box-only" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <BackButtonContainer>
+                    <BackButton title="" onPress={() => navigation.goBack()}/>
+                </BackButtonContainer>
                 <Image
                 source= {UnderwearImage}
                 style={styles.image}
                     />
-                <Text style={styles.titleText}>Period {"\n"} Underwears</Text>
-                
-                <Text style={styles.bodyText}>
-                Quick, your period is “OMW”- period underwear has you covered. Wow, the first period 
-                underwear product arrived on the market in the late 1980s!?
+                <Text style={styles.titleText}>Period Underwear</Text>
 
-                Period underwear is designed to completely replace pads and tampons (or be used as a 
-                backup). With a leak-proof layer, it can absorb 1-2 tampons’ worth of fluid! Change it daily like 
-                normal underwear, but give it a quick rinse with cool water before washing it with your regular 
-                laundry.
+                    <Text style={styles.bodyText}>
+                    Quick, your period is “OMW”- period underwear has you covered. Wow, the first period
+                    underwear product arrived on the market in the late 1980s!?
+                        {"\n\n"}
+                    Period underwear is designed to completely replace pads and tampons (or be used as a
+                    backup). With a leak-proof layer, it can absorb 1-2 tampons’ worth of fluid! Change it daily like
+                    normal underwear, but give it a quick rinse with cool water before washing it with your regular
+                    laundry.
+                        {"\n\n"}
+                    While period underwear can be costly, ranging from $30-$100 per pair depending on size, fit
+                    and duration of wear, it can cost you less in the long run as one pair generally lasts a few years.
+                    </Text>
 
-                While period underwear can be costly, ranging from $30-$100 per pair depending on size, fit 
-                and duration of wear, it can cost you less in the long run as one pair generally lasts a few years.
-                </Text>
-                
-            </View>
-        </ImageBackground>
+                </SafeAreaView>
+            </ImageBackground>
+        </ErrorFallback>
     )
 }
 
@@ -41,40 +47,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
       },
     image: {
-            position: 'absolute', 
-            width: 200, 
-            height: 130, 
-            left: 110, 
-            top: 136
+        width: "45%",
+        height: "15%",
+        marginBottom: "6%"
     },
     titleText: {
-        position: 'relative',
         textAlign: 'center',
         fontFamily: 'Avenir',
-        left: '1.00%',
-        right: '0%',
-        bottom: '11.36%',
+        marginBottom: "3%",
         fontWeight: '800',
         fontSize: 34,
         lineHeight: 40
     },
     bodyText: {
-           position: 'absolute',
-           textAlign: 'center',
-           fontFamily: 'Avenir',
-           fontSize: 14,
-           lineHeight: 19,
-           letterSpacing: -0.3,
-           left: '14.13%',
-           right: '14.13%',
-           top: '45.94%',
-           bottom: '10.59%'},
-    arrowPosition: {
-            position: 'absolute',
-            left: 17.05,
-            right: 348.5,
-            top: 54.51,
-            bottom: 741.52
-        }
-    
+        textAlign: 'center',
+        fontFamily: 'Avenir',
+        fontSize: 16,
+        lineHeight: 18,
+        letterSpacing: -0.3,
+        paddingLeft: "10%",
+        paddingRight: "10%"
+    }
 });

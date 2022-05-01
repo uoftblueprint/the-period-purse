@@ -6,7 +6,9 @@ import {ExpandedHistoryCard} from '../components/CycleHistory';
 import CycleService from '../../services/cycle/CycleService';
 import {GETStoredYears} from '../../services/utils/helpers';
 import {useFocusEffect} from '@react-navigation/native';
+import LoadingVisual from '../components/LoadingVisual';
 import { set } from 'date-fns';
+import ErrorFallback from "../../error/error-boundary";
 
 function Header({navigation}){
     return(
@@ -14,7 +16,7 @@ function Header({navigation}){
         <View
         style={[styles.nonCenterComponent]}
         >
-            <TouchableOpacity 
+            <TouchableOpacity
                 onPress={() =>navigation.goBack()}
             >
                 <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
@@ -32,7 +34,7 @@ function YearButton({year, selectedYear, setSelectedYear}){
     let textColor = year === selectedYear ? "#FFFFFF" : "#C4C4C4";
     let border = year === selectedYear ? null : styles.buttonBorder;
     return (
-        <TouchableOpacity 
+        <TouchableOpacity
             onPress={() => setSelectedYear(year)}
             style= {[styles.button, border, {backgroundColor: backgroundColor}]}
         >
@@ -55,7 +57,8 @@ export default function CycleHistoryScreen({navigation}){
     let [selectedYear, setSelectedYear] = useState(currentYear);
     let [storedYears, setStoredYears] = useState(DEFAULTS.STORED_YEARS);
     let [onPeriod, setOnPeriod] = useState(DEFAULTS.ON_PERIOD);
-    
+    let [loaded, setLoaded] = useState(false);
+
     useFocusEffect(
         useCallback(() => {
         GETStoredYears().then(
@@ -63,45 +66,62 @@ export default function CycleHistoryScreen({navigation}){
                 setStoredYears(years);
             }
         )
-        .catch(() => setStoredYears(DEFAULTS.STORED_YEARS)) 
+        .catch(() => setStoredYears(DEFAULTS.STORED_YEARS))
         CycleService.GETPeriodDay().then(days => {
             setOnPeriod(days !== 0 );
         })
         .catch(() => setOnPeriod(DEFAULTS.ON_PERIOD))
     }, []));
 
-    //get intervals for all stored years
+    //get intervals for all stored years. Sequentially, this always occurs after the above effect
     useFocusEffect(
         useCallback(
         () => {
         async function storeYearsCycles() {
             for (const year of storedYears){
-                intervals = await CycleService.GETCycleHistoryByYear(year)            
-                currentIntervals[year] = intervals;
+                currentIntervals[year] = await CycleService.GETCycleHistoryByYear(year);
             }
-            setCurrentIntervals({...currentIntervals});
+            setCurrentIntervals({...currentIntervals})
         }
         storeYearsCycles();
     }, [storedYears]));
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <ImageBackground source={background} style={styles.container}>
-                <Header navigation={navigation}/>
-                <SafeAreaView style={styles.cardContainer}>
-                    <View style={styles.buttonContainer}>
-                        {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>).reverse()}
-                    </View>
-                    <ExpandedHistoryCard 
-                        navigation={navigation} 
-                        intervals={currentIntervals[selectedYear]} 
-                        renderedYear={selectedYear}
-                        onPeriod={onPeriod}
-                    />
+    // Since the intervals are the "last" thing to be set, we know that when they change we are done loading
+    useEffect(
+        () => {
+            if(currentIntervals !== DEFAULTS.INTERVALS){
+                setLoaded(true)
+            }
+        }, [currentIntervals]
+    );
+
+    if(loaded){
+            return (
+            <ErrorFallback>
+                <SafeAreaView style={styles.container}>
+                    <ImageBackground source={background} style={styles.container}>
+                        <Header navigation={navigation}/>
+                        <SafeAreaView style={styles.cardContainer}>
+                            <View style={styles.buttonContainer}>
+                                {storedYears.map((year, index) => <YearButton year={year} selectedYear={selectedYear} setSelectedYear={setSelectedYear} key={index}/>)}
+                            </View>
+                            <ExpandedHistoryCard
+                                navigation={navigation}
+                                intervals={currentIntervals[selectedYear]}
+                                renderedYear={selectedYear}
+                                onPeriod={onPeriod}
+                            />
+                        </SafeAreaView>
+                    </ImageBackground>
                 </SafeAreaView>
-            </ImageBackground>
-        </SafeAreaView>
-    )
+        </ErrorFallback>
+            )
+    } else {
+        return (
+            <LoadingVisual/>
+        )
+    }
+
 }
 
 const styles = StyleSheet.create({
@@ -116,7 +136,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         marginHorizontal: 16
-    },  
+    },
     button: {
         borderRadius: 10,
         width: 62,
@@ -140,7 +160,7 @@ const styles = StyleSheet.create({
     nonCenterComponent: {
         flex: 1,
     },
-    headerText: { 
+    headerText: {
         fontFamily: "Avenir",
         fontSize: 20,
         fontStyle: "normal",

@@ -59,20 +59,22 @@ export const FILTER_COLOURS = {
     BAD: "#DD8502",
     TERRIBLE: "#B85A04",
     GOOD: "#FFD363",
-    NONE: "#FFE6A6",  
+    NONE: "#FFE6A6",
   },
   EXERCISE: {
     HEAVY: '#2F5B54',
     MEDIUM: '#5A9F93',
     LIGHT: '#7BCFC0',
-    LITTLE: '#B9E0D8'   
+    LITTLE: '#B9E0D8'
   },
   SLEEP: {
     HEAVY: '#133364',
     MEDIUM: '#1A50A0',
     LIGHT: '#467CCD',
     LITTLE: '#92B8F0',
-  }
+  },
+  DISABLED: "#EEEEEE",
+  NOFILTER: "#FFFFFF"
 }
 
 export const FILTER_TEXT_COLOURS = {
@@ -88,7 +90,7 @@ export const FILTER_TEXT_COLOURS = {
     BAD: "#000",
     TERRIBLE: "#000",
     GOOD: "#000",
-    NONE: "#000",  
+    NONE: "#000",
   },
   EXERCISE: {
     HEAVY: '#FFF',
@@ -101,7 +103,9 @@ export const FILTER_TEXT_COLOURS = {
     MEDIUM: '#FFF',
     LIGHT: '#FFF',
     LITTLE: '#000',
-  }
+  },
+  DISABLED: '#AAAAAA',
+  NOFILTER: '#000000'
 }
 
 export const VIEWS = {
@@ -115,10 +119,16 @@ export const VIEWS = {
 
 export const KEYS = {
   AVERAGE_PERIOD_LENGTH: "averagePeriodLength",
+  AVERAGE_CYCLE_LENGTH: "averageCycleLength",
   INITIAL_PERIOD_LENGTH: "initialPeriodLength",
   SELECTED_YEAR: "selectedYear",
   SELECTED_MONTH: "selectedMonth",
-  SELECTED_VIEW: "selectedView"
+  SELECTED_VIEW: "selectedView",
+  JOINED_DATE: "joinedDate",
+}
+
+export const FACT_NUM = {
+  FACT_CYCLE_NUM: "factCycleNumber"
 }
 
 export const REMINDERS = {
@@ -145,5 +155,19 @@ export const LOG_SYMPTOMS_FREQ ={
   THREE: "three",
   FIVE: "five",
   SEVEN: "seven"
-
 }
+
+export const APPLE_CREDENTIALS = {
+  USER_ID: "userId",
+  IDENTITY_TOKEN: "identityToken",
+  GIVEN_NAME: "givenName",
+  FAMILY_NAME: "familyName"
+}
+
+export const ICLOUD = {
+  BACKUP_KEY: "tpp-backup",
+  LAST_SAVED_TIME: "lastSavedTime"
+}
+
+export const TUTORIAL_KEY = 'showTutorial'; // key for backend value that returns 'true' if user needs to see tutorial
+

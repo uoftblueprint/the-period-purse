@@ -6,8 +6,9 @@ import {View, Text, StyleSheet} from 'react-native';
  function OnPeriodText({periodDays}){
    return (
      <View style={styles.periodTextContainer}>
-       <Text style={styles.cycleText}>Period Day </Text>
+       <Text style={styles.cycleTextTop}>Day </Text>
        <Text style={styles.cycleNumber}> {periodDays} </Text>
+       <Text style={styles.cycleText}> of period </Text>
      </View>
    )
  }
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   noTip: {
-    marginTop: 50
+    marginTop: "7%"
   },
   cycleText: {
     fontFamily: "Avenir",
@@ -76,6 +77,17 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     letterSpacing: -0.30000001192092896,
     color: "#6D6E71",
+    top: -8
+  },
+  cycleTextTop: {
+    fontFamily: "Avenir",
+    fontSize: 16,
+    fontStyle: "normal",
+    fontWeight: "500",
+    lineHeight: 22,
+    letterSpacing: -0.30000001192092896,
+    color: "#6D6E71",
+    top: 7
   },
   cycleNumber: {
     fontFamily: "Avenir",
@@ -85,6 +97,7 @@ const styles = StyleSheet.create({
     lineHeight: 68,
     letterSpacing: -0.30000001192092896,
     color: "#B31F20",
+    top: 3
   },
   periodTextContainer: {
     justifyContent: 'center',

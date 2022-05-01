@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { Text, SafeAreaView, View, StyleSheet, KeyboardAvoidingView, TouchableOpacity, StatusBar, ScrollView, Alert } from "react-native";
 import Constants from 'expo-constants';
 import CloseIcon from '../../../ios/tppapp/Images.xcassets/icons/close_icon.svg';
 import Arrow from '../../../ios/tppapp/Images.xcassets/icons/arrow.svg';
 import Accordion from "../components/Accordion";
-import { getDateString, isValidDate } from "../../services/utils/helpers";
+import {flowOnOffModeChanged, getDateString, isValidDate} from "../../services/utils/helpers";
 import { getCalendarByYear, getSymptomsFromCalendar } from "../../services/utils/helpers";
 import { ExerciseActivity, Symptoms } from "../../services/utils/models";
 import { GETAllTrackingPreferences } from "../../services/SettingsService";
 import { POSTsymptomsForDate } from "../../services/LogSymptomsService";
 import { TRACK_SYMPTOMS } from "../../services/utils/constants";
-import { STACK_SCREENS } from "../CalendarNavigator";
+import { CALENDAR_STACK_SCREENS } from "../CalendarNavigator";
 import { getISODate } from '../../services/utils/helpers';
+import { calculateAverages } from "../../services/CalculationService";
+import ErrorFallback from "../../error/error-boundary";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import LoadingVisual from "../components/LoadingVisual";
 
 
 // Alert popup constants
@@ -45,7 +49,9 @@ const symptoms = ['flow', 'mood', 'sleep', 'cramps', 'exercise', 'notes']; // or
 
 
 export default function LogSymptomsScreen({ navigation, route }) {
-  const [trackingPrefs, setPrefs] = useState(['notes']); // list of symptoms to track, default is always 'notes'
+  const initialPrefs = ['notes'];
+  const [trackingPrefs, setPrefs] = useState(initialPrefs); // list of symptoms to track, default is always 'notes'
+  const [loaded, setLoaded] = useState(false);
 
   // Set trackingPrefs when component mounts
   useEffect(() => {
@@ -54,7 +60,7 @@ export default function LogSymptomsScreen({ navigation, route }) {
         let prefArr = [...trackingPrefs];
         // set trackingPrefs somewhere
         for (let pref of allPrefs) {
-          let toTrack = pref[1]
+            let toTrack = pref[1].toLowerCase() === 'true';
           // if tracking that symptom is set to true, append it to trackingPrefs
           if (toTrack) {
               let title = pref[0];
@@ -83,6 +89,12 @@ export default function LogSymptomsScreen({ navigation, route }) {
       }
       fetchPreferences();
   }, [])
+
+  useEffect( () => {
+    if(trackingPrefs != initialPrefs){
+      setLoaded(true);
+    }
+  }, [trackingPrefs])
 
   // function to get symptoms from async storage
   const getStoredSymps = async (day, month, year) => {
@@ -200,23 +212,29 @@ export default function LogSymptomsScreen({ navigation, route }) {
     let finalSymps = new Symptoms(flowStr, moodStr, sleepMins, crampsStr, exerciseObj, notesStr);
     // If all symptoms are null, POST null instead of an empty Symptom object
     let notEmpty = Object.values(finalSymps).some((symptom) => symptom !== null);
-    let submitSymp = notEmpty ? finalSymps : null;
+    let submitSymp = notEmpty ? finalSymps : new Symptoms();
 
     POSTsymptomsForDate(selectedDate.getDate(), selectedDate.getMonth() + 1, selectedDate.getFullYear(), submitSymp)
-      .then(() => {
-        let inputData = {}
-        inputData[getISODate(selectedDate)] = {
-          symptoms: submitSymp
-        }
-        navigation.navigate(STACK_SCREENS.CALENDAR_PAGE, {inputData: [inputData]})
-        // navigation.goBack(isDirty);
+      .then(async () => {
+          let inputData = {}
+          inputData[getISODate(selectedDate)] = {
+              // submitSymp may be null, in that case pass back blank Symptoms object
+              symptoms: submitSymp
+          }
+          navigation.navigate(CALENDAR_STACK_SCREENS.CALENDAR_PAGE, {inputData: inputData})
+          // navigation.goBack(isDirty);
+
+          // Only need to recalculateAverages if flow was changed
+          if (flowOnOffModeChanged(submitSymp.flow, stored.flow)) {
+              await calculateAverages();
+          }
       })
       .catch((e) => {
         let errorInfo = submitError(typeof e === 'string' ? e : JSON.stringify(e));
         alertPopup(errorInfo)
           .then(() => { // YES close screen
             navigation.goBack();
-          })          
+          })
           .catch() // CANCEL do nothing and close alert
         setSubmitting(false);
       })
@@ -270,87 +288,119 @@ export default function LogSymptomsScreen({ navigation, route }) {
     }
   }
 
+  if (loaded){
 
   return (
-    <SafeAreaView style={styles.screen}><ScrollView>
+    <ErrorFallback>
+    <SafeAreaView style={styles.screen}>
+        {/* HEADER NAV */}
+        <View style={styles.navbarContainer}>
+            {/* CLOSE BUTTON */}
+            <TouchableOpacity
+              onPress={() => {
+                if (isDirty) {
+                  alertPopup(unsavedChanges)
+                    .then(() => { // YES discard changes
+                      navigation.goBack();
+                    })
+                    .catch() // CANCEL do nothing and close alert
+                } else {
+                  navigation.goBack();
+                }
+              }}
+              style={styles.close}>
+                <CloseIcon fill={'#000000'}/>
+            </TouchableOpacity>
 
-      {/* HEADER NAV */}
-      <View style={styles.navbarContainer}>
-
-          {/* CLOSE BUTTON */}
-          <TouchableOpacity
-            onPress={() => {
-              if (isDirty) {
-                alertPopup(unsavedChanges)
-                  .then(() => { // YES discard changes
-                    navigation.goBack();
-                  })
-                  .catch() // CANCEL do nothing and close alert
-              } else {
-                navigation.goBack();
+            {/* SWITCH AND DISPLAY DATE */}
+            <View style={styles.switchDate}>
+              {isNewDayValid(false, selectedDate)
+                ? <DateArrow
+                    onPress={async () => await switchDate(false)}
+                    isRight={false}
+                  />
+                : <View opacity={0}><DateArrow/></View>
               }
-            }}
-            style={styles.close}>
-              <CloseIcon fill={'#000000'}/>
-          </TouchableOpacity>
-
-          {/* SWITCH AND DISPLAY DATE */}
-          <View style={styles.switchDate}>
-            {isNewDayValid(false, selectedDate) &&
-              <DateArrow
-                onPress={async () => await switchDate(false)}
-                isRight={false}
-              />
-            }
-            <View style={styles.centerText}>
-              <Text style={styles.subtitle}>Log your symptoms for:</Text>
-              <Text style={styles.navbarTitle}>{dateStr}</Text>
+              <View style={styles.centerText}>
+                <Text style={styles.subtitle}>Log your symptoms for:</Text>
+                <Text style={styles.navbarTitle}>{dateStr}</Text>
+              </View>
+              {isNewDayValid(true, selectedDate)
+                ? <DateArrow
+                    onPress={async () => await switchDate(true)}
+                    isRight={true}
+                  />
+                : <View opacity={0}><DateArrow/></View>
+              }
             </View>
-            {isNewDayValid(true, selectedDate) &&
-              <DateArrow
-                onPress={async () => await switchDate(true)}
-                isRight={true}
+        </View>
+
+        <KeyboardAwareScrollView contentContainerStyle={styles.content} extraHeight={100} extraScrollHeight={120}>
+        {/* SYMPTOM ACCORDIONS */}
+        {symptoms.map((symptom, i) => {
+          if (trackingPrefs.includes(symptom))
+          { return (
+              <Accordion
+                  key={i}
+                  type={symptom}
+                  isLastChild={ (i === symptoms.length - 1) ? true : false }
+                  value={form[symptom].state} // pass in parent state
+                  setState={form[symptom].setState.bind(form)} // pass in parent setState function
               />
-            }
+          )}
+        })}
+        {/* Covers up the gray background of styles.screen  */}
+        <View style={styles.bg}></View>
+        </KeyboardAwareScrollView>
+
+        <View style={styles.saveButtonFloat}>
+          <View style={[styles.centerText, {marginHorizontal: 28}]}>
+            <TouchableOpacity
+              disabled={!isDirty}
+              style={[styles.saveButton, isDirty ? styles.saveButtonActive : styles.saveButtonDisabled]}
+              onPress={() => {
+                if (!isDirty) return; // if no changes, do nothing
+                setSubmitting(true);
+              }}
+            >
+              <Text style={{color: '#fff'}}>Save</Text>
+            </TouchableOpacity>
           </View>
+        </View>
+      {/* </ScrollView> */}
 
-      </View>
+      </SafeAreaView>
+    </ErrorFallback>
 
-      {/* SYMPTOM ACCORDIONS */}
-      {symptoms.map((symptom, i) => {
-        if (trackingPrefs.includes(symptom))
-        { return (
-            <Accordion
-                key={i}
-                type={symptom}
-                isLastChild={ (i === symptoms.length - 1) ? true : false }
-                value={form[symptom].state} // pass in parent state
-                setState={form[symptom].setState.bind(form)} // pass in parent setState function
-            />
-        )}
-      })}
-
-      <View style={[styles.centerText, {marginHorizontal: 28}]}>
-        <TouchableOpacity
-          style={styles.saveButton}
-          onPress={() => setSubmitting(true) }
-        >
-          <Text style={{color: '#fff'}}>Save</Text>
-        </TouchableOpacity>
-      </View>
-
-    </ScrollView></SafeAreaView>
-  );
+    );
+  }
+  else {
+    return <LoadingVisual/>
+  }
 }
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#EFEFF4',
+        width: '100%',
+        height: '100%',
         flex: 1,
-        paddingTop: Constants.statusBarHeight
+    },
+    bg: {
+      width: '100%',
+      height: '100%',
+      backgroundColor: '#fff',
+      marginTop: 40,
+    },
+    saveButtonFloat: {
+      backgroundColor: '#fff'
+    },
+    content: {
+        backgroundColor: '#fff',
+        paddingBottom: 40
     },
     navbarContainer: {
-        paddingTop: 98,
+        paddingTop: Constants.statusBarHeight,
         paddingBottom: 30,
         position: 'relative',
         flexDirection: 'row',
@@ -367,8 +417,7 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontWeight: "600",
         fontSize: 20,
-        paddingLeft: 30,
-        paddingRight: 30
+        paddingHorizontal: 30
     },
     close: {
       height: 30,
@@ -376,12 +425,14 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       position: 'absolute',
-      left: 18,
-      bottom: 27
+      left: 17.05,
+      right: 348.5,
+      top: 24.51,
+      bottom: 741.52
     },
     centerText: {
       flexDirection: 'column',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     subtitle: {
       fontSize: 14,
@@ -392,9 +443,22 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#5A9F93',
       width: '100%',
       height: 39,
+      bottom: 25,
       marginTop: 25
+    },
+    saveButtonActive: {
+      backgroundColor: '#5A9F93',
+
+    },
+    saveButtonDisabled: {
+      backgroundColor: '#A9BDBA',
+    },
+    arrows: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 30,
+      width: 30
     }
 });

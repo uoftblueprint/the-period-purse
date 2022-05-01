@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import { Button } from 'react-native-elements';
 
-export const WideButton = ({ onPress, title, color, disabled }) => {
+export const WideButton = ({ onPress, title, color, disabled, bottom }) => {
     return (
     <TouchableOpacity onPress={onPress} 
       style={{
@@ -14,7 +14,8 @@ export const WideButton = ({ onPress, title, color, disabled }) => {
         width: 330,
         height: 52,
         alignSelf: 'center',
-        margin: 10
+        margin: 10,
+        bottom: bottom
       }} disabled={disabled}>
       <Text style={[styles.wideButtonText, { opacity: disabled ? 0.5 : 1.0 }]}>{title}</Text>
     </TouchableOpacity>
@@ -51,9 +52,10 @@ export const UnderlineButton = ({ onPress, title }) => {
     </TouchableOpacity>);
 }
 
-export const DatePickerButton = ({ onPress, title, inputted }) => {
+export const DatePickerButton = ({ onPress, title, inputted, icon }) => {
   return (
-  <TouchableOpacity onPress={onPress} style={{ marginTop: 7 }}>
+  <TouchableOpacity onPress={onPress} style={{ height: "100%" }}>
+      {icon}
       <Text style={inputted ? styles.datePickerOutput : styles.datePickerButtonText}>{title}</Text>
   </TouchableOpacity>);
 }
@@ -63,7 +65,10 @@ export const SymptomsChoicesButton = ({ onPress, title, color, icon }) => {
     <TouchableOpacity onPress={onPress} 
       style={{ width: "100%", height: "100%", borderRadius: 16, backgroundColor: color }}>
       {icon}
-      <Text style={styles.symptomsChoicesButtonText}>{title}</Text>
+      {title==='Exercise' && <Text style={styles.symptomsChoicesButtonExercise}>{title}</Text>}
+      {title==='Mood' && <Text style={styles.symptomsChoicesButtonMood}>{title}</Text>}
+      {title !== 'Exercise' && title !== 'Mood' && <Text style={styles.symptomsChoicesButtonText}>{title}</Text> }
+      {/* <Text style={title === 'Exercise' ? styles.symptomsChoicesButtonExercise : styles.symptomsChoicesButtonText}>{title}</Text> */}
     </TouchableOpacity>);
 }
 
@@ -119,7 +124,6 @@ const styles = StyleSheet.create({
     fontSize: 17, 
     textAlign: 'center', 
     fontWeight: '400',
-    marginTop: '7%',
     right: '5%'
   },
   datePickerOutput: {
@@ -128,14 +132,30 @@ const styles = StyleSheet.create({
     fontSize: 22, 
     textAlign: 'center', 
     fontWeight: '600',
-    marginTop: '5%'
+    marginTop: '10%'
   },
   symptomsChoicesButtonText: {
     color: "#000000",
     fontFamily: "Avenir",
     fontWeight: '500',
     fontSize: 14, 
-    top: "75%",
+    top: '75%',
+    textAlign: "center"
+  },
+  symptomsChoicesButtonExercise: {
+    color: "#000000",
+    fontFamily: "Avenir",
+    fontWeight: '500',
+    fontSize: 14, 
+    top: '77%',
+    textAlign: "center"
+  }, 
+  symptomsChoicesButtonMood: {
+    color: "#000000",
+    fontFamily: "Avenir",
+    fontWeight: '500',
+    fontSize: 14, 
+    top: '70%',
     textAlign: "center"
   }
 });

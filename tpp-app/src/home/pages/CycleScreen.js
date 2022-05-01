@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {StyleSheet, Text, ImageBackground, SafeAreaView, View, ScrollView} from 'react-native';
 import CycleCard from '../components/CycleCard';
@@ -11,14 +10,18 @@ import {useFocusEffect} from '@react-navigation/native';
 import BloodDrop from '../../../ios/tppapp/Images.xcassets/icons/flow_with_heart.svg';
 import Calendar from '../../../ios/tppapp/Images.xcassets/icons/menstruation_calendar.svg';
 import Paddy from '../../../ios/tppapp/Images.xcassets/icons/paddy.svg';
+import { Footer } from '../../services/utils/footer';
+import LoadingVisual from '../components/LoadingVisual';
+import ErrorFallback from "../../error/error-boundary";
 
 function InfoCard(props){
+  let DefaultText = <Text style={styles.messageForDefault}>Please start logging to learn more. </Text>;
   return (
     <View style={[styles.card, {backgroundColor: props.backgroundColor}]}>
       <View style={styles.infoCardInternal}>
         <Text style={styles.header}>{props.header}</Text>
-        <SafeAreaView style={[styles.rowContainer, styles.daysRow, {justifyContent: "space-between"}]}>
-          <Text style={styles.daysText}>{props.days} Days</Text>
+        <SafeAreaView style={[styles.infoCardRow, styles.daysRow]}>
+          {props.days === 0 ? DefaultText : <Text style={styles.daysText}>{props.days} Days</Text> }
           <SafeAreaView style={styles.whiteBackground}>
             {props.children}
           </SafeAreaView>
@@ -31,7 +34,8 @@ function InfoCard(props){
 function PeriodNotification(props){
   return (
     <View style={[styles.periodNotifCard, styles.element]}>
-      <Text style={styles.periodNotifText}> Your period might be coming within the next {props.daysTillPeriod} days.</Text>
+      { props.daysTillPeriod > 0 && <Text style={styles.periodNotifText}> Your period might be coming within the next {props.daysTillPeriod} days.</Text> }
+      { props.daysTillPeriod <= 0 && <Text style={styles.periodNotifText}> Your period will likely come any day now!</Text> }
         {props.children}
     </View>
   )
@@ -46,7 +50,7 @@ export default function CycleScreen ({navigation}){
     CYCLE_DONUT_PERCENT: 0,
     DAYS_TILL_PERIOD: 0,
     INTERVALS: [],
-    SHOW_TIP: true
+    SHOW_TIP: false
   };
 
 
@@ -58,39 +62,44 @@ export default function CycleScreen ({navigation}){
   let [daysTillPeriod, setDaysTillPeriod] = useState(DEFAULTS.DAYS_TILL_PERIOD);
   let [intervals, setIntervals] = useState(DEFAULTS.INTERVALS);
   let [showTip, setShowTip] = useState(DEFAULTS.SHOW_TIP);
+  let [loaded, setLoaded] = useState(false);
 
   const tabBarHeight = useBottomTabBarHeight();
 
   useFocusEffect(React.useCallback(() => {
 
-     CycleService.GETPeriodDay().then(days => {
+
+     let gettingPeriod = CycleService.GETPeriodDay().then(days => {
        setPeriodDays(days);
+       setShowTip(days <= 0);
      })
      .catch(() => {setPeriodDays(DEFAULTS.PERIOD_DAYS)});
 
-     CycleService.GETCycleDonutPercent().then(percent => {
+     let gettingCycle = CycleService.GETCycleDonutPercent().then(percent => {
        setCycleDonutPercent(percent * 100);
      })
      .catch(() => setCycleDonutPercent(DEFAULTS.CYCLE_DONUT_PERCENT));
 
-     CycleService.GETDaysSinceLastPeriodEnd().then(days => {
+     let gettingPeriodEndDays = CycleService.GETDaysSinceLastPeriodEnd().then(days => {
        setDaysSinceLastPeriod(days);
      })
      .catch(setDaysSinceLastPeriod(DEFAULTS.DAYS_SINCE_LAST_PERIOD));
 
-     CycleService.GETAveragePeriodLength().then(numDays => {
+     let gettingAveragePeriodLength = CycleService.GETAveragePeriodLength().then(numDays => {
        if(numDays){
-        setAvgPeriodLength(numDays);
+         // Round to one decimal place
+        setAvgPeriodLength(Math.round(numDays * 10) / 10);
        }
        else {
          setAvgPeriodLength(DEFAULTS.AVG_PERIOD_LENGTH);
        }
      })
      .catch(() => setAvgPeriodLength(DEFAULTS.AVG_PERIOD_LENGTH));
-     
-     CycleService.GETAverageCycleLength().then(numDays => {
+
+     let gettingAverageCycleLength = CycleService.GETAverageCycleLength().then(numDays => {
        if(numDays){
-        setAvgCycleLength(numDays);
+         // Round to one decimal place
+         setAvgCycleLength(Math.round(numDays * 10) / 10);
        }
        else {
          setAvgCycleLength(DEFAULTS.AVG_CYCLE_LENGTH);
@@ -98,7 +107,7 @@ export default function CycleScreen ({navigation}){
      })
      .catch(() => setAvgCycleLength(DEFAULTS.AVG_CYCLE_LENGTH));
 
-     CycleService.GETPredictedDaysTillPeriod().then(numDays => {
+     let gettingPredictedDays = CycleService.GETPredictedDaysTillPeriod().then(numDays => {
        let toSet;
        if(numDays && numDays != -1){
          toSet = numDays;
@@ -107,7 +116,7 @@ export default function CycleScreen ({navigation}){
          toSet = DEFAULTS.DAYS_TILL_PERIOD;
          //if the prediction is invalid, don't show the tooltip
          //will not show tip until average cycle is computed
-         setShowTip(false);
+        //  setShowTip(false);
        }
        setDaysTillPeriod(toSet);
      })
@@ -115,13 +124,28 @@ export default function CycleScreen ({navigation}){
        setDaysTillPeriod(DEFAULTS.DAYS_TILL_PERIOD);
        setShowTip(false);
      });
-     
-     CycleService.GETCycleHistoryByYear(new Date().getFullYear()).then(intervals =>{
+
+     let gettingCycleHistory = CycleService.GETCycleHistoryByYear(new Date().getFullYear()).then(intervals =>{
        setIntervals(intervals);
      })
      .catch(()=> {
        setIntervals(DEFAULTS.INTERVALS);
      })
+
+     Promise.all(
+       gettingPeriod,
+       gettingCycle,
+       gettingPeriodEndDays,
+       gettingAverageCycleLength,
+       gettingAveragePeriodLength,
+       gettingAverageCycleLength,
+       gettingPredictedDays,
+       gettingCycleHistory
+     ).then(
+      () => {
+        setLoaded(true);
+      }
+     )
 
   }, []));
 
@@ -129,43 +153,61 @@ export default function CycleScreen ({navigation}){
   const tipInvisibleStyle = {
     marginBottom: tabBarHeight
   }
-  const cardContainerStyle = showTip ? styles.cardContainer : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
-  return (
-    <SafeAreaView style={styles.container}>
-      <ImageBackground source={background} style={styles.container}>    
-        {/* View that contains all the relevant cards */}
-        <ScrollView contentContainerStyle={cardContainerStyle}>
-          {/* Period Notification (Period in X days) */}
-          {showTip && (
-          <PeriodNotification daysTillPeriod={daysTillPeriod}>
-            <Paddy style={styles.paddyIcon}/>
-          </PeriodNotification>
-          )}
-          <CycleCard 
-            periodDays={periodDays} 
-            daysSinceLastPeriod={daysSinceLastPeriod} 
-            cycleDonutPercent={cycleDonutPercent}
-            showTip={showTip}
-          />
-          <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
-            <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
-              <BloodDrop fill="red" style={styles.icon}/>
-            </InfoCard>
-            <InfoCard header="Average cycle length" days={avgCycleLength} backgroundColor="#B9E0D8">
-              <Calendar fill="red" style={styles.icon}/>
-            </InfoCard>
-          </SafeAreaView>
-          <MinimizedHistoryCard 
-            navigation={navigation} 
-            intervals={intervals}
-            onPeriod={periodDays !=0}
-          />
+  const tipVisibleStyle = {
+    marginBottom: 50
+  }
 
+  const cardContainerStyle = showTip && daysTillPeriod <= 7 ?
+      Object.assign({}, styles.cardContainer, tipVisibleStyle) :
+      Object.assign({}, styles.cardContainer, tipInvisibleStyle);
+
+  if (loaded) {
+  return (
+  <ErrorFallback>
+    <SafeAreaView style={styles.container}>
+      <ImageBackground source={background} style={styles.container}>
+        {/* View that contains all the relevant cards */}
+        <ScrollView>
+          {/* Period Notification (Period in X days) */}
+          <SafeAreaView style={cardContainerStyle}>
+            {showTip && daysTillPeriod <= 7 && (
+            <PeriodNotification daysTillPeriod={daysTillPeriod}>
+              <Paddy style={styles.paddyIcon}/>
+            </PeriodNotification>
+            )}
+            <CycleCard
+              periodDays={periodDays}
+              daysSinceLastPeriod={daysSinceLastPeriod}
+              cycleDonutPercent={cycleDonutPercent}
+              showTip={showTip && daysTillPeriod <= 7}
+            />
+            <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
+              <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
+                <BloodDrop fill="red" style={styles.icon}/>
+              </InfoCard>
+              <InfoCard header="Average cycle length" days={avgCycleLength} backgroundColor="#B9E0D8">
+                <Calendar fill="red" style={styles.icon}/>
+              </InfoCard>
+            </SafeAreaView>
+            <MinimizedHistoryCard
+              navigation={navigation}
+              intervals={intervals}
+              onPeriod={periodDays !=0}
+            />
+            <View style={{marginBottom: 70}}>
+              <Footer navigation={navigation} />
+            </View>
+          </SafeAreaView>
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
-
+  </ErrorFallback>
   )
+
+  } else {
+    return <LoadingVisual/>
+  }
+
 }
 
 const styles = StyleSheet.create({
@@ -174,16 +216,32 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center'
   },
+  messageForDefault: {
+    fontFamily: "Avenir",
+    fontSize: 11,
+    fontWeight: "400",
+    lineHeight: 12,
+    letterSpacing: -0.30000001192092896,
+    textAlign: "left",
+    width: 70,
+    color: "#000000"
+  },
+
   cardContainer: {
       flex: 1,
       marginHorizontal: 16,
       alignItems: 'stretch',
-      justifyContent: 'space-evenly',
-  },  
+      paddingBottom: 50,
+  },
   rowContainer:{
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center'
+  },
+  infoCardRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   infoCardContainer:{
     justifyContent: 'space-between'
@@ -244,17 +302,19 @@ const styles = StyleSheet.create({
     height: 50,
     display: "flex",
     alignItems: 'center',
+    right: -18
   },
   icon: {
-        transform: [{scale:0.7}]
+        transform: [{scale:0.7}],
   },
   paddyIcon: {
     transform: [{scale:0.4}]
   },
   infoCardInternal: {
-    marginHorizontal: 10,
+    marginLeft: "5%",
+    marginRight: "15%"
   },
   element: {
-    marginVertical: "15%"
+     marginVertical: "7%"
   }
 })

@@ -1,47 +1,165 @@
 
-import React from "react";
+import React, {useEffect, useState, createElement} from "react";
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import {GETAllTrackingPreferences} from '../../services/SettingsService';
+import { TRACK_SYMPTOMS } from "../../services/utils/constants";
+import {VIEWS} from "../../services/utils/constants";
 import FlowIcon from "../../../ios/tppapp/Images.xcassets/icons/flow.svg";
 import MoodIcon from "../../../ios/tppapp/Images.xcassets/icons/mood.svg";
 import ExerciseIcon from "../../../ios/tppapp/Images.xcassets/icons/exercise.svg";
 import CrampsIcon from "../../../ios/tppapp/Images.xcassets/icons/cramps.svg";
 import SleepIcon from "../../../ios/tppapp/Images.xcassets/icons/sleep.svg";
+import {useIsFocused} from "@react-navigation/native";
+
+//write function that takes props & renders the corresponding icon
+export const SelectedIcon = ({selectedView, style}) => {
+    switch(selectedView) {
+        case VIEWS.Cramps:
+            return (<CrampsIcon style={style}/>)
+        case VIEWS.Exercise:
+            return (<ExerciseIcon style={style}/>);
+        case VIEWS.Flow:
+            return (<FlowIcon style={style}/>);
+        case VIEWS.Mood:
+            return (<MoodIcon style={style} fill="black"/>);
+        case VIEWS.Sleep:
+            return (<SleepIcon style={style}/>);
+    }
+
+
+}
+
+const trackSymptomsToViews = {
+    [TRACK_SYMPTOMS.MOOD] : VIEWS.Mood,
+    [TRACK_SYMPTOMS.CRAMPS] : VIEWS.Cramps,
+    [TRACK_SYMPTOMS.FLOW] : VIEWS.Flow,
+    [TRACK_SYMPTOMS.EXERCISE] : VIEWS.Exercise,
+    [TRACK_SYMPTOMS.SLEEP] : VIEWS.Sleep
+}
 
 const Selector = (props) => {
-  return (
-    <View style={{backgroundColor: '#FFFFFF'}}>
-        {props.expanded &&
-        <View style={styles.selectorContainer}>
-            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Flow)} style={[props.selectedView === props.views.Flow&& styles.selectedIcon, styles.iconContainer]} >
-                <FlowIcon style={styles.icon} fill="black"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Mood)} style={[props.selectedView === props.views.Mood && styles.selectedIcon, styles.iconContainer]}>
-                <MoodIcon style={styles.icon} fill="black"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Exercise)} style={[props.selectedView === props.views.Exercise && styles.selectedIcon, styles.iconContainer]}>
-                <ExerciseIcon style={styles.icon} fill="black"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Cramps)} style={[props.selectedView === props.views.Cramps && styles.selectedIcon, styles.iconContainer]}>
-                <CrampsIcon style={styles.icon} fill="black"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => props.toggleSelectedView(props.views.Sleep)} style={[props.selectedView === props.views.Sleep && styles.selectedIcon, styles.iconContainer]}>
-                <SleepIcon style={styles.icon} fill="black"/>
-            </TouchableOpacity>
+  let [trackedViews, setTrackedViews] = useState([]);
+  let [numTracked, setNumTracked] = useState(0);
+    let flowSelected = props.selectedView === VIEWS.Flow;
+    let moodSelected = props.selectedView === VIEWS.Mood;
+    let exerciseSelected = props.selectedView === VIEWS.Exercise;
+    let crampsSelected = props.selectedView === VIEWS.Cramps;
+    let sleepSelected = props.selectedView === VIEWS.Sleep;
+    let selectedColor = "#B31F20";
+    let unselectedColor = "#6D6E71";
+    const isFocused = useIsFocused();
 
+  useEffect(() => {
+      if (isFocused) {
+          GETAllTrackingPreferences().then(allPrefs => {
+              //convert into map so you can directly index in
+              let newTrackedViews = Object.assign({}, ...allPrefs.map(pref => ({
+                  [trackSymptomsToViews[pref[0]]]: (pref[1] === 'true')
+                })));
+
+              // find only tracked symptom, if there is only one
+              let numTracked = 0;
+              for (const prefName in newTrackedViews) {
+                  if (newTrackedViews[prefName]) {
+                      numTracked += 1;
+                      onlyTracked = trackSymptomsToViews[prefName];
+                  }
+              }
+
+              // if the selected view is no longer tracked, default to flow
+              if(!newTrackedViews[props.selectedView]) {
+                  props.setSelectedView(VIEWS.Flow)
+              }
+
+              setNumTracked(numTracked);
+              setTrackedViews(newTrackedViews);
+          });
+      }
+  }, [isFocused])
+
+  
+
+    const iconData = [
+        {
+            view: VIEWS.Flow,
+            selected: flowSelected,
+            internalIcon: FlowIcon,
+            visible: trackedViews[VIEWS.Flow]
+        },
+        {
+            view: VIEWS.Mood,
+            selected: moodSelected,
+            internalIcon: MoodIcon,
+            visible: trackedViews[VIEWS.Mood]
+        },
+        {
+            view: VIEWS.Exercise,
+            selected: exerciseSelected,
+            internalIcon: ExerciseIcon,
+            visible: trackedViews[VIEWS.Exercise]
+        },
+        {
+            view: VIEWS.Cramps,
+            selected: crampsSelected,
+            internalIcon: CrampsIcon,
+            visible: trackedViews[VIEWS.Cramps]
+        },
+        {
+            view: VIEWS.Sleep,
+            selected: sleepSelected,
+            internalIcon: SleepIcon,
+            visible: trackedViews[VIEWS.Sleep]
+
+
+        },
+    ]
+
+
+
+    return (
+        <View style={[{backgroundColor: '#fff'}, props.expanded && styles.elevatedSelector]}>
+            {props.expanded &&
+            <View style={[styles.selectorContainer, numTracked === 5 && styles.allSelectedContainer]}>
+                 {iconData.map((icon, i) => {
+                    let renderedIcon = createElement(icon.internalIcon, {
+                        fill: icon.selected ? selectedColor : unselectedColor
+                    })
+                    let activeOpacity = (icon.selected) ? 1 : 0.2 
+                    return (
+                        icon.visible && <TouchableOpacity
+                            onPress={() => props.setSelectedView(icon.view)}
+                            key={i}
+                            style={[icon.selected && styles.selectedIcon, styles.iconContainer]}
+                            activeOpacity={activeOpacity}
+                        >
+                            {renderedIcon}
+                        </TouchableOpacity>
+                    )
+                })}
+            </View>
+            }
         </View>
-        }
-    </View>
-  )
-}
+    )
+    }
 
 
 const styles = StyleSheet.create({
     selectorContainer: {
         flex:1,
         alignSelf:'stretch',
-        justifyContent: 'space-around',
+        justifyContent: 'space-evenly',
         flexDirection: "row",
-        marginBottom: 50,
+        marginBottom: '14%',
+    },
+    allSelectedContainer: {
+        justifyContent: 'space-evenly'
+    },
+    elevatedSelector: {
+        position: "absolute",
+        width: "100%",
+        zIndex: 3,
+        marginTop: 47,
+        height: "7%",
     },
     selectedIcon: {
         backgroundColor: '#EFEFF4',

@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ScrollView} from 'react-native';
 import addDays from 'date-fns/addDays';
-import { STACK_SCREENS } from '../CalendarNavigator';
+import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+const NothingLogged = () => {
+    return (
+    <Text style={styles.nothingLogged}>
+        Please start logging to learn more.
+    </Text>
+    )
+}
+
 const ShowMore = ({navigation}) => {
     return(
-        <TouchableOpacity onPress={() => navigation.navigate(STACK_SCREENS.CYCLE_HISTORY, {screen: STACK_SCREENS.CYCLE_HISTORY})}>
+        <TouchableOpacity onPress={() => navigation.navigate(CALENDAR_STACK_SCREENS.CYCLE_HISTORY, {screen: CALENDAR_STACK_SCREENS.CYCLE_HISTORY})}>
             <View style={styles.showMoreButton}>
                 <Text style={styles.showMoreText}>
                     Show More
@@ -16,7 +24,6 @@ const ShowMore = ({navigation}) => {
             </View>
         </TouchableOpacity>
     );
-
 }
 
 /**
@@ -68,6 +75,7 @@ function MinimizedHistoryCard({navigation, intervals, onPeriod}){
                     <Text style={styles.title}>Period History</Text>
                     <ShowMore navigation={navigation}/>
                 </SafeAreaView>
+                {(intervals.length == 0 ) && NothingLogged()}
                 {intervals.map((interval, index)=> {
                     if(index < 3){
                         return  <Interval 
@@ -96,6 +104,7 @@ function ExpandedHistoryCard({intervals, renderedYear, onPeriod}){
                 <View style={styles.bottomBorder}>
                     <Text style={styles.title}> {renderedYear} </Text>
                 </View>
+                {(intervals.length == 0 ) && NothingLogged()}
                 {intervals.map((interval, index) => {
                     return  <Interval 
                                 interval={interval} 
@@ -186,5 +195,14 @@ const styles = StyleSheet.create({
     },
     interval: {
         marginBottom: 19,
+    },
+    nothingLogged: {
+        fontFamily: "Avenir",
+        fontSize: 14,
+        fontWeight: "300",
+        lineHeight: 19,
+        letterSpacing: -0.30000001192092896,
+        textAlign: "left",
+        marginBottom: "10%"
     }
 })

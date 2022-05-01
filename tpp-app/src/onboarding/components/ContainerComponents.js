@@ -15,7 +15,7 @@ export const BackButtonContainer = styled.SafeAreaView`
   borderRadius: 10px;
   position: absolute; 
   left: 10px;
-  top: 10px;
+  top: 5%;
   flexDirection: row
 `;
 
@@ -42,7 +42,7 @@ export const InputBorderContainer = styled.View`
 export const InputContainer = styled.SafeAreaView`
   alignSelf: center;
   width: 50%;
-  height: 60px;
+  height: 8%;
   borderRadius: 10px;
   backgroundColor: #FFFFFF;
 `;
@@ -69,7 +69,7 @@ export const TextButtonContainer = styled.SafeAreaView`
 export const SymptomsButtonContainer = styled.SafeAreaView`
   flexDirection: row;
   alignSelf: center;
-  justify-content: space-between;
-  width: 85%;
-  bottom: 70%
+  justify-content: space-evenly;
+  width: 90%;
+  bottom: 74%;
 `;
