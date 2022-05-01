@@ -441,11 +441,11 @@ useEffect(() => {
   
         <SafeAreaView style={{top: "-5%"}}>
             <Text style={styles.heading}>Notifications</Text>
-            <NotificationsButton 
-                text={"Remind me to log period"} 
-                subtext={`${remindPeriodFreq} before at ${remindPeriodTime + " " + remindPeriodTimeMeridian}`} 
-                toggle={togglePeriodSwitch} 
-                enabled={remindPeriodEnabled} />
+            {/*<NotificationsButton */}
+            {/*    text={"Remind me to log period"} */}
+            {/*    subtext={`${remindPeriodFreq} ${remindPeriodFreq === "1" ? "day" : "days" } before at ${remindPeriodTime + " " + remindPeriodTimeMeridian}`}*/}
+            {/*    toggle={togglePeriodSwitch} */}
+            {/*    enabled={remindPeriodEnabled} />*/}
             <NotificationsButton
                 text={"Remind me to log symptoms"}
                 subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`} 

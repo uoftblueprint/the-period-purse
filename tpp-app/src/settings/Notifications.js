@@ -86,25 +86,25 @@ export default function Notifications ( {navigation} ) {
                     </View>
                     <View style={{top: "2%"}}>
 
-                        <NotificationStack name={"Remind me to log period"} header={"We'll remind you when your period is coming."}/>
-                        <View
-                        style={{
-                            borderBottomColor: '#CFCFCF',
-                            borderBottomWidth: 1,
-                            }}/>
+                        {/*<NotificationStack name={"Remind me to log period"} header={"We'll remind you when your period is coming."}/>*/}
+                        {/*<View*/}
+                        {/*style={{*/}
+                        {/*    borderBottomColor: '#CFCFCF',*/}
+                        {/*    borderBottomWidth: 1,*/}
+                        {/*    }}/>*/}
 
-                        <NotificationAccordion title={"How many days in advance"} selectedText={remindPeriodFreq} setSelectedText={setRemindPeriodFreq} type={"days"}/> 
-                        <View
-                        style={{
-                            borderBottomColor: '#CFCFCF',
-                            borderBottomWidth: 1,
-                            }}/>
-                        <NotificationAccordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} time={remindPeriodTime} meridian={remindPeriodTimeMeridian} setTime={setRemindPeriodTime} setTimeMeridian={setRemindPeriodTimeMeridian}  type={"periodTime"}/>
-                        <View
-                        style={{
-                            borderBottomColor: '#CFCFCF',
-                            borderBottomWidth: 1,
-                            }}/>
+                        {/*<NotificationAccordion title={"How many days in advance"} selectedText={remindPeriodFreq} setSelectedText={setRemindPeriodFreq} type={"days"}/> */}
+                        {/*<View*/}
+                        {/*style={{*/}
+                        {/*    borderBottomColor: '#CFCFCF',*/}
+                        {/*    borderBottomWidth: 1,*/}
+                        {/*    }}/>*/}
+                        {/*<NotificationAccordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} time={remindPeriodTime} meridian={remindPeriodTimeMeridian} setTime={setRemindPeriodTime} setTimeMeridian={setRemindPeriodTimeMeridian}  type={"periodTime"}/>*/}
+                        {/*<View*/}
+                        {/*style={{*/}
+                        {/*    borderBottomColor: '#CFCFCF',*/}
+                        {/*    borderBottomWidth: 1,*/}
+                        {/*    }}/>*/}
                         <NotificationStack name={"Remind me to log symptoms"} header={"We'll remind you to log your symptoms. "}/>
                         <View
                         style={{
