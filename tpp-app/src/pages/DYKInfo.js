@@ -17,9 +17,8 @@ export default function DidYouKnow({ navigation }) {
         async function retrieveFactCycle() {
            let factWhole;
             GETFactCycle().then((factArray) => {
-                console.log(19, factArray);
                 factWhole = dykData[factCycleNum];
-                setRetrievedFact(factWhole.slice(0, 84));
+                setRetrievedFact(factWhole);
 
                 if (!factArray){
                     POSTFactCycle().then(async () => {
@@ -27,7 +26,6 @@ export default function DidYouKnow({ navigation }) {
                         setFactCycleDate(factArray[0]);
                         setFactCycleNum(factArray[1]);
                         factWhole = dykData[factArray[1]]
-                        console.log(`This is fact on DYKpage 30: ${factWhole}`)
                         setRetrievedFact(factWhole);
                     })
                 }
@@ -38,12 +36,10 @@ export default function DidYouKnow({ navigation }) {
                 if (getFullCurrentDateString() !== factCycleDate) {
                     POSTFactCycle().then(async () => {
                         let factArray = await GETFactCycle();
-                        console.log(`This is factArray on DYK 40: ${factArray}`)
                         setFactCycleDate(factArray[0]);
                         setFactCycleNum(factArray[1]);
 
                         factWhole = dykData[factArray[1]]
-                        console.log(`This is factWhole on DYK 46: ${factWhole}`)
 
                         setRetrievedFact(factWhole);
                     });
@@ -54,8 +50,6 @@ export default function DidYouKnow({ navigation }) {
     }, [])
 
     let fact = dykData[factCycleNum]
-    console.log(`This is factCycleArray number on DYK page: ${factCycleNum}`)
-    console.log(`This is fact on DYK page: ${retrievedFact}`)
 
     return (
         <ErrorFallback>
