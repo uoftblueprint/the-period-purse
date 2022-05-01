@@ -160,9 +160,26 @@ export default class Accordion extends Component{
 
         // Change icon color depending on if there's a selected value
         const iconFill = isNonEmpty ? '#72C6B7' : '#6D6E71';
-        const renderedIcon = createElement(this.icon, {
+        let renderedIcon = createElement(this.icon, {
             fill: iconFill
         });
+
+        if (this.props.type === 'sleep') {
+          renderedIcon = createElement(this.icon, {
+            fill: iconFill,
+            marginLeft: 4
+          });
+        } else if (this.props.type === 'exercise'){
+          renderedIcon = createElement(this.icon, {
+            fill: iconFill,
+            marginLeft: 3
+          });
+        } else if (this.props.type === 'notes') {
+          renderedIcon = createElement(this.icon, {
+            fill: iconFill,
+            marginLeft: 3
+          });
+        }
 
         // set accordion content based on symptom type
         let accContent;

@@ -65,7 +65,10 @@ export const SymptomsChoicesButton = ({ onPress, title, color, icon }) => {
     <TouchableOpacity onPress={onPress} 
       style={{ width: "100%", height: "100%", borderRadius: 16, backgroundColor: color }}>
       {icon}
-      <Text style={styles.symptomsChoicesButtonText}>{title}</Text>
+      {title==='Exercise' && <Text style={styles.symptomsChoicesButtonExercise}>{title}</Text>}
+      {title==='Mood' && <Text style={styles.symptomsChoicesButtonMood}>{title}</Text>}
+      {title !== 'Exercise' && title !== 'Mood' && <Text style={styles.symptomsChoicesButtonText}>{title}</Text> }
+      {/* <Text style={title === 'Exercise' ? styles.symptomsChoicesButtonExercise : styles.symptomsChoicesButtonText}>{title}</Text> */}
     </TouchableOpacity>);
 }
 
@@ -136,7 +139,23 @@ const styles = StyleSheet.create({
     fontFamily: "Avenir",
     fontWeight: '500',
     fontSize: 14, 
-    top: "75%",
+    top: '75%',
+    textAlign: "center"
+  },
+  symptomsChoicesButtonExercise: {
+    color: "#000000",
+    fontFamily: "Avenir",
+    fontWeight: '500',
+    fontSize: 14, 
+    top: '77%',
+    textAlign: "center"
+  }, 
+  symptomsChoicesButtonMood: {
+    color: "#000000",
+    fontFamily: "Avenir",
+    fontWeight: '500',
+    fontSize: 14, 
+    top: '70%',
     textAlign: "center"
   }
 });
