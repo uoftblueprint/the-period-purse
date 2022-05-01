@@ -74,7 +74,7 @@ const cardData = [
         screen: STACK_SCREENS.PADS
     },
     {
-        name: "Cloth Pad",
+        name: "Cloth Pads",
         image: <ClothPadIcon/>,
         screen: STACK_SCREENS.CLOTH_PADS
     },
