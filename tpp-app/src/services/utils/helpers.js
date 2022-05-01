@@ -208,13 +208,28 @@ export const GETStoredYears = async () => {
 export const getMonthsDiff = (dateFromStr) => {
   if(dateFromStr) {
     let parts = dateFromStr.split('-')
-    let dateFrom = new Date(parts[0], parts[1] - 1, parts[2]); 
+    let dateFrom = new Date(parts[0], parts[1] - 1, parts[2]);
     let dateTo = new Date()
-    return (dateTo.getMonth() - dateFrom.getMonth()) + 
+    return (dateTo.getMonth() - dateFrom.getMonth()) +
         (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
   }
   return null;
 }
+
+
+export const getCorrectDate = (daysAdded, time) => {
+  // takes a string time and parses it
+  const timeToSet = time.split(":")
+  let hour = parseInt(timeToSet[0].split(":")[0]);
+
+  const date = new Date();
+  date.setDate(date.getDate() + daysAdded);
+  date.setHours(hour);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  return date;
+};
+
 
 /** 
 * Gets the full current date as a string in the format of "2022-1-1"

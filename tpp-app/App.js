@@ -13,7 +13,12 @@ import SettingsNavigator from './src/settings/SettingsNavigator';
 import { TabBarMiddleButton } from './src/home/components/TabBarMiddleButton';
 import Welcome from './src/onboarding/Welcome';
 import InfoNavigator from './src/info/InfoNavigator';
-import { GETAllTrackingPreferences } from './src/services/SettingsService';
+import {
+    POSTRemindLogSymptoms,
+    POSTRemindLogSymptomsFreq,
+    POSTRemindLogSymptomsTime,
+    GETRemindLogSymptomsFreq, GETRemindLogSymptomsTime, GETRemindLogSymptoms
+} from './src/services/SettingsService';
 import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
 import PrivacyPolicyScreen from './src/home/pages/PrivacyPolicyScreen';
@@ -112,8 +117,19 @@ export function MainNavigator() {
       sound: true,
       critical: true,
     }).then(
-      (data) => {
+      async (data) => {
         console.log('PushNotificationsIOS.requestPermissions', data);
+
+        if (await GETRemindLogSymptomsFreq() === null) {
+            await POSTRemindLogSymptomsFreq("Every day");
+        }
+        if (await GETRemindLogSymptomsTime() == null) {
+            await POSTRemindLogSymptomsTime("10:00 AM");
+        }
+        if (await GETRemindLogSymptoms() === null) {
+            await POSTRemindLogSymptoms(true);
+        }
+
       },
       (data) => {
         console.log('PushNotificationsIOS.requestPermissions failed', data);

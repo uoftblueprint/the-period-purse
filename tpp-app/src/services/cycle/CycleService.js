@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FLOW_LEVEL} from '../utils/constants';
-import {getCalendarByYear, getSymptomsFromCalendar, getDaysDiffInclusive, getPeriodsInYear}  from '../utils/helpers';
+import {getDateString, getCalendarByYear, getSymptomsFromCalendar, getDaysDiffInclusive, getPeriodsInYear}  from '../utils/helpers';
 import {Symptoms} from '../utils/models';
 import differenceInDays from 'date-fns/differenceInDays';
 import isSameDay from 'date-fns/isSameDay';
@@ -21,27 +21,26 @@ import {errorAlertModal} from "../../error/errorAlertModal";
  * @return {Promise} Resolves into Date object that is the closest date after finalPeriodStart that is the end of a period. Date may be in a later year than finalPeriodStart
  */
 async function getLastPeriodsEnd(finalPeriodStart, calendar = null){
-  try {
-    let current = finalPeriodStart;
-    let yesterday = subDays(current, 1);
-    let twoDaysEarlier = subDays(current, 2);
+    var current = finalPeriodStart;
+    var yesterday = subDays(current, 1);
+    var twoDaysEarlier = subDays(current, 2);
 
-    if (!calendar) {
+    if (!calendar){
       calendar = await getCalendarByYear(current.getFullYear());
     }
 
-    let dateSymptoms = getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
+    let dateSymptoms = getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth()+1, current.getFullYear());
     let yesterdaySymptoms = new Symptoms();
     let twoDaysEarlierSymptoms = new Symptoms()
 
-    let noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null);
-    let noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null);
-    let flowTwoDaysEarlier = (twoDaysEarlierSymptoms.flow !== null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE);
+    var noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
+    var noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null) ;
+    var flowTwoDaysEarlier = (twoDaysEarlierSymptoms.flow !== null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE)
 
 
-    while (!(noFlowToday && noFlowYesterday && flowTwoDaysEarlier)) {
+    while(!(noFlowToday && noFlowYesterday && flowTwoDaysEarlier)){
 
-      const tomorrow = addDays(current, 1);
+      var tomorrow = addDays(current, 1);
       twoDaysEarlier = yesterday;
       yesterday = current;
       current = tomorrow;
@@ -50,17 +49,16 @@ async function getLastPeriodsEnd(finalPeriodStart, calendar = null){
       twoDaysEarlierSymptoms = yesterdaySymptoms;
       yesterdaySymptoms = dateSymptoms;
       dateSymptoms = getSymptomsFromCalendar(calendar, current.getDate(), current.getMonth() + 1, current.getFullYear());
-      noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null);
-      noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null);
+      noFlowToday = (dateSymptoms.flow === FLOW_LEVEL.NONE || dateSymptoms.flow === null) ;
+      noFlowYesterday = (yesterdaySymptoms.flow === FLOW_LEVEL.NONE || yesterdaySymptoms.flow === null) ;
       flowTwoDaysEarlier = (twoDaysEarlierSymptoms.flow !== null && twoDaysEarlierSymptoms.flow !== FLOW_LEVEL.NONE)
     }
 
 
+
     return twoDaysEarlier;
-  } catch (e) {
-    console.log(e);
-    errorAlertModal();
-  }
+
+
 }
 export {getLastPeriodsEnd};
 
@@ -448,7 +446,42 @@ const CycleService = {
 
     let nextPeriodStart = addDays(prevPeriodStart, avgCycleLength);
     if(avgCycleLength && prevPeriodStart){
-      return differenceInDays(nextPeriodStart, today);
+      let predictedDaysTillPeriod = differenceInDays(nextPeriodStart, today);
+
+      // Set notification if enabled
+      // if (await GETRemindLogPeriod()) {
+      //   const freq = await GETRemindLogPeriodFreq();
+      //   const time = await GETRemindLogPeriodTime();
+      //
+      //   // Parsing
+      //   const daysAhead = parseInt(freq);
+      //   const hour = time.split(" ")[0].split(":")[0];
+      //   const amOrPm = time.split(" ")[1];
+      //   let remindPeriodTime;
+      //   if (amOrPm === "PM" && hour !== "12") {
+      //     // add 12 hours
+      //     remindPeriodTime = JSON.stringify(parseInt(hour) + 12) + ":00";
+      //   } else if (hour === "12") {
+      //     remindPeriodTime = "0:00";
+      //   } else {
+      //     remindPeriodTime = hour + ":00";
+      //   }
+      //
+      //   // "0:00 - 24:00"
+      //
+      //   // notification scheduling
+      //   PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
+      //   PushNotificationIOS.addNotificationRequest({
+      //     id: 'remindperiod',
+      //     title: 'Period Reminder!',
+      //     body: `Your period is predicted to come in ${daysAhead} days.`,
+      //     badge: 1,
+      //     fireDate: getCorrectDate((predictedDaysTillPeriod - daysAhead), remindPeriodTime),
+      //     repeats: true
+      //   });
+      //
+      // }
+      return predictedDaysTillPeriod;
     }
     else {
       return -1;  

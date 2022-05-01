@@ -2,119 +2,131 @@ import React, {useEffect, useState} from 'react';
 import {View,  Text, StyleSheet, ImageBackground} from 'react-native'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
-import Accordion from './NotificationAccordion'
+import NotificationAccordion from './NotificationAccordion'
+import { BackButton } from '../home/components/BackButtonComponent';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import ErrorFallback from "../error/error-boundary";
+import { GETRemindLogPeriodFreq, GETRemindLogSymptomsFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsTime } from '../services/SettingsService';
+import { BackButtonContainer } from '../onboarding/components/ContainerComponents';
+import { STACK_SCREENS } from './SettingsNavigator';
 
 
-export default function Notifications () {
-    const [remindPeriodFreq, setRemindPeriodFreq] = useState("2 days");
+export default function Notifications ( {navigation} ) {
+    const [remindPeriodFreq, setRemindPeriodFreq] = useState("2");
     const [remindPeriodTime, setRemindPeriodTime] = useState("10:00");
     const [remindPeriodTimeMeridian, setRemindPeriodTimeMeridian] = useState("AM");
     const [remindSymptomsFreq, setRemindSymptomsFreq] = useState("Every day");
     const [remindSymptomsTime, setRemindSymptomsTime] = useState("10:00");
     const [remindSymptomsTimeMeridian, setRemindSymptomsTimeMeridian] = useState("AM");
 
-    const [notificationSettingsValues, setNotificationSettingsValues] = useState([remindPeriodFreq, remindPeriodTime, remindPeriodTimeMeridian,
-        remindSymptomsFreq, remindSymptomsTime, remindSymptomsTimeMeridian]);
-    const [notificationSettingFunctions, setNotificationSettingFunctions] = useState([setRemindPeriodFreq, setRemindPeriodTime, setRemindPeriodTimeMeridian,
-        setRemindSymptomsFreq, setRemindSymptomsTime, setRemindSymptomsTimeMeridian]);
+    // Retrieve previously stored information from the database if it exists
+    useEffect(() => {
 
-// get the frequencies
-useEffect(() => {
-    async function getFreqTimes() {
-        let storedPeriodFreq = await GETRemindLogPeriodFreq();
-        let storedSymptomFreq = await GETRemindLogSymptomsFreq();
-        let storedPeriodTime = await GETRemindLogPeriodTime();
-        let storedSymptomTime = await GETRemindLogSymptomsTime();
+        async function getFreqTimes() {
 
-        if (storedPeriodFreq) {
-            setRemindPeriodFreq(storedPeriodFreq);
+
+            let storedPeriodFreq = await GETRemindLogPeriodFreq();
+            let storedSymptomFreq = await GETRemindLogSymptomsFreq();
+            let storedPeriodTime = await GETRemindLogPeriodTime();
+            let storedSymptomTime = await GETRemindLogSymptomsTime();
+
+            if (storedPeriodFreq) {
+                setRemindPeriodFreq(storedPeriodFreq);
+            }
+
+            if (storedSymptomFreq) {
+                setRemindSymptomsFreq(storedSymptomFreq);
+            }
+
+            if (storedPeriodTime) {
+                let parsedTime = storedPeriodTime.split(" ")
+                setRemindPeriodTime(parsedTime[0]);
+                setRemindPeriodTimeMeridian(parsedTime[1]);
+            }
+
+            if (storedSymptomTime) {
+                let parsedTime = storedSymptomTime.split(" ")
+                setRemindSymptomsTime(parsedTime[0]);
+                setRemindSymptomsTimeMeridian(parsedTime[1]);
+            }
+
         }
-
-        if (storedSymptomFreq) {
-            setRemindSymptomsFreq(storedPeriodFreq);
-        }
-
-        if (storedPeriodTime) {
-            setRemindPeriodTime(storedPeriodTime.slice(0, storedPeriodTime.length - 2));
-            setRemindPeriodTimeMeridian(storedPeriodTime.slice(-2));
-
-        }
-
-        if(storedSymptomTime) {
-            setRemindSymptomsTime(storedSymptomTime.slice(0, storedSymptomTime.length - 2));
-            setRemindSymptomsTimeMeridian(storedSymptomTime.slice(-2));
-        }
-// [periodFreq, periodTime, periodMerdian, symptomsFreq, symptomsTime, symptomsMerdian], same pattern for setting functions
-        setNotificationSettingsValues([remindPeriodFreq, remindPeriodTime, remindPeriodTimeMeridian,
-                                        remindSymptomsFreq, remindSymptomsTime, remindSymptomsTimeMeridian]);
-
-        setNotificationSettingFunctions([setRemindPeriodFreq, setRemindPeriodTime, setRemindPeriodTimeMeridian,
-                                        setRemindSymptomsFreq, setRemindSymptomsTime, setRemindSymptomsTimeMeridian]);
-                        
-    }
-    getFreqTimes();
-}, []);
+        getFreqTimes();
+    }, []);
 
     return (
-        <ErrorFallback>
-            <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
-                            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <SafeAreaView>
-            <View style={{top: -90}}>
+    <ErrorFallback>
+        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <SafeAreaView>
+                    <View style={styles.navbar}>
+                        <BackButtonContainer style={[styles.navitem, styles.backbutton]}>
+                            <BackButton title="" onPress={() => {
+                                navigation.navigate(STACK_SCREENS.SETTINGS, {
+                                    remindPeriodFreq: remindPeriodFreq,
+                                    remindPeriodTime: remindPeriodTime,
+                                    remindSymptomsFreq: remindSymptomsFreq,
+                                    remindSymptomsTime: remindSymptomsTime,
+                                    remindPeriodTimeMeridian: remindPeriodTimeMeridian,
+                                    remindSymptomsTimeMeridian: remindSymptomsTimeMeridian,
+                                });
+                            }}/>
+                        </BackButtonContainer>
+                        <Text style={[styles.navitem, styles.title]}>Notifications</Text>
+                        <View style={styles.navitem}></View>
+                    </View>
+                    <View style={{top: "2%"}}>
 
-                <NotificationStack name={"Remind me to log period"}/>
-                <View
-                style={{
-                    borderBottomColor: '#CFCFCF',
-                    borderBottomWidth: 1,
-                    }}/>
+                        {/*<NotificationStack name={"Remind me to log period"} header={"We'll remind you when your period is coming."}/>*/}
+                        {/*<View*/}
+                        {/*style={{*/}
+                        {/*    borderBottomColor: '#CFCFCF',*/}
+                        {/*    borderBottomWidth: 1,*/}
+                        {/*    }}/>*/}
 
-                <Accordion title={"How many days in advance"} selectedText={remindPeriodFreq} type={"days"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
-                <View
-                style={{
-                    borderBottomColor: '#CFCFCF',
-                    borderBottomWidth: 1,
-                    }}/>
-                <Accordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} type={"periodTime"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
-                <View
-                style={{
-                    borderBottomColor: '#CFCFCF',
-                    borderBottomWidth: 1,
-                    }}/>
-                <NotificationStack name={"Remind me to log symptoms"}/>
-                <View
-                style={{
-                    borderBottomColor: '#CFCFCF',
-                    borderBottomWidth: 1,
-                    }}/>
-                <Accordion title={"Repeat"} selectedText={remindSymptomsFreq}  type={"howOften"}  pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
-                <View
-                style={{
-                    borderBottomColor: '#CFCFCF',
-                    borderBottomWidth: 1,
-                    }}/>
-                <Accordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} type={"symptomTime"} pickerDataValues={notificationSettingsValues} pickerDataFunctions={notificationSettingFunctions}/>
-                <View
-                style={{
-                    borderBottomColor: '#CFCFCF',
-                    borderBottomWidth: 1,
-                    }}/>
-            </View>
-            </SafeAreaView>
+                        {/*<NotificationAccordion title={"How many days in advance"} selectedText={remindPeriodFreq} setSelectedText={setRemindPeriodFreq} type={"days"}/> */}
+                        {/*<View*/}
+                        {/*style={{*/}
+                        {/*    borderBottomColor: '#CFCFCF',*/}
+                        {/*    borderBottomWidth: 1,*/}
+                        {/*    }}/>*/}
+                        {/*<NotificationAccordion title={"Reminder time"} selectedText={`${remindPeriodTime} ${remindPeriodTimeMeridian}`} time={remindPeriodTime} meridian={remindPeriodTimeMeridian} setTime={setRemindPeriodTime} setTimeMeridian={setRemindPeriodTimeMeridian}  type={"periodTime"}/>*/}
+                        {/*<View*/}
+                        {/*style={{*/}
+                        {/*    borderBottomColor: '#CFCFCF',*/}
+                        {/*    borderBottomWidth: 1,*/}
+                        {/*    }}/>*/}
+                        <NotificationStack name={"Remind me to log symptoms"} header={"We'll remind you to log your symptoms. "}/>
+                        <View
+                        style={{
+                            borderBottomColor: '#CFCFCF',
+                            borderBottomWidth: 1,
+                            }}/>
+                        <NotificationAccordion title={"Repeat"} selectedText={remindSymptomsFreq} setSelectedText={setRemindSymptomsFreq} type={"howOften"}/>
+                        <View
+                        style={{
+                            borderBottomColor: '#CFCFCF',
+                            borderBottomWidth: 1,
+                            }}/>
+                        <NotificationAccordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} time={remindSymptomsTime} meridian={remindSymptomsTimeMeridian} setTime={setRemindSymptomsTime} setTimeMeridian={setRemindSymptomsTimeMeridian} type={"symptomTime"}/>
+                        <View
+                        style={{
+                            borderBottomColor: '#CFCFCF',
+                            borderBottomWidth: 1,
+                            }}/>
+                    </View>
+                </SafeAreaView>
             </ScrollView>
-            </ImageBackground>
-        </ErrorFallback>
+        </ImageBackground>
+    </ErrorFallback>
     )
-}                
+}
 
 const NotificationStack = (props) => {
     return (
-
         <SafeAreaView style={styles.rowContainer} >
-        <Text style={styles.optionText}>{props.name}</Text>
-    
+            <Text style={styles.optionText}>{props.name}</Text>
+            <Text style={styles.optionHeader}>{props.header}</Text>
         </SafeAreaView>
       
     )
@@ -122,15 +134,26 @@ const NotificationStack = (props) => {
 
 const styles = StyleSheet.create({   
     bgImage: {
-    flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'center'
-  },
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'center'
+    },
     rowContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        zIndex:0
+    },
+    backbutton: {
+        zIndex:1,
+    },
+    navbar: {
+        flexDirection: 'column',
         alignItems: 'center',
-        bottom: -10
+        
+    },
+    navitem: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+
     },
     dropDownTextBox: {
         flexDirection: 'row',
@@ -164,10 +187,26 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         left: 16,
     },
+    optionHeader: {
+        fontFamily: 'Avenir',
+        fontWeight: '400',
+        fontSize: 16,
+        lineHeight: 34,
+        color: '#6D6E71',
+        left: 15,
+        bottom: "-10%"
+    },
     optionView:{
         paddingTop: -25,
         paddingBottom: -25,
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
+    title: {
+        top: 5,
+        fontWeight: "800",
+        fontSize: 20,
+        fontFamily: "Avenir",
+        color: "black",
+    }
 });
