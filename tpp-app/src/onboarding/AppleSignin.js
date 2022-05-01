@@ -1,10 +1,16 @@
 import React, { useEffect } from 'react';
 import { AppleButton } from '@invertase/react-native-apple-authentication';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
-import { StyleSheet, View } from "react-native";
+import {Alert, StyleSheet, View} from "react-native";
+import {
+    GETBackupFromiCloud,
+    POSTAppleIdentity, POSTBackupToiCloud,
+    userHasiCloudBackup
+} from "../services/AppleService";
+import {STACK_SCREENS} from "./Confirmation";
+import {STACK_SCREENS as SETTINGS_STACK_SCREEN } from "../settings/SettingsNavigator";
 
-
-async function onAppleButtonPress() {
+export async function onAppleButtonPress({navigation, comingFromSettings}) {
     // performs login request
     const appleAuthRequestResponse = await appleAuth.performRequest({
       requestedOperation: appleAuth.Operation.LOGIN,
@@ -19,11 +25,68 @@ async function onAppleButtonPress() {
   
     // use credentialState response to ensure the user is authenticated
     if (credentialState === appleAuth.State.AUTHORIZED) {
-      // user is authenticated
+      // user is authenticated, save their apple auth related fields
+      console.log(appleAuthRequestResponse);
+      await POSTAppleIdentity(appleAuthRequestResponse.user, appleAuthRequestResponse.fullName.givenName, appleAuthRequestResponse.fullName.familyName, appleAuthRequestResponse.identityToken);
+      console.log("comingFromSettings", comingFromSettings);
+      // Check if they have an existing file in their iCloud for M. Nation
+      // If yes, ask if they want to load up their backed up data
+      if (await userHasiCloudBackup()) {
+          // Coming from Settings' Backup Account
+          if (comingFromSettings) {
+              // replace icloud with AsyncStorage
+              await POSTBackupToiCloud()
+                  .then(() => {
+                      Alert.alert(
+                          "Backup Successful",
+                          "Your data has been backed up to your iCloud!", [
+                              {
+                                  text: "OK",
+                                  style: "default",
+                                  onPress: () => navigation.goBack()
+                              }
+                          ]
+                      );
+                  })
+                  .catch((e) => {
+                      console.log(e);
+                  });
+
+          // Coming from Welcome screen
+          } else {
+              Alert.alert(
+                  "Use Backup",
+                  "Would you like to use your backed up data for this app?", [
+                      {
+                          text: "No",
+                          style: "cancel",
+                          // Proceed to quick start
+                          onPress: () => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)
+                      }, {
+                          text: "Yes",
+                          style: "default",
+                          // Retrieve their backup
+                          onPress: async () =>
+                              GETBackupFromiCloud().then(() => {
+                                  navigation.navigate(STACK_SCREENS.MAIN_PAGE);
+                              })
+                      }
+                  ]
+              );
+          }
+
+      // If no, proceed to quick start
+      } else {
+          if (comingFromSettings) {
+              navigation.navigate(SETTINGS_STACK_SCREEN.BACK_UP_ACCOUNT);
+          } else {
+              navigation.navigate(STACK_SCREENS.PERIOD_LENGTH);
+          }
+      }
     }
 }
 
-export default function AppleSignin() {
+export default function AppleSignin({navigation}) {
     useEffect(() => {
       // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
       return appleAuth.onCredentialRevoked(async () => {
@@ -37,7 +100,7 @@ export default function AppleSignin() {
                 buttonStyle={AppleButton.Style.WHITE_OUTLINE}
                 buttonType={AppleButton.Type.SIGN_IN}
                 style={styles.appleSignin}
-                onPress={() => onAppleButtonPress()}
+                onPress={() => onAppleButtonPress({ navigation: navigation, comingFromSettings: false})}
             />
         </View>
     )
@@ -62,9 +125,6 @@ const styles = StyleSheet.create({
     marginTop: 50
   },
   appleSignin: {
-    width: 160,
-    height: 45,
-    alignSelf: 'center',
     alignItems: 'stretch', 
     justifyContent: 'center',
     borderRadius: 10,

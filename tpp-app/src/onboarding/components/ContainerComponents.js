@@ -15,7 +15,7 @@ export const BackButtonContainer = styled.SafeAreaView`
   borderRadius: 10px;
   position: absolute; 
   left: 10px;
-  top: 10px;
+  top: 5%;
   flexDirection: row
 `;
 
@@ -71,5 +71,5 @@ export const SymptomsButtonContainer = styled.SafeAreaView`
   alignSelf: center;
   justify-content: space-evenly;
   width: 90%;
-  bottom: 67%;
+  bottom: 74%;
 `;

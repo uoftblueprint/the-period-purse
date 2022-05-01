@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TRACK_SYMPTOMS, REMINDERS } from './utils/constants'
+import {errorAlertModal} from "../error/errorAlertModal";
 
 /**
  * Clears all of the user's account data
@@ -14,6 +15,7 @@ export const DELETEAccountData = async () => new Promise(async (resolve, reject)
         });
     } catch (e) {
         console.log(`DELETEAccountData error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 })
@@ -35,35 +37,8 @@ export const GETAllTrackingPreferences = async () => new Promise(async (resolve,
             resolve(values);
         });
     } catch (e) {
-        console.log(`GETAllTrackingPreferences error: ${JSON.stringify(e)}`)
-        reject();
-    }
-})
-
-
-/**
- * Posts any changes in symptom tracking preferences
- * @param {boolean} flow representing whether to track flow
- * @param {boolean} mood representing whether to track mood
- * @param {boolean} sleep representing whether to track sleep
- * @param {boolean} cramps representing whether to track cramps
- * @param {boolean} exercise representing whether to track exercise
- * @returns a promise resolving when the post operation is complete
- */
-export const POSTUpdatePreferences = async (flow, mood, sleep, cramps, exercise) => new Promise(async (resolve, reject) => {
-    try {
-        await AsyncStorage.multiSet([
-            [TRACK_SYMPTOMS.FLOW, JSON.stringify(flow)],
-            [TRACK_SYMPTOMS.MOOD, JSON.stringify(mood)],
-            [TRACK_SYMPTOMS.SLEEP, JSON.stringify(sleep)],
-            [TRACK_SYMPTOMS.CRAMPS, JSON.stringify(cramps)],
-            [TRACK_SYMPTOMS.EXERCISE, JSON.stringify(exercise)]
-        ]).then(() => {
-            console.log("Posted symptoms")
-            resolve();
-        });
-    } catch (e) {
-        console.log(`POSTUpdatePreferences error: ${JSON.stringify(e)}`)
+        console.log(`GETAllTrackingPreferences error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 })
@@ -83,6 +58,7 @@ export const POSTUpdateOnePreference = async (key, value) => new Promise(async(r
         });
     } catch (e) {
         console.log(`POSTUpdateOnePreference error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 }) 
@@ -101,7 +77,8 @@ export const POSTRemindLogPeriod = async (enableRemind) => new Promise(async (re
                 resolve();
             });
     } catch (e) {
-        console.log(`POSTRemindLogPeriod error: ${JSON.stringify(e)}`)
+        console.log(`POSTRemindLogPeriod error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -124,6 +101,7 @@ export const POSTRemindLogPeriod = async (enableRemind) => new Promise(async (re
             });
     } catch (e) {
         console.log(`GETRemindLogPeriod error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -142,7 +120,8 @@ export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (
                 resolve();
             });
     } catch (e) {
-        console.log(`POSTRemindLogSymptoms error: ${JSON.stringify(e)}`)
+        console.log(`POSTRemindLogSymptoms error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -166,6 +145,7 @@ export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (
             });
     } catch (e) {
         console.log(`GETRemindLogSymptoms error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -183,7 +163,8 @@ export const POSTRemindLogPeriodFreq = async (advanceDays) => new Promise(async 
                 resolve();
             });
     } catch (e) {
-        console.log(`POSTRemindLogPeriodFreq error: ${JSON.stringify(e)}`)
+        console.log(`POSTRemindLogPeriodFreq error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -200,7 +181,8 @@ export const GETRemindLogPeriodFreq = async () => new Promise(async (resolve, re
                 resolve(value);
             });
     } catch (e) {
-        console.log(`GETRemindLogPeriodFreq error: ${JSON.stringify(e)}`)
+        console.log(`GETRemindLogPeriodFreq error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -219,7 +201,8 @@ export const POSTRemindLogPeriodTime = async (time) => new Promise(async (resolv
                 resolve();
             });
     } catch (e) {
-        console.log(`POSTRemindLogPeriodTime error: ${JSON.stringify(e)}`)
+        console.log(`POSTRemindLogPeriodTime error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -236,7 +219,8 @@ export const GETRemindLogPeriodTime = async () => new Promise(async (resolve, re
                 resolve(value);
             });
     } catch (e) {
-        console.log(`GETRemindLogPeriodTime error: ${JSON.stringify(e)}`)
+        console.log(`GETRemindLogPeriodTime error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -254,7 +238,8 @@ export const POSTRemindLogSymptomsFreq = async (freq) => new Promise(async (reso
                 resolve();
             })
     } catch (e) {
-        console.log(`POSTRemindLogSymptomsFreq error: ${JSON.stringify(e)}`)
+        console.log(`POSTRemindLogSymptomsFreq error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -271,7 +256,8 @@ export const GETRemindLogSymptomsFreq = async () => new Promise(async (resolve, 
                 resolve(value);
             });
     } catch (e) {
-        console.log(`GETRemindLogSymptomsFreq error: ${JSON.stringify(e)}`)
+        console.log(`GETRemindLogSymptomsFreq error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -290,7 +276,8 @@ export const POSTRemindLogSymptomsTime = async (time) => new Promise(async (reso
                 resolve();
             });
     } catch (e) {
-        console.log(`POSTRemindLogSymptomsTime error: ${JSON.stringify(e)}`)
+        console.log(`POSTRemindLogSymptomsTime error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -307,7 +294,8 @@ export const GETRemindLogSymptomsTime = async () => new Promise(async (resolve, 
                 resolve(value);
             });
     } catch (e) {
-        console.log(`GETRemindLogSymptomsTime error: ${JSON.stringify(e)}`)
+        console.log(`GETRemindLogSymptomsTime error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });

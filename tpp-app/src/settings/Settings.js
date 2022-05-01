@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground, SafeAreaView} from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.svg';
@@ -15,6 +15,7 @@ import {TRACK_SYMPTOMS, VIEWS} from '../services/utils/constants'
 import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
 import {STACK_SCREENS} from './SettingsNavigator.js';
+import ErrorFallback from "../error/error-boundary";
 import { getCorrectDate } from '../services/utils/helpers';
 
 const PreferenceButton = (props) => {
@@ -47,7 +48,7 @@ const SocialMediaButton = (props) => {
 
 const Preferences = (props) => {
     let WHITE = '#FFFFFF'
-    let TEAL = "#73C7B7" 
+    let TEAL = "#73C7B7"
 
     const [flow, trackFlow] = useState('#FFFFFF');
     const [mood, trackMood] = useState('#FFFFFF');
@@ -66,6 +67,7 @@ const Preferences = (props) => {
               // if tracking that symptom is set to true, append it to trackingPrefs
                 if (toTrack) {
                   let title = pref[0];
+                  let symptom;
                   switch(title) {
                     case TRACK_SYMPTOMS.MOOD:
                       symptom = 'mood'
@@ -147,61 +149,22 @@ const Preferences = (props) => {
     );
 }
 
-// const Socials = () => {
-//     return (
-//         <View style={styles.iconsContainer}>
-//             {
-//                 socialMediaIcons.map((socialMedia, i) => {
-//                     return <SocialMediaButton key={i} icon={socialMedia.component} url={socialMedia.url} />
-//                 })
-//             }
-//         </View>
-//     );
-// }
-
-// const TermsAndConditions = () => {
-//     const openLink = () => Linking.canOpenURL("https://www.google.com/").then(() => {
-//         Linking.openURL("https://www.google.com/");
-//     });
-
-//     return (
-//         <View styles={styles.termsAndConditionsContainer}>
-//             <View style={styles.copyright}>
-//                 <Text style={styles.copyrightText}>&copy; 2022 The Period Purse, All rights reserved.</Text>
-//             </View>
-//             <View style={styles.terms}>
-//                 <TouchableOpacity onPress={openLink} style={styles.icon} >
-//                     <Text style={styles.termsText}> Terms and Privacy Policy. </Text>
-//                     <Text style={styles.lineText}> ______________________ </Text>
-//                 </TouchableOpacity>
-//             </View>
-//         </View>
-//     )
-// }
-
-const settingScreens = new Map([
-    ["Profile Information", STACK_SCREENS.PROFILE_INFORMATION],
-    ["Privacy Policy", STACK_SCREENS.PRIVACY_POLICY],
-    ["Log Out", STACK_SCREENS.LOG_OUT],
-    ["Delete Account", STACK_SCREENS.DELETE_ACCOUNT]
-])
-
 const SettingsStackButton = (props) => {
     console.log(props);
     return (
-    <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.DELETE_ACCOUNT)}>
+    <TouchableOpacity onPress={() => props.navigation.navigate(props.name)}>
         <SafeAreaView style={styles.optionView} >
 
         <Text style={styles.optionText}>{props.name}</Text>
-        <View>   
+        <View>
             <Icon
                     name="arrow-back-ios"
                     size={24}
                     color="#5A9F93"
                     style={{transform: [{rotateY: '180deg'}],}}
                     /></View>
-     
-       
+
+
 
         </SafeAreaView>
         <View
@@ -215,7 +178,7 @@ const SettingsStackButton = (props) => {
 }
 
 const NotificationsButton = (props) => {
-return( 
+return(
 <View>
 <View style={styles.reminderTextBox}>
     <Text style={styles.remindText}>{props.text}</Text>
@@ -229,7 +192,7 @@ return(
             left: "-10%"
         }}
     />
-   
+
 </View>
 <Text style={styles.remindSubtext}>{props.subtext}</Text>
          <View
@@ -255,14 +218,14 @@ const NotificationSettings = (props) => {
     const [remindSymptomsTime, setRemindSymptomsTime] = useState("10:00");
     const [remindSymptomsTimeMeridian, setRemindSymptomsTimeMeridian] = useState("AM");
 
-// get the days until period 
+// get the days until period
     useFocusEffect(React.useCallback(() => {
         CycleService.GETPredictedDaysTillPeriod().then(numDays => {
             let toSet;
             if(numDays && numDays != -1){
               toSet = numDays;
             }
-            else{ 
+            else{
               toSet = 0
             }
             setNumberOfDaysUntilPeriod(toSet)
@@ -270,13 +233,13 @@ const NotificationSettings = (props) => {
           .catch(() => {
             setDaysTillPeriod(0);
           });
-   
+
      }, []));
 
      useFocusEffect(
         useCallback(() => {
-            
-            if (props.route.params?.remindPeriodFreq) 
+
+            if (props.route.params?.remindPeriodFreq)
                 setRemindPeriodFreq(props.route.params?.remindPeriodFreq)
             if (props.route.params?.remindPeriodTime)
                 setRemindPeriodTime(props.route.params?.remindPeriodTime)
@@ -340,7 +303,7 @@ useEffect(() => {
             setRemindSymptomsTime(parsedTime[0]);
             setRemindSymptomsTimeMeridian(parsedTime[1]);
         }
-                        
+
     }
     getFreqTimes();
     getRemindPeriodEnabled();
@@ -361,7 +324,7 @@ useEffect(() => {
             });
 
     };
-    const toggleSymptomsSwitch = async () => { // post here 
+    const toggleSymptomsSwitch = async () => { // post here
         POSTRemindLogSymptoms(!remindSymptomsEnabled)
             .then(() => {
                 setRemindSymptomsEnabled(!remindSymptomsEnabled);
@@ -438,7 +401,7 @@ useEffect(() => {
             });
     };
     return (
-  
+
         <SafeAreaView style={{top: "-5%"}}>
             <Text style={styles.heading}>Notifications</Text>
             {/*<NotificationsButton */}
@@ -448,15 +411,15 @@ useEffect(() => {
             {/*    enabled={remindPeriodEnabled} />*/}
             <NotificationsButton
                 text={"Remind me to log symptoms"}
-                subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`} 
+                subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`}
                 toggle={toggleSymptomsSwitch}
                 enabled={remindSymptomsEnabled}/>
-    <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}> 
+    <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}>
         <View>
-        
+
         <SafeAreaView style={styles.notificationSettingsView} >
         <Text style={styles.optionText}>Customize notifications</Text>
-        <View>   
+        <View>
         <Icon
                 name="arrow-back-ios"
                 size={24}
@@ -484,13 +447,14 @@ const SettingOptions = ({navigation}) => {
             <Text style={styles.heading}>Account settings </Text>
         {/*<SettingsStackButton name={"Profile Information"}  navigation={navigation} />*/}
         {/*<SettingsStackButton name={"Privacy Policy"}  navigation={navigation}/>*/}
-        {/*<SettingsStackButton name={"Log Out"} navigation={navigation}/>*/}
+        <SettingsStackButton name={STACK_SCREENS.BACK_UP_ACCOUNT} navigation={navigation}/>
         <SettingsStackButton name={STACK_SCREENS.DELETE_ACCOUNT} navigation={navigation} />
         </SafeAreaView>
     )
 }
 export default function Settings ({ route, navigation }) {
     return (
+      <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <ScrollView>
                 <SafeAreaView style={styles.container}>
@@ -503,6 +467,7 @@ export default function Settings ({ route, navigation }) {
                 </SafeAreaView>
             </ScrollView>
         </ImageBackground>
+      </ErrorFallback>
     )
 }
 
@@ -607,7 +572,7 @@ const styles = StyleSheet.create({
     },
     reminderTextBox : {
         flexDirection: 'row',
-        justifyContent: 'space-between', 
+        justifyContent: 'space-between',
         padding: "3%",
         height: 72,
         left: 0
@@ -658,5 +623,5 @@ const styles = StyleSheet.create({
     termsText: {
         color: "#5A9F93",
     },
-    
+
 });

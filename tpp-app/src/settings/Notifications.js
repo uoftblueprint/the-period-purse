@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import NotificationAccordion from './NotificationAccordion'
 import { BackButton } from '../home/components/BackButtonComponent';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import ErrorFallback from "../error/error-boundary";
 import { GETRemindLogPeriodFreq, GETRemindLogSymptomsFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsTime } from '../services/SettingsService';
 import { BackButtonContainer } from '../onboarding/components/ContainerComponents';
 import { STACK_SCREENS } from './SettingsNavigator';
@@ -23,7 +24,7 @@ export default function Notifications ( {navigation} ) {
 
         async function getFreqTimes() {
 
-            
+
             let storedPeriodFreq = await GETRemindLogPeriodFreq();
             let storedSymptomFreq = await GETRemindLogSymptomsFreq();
             let storedPeriodTime = await GETRemindLogPeriodTime();
@@ -48,7 +49,7 @@ export default function Notifications ( {navigation} ) {
                 setRemindSymptomsTime(parsedTime[0]);
                 setRemindSymptomsTimeMeridian(parsedTime[1]);
             }
-                            
+
         }
         getFreqTimes();
     }, []);
@@ -65,6 +66,7 @@ export default function Notifications ( {navigation} ) {
 
 
     return (
+    <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <SafeAreaView>
@@ -111,13 +113,13 @@ export default function Notifications ( {navigation} ) {
                             borderBottomColor: '#CFCFCF',
                             borderBottomWidth: 1,
                             }}/>
-                        <NotificationAccordion title={"Repeat"} selectedText={remindSymptomsFreq} setSelectedText={setRemindSymptomsFreq} type={"howOften"}/> 
+                        <NotificationAccordion title={"Repeat"} selectedText={remindSymptomsFreq} setSelectedText={setRemindSymptomsFreq} type={"howOften"}/>
                         <View
                         style={{
                             borderBottomColor: '#CFCFCF',
                             borderBottomWidth: 1,
                             }}/>
-                        <NotificationAccordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} time={remindSymptomsTime} meridian={remindSymptomsTimeMeridian} setTime={setRemindSymptomsTime} setTimeMeridian={setRemindSymptomsTimeMeridian} type={"symptomTime"}/>   
+                        <NotificationAccordion title={"Reminder time"} selectedText={`${remindSymptomsTime} ${remindSymptomsTimeMeridian}`} time={remindSymptomsTime} meridian={remindSymptomsTimeMeridian} setTime={setRemindSymptomsTime} setTimeMeridian={setRemindSymptomsTimeMeridian} type={"symptomTime"}/>
                         <View
                         style={{
                             borderBottomColor: '#CFCFCF',
@@ -127,8 +129,9 @@ export default function Notifications ( {navigation} ) {
                 </SafeAreaView>
             </ScrollView>
         </ImageBackground>
+    </ErrorFallback>
     )
-}                
+}
 
 const NotificationStack = (props) => {
     return (
@@ -136,6 +139,7 @@ const NotificationStack = (props) => {
             <Text style={styles.optionText}>{props.name}</Text>
             <Text style={styles.optionHeader}>{props.header}</Text>
         </SafeAreaView>
+      
     )
 }
 
@@ -144,7 +148,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'stretch',
         justifyContent: 'center'
-    },    
+    },
     rowContainer: {
         zIndex:0
     },
@@ -153,7 +157,7 @@ const styles = StyleSheet.create({
     },
     navbar: {
         flexDirection: 'column',
-        alignItems: 'center',      
+        alignItems: 'center',
     },
     navitem: {
         flex: 1,

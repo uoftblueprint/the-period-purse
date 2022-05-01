@@ -18,6 +18,9 @@ import SettingsIcon from './ios/tppapp/Images.xcassets/icons/settings_icon.svg';
 import InfoIcon from './ios/tppapp/Images.xcassets/icons/info_icon.svg';
 import PrivacyPolicyScreen from './src/home/pages/PrivacyPolicyScreen';
 import TermsAndConditions from './src/home/pages/TermsAndConditions';
+import { StartLoadScreen } from './src/home/pages/StartLoadScreen';
+import { setJSExceptionHandler, setNativeExceptionHandler } from 'react-native-exception-handler';
+import {errorAlertModal} from "./src/error/errorAlertModal";
 
 
 export const STACK_SCREENS = {
@@ -129,29 +132,56 @@ export function MainNavigator() {
 
   return (
       <NavigationContainer ref={navigationRef} independent={true}>
-        <Stack.Navigator intialRouteName="footer" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name={STACK_SCREENS.MAIN_PAGE} component={MainPage}/>
-          <Stack.Screen name={STACK_SCREENS.PRIVACY_POLICY} component={PrivacyPolicyScreen}/>
-          <Stack.Screen name={STACK_SCREENS.TERMS_AND_CONDITION} component={TermsAndConditions}/>
+          <Stack.Screen name={STACK_SCREENS.PRIVACY_POLICY} component={PrivacyPolicyScreen} 
+          options={{title: "Privacy Policy",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
+          }}/>
+          <Stack.Screen name={STACK_SCREENS.TERMS_AND_CONDITION} component={TermsAndConditions} 
+          options={{title: "Terms and Conditions",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
+          }} />
         </Stack.Navigator>
       </NavigationContainer>
   );
 }
 
+const errorHandler = (e, isFatal) => {
+    if (isFatal) {
+        errorAlertModal();
+    } else {
+        console.log(e); // So that we can see it in the ADB logs in case of Android if needed
+    }
+};
+
+setJSExceptionHandler(errorHandler, true);
+
+setNativeExceptionHandler((errorString) => {
+    console.log('setNativeExceptionHandler');
+});
+
+
 function App() {
-  const [preferences, setPreferences] = useState(null)
-  useEffect(() => {
-     async function getPreferences() {
-       setPreferences(await GETAllTrackingPreferences());
-     }
-     getPreferences();
-  }, [])
-  if(preferences && preferences[0] && preferences[0][1])
-    // tracking preferences have been set, go to main page
-    return (<MainNavigator></MainNavigator>);
-  else
-    // tracking preferences have not been set, go to onboarding
-    return (<Welcome></Welcome>);
+  return (<StartLoadScreen/>);
 }
 
 

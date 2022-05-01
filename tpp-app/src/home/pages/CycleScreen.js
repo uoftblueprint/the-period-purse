@@ -11,14 +11,17 @@ import BloodDrop from '../../../ios/tppapp/Images.xcassets/icons/flow_with_heart
 import Calendar from '../../../ios/tppapp/Images.xcassets/icons/menstruation_calendar.svg';
 import Paddy from '../../../ios/tppapp/Images.xcassets/icons/paddy.svg';
 import { Footer } from '../../services/utils/footer';
+import LoadingVisual from '../components/LoadingVisual';
+import ErrorFallback from "../../error/error-boundary";
 
 function InfoCard(props){
+  let DefaultText = <Text style={styles.messageForDefault}>Please start logging to learn more. </Text>;
   return (
     <View style={[styles.card, {backgroundColor: props.backgroundColor}]}>
       <View style={styles.infoCardInternal}>
         <Text style={styles.header}>{props.header}</Text>
-        <SafeAreaView style={[styles.rowContainer, styles.daysRow, {justifyContent: "space-between"}]}>
-          <Text style={styles.daysText}>{props.days} Days</Text>
+        <SafeAreaView style={[styles.infoCardRow, styles.daysRow]}>
+          {props.days === 0 ? DefaultText : <Text style={styles.daysText}>{props.days} Days</Text> }
           <SafeAreaView style={styles.whiteBackground}>
             {props.children}
           </SafeAreaView>
@@ -59,28 +62,30 @@ export default function CycleScreen ({navigation}){
   let [daysTillPeriod, setDaysTillPeriod] = useState(DEFAULTS.DAYS_TILL_PERIOD);
   let [intervals, setIntervals] = useState(DEFAULTS.INTERVALS);
   let [showTip, setShowTip] = useState(DEFAULTS.SHOW_TIP);
+  let [loaded, setLoaded] = useState(false);
 
   const tabBarHeight = useBottomTabBarHeight();
 
   useFocusEffect(React.useCallback(() => {
 
-     CycleService.GETPeriodDay().then(days => {
+
+     let gettingPeriod = CycleService.GETPeriodDay().then(days => {
        setPeriodDays(days);
        setShowTip(days <= 0);
      })
      .catch(() => {setPeriodDays(DEFAULTS.PERIOD_DAYS)});
 
-     CycleService.GETCycleDonutPercent().then(percent => {
+     let gettingCycle = CycleService.GETCycleDonutPercent().then(percent => {
        setCycleDonutPercent(percent * 100);
      })
      .catch(() => setCycleDonutPercent(DEFAULTS.CYCLE_DONUT_PERCENT));
 
-     CycleService.GETDaysSinceLastPeriodEnd().then(days => {
+     let gettingPeriodEndDays = CycleService.GETDaysSinceLastPeriodEnd().then(days => {
        setDaysSinceLastPeriod(days);
      })
      .catch(setDaysSinceLastPeriod(DEFAULTS.DAYS_SINCE_LAST_PERIOD));
 
-     CycleService.GETAveragePeriodLength().then(numDays => {
+     let gettingAveragePeriodLength = CycleService.GETAveragePeriodLength().then(numDays => {
        if(numDays){
          // Round to one decimal place
         setAvgPeriodLength(Math.round(numDays * 10) / 10);
@@ -90,8 +95,8 @@ export default function CycleScreen ({navigation}){
        }
      })
      .catch(() => setAvgPeriodLength(DEFAULTS.AVG_PERIOD_LENGTH));
-     
-     CycleService.GETAverageCycleLength().then(numDays => {
+
+     let gettingAverageCycleLength = CycleService.GETAverageCycleLength().then(numDays => {
        if(numDays){
          // Round to one decimal place
          setAvgCycleLength(Math.round(numDays * 10) / 10);
@@ -102,7 +107,7 @@ export default function CycleScreen ({navigation}){
      })
      .catch(() => setAvgCycleLength(DEFAULTS.AVG_CYCLE_LENGTH));
 
-     CycleService.GETPredictedDaysTillPeriod().then(numDays => {
+     let gettingPredictedDays = CycleService.GETPredictedDaysTillPeriod().then(numDays => {
        let toSet;
        if(numDays && numDays != -1){
          toSet = numDays;
@@ -119,13 +124,28 @@ export default function CycleScreen ({navigation}){
        setDaysTillPeriod(DEFAULTS.DAYS_TILL_PERIOD);
        setShowTip(false);
      });
-     
-     CycleService.GETCycleHistoryByYear(new Date().getFullYear()).then(intervals =>{
+
+     let gettingCycleHistory = CycleService.GETCycleHistoryByYear(new Date().getFullYear()).then(intervals =>{
        setIntervals(intervals);
      })
      .catch(()=> {
        setIntervals(DEFAULTS.INTERVALS);
      })
+
+     Promise.all(
+       gettingPeriod,
+       gettingCycle,
+       gettingPeriodEndDays,
+       gettingAverageCycleLength,
+       gettingAveragePeriodLength,
+       gettingAverageCycleLength,
+       gettingPredictedDays,
+       gettingCycleHistory
+     ).then(
+      () => {
+        setLoaded(true);
+      }
+     )
 
   }, []));
 
@@ -136,24 +156,30 @@ export default function CycleScreen ({navigation}){
   const tipVisibleStyle = {
     marginBottom: 50
   }
-  const cardContainerStyle = showTip ? Object.assign({}, styles.cardContainer, tipVisibleStyle) : Object.assign({}, styles.cardContainer, tipInvisibleStyle);
+
+  const cardContainerStyle = showTip && daysTillPeriod <= 7 ?
+      Object.assign({}, styles.cardContainer, tipVisibleStyle) :
+      Object.assign({}, styles.cardContainer, tipInvisibleStyle);
+
+  if (loaded) {
   return (
+  <ErrorFallback>
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={background} style={styles.container}>    
+      <ImageBackground source={background} style={styles.container}>
         {/* View that contains all the relevant cards */}
         <ScrollView>
           {/* Period Notification (Period in X days) */}
           <SafeAreaView style={cardContainerStyle}>
-            {showTip && (
+            {showTip && daysTillPeriod <= 7 && (
             <PeriodNotification daysTillPeriod={daysTillPeriod}>
               <Paddy style={styles.paddyIcon}/>
             </PeriodNotification>
             )}
-            <CycleCard 
-              periodDays={periodDays} 
-              daysSinceLastPeriod={daysSinceLastPeriod} 
+            <CycleCard
+              periodDays={periodDays}
+              daysSinceLastPeriod={daysSinceLastPeriod}
               cycleDonutPercent={cycleDonutPercent}
-              showTip={showTip}
+              showTip={showTip && daysTillPeriod <= 7}
             />
             <SafeAreaView style={[styles.rowContainer, styles.infoCardContainer, styles.element]}>
               <InfoCard header="Average period length" days={avgPeriodLength} backgroundColor="#FFDBDB">
@@ -163,8 +189,8 @@ export default function CycleScreen ({navigation}){
                 <Calendar fill="red" style={styles.icon}/>
               </InfoCard>
             </SafeAreaView>
-            <MinimizedHistoryCard 
-              navigation={navigation} 
+            <MinimizedHistoryCard
+              navigation={navigation}
               intervals={intervals}
               onPeriod={periodDays !=0}
             />
@@ -175,8 +201,13 @@ export default function CycleScreen ({navigation}){
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
-
+  </ErrorFallback>
   )
+
+  } else {
+    return <LoadingVisual/>
+  }
+
 }
 
 const styles = StyleSheet.create({
@@ -185,6 +216,17 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center'
   },
+  messageForDefault: {
+    fontFamily: "Avenir",
+    fontSize: 11,
+    fontWeight: "400",
+    lineHeight: 12,
+    letterSpacing: -0.30000001192092896,
+    textAlign: "left",
+    width: 70,
+    color: "#000000"
+  },
+
   cardContainer: {
       flex: 1,
       marginHorizontal: 16,
@@ -195,6 +237,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center'
+  },
+  infoCardRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   infoCardContainer:{
     justifyContent: 'space-between'
@@ -255,15 +302,17 @@ const styles = StyleSheet.create({
     height: 50,
     display: "flex",
     alignItems: 'center',
+    right: -18
   },
   icon: {
-        transform: [{scale:0.7}]
+        transform: [{scale:0.7}],
   },
   paddyIcon: {
     transform: [{scale:0.4}]
   },
   infoCardInternal: {
-    marginHorizontal: 10,
+    marginLeft: "5%",
+    marginRight: "15%"
   },
   element: {
      marginVertical: "7%"

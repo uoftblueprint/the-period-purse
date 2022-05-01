@@ -5,6 +5,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { TabBarMiddleButton } from '../components/TabBarMiddleButton'
 import BloodDrop from '../../../ios/tppapp/Images.xcassets/icons/blood_drop';
 import Calendar from '../../../ios/tppapp/Images.xcassets/icons/calendar_icon_multiple_dates';
+import ErrorFallback from "../../error/error-boundary";
 import { CALENDAR_STACK_SCREENS } from '../CalendarNavigator';
 
 
@@ -13,9 +14,10 @@ export default function SelectLogOptionOverlay({ navigation }) {
   const today = new Date();
 
   return (
-      <TouchableWithoutFeedback onPress={() => navigation.goBack()} >
-        <View style={styles.overlay}>
-          <View style={[ styles.buttonContainer, { marginBottom: tabBarHeight } ]}>
+      <ErrorFallback>
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()} >
+            <View style={styles.overlay}>
+              <View style={[ styles.buttonContainer, { marginBottom: tabBarHeight } ]}>
 
             <OptionButton
               title={"Log daily symptoms"}
@@ -28,10 +30,8 @@ export default function SelectLogOptionOverlay({ navigation }) {
                     year: today.getFullYear(),
                     month: today.getMonth() + 1,
                     day: today.getDate()
-                  }}
-                );
-              }}
-            />
+                  }})}}
+                />
 
             <OptionButton
               title={"Log multiple period dates"}
@@ -42,17 +42,18 @@ export default function SelectLogOptionOverlay({ navigation }) {
               }}
             />
 
-          </View>
-          <TabBarMiddleButton
-            style={{
-              position: 'absolute',
-              bottom: tabBarHeight - 40,
-              transform: [{ rotate: "45deg" }]
-            }}
-            inOverlay={true}
-          />
-        </View>
-      </TouchableWithoutFeedback>
+              </View>
+              <TabBarMiddleButton
+                style={{
+                  position: 'absolute',
+                  bottom: tabBarHeight - 40,
+                  transform: [{ rotate: "45deg" }]
+                }}
+                inOverlay={true}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+      </ErrorFallback>
   );
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, Image, ImageBackground, View, TouchableOpacity } from 'react-native';
+import {StyleSheet, Text, Image, ImageBackground, View, TouchableOpacity, Button} from 'react-native';
 import MNationIcon from '../../ios/tppapp/Images.xcassets/SplashScreen.imageset/splashscreen.png'
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { NavigationContainer } from '@react-navigation/native';
@@ -18,10 +18,11 @@ import { STACK_SCREENS } from './Confirmation';
 import AppleSignin from './AppleSignin';
 import PrivacyPolicyScreen from '../home/pages/PrivacyPolicyScreen';
 import TermsAndConditions from '../home/pages/TermsAndConditions';
+import ErrorFallback from "../error/error-boundary";
 
 // Get Start Page Component
 const GetStarted = ({ navigation }) => {
-  
+
   const openPrivacyPolicy = () => {
     navigation.navigate(STACK_SCREENS.PRIVACY_POLICY)
   }
@@ -30,12 +31,13 @@ const GetStarted = ({ navigation }) => {
   }
 
   return(
+  <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <Image style={styles.appIcon} source={MNationIcon}/>
       <Text style={styles.titleText}>Welcome!</Text>
       <View style={{height: 80}}></View>
       <WideButton title="Quick Start" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}/>
-      <AppleSignin />
+      <AppleSignin navigation={navigation}/>
       <View style={styles.copyright}>
           <Text>{`By continuing, you accept the`}</Text>
       </View>
@@ -49,6 +51,7 @@ const GetStarted = ({ navigation }) => {
           </TouchableOpacity>
       </View>
     </ImageBackground>
+  </ErrorFallback>
   )
 };
 
@@ -102,13 +105,37 @@ export default function Welcome() {
         name={STACK_SCREENS.CONFIRMATION}
         component={Confirmation}
       />
-      <Stack.Screen 
-        name={STACK_SCREENS.PRIVACY_POLICY} 
+      <Stack.Screen
+        name={STACK_SCREENS.PRIVACY_POLICY}
         component={PrivacyPolicyScreen}
+        options={{title: "Privacy Policy",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
+          }}
       />
-      <Stack.Screen 
-        name={STACK_SCREENS.TERMS_AND_CONDITION} 
+      <Stack.Screen
+        name={STACK_SCREENS.TERMS_AND_CONDITION}
         component={TermsAndConditions}
+        options={{title: "Terms and Conditions",
+            headerShown: true,
+            headerStyle: {height: 200},
+            headerTitleStyle: {
+              fontWeight: "800",
+              fontSize: 20,
+              fontFamily: "Avenir",
+              color: "black"
+            },
+            headerTintColor:"#5A9F93",
+            headerBackTitleVisible: false
+          }}
       />
       </Stack.Navigator>
     </NavigationContainer>

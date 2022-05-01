@@ -1,4 +1,12 @@
 rootProject.name = 'tppapp'
+include ':react-native-cloud-fs'
+project(':react-native-cloud-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-cloud-fs/android')
+include ':react-native-cloud-store'
+project(':react-native-cloud-store').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-cloud-store/android')
+include ':react-native-cloud-store'
+project(':react-native-cloud-store').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-cloud-store/android')
+include ':react-native-restart'
+project(':react-native-restart').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-restart/android')
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()

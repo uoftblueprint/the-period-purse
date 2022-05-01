@@ -4,39 +4,43 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { DELETEAccountData } from '../services/SettingsService';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import {STACK_SCREENS} from "../onboarding/Confirmation";
+import ErrorFallback from "../error/error-boundary";
+import RNRestart from "react-native-restart";
 
-export default function DeleteAccount ({props}) {
+export default function DeleteAccount ({navigation}) {
 
     const deleteAccount = async () => {
         DELETEAccountData()
             .then(() => {
-                props.navigation.navigate(STACK_SCREENS.GET_STARTED);
+                RNRestart.Restart();
             });
     }
 
     return (
-        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
-                <SafeAreaView>
-                    <Text style={styles.heading}>Delete Account</Text>
-                    <Text style={styles.body}>Are you sure you want to delete your account? You cannot undo this action. </Text>
-                    <TouchableOpacity style={styles.deleteButton} onPress={() => Alert.alert(
-                        "Delete Account",
-                        "Are you sure you want to delete your account?", [
-                            {
-                                text: "Cancel",
-                                style: "cancel"
-                            },
-                            {
-                                text: "Delete",
-                                onPress: () => deleteAccount(),
-                                style: "destructive"
-                            }
-                        ]
-                    )}>
-                        <Text style={styles.deleteButtonText}> Delete Account </Text>
-                    </TouchableOpacity>
-                </SafeAreaView>
-        </ImageBackground>
+        <ErrorFallback>
+            <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+                    <SafeAreaView>
+                        <Text style={styles.heading}>Delete Account</Text>
+                        <Text style={styles.body}>Are you sure you want to delete your account? You cannot undo this action. </Text>
+                        <TouchableOpacity style={styles.deleteButton} onPress={() => Alert.alert(
+                            "Delete Account",
+                            "Are you sure you want to delete your account?", [
+                                {
+                                    text: "Cancel",
+                                    style: "cancel"
+                                },
+                                {
+                                    text: "Delete",
+                                    onPress: () => deleteAccount(),
+                                    style: "destructive"
+                                }
+                            ]
+                        )}>
+                            <Text style={styles.deleteButtonText}> Delete Account </Text>
+                        </TouchableOpacity>
+                    </SafeAreaView>
+            </ImageBackground>
+        </ErrorFallback>
     )
 }
 
@@ -55,7 +59,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         left: "7.5%",
-        top: "-90%"
+        top: "-100%"
     },
     deleteButtonText: {
         color: '#FFF',
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
         letterSpacing: -0.3,
         marginLeft: "7.5%",
         marginBottom: "5%",
-        top: "-90%",
+        top: "-100%",
         lineHeight: 20,
         left: 0
     },
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
         letterSpacing: -0.3,
         marginBottom: "5%",
         marginLeft: "7.5%",
-        top: "-90%"
+        top: "-100%"
     },
     textContainer: {
         justifyContent: 'space-evenly',

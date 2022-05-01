@@ -3,6 +3,7 @@ import {FLOW_LEVEL} from '../utils/constants';
 import { Symptoms } from './models';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import addDays from 'date-fns/addDays';
+import {errorAlertModal} from "../../error/errorAlertModal";
 // Backend helper functions used across app
 
 /**
@@ -86,27 +87,32 @@ export const getDateString = (date, format = 'YYYY-MM-DD') => {
  * @return {Object} A dictionary containing the calendars for the year before, current year, and next year. Keys are the year numbers
  */
 export const getCalendarByYear = async (year) => {
-  let prevYear = year - 1;
-  let nextYear = year + 1;
+    try {
+        let prevYear = year - 1;
+        let nextYear = year + 1;
 
-  let currentCalendarString = await AsyncStorage.getItem(year.toString());
-  let prevCalendarString = await AsyncStorage.getItem(prevYear.toString());
-  let nextCalendarString = await AsyncStorage.getItem(nextYear.toString());
+        let currentCalendarString = await AsyncStorage.getItem(year.toString());
+        let prevCalendarString = await AsyncStorage.getItem(prevYear.toString());
+        let nextCalendarString = await AsyncStorage.getItem(nextYear.toString());
 
-  let calendars = {}
-  if (prevCalendarString){
-    let prevCalendar = JSON.parse(prevCalendarString);
-    calendars[prevYear] = prevCalendar;
-  }
-  if (currentCalendarString){
-    let currentCalendar = JSON.parse(currentCalendarString);
-    calendars[year] = currentCalendar;
-  }
-  if (nextCalendarString){
-    let nextCalendar = JSON.parse(nextCalendarString);
-    calendars[nextYear] = nextCalendar;
-  }
-  return calendars;
+        let calendars = {}
+        if (prevCalendarString) {
+            let prevCalendar = JSON.parse(prevCalendarString);
+            calendars[prevYear] = prevCalendar;
+        }
+        if (currentCalendarString) {
+            let currentCalendar = JSON.parse(currentCalendarString);
+            calendars[year] = currentCalendar;
+        }
+        if (nextCalendarString) {
+            let nextCalendar = JSON.parse(nextCalendarString);
+            calendars[nextYear] = nextCalendar;
+        }
+        return calendars;
+    } catch (e) {
+        console.log(e);
+        errorAlertModal();
+    }
 }
 
 
@@ -187,16 +193,39 @@ export const getPeriodsInYear = async (year, calendar=null) => {
  * @returns {Promise} Promise that resolves into all the years that are stored. If none found, returns empty array
  */
 export const GETStoredYears = async () => {
-    let currentYear = new Date().getFullYear();
-    let storedYears = [];
-    let yearToCheck = currentYear;
+    try {
+        let currentYear = new Date().getFullYear();
+        let storedYears = [];
+        let yearToCheck = currentYear;
 
-    while(JSON.parse(await AsyncStorage.getItem(yearToCheck.toString()))){
-        storedYears.push(yearToCheck);
-        yearToCheck-=1;
+        while (JSON.parse(await AsyncStorage.getItem(yearToCheck.toString()))) {
+            storedYears.push(yearToCheck);
+            yearToCheck -= 1;
+        }
+
+        return storedYears;
+    } catch (e) {
+        console.log(e);
+        errorAlertModal();
     }
 
     return storedYears;
+}
+
+/**
+ * Calculates the number of months between today's date and date given by dateFromStr
+ * @param {String} dateFromStr string ("YYYY-MM-DD") representing the date to calculate from
+ * @returns the number of months between today's date and dateFromStr
+ */
+export const getMonthsDiff = (dateFromStr) => {
+  if(dateFromStr) {
+    let parts = dateFromStr.split('-')
+    let dateFrom = new Date(parts[0], parts[1] - 1, parts[2]);
+    let dateTo = new Date()
+    return (dateTo.getMonth() - dateFrom.getMonth()) +
+        (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
+  }
+  return null;
 }
 
 export const getCorrectDate = (daysAdded, time) => {

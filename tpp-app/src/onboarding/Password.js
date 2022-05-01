@@ -6,30 +6,33 @@ import { BackButton } from '../home/components/BackButtonComponent';
 import { WideButton } from './components/ButtonComponents';
 import { BackButtonContainer, InputBorderContainer, PageTitleContainer } from './components/ContainerComponents';
 import { PageTitle, InputLabel } from './components/TextComponents'
+import ErrorFallback from "../error/error-boundary";
 
 export default function Password ({ navigation }) {
   return (
-    <ImageBackground source={OnboardingBackground} style={styles.container}>
-      <BackButtonContainer>
-        <BackButton onPress={() => {navigation.navigate(STACK_SCREENS.REGISTRATION)}}/>
-        <PageTitleContainer>
-          <PageTitle>Registration</PageTitle>
-        </PageTitleContainer>
-      </BackButtonContainer>
+      <ErrorFallback>
+        <ImageBackground source={OnboardingBackground} style={styles.container}>
+          <BackButtonContainer>
+            <BackButton onPress={() => {navigation.navigate(STACK_SCREENS.REGISTRATION)}}/>
+            <PageTitleContainer>
+              <PageTitle>Registration</PageTitle>
+            </PageTitleContainer>
+          </BackButtonContainer>
 
-      <InputBorderContainer>
-        <InputLabel>PASSWORD</InputLabel>
-        <TextInput style={styles.input} placeholder="At least 6 characters" autoCapitalize="none" secureTextEntry={true}/>
-      </InputBorderContainer>
+          <InputBorderContainer>
+            <InputLabel>PASSWORD</InputLabel>
+            <TextInput style={styles.input} placeholder="At least 6 characters" autoCapitalize="none" secureTextEntry={true}/>
+          </InputBorderContainer>
 
-      <KeyboardAvoidingView
-        style={{flex: 1}}
-        enabled behavior={ Platform.OS === 'ios'? 'padding': null}
-        keyboardVerticalOffset={30}>
-        <View style={{height: "80%"}}></View>
-        <WideButton title="Continue" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.SUCCESS)}/>
-      </KeyboardAvoidingView>
-    </ImageBackground>
+          <KeyboardAvoidingView
+            style={{flex: 1}}
+            enabled behavior={ Platform.OS === 'ios'? 'padding': null}
+            keyboardVerticalOffset={30}>
+            <View style={{height: "80%"}}></View>
+            <WideButton title="Continue" color="#5A9F93" onPress={() => navigation.navigate(STACK_SCREENS.SUCCESS)}/>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </ErrorFallback>
   );
 }
 
