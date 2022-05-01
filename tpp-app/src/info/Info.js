@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Linking, ScrollView, Image, TouchableOpacity, ImageBackground, SafeAreaView} from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import PadIcon from '../../ios/tppapp/Images.xcassets/InfoPageImages/pad-small.svg';
@@ -11,6 +11,10 @@ import { STACK_SCREENS } from './InfoNavigator';
 import { Footer } from '../services/utils/footer';
 import PaddyIcon from "../../ios/tppapp/Images.xcassets/icons/paddy.svg";
 import ErrorFallback from "../error/error-boundary";
+import factsJSON from "../pages/DYKFacts.json";
+import { GETFactCycle, POSTFactCycle } from "./InfoService";
+import { getFullCurrentDateString } from "../services/utils/helpers.js";
+
 
 const LearnMoreCard = () => {
     return(
@@ -30,7 +34,9 @@ const LearnMoreCard = () => {
     )
 }
 
-const MenstrualProductCard = ({ onPress, name, image }) =>{
+
+
+const MenstrualProductCard = ({name, image, onPress}) =>{
     return (
         <TouchableOpacity style={styles.productCard} onPress={onPress}>
             <View style={styles.productIcon}>
@@ -41,12 +47,12 @@ const MenstrualProductCard = ({ onPress, name, image }) =>{
     )
 }
 
-const FunFactCard = ({ onPress }) =>{
+const FunFactCard = ({ bodyText, onPress }) =>{
     return (
         <TouchableOpacity style={styles.funFactCard} onPress={onPress}>
             <PaddyIcon style={styles.paddyStyling} height={"75%"}/>
             <Text style={styles.DYKText}>Did you know?</Text>
-            <Text style={styles.DYKBodyText}>Only 46% of Canadians feel comfortable talking about periods. Periods rank lower in... </Text>
+            <Text style={styles.DYKBodyText}>{bodyText}... </Text>
         </TouchableOpacity>
     )
 }
@@ -85,12 +91,58 @@ const cardData = [
 ]
 
 export default function Info ({ navigation }) {
+    const [factCycleDate, setFactCycleDate] = useState(""); // 0th index
+    const [factCycleNum, setFactCycleNum] = useState("1"); // number of fact
+    const [retrievedFact, setRetrievedFact] = useState("Getting Fact");
+
+    useEffect(() => {
+        const retrieveFactCycle = async () => {
+            let factWhole;
+            GETFactCycle().then((factArray) => {
+
+                if (!factArray){
+                    POSTFactCycle().then(async () => {
+                        GETFactCycle().then((rePostedFactArray) => {
+                            setFactCycleDate(rePostedFactArray[0]);
+                            setFactCycleNum(rePostedFactArray[1]);
+                            factWhole = factsJSON[rePostedFactArray[1]]
+                            setRetrievedFact(factWhole.slice(0, Math.floor(factWhole.length / 2)));
+                        })
+                      
+                    })
+                } else {
+                                
+                if (getFullCurrentDateString() !== factArray[0]) {
+                    POSTFactCycle().then(async () => {
+                        GETFactCycle().then((rePostedFactArray) => {
+                        setFactCycleDate(rePostedFactArray[0]);
+                        setFactCycleNum(rePostedFactArray[1]);
+                        factWhole = factsJSON[rePostedFactArray[1]]
+
+                        setRetrievedFact(factWhole.slice(0, Math.floor(factWhole.length / 2)));
+
+                        })
+                    });
+                } else {
+                    setFactCycleNum(factArray[1]);
+                    factWhole = factsJSON[factArray[1]]
+
+                    setRetrievedFact(factWhole.slice(0, Math.floor(factWhole.length / 2)));
+                }
+                }
+    
+            });
+        }
+        retrieveFactCycle()
+    }, [])
+
+
     return (
      <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.container}>
             <ScrollView>
                 <SafeAreaView style={styles.cardContainer}>
-                    <FunFactCard onPress={() => navigation.navigate(STACK_SCREENS.FUN_FACT)}/>
+                    <FunFactCard bodyText={retrievedFact} onPress={() => navigation.navigate(STACK_SCREENS.FUN_FACT)}/>
                     <Text style={{
                         ...styles.productText,
                         textAlign: 'left',
@@ -122,7 +174,17 @@ export default function Info ({ navigation }) {
     )
 }
 
+
 const styles = StyleSheet.create({
+    didYouKnowCard: {
+        backgroundColor: '#72C6B7',
+        borderRadius: 12,
+        borderWidth: 0,
+        width: 360,
+        height: 148,
+        left: 17,
+        top: 77
+    },
     container: {
         flex: 1,
         alignItems: 'stretch',
@@ -187,6 +249,24 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: "wrap",
         justifyContent: 'space-evenly'
+    },
+    didYouKnowText: {
+        fontFamily: "Avenir",
+        fontWeight: "800",
+        fontSize: 16,
+        color: "#FFFFFF",
+        height: 20,
+        left: 25,
+        top: 19
+    },
+    didYouKnowDescription: {
+        fontFamily: "Avenir",
+        fontWeight: "400",
+        fontSize: 14,
+        color: "#0000",
+        height: 76,
+        left: 0,
+        top: 35
     },
     productText: {
         fontFamily: "Avenir",

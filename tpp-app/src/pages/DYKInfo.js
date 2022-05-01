@@ -1,12 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {StyleSheet, Text, View, Image, SafeAreaView, ImageBackground} from 'react-native';
 import PadImageHappy from 'tpp-app/ios/tppapp/Images.xcassets/InfoPageImages/pad-3-2x.png';
 import { BackButton } from '../home/components/BackButtonComponent';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
+import {GETFactCycle, POSTFactCycle } from "../info/InfoService"
+import { getFullCurrentDateString } from "../services/utils/helpers.js"
+import dykData from "../pages/DYKFacts.json"
 import ErrorFallback from "../error/error-boundary";
 
 
 export default function DidYouKnow({ navigation }) {
+    const [factCycleDate, setFactCycleDate] = useState(""); // 0th index
+    const [factCycleNum, setFactCycleNum] = useState(1); // number of fact
+    const [retrievedFact, setRetrievedFact] = useState("Getting Fact");
+    useEffect(() => {
+        async function retrieveFactCycle() {
+           let factWhole;
+            GETFactCycle().then((factArray) => {
+                factWhole = dykData[factCycleNum];
+                setRetrievedFact(factWhole);
+
+                if (!factArray){
+                    POSTFactCycle().then(async () => {
+                        let factArray = await GETFactCycle();
+                        setFactCycleDate(factArray[0]);
+                        setFactCycleNum(factArray[1]);
+                        factWhole = dykData[factArray[1]]
+                        setRetrievedFact(factWhole);
+                    })
+                }
+
+                setFactCycleDate(factArray[0]);
+                setFactCycleNum(factArray[1]);
+
+                if (getFullCurrentDateString() !== factCycleDate) {
+                    POSTFactCycle().then(async () => {
+                        let factArray = await GETFactCycle();
+                        setFactCycleDate(factArray[0]);
+                        setFactCycleNum(factArray[1]);
+
+                        factWhole = dykData[factArray[1]]
+
+                        setRetrievedFact(factWhole);
+                    });
+                }
+            }); 
+        }
+        retrieveFactCycle()
+    }, [])
+
+    let fact = dykData[factCycleNum]
+
     return (
         <ErrorFallback>
             <ImageBackground source={OnboardingBackground} style={styles.container}>
@@ -20,9 +64,8 @@ export default function DidYouKnow({ navigation }) {
                 <Text style={styles.titleText}>Did you know?</Text>
                     {"\n"}
                     {"\n"}
-                    Only 46% of Canadians feel comfortable talking about periods. Periods rank lower in comfortability to talk about than politics, sex, and Sexually Transmitted Infections (STIs).
+                   {fact}
                 </Text>
-
                 </SafeAreaView>
             </ImageBackground>
         </ErrorFallback>

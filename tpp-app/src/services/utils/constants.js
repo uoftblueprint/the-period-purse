@@ -127,6 +127,10 @@ export const KEYS = {
   JOINED_DATE: "joinedDate",
 }
 
+export const FACT_NUM = {
+  FACT_CYCLE_NUM: "factCycleNumber"
+}
+
 export const REMINDERS = {
   REMIND_LOG_PERIOD: "remindLogPeriod",
   REMIND_LOG_SYMPTOMS: "remindLogSymptoms",
@@ -166,3 +170,4 @@ export const ICLOUD = {
 }
 
 export const TUTORIAL_KEY = 'showTutorial'; // key for backend value that returns 'true' if user needs to see tutorial
+
