@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
     navbar: {
         flexDirection: 'column',
         alignItems: 'center',
+        
     },
     navitem: {
         flex: 1,
@@ -213,9 +214,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     title: {
-        top: 20,
-        fontSize: 16,
-        fontFamily: 'Avenir',
+        top: 5,
         fontWeight: "800",
+        fontSize: 20,
+        fontFamily: "Avenir",
+        color: "black",
     }
 });
