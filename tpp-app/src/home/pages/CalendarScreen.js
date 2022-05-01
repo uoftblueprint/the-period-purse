@@ -20,8 +20,6 @@ export let scrollDate = getISODate(new Date());
 
 export const Calendar = ({ navigation, marked, setYearInView, selectedView, route }) => {
     const jumpDate = route.params?.newDate ? route.params.newDate : getISODate(new Date());
-    console.log(jumpDate[9]);
-    console.log("THIS IS JUMP DDATE ^^^^");
     let joinedDate = ""; 
     GETJoinedDate().then(res => { joinedDate = res })
     const pastScroll = 12 + (getMonthsDiff(joinedDate))
