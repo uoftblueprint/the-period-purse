@@ -63,7 +63,7 @@ export default function SymptomsChoices ({ route, navigation }) {
         </BodyText>
         <Card containerStyle={[styles.card]}>
           <FlowDeselected style={styles.image}/>
-          <Text style={{marginLeft: '28%', marginRight: '4%', fontSize: 14.5}}>By default, we'll always track your period flow. Choose up to four other symptoms to track.</Text>
+          <Text style={{top: 10, marginLeft: '28%', marginRight: '4%', fontSize: 14.5}}>By default, we'll always track your period flow. Choose up to four other symptoms to track.</Text>
         </Card>
       </SafeAreaView>
 
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     bottom: '33%',
     borderRadius: 12,
     width: '88%',
-    height: '9%',
+    height: '11%',
     borderWidth: 0,
     shadowColor: 'rgba(0,0,0, 0.0)', // Remove Shadow for iOS
     shadowOffset: { height: 0, width: 0 },
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   image: {
     position: 'absolute', 
-    top: "-10%",
+    top: 3,
     marginLeft: '2%',
   },
 });
