@@ -58,18 +58,10 @@ const SettingsIconStyled = (props) => (
   </View>
 );
 
-export function MyTabs() {
-  return (
-      <Tab.Navigator>
-        <Tab.Screen name="Info" component={Info} />
-        <Tab.Screen name="Settings" component={Settings} />
-      </Tab.Navigator>
-  );
-}
 
 const MainPage = () => {
   return(<Tab.Navigator initialRouteName='MiddleButton'>
-          <Tab.Screen name="Info" component={InfoNavigator} options={{
+          <Tab.Screen name="Learn" component={InfoNavigator} options={{
             headerShown: false,
             tabBarIcon: (props) => (
               <InfoIconStyled {...props} />
