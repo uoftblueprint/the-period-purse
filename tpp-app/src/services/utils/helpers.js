@@ -18,6 +18,7 @@ export const flowOnOffModeChanged = (previousFlow, newFlow) => {
         !flowOn.includes(previousFlow) && flowOn.includes(newFlow);
 }
 
+
 /**
  * Initializes an empty year array with 12 nested arrays, representing a month.
  * Within each month array is X null values corresponding to X days of that month in that year.
@@ -220,10 +221,41 @@ export const GETStoredYears = async () => {
 export const getMonthsDiff = (dateFromStr) => {
   if(dateFromStr) {
     let parts = dateFromStr.split('-')
-    let dateFrom = new Date(parts[0], parts[1] - 1, parts[2]); 
+    let dateFrom = new Date(parts[0], parts[1] - 1, parts[2]);
     let dateTo = new Date()
-    return (dateTo.getMonth() - dateFrom.getMonth()) + 
+    return (dateTo.getMonth() - dateFrom.getMonth()) +
         (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
   }
   return null;
+}
+
+
+export const getCorrectDate = (daysAdded, time) => {
+  // takes a string time and parses it
+  const timeToSet = time.split(":")
+  let hour = parseInt(timeToSet[0].split(":")[0]);
+
+  const date = new Date();
+  date.setDate(date.getDate() + daysAdded);
+  date.setHours(hour);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  return date;
+};
+
+
+/** 
+* Gets the full current date as a string in the format of "2022-1-1"
+* @returns a string representing the current date
+*/
+
+export function getFullCurrentDateString(){
+ const d = new Date();
+ const year = d.getFullYear()
+ const month = d.getMonth()
+ const day = d.getDate()
+
+ const fullDateArray  = [year, month, day]
+
+ return fullDateArray.join("-")
 }

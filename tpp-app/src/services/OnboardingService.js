@@ -107,6 +107,7 @@ export const POSTSymptomsToTrack = async (flow, mood, sleep, cramps, exercise) =
     } catch (e) {
         console.log(`POSTSymptomsToTrack error: ${JSON.stringify(e)}`);
         errorAlertModal();
+        errorAlertModal();
         reject();
     }
 })
@@ -124,6 +125,7 @@ export const POSTJoinedDate = async() => new Promise( async (resolve, reject) =>
     }
     catch (e) {
         console.log(`POSTJoinedDate error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 })
@@ -140,6 +142,7 @@ export const POSTJoinedDate = async() => new Promise( async (resolve, reject) =>
     }
     catch (e) {
         console.log(`GETJoinedDate error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 }

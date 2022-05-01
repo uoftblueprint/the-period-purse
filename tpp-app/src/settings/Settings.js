@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {View, Switch, Text, StyleSheet, Image, TouchableOpacity, Linking, ImageBackground, SafeAreaView} from 'react-native';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import CrampsIcon from '../../ios/tppapp/Images.xcassets/icons/cramps.svg';
@@ -6,11 +6,10 @@ import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.svg';
 import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/flow.svg';
 import MoodIcon from '../../ios/tppapp/Images.xcassets/icons/mood.svg';
 import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.svg';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Footer } from '../services/utils/footer';
 import { ScrollView } from 'react-native-gesture-handler';
-import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, POSTRemindLogSymptoms, POSTUpdateOnePreference, GETRemindLogSymptomsFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsTime } from '../services/SettingsService';
+import { GETAllTrackingPreferences, GETRemindLogSymptoms, GETRemindLogSymptomsFreq, GETRemindLogSymptomsTime, POSTRemindLogSymptoms, POSTUpdateOnePreference } from '../services/SettingsService';
 import {TRACK_SYMPTOMS, VIEWS} from '../services/utils/constants'
 import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
@@ -30,18 +29,6 @@ const PreferenceButton = (props) => {
         <Text>{props.cardName}</Text>
 
         </View>
-    );
-}
-
-const SocialMediaButton = (props) => {
-    const openLink = () => Linking.canOpenURL(props.url).then(() => {
-        Linking.openURL(props.url);
-    });
-
-    return (
-        <TouchableOpacity onPress={openLink} style={styles.icon}>
-            {props.icon}
-        </TouchableOpacity>
     );
 }
 
@@ -97,17 +84,6 @@ const Preferences = (props) => {
           fetchPreferences();
       }, [])
 
-    useEffect(() => {
-        console.log(mood, 'im changing!')
-    }, [mood])
-
-    const handleFlow = () => {
-        POSTUpdateOnePreference(TRACK_SYMPTOMS.FLOW, flow === WHITE)
-            .then(() => {
-                flow === WHITE ? trackFlow(TEAL) : trackFlow(WHITE);
-            });
-      }
-
       const handleSleep = () => {
         POSTUpdateOnePreference(TRACK_SYMPTOMS.SLEEP, sleep === WHITE)
             .then(() => {
@@ -149,22 +125,18 @@ const Preferences = (props) => {
 }
 
 const SettingsStackButton = (props) => {
-    console.log(props);
     return (
     <TouchableOpacity onPress={() => props.navigation.navigate(props.name)}>
-        <SafeAreaView style={styles.optionView} >
+        <SafeAreaView style={[styles.rowContainer, styles.optionView]} >
 
-        <Text style={styles.optionText}>{props.name}</Text>
-        <View>
+        <Text style={[styles.containerElement, styles.optionText]}>{props.name}</Text>
+        <View style={styles.containerElement}>
             <Icon
                     name="arrow-back-ios"
                     size={24}
                     color="#5A9F93"
-                    style={{transform: [{rotateY: '180deg'}],}}
+                    style={styles.arrowBack}
                     /></View>
-
-
-
         </SafeAreaView>
         <View
             style={{
@@ -186,6 +158,7 @@ return(
         value={props.enabled}
         trackColor={{true: "#72C6B7"}}
         style={{
+            zIndex: 1,
             top: "5%",
             left: "-10%"
         }}
@@ -209,15 +182,16 @@ const NotificationSettings = (props) => {
     const [numberOfDaysUntilPeriod, setNumberOfDaysUntilPeriod] = useState(0);
 
 // needed for Notification Page
-    const [remindPeriodFreq, setRemindPeriodFreq] = useState("2 days");
-    const [remindPeriodTime, setRemindPeriodTime] = useState("10:00");
-    const [remindPeriodTimeMeridian, setRemindPeriodTimeMeridian] = useState("AM");
     const [remindSymptomsFreq, setRemindSymptomsFreq] = useState("Every day");
     const [remindSymptomsTime, setRemindSymptomsTime] = useState("10:00");
     const [remindSymptomsTimeMeridian, setRemindSymptomsTimeMeridian] = useState("AM");
 
 // get the days until period
     useFocusEffect(React.useCallback(() => {
+        GETRemindLogSymptoms().then(enabled => {
+           setRemindSymptomsEnabled(enabled);
+        });
+
         CycleService.GETPredictedDaysTillPeriod().then(numDays => {
             let toSet;
             if(numDays && numDays != -1){
@@ -234,220 +208,121 @@ const NotificationSettings = (props) => {
 
      }, []));
 
-// get whether the switches need to be turned on
-useEffect(() => {
-    async function getRemindPeriodEnabled () {
-        let remindPeriod = await GETRemindLogPeriod()
-        setRemindPeriodEnabled(remindPeriod != null ? remindPeriod : false);
-    }
-    getRemindPeriodEnabled();
-}, []);
+     useFocusEffect(
 
-useEffect(() => {
-    async function getRemindSymptomsEnabled () {
-        let remindSymptoms = await GETRemindLogSymptoms()
-        setRemindSymptomsEnabled(remindSymptoms != null ? remindSymptoms : false);
-    }
-    getRemindSymptomsEnabled();
-}, [])
+         useCallback( () => {
+
+             if (props.route.params?.remindSymptomsFreq)
+                 setRemindSymptomsFreq(props.route.params?.remindSymptomsFreq)
+             if (props.route.params?.remindSymptomsTime)
+                 setRemindSymptomsTime(props.route.params?.remindSymptomsTime)
+             if (props.route.params?.remindSymptomsTimeMeridian)
+                 setRemindSymptomsTimeMeridian(props.route.params?.remindSymptomsTimeMeridian)
+
+             if (props.route.params?.remindSymptomsFreq && props.route.params?.remindSymptomsTime) {
+                 console.log(234);
+                 POSTRemindLogSymptoms(remindSymptomsEnabled);
+             }
+
+         }, [
+             props.route.params?.remindPeriodFreq,
+             props.route.params?.remindPeriodTime,
+             props.route.params?.remindSymptomsFreq,
+             props.route.params?.remindSymptomsTime
+         ])
+     )
+
 
 // get the frequencies
 useEffect(() => {
+
+    async function getRemindSymptomsEnabled() {
+        let remindSymptoms = await GETRemindLogSymptoms();
+        console.log(318, typeof remindSymptoms);
+        setRemindSymptomsEnabled(remindSymptoms);
+    }
+
     async function getFreqTimes() {
-        let storedPeriodFreq = await GETRemindLogPeriodFreq();
+
+
         let storedSymptomFreq = await GETRemindLogSymptomsFreq();
-        let storedPeriodTime = await GETRemindLogPeriodTime();
         let storedSymptomTime = await GETRemindLogSymptomsTime();
 
-        if (storedPeriodFreq) {
-            setRemindPeriodFreq(storedPeriodFreq);
-        }
+
 
         if (storedSymptomFreq) {
-            setRemindSymptomsFreq(storedPeriodFreq);
+            setRemindSymptomsFreq(storedSymptomFreq);
         }
 
-        if (storedPeriodTime) {
-            setRemindPeriodTime(storedPeriodTime.slice(0, storedPeriodTime.length - 2));
-            setRemindPeriodTimeMeridian(storedPeriodTime.slice(-2));
-
+        if (storedSymptomTime) {
+            let parsedTime = storedSymptomTime.split(" ")
+            setRemindSymptomsTime(parsedTime[0]);
+            setRemindSymptomsTimeMeridian(parsedTime[1]);
         }
-
-        if(storedSymptomTime) {
-            setRemindSymptomsTime(storedSymptomTime.slice(0, storedSymptomTime.length - 2));
-            setRemindSymptomsTimeMeridian(storedSymptomTime.slice(-2));
-        }
-// [periodFreq, periodTime, periodMerdian, symptomsFreq, symptomsTime, symptomsMerdian], same pattern for setting functions
-        setNotificationSettingsValues([remindPeriodFreq, remindPeriodTime, remindPeriodTimeMeridian,
-                                        remindSymptomsFreq, remindSymptomsTime, remindSymptomsTimeMeridian]);
-
-        setNotificationSettingFunctions([setRemindPeriodFreq, setRemindPeriodTime, setRemindPeriodTimeMeridian,
-                                        setRemindSymptomsFreq, setRemindSymptomsTime, setRemindSymptomsTimeMeridian]);
 
     }
+
     getFreqTimes();
+    getRemindSymptomsEnabled();
 }, []);
 
-    const togglePeriodSwitch = () => {
-        setRemindPeriodEnabled(!remindPeriodEnabled)
-        // POSTRemindLogPeriod(remindPeriodEnabled); // post here
-        let daysAheadStr = remindPeriodFreq.split(" ")[0]
-
-        let daysAhead = parseInt(daysAheadStr);
-        console.log("334", remindPeriodEnabled);
-        if(!remindPeriodEnabled){
-            console.log("REMIND 0");
-            // if (numberOfDaysUntilPeriod > daysAhead) { // if the number of days until period is less than days ahead, then we can't schedule notification
-                PushNotificationIOS.addNotificationRequest({
-                    id: 'remindperiod',
-                    title: 'Period Reminder!',
-                    body: `Your period is predicted to come in ${daysAheadStr} days.`,
-                    badge: 1,
-                    fireDate: getCorrectDate((numberOfDaysUntilPeriod - daysAhead), remindPeriodTime),
-                    repeats: true
-                })
-            // }
-
-        } else {
-            PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
-        }
+    // const togglePeriodSwitch = async () => {
+    //     console.log(379, remindPeriodEnabled)
+    //     POSTRemindLogPeriod(!remindPeriodEnabled)
+    //         .then(async () => {
+    //             setRemindPeriodEnabled(!remindPeriodEnabled);
+    //         });
+    //
+    // };
+    const toggleSymptomsSwitch = async () => { // post here
+        POSTRemindLogSymptoms(!remindSymptomsEnabled)
+            .then(() => {
+                console.log(!remindSymptomsEnabled);
+                setRemindSymptomsEnabled(!remindSymptomsEnabled);
+            });
     };
-    const toggleSymptomsSwitch = () => { // post here
+    return (
 
-        setRemindSymptomsEnabled(!remindSymptomsEnabled);
-        POSTRemindLogSymptoms(remindSymptomsEnabled);
+        <SafeAreaView style={{top: "-5%"}}>
+            <Text style={styles.heading}>Notifications</Text>
+            {/*<NotificationsButton */}
+            {/*    text={"Remind me to log period"} */}
+            {/*    subtext={`${remindPeriodFreq} ${remindPeriodFreq === "1" ? "day" : "days" } before at ${remindPeriodTime + " " + remindPeriodTimeMeridian}`}*/}
+            {/*    toggle={togglePeriodSwitch} */}
+            {/*    enabled={remindPeriodEnabled} />*/}
+            <NotificationsButton
+                text={"Remind me to log symptoms"}
+                subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`}
+                toggle={toggleSymptomsSwitch}
+                enabled={remindSymptomsEnabled}/>
+    <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}>
+        <View>
 
-        if (remindSymptomsEnabled) {
-            console.log("REMIND1", remindPeriodFreq);
-            // Schedule a reoccuring notification
-            switch (remindPeriodFreq) {
-                case "Every day":
-                    PushNotificationIOS.addNotificationRequest({
-                        id: 'remindsymptoms',
-                        title: 'Daily Log Reminder',
-                        body: 'Daily reminder to log your symptoms!',
-                        badge: 1,
-                        fireDate: getCorrectDate(1, remindSymptomsTime),
-                        repeats: true,
-                        repeatsComponent: {
-                            hour: true,
-                            minute: true,
-                        },
-                    });
-                    break;
-                case "Every week":
-                    PushNotificationIOS.addNotificationRequest({
-                        id: 'remindsymptoms',
-                        title: 'Weekly Log Reminder',
-                        body: 'Weekly reminder to log your symptoms!',
-                        badge: 1,
-                        fireDate: getCorrectDate(7, remindSymptomsTime),
-                        repeats: true,
-                        repeatsComponent: {
-                            hour: true,
-                            minute: true,
-                        },
-                    });
-                    break;
-                case "Every month":
-                    PushNotificationIOS.addNotificationRequest({
-                        id: 'remindsymptoms',
-                        title: 'Monthly Log Reminder',
-                        body: 'Monthly reminder to log your symptoms!',
-                        badge: 1,
-                        fireDate: getCorrectDate(30, remindSymptomsTime),
-                        repeats: true,
-                        repeatsComponent: {
-                            hour: true,
-                            minute: true,
-                        },
-                    });
-                    break;
-                case "Only during period":
-                    if (CycleService.isOnPeriod) {
-                        PushNotificationIOS.addNotificationRequest({
-                        id: 'remindsymptoms',
-                        title: 'Symptom Logging Reminder',
-                        body: 'Reminder to log your period!',
-                        badge: 1,
-                        fireDate: getCorrectDate(1, remindSymptomsTime),
-                        repeats: true,
-                        repeatsComponent: {
-                            hour: true,
-                            minute: true,
-                        },
-                    });
-                }
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms'])
-        }
-    }
+        <SafeAreaView style={[styles.rowContainer, styles.notificationSettingsView]} >
+                <Text style={[styles.containerElement, styles.optionText]}>Customize notifications</Text>
+                <View style={styles.containerElement}>
+                    <Icon
+                            name="arrow-back-ios"
+                            size={24}
+                            color="#5A9F93"
+                            style={styles.arrowBack}
+                            />
+            </View>
+        </SafeAreaView>
+            <View
+                style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                top: "15%"
+                }}/>
+            </View>
+            </TouchableOpacity>
+        </SafeAreaView>
 
-    const getCorrectDate = (daysAdded, time) => {
-        // takes a string time and parses it
-        const timeToSet = time.split("")
-        let hour = parseInt(timeToSet[0].split(":")[0])
-        let minute = parseInt(timeToSet[0].split(":")[1])
-
-        // const date = new Date();
-        // date.setDate(date.getDate() + daysAdded);
-        // date.setHours(hour);
-        // date.setMinutes(minute);
-        // return date;
-        const date = new Date();
-        date.setDate(date.getDate());
-        date.setHours(10);
-        date.setMinutes(40);
-        console.log("DATE SET", date);
-        return date;
-    };
-return (
-
-    <SafeAreaView style={{top: "-5%"}}>
-        <Text style={styles.heading}>Notifications</Text>
-        <NotificationsButton
-            text={"Remind me to log period"}
-            subtext={`${remindPeriodFreq} before at ${remindPeriodTime + " " + remindPeriodTimeMeridian}`}
-            toggle={togglePeriodSwitch}
-            enabled={remindPeriodEnabled} />
-        <NotificationsButton
-            text={"Remind me to log symptoms"}
-            subtext={`${remindSymptomsFreq} at ${remindSymptomsTime + " " + remindSymptomsTimeMeridian}`}
-            toggle={toggleSymptomsSwitch}
-            enabled={remindSymptomsEnabled}/>
-  <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}>
-    <View>
-
-     <SafeAreaView style={styles.notificationSettingsView} >
-    <Text style={styles.optionText}>Customize notifications</Text>
-    <View>
-     <Icon
-            name="arrow-back-ios"
-            size={24}
-            color="#5A9F93"
-            style={{transform: [{rotateY: '180deg'}],}}
-            />
-    </View>
-    </SafeAreaView>
-    <View
-        style={{
-        borderBottomColor: '#CFCFCF',
-        borderBottomWidth: 1,
-        top: "15%"
-        }}/>
-       </View>
-       </TouchableOpacity>
-    </SafeAreaView>
-
-)
+    )
 }
 
 const SettingOptions = ({navigation}) => {
-    console.log(navigation);
     return (
         <SafeAreaView style={{top: "-8%"}}>
             <Text style={styles.heading}>Account settings </Text>
@@ -458,22 +333,22 @@ const SettingOptions = ({navigation}) => {
         </SafeAreaView>
     )
 }
-export default function Settings ({ navigation }) {
+export default function Settings ({ route, navigation }) {
     return (
-        <ErrorFallback>
-            <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
-                <ScrollView>
-                    <SafeAreaView style={styles.container}>
-                        <View style={{ marginLeft: "5%" }}>
-                        <Preferences/>
-                        <NotificationSettings navigation={navigation}/>
-                        <SettingOptions navigation={navigation}/>
-                        </View>
-                    <Footer navigation={navigation}/>
-                    </SafeAreaView>
-                </ScrollView>
-            </ImageBackground>
-        </ErrorFallback>
+      <ErrorFallback>
+        <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
+            <ScrollView>
+                <SafeAreaView style={styles.container}>
+                    <View style={{ marginLeft: "5%" }}>
+                    <Preferences/>
+                    <NotificationSettings route={route} navigation={navigation}/>
+                    <SettingOptions navigation={navigation}/>
+                    </View>
+                <Footer navigation={navigation}/>
+                </SafeAreaView>
+            </ScrollView>
+        </ImageBackground>
+      </ErrorFallback>
     )
 }
 
@@ -484,9 +359,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
       },
     rowContainer: {
+        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        marginTop: 18,
+    },
+    containerElement: {
+        flex: 1,
     },
     preferences: {
         flexDirection: 'row',
@@ -550,8 +429,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Avenir',
         fontWeight: "800",
-        lineHeight: 34,
-        textAlign: 'left'
+        lineHeight: 22,
+        textAlign: 'left',
+        paddingBottom: 15,
+        paddingTop: 0,
     },
     optionView:{
         paddingTop: "15%",
@@ -559,11 +440,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
+    arrowBack: {
+        transform: [{rotateY: '180deg'}],
+    },
     notificationSettingsView :{
-        paddingTop: "-20%",
-        paddingBottom: -20,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: 5
     },
     remindText: {
         fontFamily: 'Avenir',
@@ -571,7 +454,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         height: 34,
         lineHeight: 34,
-        left: -10
+        left: -10,
+        zIndex:0,
+
     },
     reminderTextBox : {
         flexDirection: 'row',
@@ -587,7 +472,9 @@ const styles = StyleSheet.create({
         lineHeight: 34,
         top: "-30%",
         color: '#6D6E71',
-        left: 4
+        left: 4,
+        zIndex:0,
+        width: 300,
     },
 
     iconsContainer: {

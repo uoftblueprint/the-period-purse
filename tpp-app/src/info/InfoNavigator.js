@@ -6,6 +6,7 @@ import PadsPage from '../pages/PadInfo.js'
 import MenstrualCupsPage from '../pages/MenstrualCupsInfo.js'
 import ClothPadsPage from '../pages/ClothPadsInfo.js'
 import TamponsPage from "../pages/TamponInfo.js"
+import DYKPage from "../pages/DYKInfo.js"
 import MenstrualDiscPage from "../pages/MenstrualDiscInfo.js"
 import DidYouKnow from "../pages/DYKInfo";
 
