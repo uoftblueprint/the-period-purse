@@ -299,8 +299,7 @@ const SchedulingPicker = (props) => {
 
 const styles =  StyleSheet.create({
     container: {
-       padding: -48,
-       
+       padding: -48, 
     },
 
     dropDownTextBox: {

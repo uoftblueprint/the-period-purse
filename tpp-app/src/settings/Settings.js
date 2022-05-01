@@ -153,15 +153,15 @@ const SettingsStackButton = (props) => {
     console.log(props);
     return (
     <TouchableOpacity onPress={() => props.navigation.navigate(props.name)}>
-        <SafeAreaView style={styles.optionView} >
+        <SafeAreaView style={[styles.rowContainer, styles.optionView]} >
 
-        <Text style={styles.optionText}>{props.name}</Text>
-        <View>
+        <Text style={[styles.containerElement, styles.optionText]}>{props.name}</Text>
+        <View style={styles.containerElement}>
             <Icon
                     name="arrow-back-ios"
                     size={24}
                     color="#5A9F93"
-                    style={{transform: [{rotateY: '180deg'}],}}
+                    style={styles.arrowBack}
                     /></View>
 
 
@@ -237,7 +237,7 @@ const NotificationSettings = (props) => {
      }, []));
 
      useFocusEffect(
-        useCallback(() => {
+        React.useCallback(() => {
 
             if (props.route.params?.remindPeriodFreq)
                 setRemindPeriodFreq(props.route.params?.remindPeriodFreq)
@@ -417,25 +417,25 @@ useEffect(() => {
     <TouchableOpacity onPress={() => props.navigation.navigate(STACK_SCREENS.NOTIFICATIONS)}>
         <View>
 
-        <SafeAreaView style={styles.notificationSettingsView} >
-        <Text style={styles.optionText}>Customize notifications</Text>
-        <View>
-        <Icon
-                name="arrow-back-ios"
-                size={24}
-                color="#5A9F93"
-                style={{transform: [{rotateY: '180deg'}],}}
-                />
-        </View>
+        <SafeAreaView style={[styles.rowContainer, styles.notificationSettingsView]} >
+                <Text style={[styles.containerElement, styles.optionText]}>Customize notifications</Text>
+                <View style={styles.containerElement}>
+                    <Icon
+                            name="arrow-back-ios"
+                            size={24}
+                            color="#5A9F93"
+                            style={styles.arrowBack}
+                            />
+            </View>
         </SafeAreaView>
-        <View
-            style={{
-            borderBottomColor: '#CFCFCF',
-            borderBottomWidth: 1,
-            top: "15%"
-            }}/>
-        </View>
-        </TouchableOpacity>
+            <View
+                style={{
+                borderBottomColor: '#CFCFCF',
+                borderBottomWidth: 1,
+                top: "15%"
+                }}/>
+            </View>
+            </TouchableOpacity>
         </SafeAreaView>
 
     )
@@ -478,9 +478,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
       },
     rowContainer: {
+        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        marginTop: 18,
+    },
+    containerElement: {
+        flex: 1,
     },
     preferences: {
         flexDirection: 'row',
@@ -547,6 +551,7 @@ const styles = StyleSheet.create({
         lineHeight: 22,
         textAlign: 'left',
         paddingBottom: 15,
+        paddingTop: 0,
     },
     optionView:{
         paddingTop: "15%",
@@ -554,11 +559,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
+    arrowBack: {
+        transform: [{rotateY: '180deg'}],
+    },
     notificationSettingsView :{
-        paddingTop: "-20%",
-        paddingBottom: -20,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: 5
     },
     remindText: {
         fontFamily: 'Avenir',

@@ -33,8 +33,32 @@ export default function SettingsNavigator({navigation}) {
               //     <Icon name="keyboard-arrow-left" size={36} color={"#5A9F93"}/>
               // </TouchableOpacity>)}}
               />
-              <Stack.Screen name={STACK_SCREENS.BACK_UP_ACCOUNT} component={BackUpAccount} />
-              <Stack.Screen name={STACK_SCREENS.DELETE_ACCOUNT} component={DeleteAccount} />
+              <Stack.Screen name={STACK_SCREENS.BACK_UP_ACCOUNT} component={BackUpAccount}
+                        options={{title: STACK_SCREENS.BACK_UP_ACCOUNT,
+                        headerShown: true,
+                        headerStyle: {height: 200},
+                        headerTitleStyle: {
+                          fontWeight: "800",
+                          fontSize: 20,
+                          fontFamily: "Avenir",
+                          color: "black",
+                        },
+                        headerTintColor:"#5A9F93",
+                        headerBackTitleVisible: false
+                      }}  />
+              <Stack.Screen name={STACK_SCREENS.DELETE_ACCOUNT} component={DeleteAccount}
+                        options={{title: STACK_SCREENS.DELETE_ACCOUNT,
+                        headerShown: true,
+                        headerStyle: {height: 200},
+                        headerTitleStyle: {
+                          fontWeight: "800",
+                          fontSize: 20,
+                          fontFamily: "Avenir",
+                          color: "black"
+                        },
+                        headerTintColor:"#5A9F93",
+                        headerBackTitleVisible: false
+                      }} />
         </Stack.Navigator>
     )
 };
