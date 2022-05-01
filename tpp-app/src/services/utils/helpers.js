@@ -7,6 +7,19 @@ import {errorAlertModal} from "../../error/errorAlertModal";
 // Backend helper functions used across app
 
 /**
+ * Returns TRUE if a symptom previously had flow and now doesn't, or vice versa. Return FALSE otherwise.
+ * @param previousFlow string of previous flow level
+ * @param newFlow string of new flow level
+ * @return {boolean} indicating if flow used to be on and is now off, or vice versa
+ */
+export const flowOnOffModeChanged = (previousFlow, newFlow) => {
+    const flowOn = [FLOW_LEVEL.SPOTTING, FLOW_LEVEL.LIGHT, FLOW_LEVEL.MEDIUM, FLOW_LEVEL.HEAVY];
+    return flowOn.includes(previousFlow) && !flowOn.includes(newFlow) ||
+        !flowOn.includes(previousFlow) && flowOn.includes(newFlow);
+}
+
+
+/**
  * Initializes an empty year array with 12 nested arrays, representing a month.
  * Within each month array is X null values corresponding to X days of that month in that year.
  * @param {number} yearNumber
