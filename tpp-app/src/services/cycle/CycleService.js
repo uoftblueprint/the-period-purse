@@ -8,9 +8,6 @@ import subDays from 'date-fns/subDays';
 import addDays from 'date-fns/addDays';
 import Keys from '../utils/keys';
 import isAfter from 'date-fns/isAfter';
-import { getCorrectDate } from '../utils/helpers';
-import { GETRemindLogPeriod, GETRemindLogPeriodFreq, GETRemindLogPeriodTime } from '../SettingsService';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {errorAlertModal} from "../../error/errorAlertModal";
 
 
@@ -452,38 +449,38 @@ const CycleService = {
       let predictedDaysTillPeriod = differenceInDays(nextPeriodStart, today);
 
       // Set notification if enabled
-      if (await GETRemindLogPeriod()) {
-        const freq = await GETRemindLogPeriodFreq();
-        const time = await GETRemindLogPeriodTime();
-
-        // Parsing
-        const daysAhead = parseInt(freq);
-        const hour = time.split(" ")[0].split(":")[0];
-        const amOrPm = time.split(" ")[1];
-        let remindPeriodTime;
-        if (amOrPm === "PM" && hour !== "12") {
-          // add 12 hours
-          remindPeriodTime = JSON.stringify(parseInt(hour) + 12) + ":00";
-        } else if (hour === "12") {
-          remindPeriodTime = "0:00";
-        } else {
-          remindPeriodTime = hour + ":00";
-        }
-
-        // "0:00 - 24:00"
-
-        // notification scheduling
-        PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
-        PushNotificationIOS.addNotificationRequest({
-          id: 'remindperiod',
-          title: 'Period Reminder!',
-          body: `Your period is predicted to come in ${daysAhead} days.`,
-          badge: 1,
-          fireDate: getCorrectDate((predictedDaysTillPeriod - daysAhead), remindPeriodTime),
-          repeats: true
-        });
-
-      }
+      // if (await GETRemindLogPeriod()) {
+      //   const freq = await GETRemindLogPeriodFreq();
+      //   const time = await GETRemindLogPeriodTime();
+      //
+      //   // Parsing
+      //   const daysAhead = parseInt(freq);
+      //   const hour = time.split(" ")[0].split(":")[0];
+      //   const amOrPm = time.split(" ")[1];
+      //   let remindPeriodTime;
+      //   if (amOrPm === "PM" && hour !== "12") {
+      //     // add 12 hours
+      //     remindPeriodTime = JSON.stringify(parseInt(hour) + 12) + ":00";
+      //   } else if (hour === "12") {
+      //     remindPeriodTime = "0:00";
+      //   } else {
+      //     remindPeriodTime = hour + ":00";
+      //   }
+      //
+      //   // "0:00 - 24:00"
+      //
+      //   // notification scheduling
+      //   PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
+      //   PushNotificationIOS.addNotificationRequest({
+      //     id: 'remindperiod',
+      //     title: 'Period Reminder!',
+      //     body: `Your period is predicted to come in ${daysAhead} days.`,
+      //     badge: 1,
+      //     fireDate: getCorrectDate((predictedDaysTillPeriod - daysAhead), remindPeriodTime),
+      //     repeats: true
+      //   });
+      //
+      // }
       return predictedDaysTillPeriod;
     }
     else {

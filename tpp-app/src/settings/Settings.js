@@ -6,17 +6,15 @@ import ExerciseIcon from '../../ios/tppapp/Images.xcassets/icons/exercise.svg';
 import FlowIcon from '../../ios/tppapp/Images.xcassets/icons/flow.svg';
 import MoodIcon from '../../ios/tppapp/Images.xcassets/icons/mood.svg';
 import SleepIcon from '../../ios/tppapp/Images.xcassets/icons/sleep.svg';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Footer } from '../services/utils/footer';
 import { ScrollView } from 'react-native-gesture-handler';
-import {GETRemindLogPeriodFreq,  GETAllTrackingPreferences, GETRemindLogPeriod, GETRemindLogSymptoms, GETRemindLogSymptomsFreq, GETRemindLogPeriodTime, GETRemindLogSymptomsTime, POSTRemindLogSymptoms, POSTRemindLogPeriod, POSTUpdateOnePreference } from '../services/SettingsService';
+import { GETAllTrackingPreferences, GETRemindLogSymptoms, GETRemindLogSymptomsFreq, GETRemindLogSymptomsTime, POSTRemindLogSymptoms, POSTUpdateOnePreference } from '../services/SettingsService';
 import {TRACK_SYMPTOMS, VIEWS} from '../services/utils/constants'
 import CycleService from '../services/cycle/CycleService';
 import {useFocusEffect} from '@react-navigation/native';
 import {STACK_SCREENS} from './SettingsNavigator.js';
 import ErrorFallback from "../error/error-boundary";
-import { getCorrectDate } from '../services/utils/helpers';
 
 const PreferenceButton = (props) => {
     return (
@@ -31,18 +29,6 @@ const PreferenceButton = (props) => {
         <Text>{props.cardName}</Text>
 
         </View>
-    );
-}
-
-const SocialMediaButton = (props) => {
-    const openLink = () => Linking.canOpenURL(props.url).then(() => {
-        Linking.openURL(props.url);
-    });
-
-    return (
-        <TouchableOpacity onPress={openLink} style={styles.icon}>
-            {props.icon}
-        </TouchableOpacity>
     );
 }
 
@@ -98,17 +84,6 @@ const Preferences = (props) => {
           fetchPreferences();
       }, [])
 
-    useEffect(() => {
-        console.log(mood, 'im changing!')
-    }, [mood])
-
-    const handleFlow = () => {
-        POSTUpdateOnePreference(TRACK_SYMPTOMS.FLOW, flow === WHITE)
-            .then(() => {
-                flow === WHITE ? trackFlow(TEAL) : trackFlow(WHITE);
-            });
-      }
-
       const handleSleep = () => {
         POSTUpdateOnePreference(TRACK_SYMPTOMS.SLEEP, sleep === WHITE)
             .then(() => {
@@ -150,7 +125,6 @@ const Preferences = (props) => {
 }
 
 const SettingsStackButton = (props) => {
-    console.log(props);
     return (
     <TouchableOpacity onPress={() => props.navigation.navigate(props.name)}>
         <SafeAreaView style={[styles.rowContainer, styles.optionView]} >
@@ -163,9 +137,6 @@ const SettingsStackButton = (props) => {
                     color="#5A9F93"
                     style={styles.arrowBack}
                     /></View>
-
-
-
         </SafeAreaView>
         <View
             style={{
@@ -210,16 +181,17 @@ const NotificationSettings = (props) => {
     const [remindSymptomsEnabled, setRemindSymptomsEnabled] = useState(false);
     const [numberOfDaysUntilPeriod, setNumberOfDaysUntilPeriod] = useState(0);
 
-// needed for Notification Page 
-    const [remindPeriodFreq, setRemindPeriodFreq] = useState("2");
-    const [remindPeriodTime, setRemindPeriodTime] = useState("10:00");
-    const [remindPeriodTimeMeridian, setRemindPeriodTimeMeridian] = useState("AM");
+// needed for Notification Page
     const [remindSymptomsFreq, setRemindSymptomsFreq] = useState("Every day");
     const [remindSymptomsTime, setRemindSymptomsTime] = useState("10:00");
     const [remindSymptomsTimeMeridian, setRemindSymptomsTimeMeridian] = useState("AM");
 
 // get the days until period
     useFocusEffect(React.useCallback(() => {
+        GETRemindLogSymptoms().then(enabled => {
+           setRemindSymptomsEnabled(enabled);
+        });
+
         CycleService.GETPredictedDaysTillPeriod().then(numDays => {
             let toSet;
             if(numDays && numDays != -1){
@@ -237,65 +209,49 @@ const NotificationSettings = (props) => {
      }, []));
 
      useFocusEffect(
-        React.useCallback(() => {
 
-            if (props.route.params?.remindPeriodFreq)
-                setRemindPeriodFreq(props.route.params?.remindPeriodFreq)
-            if (props.route.params?.remindPeriodTime)
-                setRemindPeriodTime(props.route.params?.remindPeriodTime)
-            if (props.route.params?.remindSymptomsFreq)
-                setRemindSymptomsFreq(props.route.params?.remindSymptomsFreq)
-            if (props.route.params?.remindSymptomsTime)
-                setRemindSymptomsTime(props.route.params?.remindSymptomsTime)
-            if (props.route.params?.remindPeriodTimeMeridian)
-                setRemindPeriodTimeMeridian(props.route.params?.remindPeriodTimeMeridian)
-            if (props.route.params?.remindSymptomsTimeMeridian)
-                setRemindSymptomsTimeMeridian(props.route.params?.remindSymptomsTimeMeridian)
+         useCallback( () => {
 
-        }, [
-            props.route.params?.remindPeriodFreq,
-            props.route.params?.remindPeriodTime,
-            props.route.params?.remindSymptomsFreq,
-            props.route.params?.remindSymptomsTime
-        ])
-    )
+             if (props.route.params?.remindSymptomsFreq)
+                 setRemindSymptomsFreq(props.route.params?.remindSymptomsFreq)
+             if (props.route.params?.remindSymptomsTime)
+                 setRemindSymptomsTime(props.route.params?.remindSymptomsTime)
+             if (props.route.params?.remindSymptomsTimeMeridian)
+                 setRemindSymptomsTimeMeridian(props.route.params?.remindSymptomsTimeMeridian)
+
+             if (props.route.params?.remindSymptomsFreq && props.route.params?.remindSymptomsTime) {
+                 console.log(234);
+                 POSTRemindLogSymptoms(remindSymptomsEnabled);
+             }
+
+         }, [
+             props.route.params?.remindPeriodFreq,
+             props.route.params?.remindPeriodTime,
+             props.route.params?.remindSymptomsFreq,
+             props.route.params?.remindSymptomsTime
+         ])
+     )
 
 
 // get the frequencies
 useEffect(() => {
-    async function getRemindPeriodEnabled () {
-        let remindPeriod = await GETRemindLogPeriod();
-        console.log(313, remindPeriod);
-        setRemindPeriodEnabled(remindPeriod);
-    }
-    async function getRemindSymptomsEnabled () {
+
+    async function getRemindSymptomsEnabled() {
         let remindSymptoms = await GETRemindLogSymptoms();
-        console.log(318, remindSymptoms);
+        console.log(318, typeof remindSymptoms);
         setRemindSymptomsEnabled(remindSymptoms);
     }
+
     async function getFreqTimes() {
 
-        console.log(remindPeriodFreq)
 
-        let storedPeriodFreq = await GETRemindLogPeriodFreq();
         let storedSymptomFreq = await GETRemindLogSymptomsFreq();
-        let storedPeriodTime = await GETRemindLogPeriodTime();
         let storedSymptomTime = await GETRemindLogSymptomsTime();
 
-        console.log(remindPeriodFreq)
 
-        if (storedPeriodFreq) {
-            setRemindPeriodFreq(storedPeriodFreq);
-        }
 
         if (storedSymptomFreq) {
             setRemindSymptomsFreq(storedSymptomFreq);
-        }
-
-        if (storedPeriodTime) {
-            let parsedTime = storedPeriodTime.split(" ")
-            setRemindPeriodTime(parsedTime[0]);
-            setRemindPeriodTimeMeridian(parsedTime[1]);
         }
 
         if (storedSymptomTime) {
@@ -305,99 +261,24 @@ useEffect(() => {
         }
 
     }
+
     getFreqTimes();
-    getRemindPeriodEnabled();
     getRemindSymptomsEnabled();
 }, []);
 
-    const togglePeriodSwitch = async () => {
-        console.log(379, remindPeriodEnabled)
-        POSTRemindLogPeriod(!remindPeriodEnabled)
-            .then(async () => {
-                setRemindPeriodEnabled(!remindPeriodEnabled);
-                console.log(383, remindPeriodEnabled);
-                if (!remindPeriodEnabled) {
-                    PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
-                } else {
-                    await CycleService.GETPredictedDaysTillPeriod();
-                }
-            });
-
-    };
+    // const togglePeriodSwitch = async () => {
+    //     console.log(379, remindPeriodEnabled)
+    //     POSTRemindLogPeriod(!remindPeriodEnabled)
+    //         .then(async () => {
+    //             setRemindPeriodEnabled(!remindPeriodEnabled);
+    //         });
+    //
+    // };
     const toggleSymptomsSwitch = async () => { // post here
         POSTRemindLogSymptoms(!remindSymptomsEnabled)
             .then(() => {
+                console.log(!remindSymptomsEnabled);
                 setRemindSymptomsEnabled(!remindSymptomsEnabled);
-                console.log(415, remindSymptomsEnabled);
-                if (remindSymptomsEnabled) {
-                    console.log("REMIND1", remindPeriodFreq);
-                    // Schedule a reoccuring notification
-
-                    // Parsing
-
-                    const hour = remindSymptomsTime.split(" ")[0].split(":")[0];
-                    const amOrPm = remindSymptomsTime.split(" ")[1];
-                    let remindTime;
-                    if (amOrPm === "PM" && hour !== "12") {
-                        // add 12 hours
-                        remindTime = JSON.stringify(parseInt(hour) + 12) + ":00";
-                    } else if (hour === "12") {
-                        remindTime = "0:00";
-                    } else {
-                        remindTime = hour + ":00";
-                    }
-
-                    switch (remindPeriodFreq) {
-                        case "Every day":
-                            PushNotificationIOS.addNotificationRequest({
-                                id: 'remindsymptoms',
-                                title: 'Daily Log Reminder',
-                                body: 'Daily reminder to log your symptoms!',
-                                badge: 1,
-                                fireDate: getCorrectDate(1, remindTime),
-                                repeats: true,
-                                repeatsComponent: {
-                                    hour: true,
-                                    minute: true,
-                                },
-                            });
-                            break;
-                        case "Every week":
-                            PushNotificationIOS.addNotificationRequest({
-                                id: 'remindsymptoms',
-                                title: 'Weekly Log Reminder',
-                                body: 'Weekly reminder to log your symptoms!',
-                                badge: 1,
-                                fireDate: getCorrectDate(7, remindTime),
-                                repeats: true,
-                                repeatsComponent: {
-                                    dayOfWeek: true,
-                                    hour: true,
-                                    minute: true,
-                                },
-                            });
-                            break;
-                        case "Every month":
-                            PushNotificationIOS.addNotificationRequest({
-                                id: 'remindsymptoms',
-                                title: 'Monthly Log Reminder',
-                                body: 'Monthly reminder to log your symptoms!',
-                                badge: 1,
-                                fireDate: getCorrectDate(30, remindTime),
-                                repeats: true,
-                                repeatsComponent: {
-                                    month: true,
-                                    hour: true,
-                                    minute: true,
-                                },
-                            });
-                            break;
-                        default:
-                            break;
-                    }
-                } else {
-                    PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms'])
-                }
             });
     };
     return (

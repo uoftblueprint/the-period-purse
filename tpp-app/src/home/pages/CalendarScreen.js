@@ -138,9 +138,12 @@ export default function CalendarScreen ({ route, navigation }) {
                                 let symptomData = monthArray[i][j]
 
                                 // Add it into the marked state, which then updates the calendar
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0);
+                                // console.log(141, date, today, date > today);
                                 newMarkedData[isoDate] = {
                                     symptoms: symptomData,
-                                    disable: date > new Date()
+                                    disable: date > today
                                 }
                             }
                         }
@@ -240,7 +243,6 @@ const styles = StyleSheet.create({
       height: 50,
       width: '100%',
       backgroundColor: '#fff',
-      width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: 0

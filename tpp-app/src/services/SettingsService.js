@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TRACK_SYMPTOMS, REMINDERS } from './utils/constants'
 import {errorAlertModal} from "../error/errorAlertModal";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import {getCorrectDate} from "./utils/helpers";
+import CycleService from "./cycle/CycleService";
 
 /**
  * Clears all of the user's account data
@@ -63,48 +66,48 @@ export const POSTUpdateOnePreference = async (key, value) => new Promise(async(r
     }
 }) 
 
-/**
- * Posts whether the user wants a reminder to log period
- * @param {boolean} enableRemind representing whether the user wants to a reminder to log period
- * @returns a promise resolving when the post operation is complete
- */
+// /**
+//  * Posts whether the user wants a reminder to log period
+//  * @param {boolean} enableRemind representing whether the user wants to a reminder to log period
+//  * @returns a promise resolving when the post operation is complete
+//  */
+//
+// export const POSTRemindLogPeriod = async (enableRemind) => new Promise(async (resolve, reject) => {
+//     try {
+//         AsyncStorage.setItem(REMINDERS.REMIND_LOG_PERIOD, JSON.stringify(enableRemind))
+//             .then(async () => {
+//                 console.log("Posted period logging reminder");
+//                 // if (!enableRemind) {
+//                 //     PushNotificationIOS.removePendingNotificationRequests(['remindperiod'])
+//                 // } else {
+//                 //     await CycleService.GETPredictedDaysTillPeriod();
+//                 // }
+//                 resolve();
+//             });
+//     } catch (e) {
+//         console.log(`POSTRemindLogPeriod error: ${JSON.stringify(e)}`);
+//         errorAlertModal();
+//         reject();
+//     }
+// });
 
-export const POSTRemindLogPeriod = async (enableRemind) => new Promise(async (resolve, reject) => {
-    try {
-        AsyncStorage.setItem(REMINDERS.REMIND_LOG_PERIOD, JSON.stringify(enableRemind))
-            .then(() => {
-                console.log("Posted period logging reminder");
-                resolve();
-            });
-    } catch (e) {
-        console.log(`POSTRemindLogPeriod error: ${JSON.stringify(e)}`);
-        errorAlertModal();
-        reject();
-    }
-});
-
-/**
- * Retrieves whether the user wants a remind to log period
- * @returns a promise resolving in a boolean when the get operation is complete
- */
- export const GETRemindLogPeriod = async () => new Promise(async(resolve, reject) => {
-    try {
-        AsyncStorage.getItem(REMINDERS.REMIND_LOG_PERIOD)
-            .then(async (value) => {
-                console.log(`Retrieved RemindLogPeriod boolean`);
-                if (value !== null) {
-                    resolve(JSON.parse(value));
-                } else {
-                    await POSTRemindLogSymptoms(false);
-                    resolve(false);
-                }
-            });
-    } catch (e) {
-        console.log(`GETRemindLogPeriod error: ${JSON.stringify(e)}`);
-        errorAlertModal();
-        reject();
-    }
-});
+// /**
+//  * Retrieves whether the user wants a remind to log period
+//  * @returns a promise resolving in a boolean when the get operation is complete
+//  */
+//  export const GETRemindLogPeriod = async () => new Promise(async(resolve, reject) => {
+//     try {
+//         AsyncStorage.getItem(REMINDERS.REMIND_LOG_PERIOD)
+//             .then(async (value) => {
+//                 console.log(`Retrieved RemindLogPeriod boolean`);
+//                 resolve(JSON.parse(value));
+//             });
+//     } catch (e) {
+//         console.log(`GETRemindLogPeriod error: ${JSON.stringify(e)}`);
+//         errorAlertModal();
+//         reject();
+//     }
+// });
 
 
 /**
@@ -115,8 +118,80 @@ export const POSTRemindLogPeriod = async (enableRemind) => new Promise(async (re
 export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (resolve, reject) => {
     try {
         AsyncStorage.setItem(REMINDERS.REMIND_LOG_SYMPTOMS, JSON.stringify(enableRemind))
-            .then(() => {
-                console.log("Posted period symptom logging reminder");
+            .then(async () => {
+                console.log("Posted period symptom logging reminder", enableRemind);
+
+                // If enabled, re-schedule notifications
+                if (enableRemind) {
+                    const remindLogSymptomsTime = await GETRemindLogSymptomsTime();
+                    const remindLogSymptomsFreq = await GETRemindLogSymptomsFreq();
+                    const hour = remindLogSymptomsTime.split(" ")[0].split(":")[0];
+                    const amOrPm = remindLogSymptomsTime.split(" ")[1];
+                    let remindTime;
+                    if (amOrPm === "PM" && hour !== "12") {
+                        // add 12 hours
+                        remindTime = JSON.stringify(parseInt(hour) + 12) + ":00";
+                    } else if (hour === "12") {
+                        remindTime = "0:00";
+                    } else {
+                        remindTime = hour + ":00";
+                    }
+
+                    PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms']);
+                    console.log("REMIND TIME", remindTime, remindLogSymptomsFreq);
+
+                    switch (remindLogSymptomsFreq) {
+                        case "Every day":
+                            PushNotificationIOS.addNotificationRequest({
+                                id: 'remindsymptoms',
+                                title: 'Daily Log Reminder',
+                                body: 'Daily reminder to log your symptoms!',
+                                badge: 1,
+                                fireDate: getCorrectDate(1, remindTime),
+                                repeats: true,
+                                repeatsComponent: {
+                                    hour: true,
+                                    minute: true,
+                                },
+                            });
+                            console.log(new Date());
+                            break;
+                        case "Every week":
+                            PushNotificationIOS.addNotificationRequest({
+                                id: 'remindsymptoms',
+                                title: 'Weekly Log Reminder',
+                                body: 'Weekly reminder to log your symptoms!',
+                                badge: 1,
+                                fireDate: getCorrectDate(1, remindTime),
+                                repeats: true,
+                                repeatsComponent: {
+                                    dayOfWeek: true,
+                                    hour: true,
+                                    minute: true,
+                                },
+                            });
+                            break;
+                        case "Every month":
+                            PushNotificationIOS.addNotificationRequest({
+                                id: 'remindsymptoms',
+                                title: 'Monthly Log Reminder',
+                                body: 'Monthly reminder to log your symptoms!',
+                                badge: 1,
+                                fireDate: getCorrectDate(1, remindTime),
+                                repeats: true,
+                                repeatsComponent: {
+                                    month: true,
+                                    hour: true,
+                                    minute: true,
+                                },
+                            });
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms']);
+                }
                 resolve();
             });
     } catch (e) {
@@ -136,12 +211,8 @@ export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (
         await AsyncStorage.getItem(REMINDERS.REMIND_LOG_SYMPTOMS)
             .then(async (value) => {
                 console.log(`Retrieved RemindLogSymptoms boolean`);
-                if (value !== null) {
-                    resolve(JSON.parse(value));
-                } else {
-                    await POSTRemindLogSymptoms(false);
-                    resolve(false);
-                }
+                console.log(218, typeof value, JSON.parse(value));
+                resolve(JSON.parse(value));
             });
     } catch (e) {
         console.log(`GETRemindLogSymptoms error: ${JSON.stringify(e)}`);
@@ -264,7 +335,7 @@ export const GETRemindLogSymptomsFreq = async () => new Promise(async (resolve, 
 
 
 /**
- * Posts the time (exp: 1 am, 2 am) to send reminder to log symptoms
+ * Posts the time (exp: 1:00 am, 2:00 am) to send reminder to log symptoms
  * @param {string} time string representing the time
  * @returns a promise resolving when the post method is complete
  */

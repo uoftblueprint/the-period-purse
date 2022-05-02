@@ -231,14 +231,12 @@ export const getMonthsDiff = (dateFromStr) => {
 export const getCorrectDate = (daysAdded, time) => {
   // takes a string time and parses it
   const timeToSet = time.split(":")
-  let hour = parseInt(timeToSet[0].split(":")[0])
-  console.log(hour);
+  let hour = parseInt(timeToSet[0].split(":")[0]);
 
   const date = new Date();
   date.setDate(date.getDate() + daysAdded);
   date.setHours(hour);
   date.setMinutes(0);
   date.setSeconds(0);
-  console.log("DATE SET", date);
   return date;
 };
