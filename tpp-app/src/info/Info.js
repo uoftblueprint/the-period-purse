@@ -108,7 +108,7 @@ export default function Info ({ navigation }) {
                         GETFactCycle().then((rePostedFactArray) => {
                             setFactCycleDate(rePostedFactArray[0]);
                             setFactCycleNum(rePostedFactArray[1]);
-                            factWhole = factsJSON[factCycleNum]
+                            factWhole = factsJSON[rePostedArray[1]]
                             console.log(`This is fact on Info Page 111: ${factWhole}`)
                             setRetrievedFact(factWhole.slice(0, 84));
                         })
@@ -124,7 +124,7 @@ export default function Info ({ navigation }) {
                         setFactCycleNum(rePostedFactArray[1]);
 
                         console.log(`This is factCycleArray number on Info Page 124: ${rePostedFactArray[1]}`)
-                        factWhole = factsJSON[factCycleNum]
+                        factWhole = factsJSON[rePostedFactArray[1]]
                         console.log(`This is fact on Info Page 125: ${factWhole}`)
 
                         setRetrievedFact(factWhole.slice(0, 84));
@@ -134,7 +134,7 @@ export default function Info ({ navigation }) {
                     });
                 } else {
                     setFactCycleNum(factArray[1]);
-                    factWhole = factsJSON[factCycleNum]
+                    factWhole = factsJSON[factArray[1]]
                     console.log(`This is factCycleNum on Info page 135: ${factCycleNum}`)
                     console.log(`This is fact on Info Page 136: ${factWhole}`)
 
