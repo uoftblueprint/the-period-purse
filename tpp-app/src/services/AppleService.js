@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {APPLE_CREDENTIALS, ICLOUD} from "./utils/constants";
 import iCloudStorage from 'react-native-icloudstore';
+import {errorAlertModal} from "../error/errorAlertModal";
 
 /**
  * Save the user's token so we can authenticate them
@@ -22,6 +23,7 @@ export const POSTAppleIdentity = async (userId, givenName, familyName, token) =>
             })
         .catch((e) => {
             console.log(`POSTAppleIdentity error: ${JSON.stringify(e)}`);
+            errorAlertModal();
             reject();
         });
 });
@@ -36,6 +38,7 @@ export const GETAppleIdentityToken = async () => new Promise( async (resolve, re
             resolve(JSON.parse(token));
         }).catch((e) => {
             console.log(`GETAppleIdentityToken error: ${JSON.stringify(e)}`);
+            errorAlertModal();
             reject();
     });
 });
@@ -49,8 +52,9 @@ export const GETAppleUser = async () => new Promise( async (resolve, reject) => 
             console.log("Retrieved user's Apple user ID", token);
             resolve(JSON.parse(token));
         }).catch((e) => {
-        console.log(`GETAppleUser error: ${JSON.stringify(e)}`);
-        reject();
+            console.log(`GETAppleUser error: ${JSON.stringify(e)}`);
+            errorAlertModal();
+            reject();
     });
 });
 
@@ -63,8 +67,9 @@ export const GETLastSavedBackupTime = async () => new Promise( async (resolve, r
             console.log("Retrieved user's last back up time");
             resolve(JSON.parse(lastSavedTime));
         }).catch((e) => {
-        console.log(`GETLastSavedBackupTime error: ${JSON.stringify(e)}`);
-        reject();
+            console.log(`GETLastSavedBackupTime error: ${JSON.stringify(e)}`);
+            errorAlertModal();
+            reject();
     });
 });
 
@@ -84,6 +89,7 @@ export const POSTBackupToiCloud = async () => new Promise( async (resolve, rejec
         resolve();
     } catch (e) {
         console.log(`POSTBackupToiCloud error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -102,6 +108,7 @@ export const userHasiCloudBackup = async () => new Promise(async(resolve, reject
         }
     } catch (e) {
         console.log(`userHasiCloudBackup error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });
@@ -129,6 +136,7 @@ export const GETBackupFromiCloud = async () => new Promise( async (resolve, reje
 
     } catch (e) {
         console.log(`GETBackupFromiCloud error: ${JSON.stringify(e)}`);
+        errorAlertModal();
         reject();
     }
 });

@@ -138,7 +138,6 @@ export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (
                     }
 
                     PushNotificationIOS.removePendingNotificationRequests(['remindsymptoms']);
-                    console.log("REMIND TIME", remindTime, remindLogSymptomsFreq);
 
                     switch (remindLogSymptomsFreq) {
                         case "Every day":
@@ -154,7 +153,6 @@ export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (
                                     minute: true,
                                 },
                             });
-                            console.log(new Date());
                             break;
                         case "Every week":
                             PushNotificationIOS.addNotificationRequest({
@@ -211,7 +209,6 @@ export const POSTRemindLogSymptoms = async (enableRemind) => new Promise(async (
         await AsyncStorage.getItem(REMINDERS.REMIND_LOG_SYMPTOMS)
             .then(async (value) => {
                 console.log(`Retrieved RemindLogSymptoms boolean`);
-                console.log(218, typeof value, JSON.parse(value));
                 resolve(JSON.parse(value));
             });
     } catch (e) {

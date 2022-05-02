@@ -54,17 +54,6 @@ export default function Notifications ( {navigation} ) {
         getFreqTimes();
     }, []);
 
-    // Reschedule a new period notification if it detects a change in either the frequency setting or the time setting
-    useEffect(() => {
-        console.log(remindPeriodFreq + " " + remindPeriodTime)
-    }, [remindPeriodFreq, remindPeriodTime])
-
-    // Reschedule a new symptom notification if it detects a change in either the frequency setting or time setting
-    useEffect(() => {
-        console.log(remindSymptomsFreq + " " + remindSymptomsTime)
-    }, [remindSymptomsFreq, remindSymptomsTime])
-
-
     return (
     <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>

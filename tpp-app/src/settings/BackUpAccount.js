@@ -9,6 +9,8 @@ import {
     POSTBackupToiCloud
 } from "../services/AppleService";
 import {onAppleButtonPress} from "../onboarding/AppleSignin";
+import {errorAlertModal} from "../error/errorAlertModal";
+import ErrorFallback from "../error/error-boundary";
 
 export default function BackUpAccount ({ navigation }) {
     const [isSignedIn, setIsSignedIn] = useState(false);
@@ -54,10 +56,12 @@ export default function BackUpAccount ({ navigation }) {
         })
             .catch((e) => {
                 console.log(e);
+                errorAlertModal();
             });
     }
 
     return (
+    <ErrorFallback>
         <ImageBackground source={OnboardingBackground} style={styles.bgImage}>
             <SafeAreaView>
                 <Text style={styles.heading}>Back Up Account</Text>
@@ -79,6 +83,7 @@ export default function BackUpAccount ({ navigation }) {
                 /> }
             </SafeAreaView>
         </ImageBackground>
+    </ErrorFallback>
     )
 }
 

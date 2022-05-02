@@ -140,7 +140,6 @@ export default function CalendarScreen ({ route, navigation }) {
                                 // Add it into the marked state, which then updates the calendar
                                 const today = new Date();
                                 today.setHours(0, 0, 0, 0);
-                                // console.log(141, date, today, date > today);
                                 newMarkedData[isoDate] = {
                                     symptoms: symptomData,
                                     disable: date > today
