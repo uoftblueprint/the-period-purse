@@ -12,6 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		15A62022281A10A9003C5475 /* empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A62021281A10A9003C5475 /* empty.swift */; };
+		15E47BFE2821921100CE0648 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 15E47BFC28218F9000CE0648 /* assets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		96905EF65AED1B983A6B3ABC /* libPods-tppapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-tppapp.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
@@ -29,6 +30,7 @@
 		15A62020281A10A8003C5475 /* tppapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "tppapp-Bridging-Header.h"; sourceTree = "<group>"; };
 		15A62021281A10A9003C5475 /* empty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = empty.swift; sourceTree = SOURCE_ROOT; };
 		15B5C3672818CF9E00C6A952 /* tppapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = tppapp.entitlements; path = tppapp/tppapp.entitlements; sourceTree = "<group>"; };
+		15E47BFC28218F9000CE0648 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-tppapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tppapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-tppapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tppapp.debug.xcconfig"; path = "Target Support Files/Pods-tppapp/Pods-tppapp.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-tppapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tppapp.release.xcconfig"; path = "Target Support Files/Pods-tppapp/Pods-tppapp.release.xcconfig"; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				15E47BFC28218F9000CE0648 /* assets */,
 				13B07FAE1A68108700A75B9A /* tppapp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -189,6 +192,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15E47BFE2821921100CE0648 /* assets in Resources */,
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
