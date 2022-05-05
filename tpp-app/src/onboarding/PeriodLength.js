@@ -28,14 +28,14 @@ export default function PeriodLength ({ navigation }) {
   <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <BackButtonContainer>
+        <BackButtonContainer style={styles.backButtonContainer}>
           <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.GET_STARTED)}}/>
         </BackButtonContainer>
 
         <SafeAreaView pointerEvents="box-none" style={{ alignItems: 'center' }}>
-          <BackgroundShape style={{ top: 40 }}/>
-          <PeriodLengthIcon width='130' height='130' style={{ bottom: '35%' }}/>
-          <BarIcon style={{ bottom: '27%'}}/>
+          <BackgroundShape style={{ top: 40 , zIndex: 2}}/>
+          <PeriodLengthIcon width='130' height='130' style={{ bottom: '35%' , zIndex: 2}}/>
+          <BarIcon style={{ bottom: '27%', zIndex: 2}}/>
 
           <TitleText style={{ bottom: '25%' }}>
             How long does your {'\n'} period usually last?
@@ -77,6 +77,9 @@ export default function PeriodLength ({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  backButtonContainer: {
+    zIndex: 1
+  },
   container: {
     flex: 1,
     alignItems: 'stretch',
@@ -126,5 +129,6 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 10
   },
 });

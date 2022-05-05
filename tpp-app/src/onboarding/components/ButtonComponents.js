@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 149,
     height: 54,
-    bottom: 10
+    // bottom: 10
   },
   nextButtonText: {
     color: "#FFFFFF",
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 149,
     height: 54,
-    bottom: 10,
+    // bottom: 10,
     marginRight: 20
   },
   skipButtonText: {

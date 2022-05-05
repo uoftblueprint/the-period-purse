@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
+import { View, StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import {Card, Text} from 'react-native-elements';
 import OnboardingBackground from '../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png'
 import { STACK_SCREENS } from './Confirmation';
@@ -45,14 +45,14 @@ export default function SymptomsChoices ({ route, navigation }) {
   return (
   <ErrorFallback>
     <ImageBackground source={OnboardingBackground} style={styles.container}>
-      <BackButtonContainer>
+      <BackButtonContainer style={styles.backButtonContainer}>
         <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.PERIOD_START, {
             periodLength: periodLength
         })}}/>
       </BackButtonContainer>
       
-      <SafeAreaView pointerEvents="none" style={{ alignItems: 'center' }}>
-        <BackgroundShape style={{ top: 100 }}/>
+      <View pointerEvents="none" style={{ alignItems: 'center' }}>
+        <BackgroundShape style={{ top: "10%" }}/>
         <CalendarIcon width='250' height='250' style={{ bottom: "30%" }}/>
         <BarIcon style={{ bottom: "31%" }}/>
         <TitleText style={{ bottom: "30%" }}>
@@ -65,7 +65,7 @@ export default function SymptomsChoices ({ route, navigation }) {
           <FlowDeselected style={styles.image}/>
           <Text style={{top: 10, marginLeft: '28%', marginRight: '4%', fontSize: 14.5}}>By default, we'll always track your period flow. Choose up to four other symptoms to track.</Text>
         </Card>
-      </SafeAreaView>
+      </View>
 
       <SymptomsButtonContainer>
         <SafeAreaView style={[styles.symptoms, { backgroundColor: mood }]}>
@@ -116,6 +116,9 @@ export default function SymptomsChoices ({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  backButtonContainer: {
+    zIndex: 1
+  },
   container: {
     flex: 1,
     alignItems: 'stretch',

@@ -77,7 +77,7 @@ export default function PeriodStart ({ route, navigation }) {
   <ErrorFallback>
     <PaperProvider theme={theme}>
       <ImageBackground source={OnboardingBackground} style={styles.container}>
-        <BackButtonContainer>
+        <BackButtonContainer style={styles.backButtonContainer}>
           <BackButton title="" onPress={() => {navigation.navigate(STACK_SCREENS.PERIOD_LENGTH)}}/>
         </BackButtonContainer>
 
@@ -185,12 +185,17 @@ const fontConfig = {
 };
 
 const styles = StyleSheet.create({
+  backButtonContainer: {
+    zIndex: 1
+  },
   container: {
+    zIndex: 3,
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center'
   },
   icon: {
+    zIndex: 2,
     alignSelf: 'center',
     left: '30%',
     bottom: '-35%'
