@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import {SafeAreaView, Text, StyleSheet, View, TouchableOpacity, ImageBackground} from 'react-native';
+import {SafeAreaView, ScrollView, Text, StyleSheet, View, TouchableOpacity, ImageBackground} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import background from '../../../ios/tppapp/Images.xcassets/SplashScreenBackground.imageset/colourwatercolour.png';
 import LegendButton from "../../../ios/tppapp/Images.xcassets/icons/legend_icon.svg";
@@ -35,12 +35,12 @@ export default function LegendScreen({navigation}){
         <SafeAreaView style={styles.container}>
             <ImageBackground source={background} style={styles.container}>
                 <Header navigation={navigation}/>
-                <SafeAreaView style={styles.legendView}>
+                <ScrollView contentContainerStyle={styles.legendView}>
                     <FlowLegend style={styles.legendTopCard}></FlowLegend>
                     <CrampLegend style={styles.legendCard}></CrampLegend>
                     <SleepLegend style={styles.legendCard}></SleepLegend>
                     <ExerciseLegend style={styles.legendCard}></ExerciseLegend>
-                </SafeAreaView>
+                </ScrollView>
             </ImageBackground>
         </SafeAreaView>
     )
