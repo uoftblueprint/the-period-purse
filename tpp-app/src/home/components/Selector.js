@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
         width: "100%",
         zIndex: 3,
         marginTop: 47,
-        height: "7%",
+        height: 55,
     },
     selectedIcon: {
         backgroundColor: '#EFEFF4',
