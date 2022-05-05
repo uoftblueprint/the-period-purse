@@ -35,7 +35,7 @@ export default function LegendScreen({navigation}){
         <SafeAreaView style={styles.container}>
             <ImageBackground source={background} style={styles.container}>
                 <Header navigation={navigation}/>
-                <ScrollView contentContainerStyle={styles.legendView}>
+                <ScrollView style={styles.legendView} contentContainerStyle={{alignItems: 'center', paddingBottom: '25%'}}>
                     <FlowLegend style={styles.legendTopCard}></FlowLegend>
                     <CrampLegend style={styles.legendCard}></CrampLegend>
                     <SleepLegend style={styles.legendCard}></SleepLegend>
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     },
     legendView: {
         flex: 1,
-        alignItems: 'center'
     },
     legendButton: {
         marginRight: 5
@@ -64,7 +63,8 @@ const styles = StyleSheet.create({
         marginTop: 35,
     },
     legendCard: {
-        marginTop: 15
+        marginTop: 15,
+        paddingBottom: '30%'
     },
     headerContainer: {
         backgroundColor: 'white',

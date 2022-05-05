@@ -17,6 +17,7 @@ export default function MenstrualCupInfo({ navigation }) {
                 <Image
                 source= {CupImage}
                 style={styles.image}
+                resizeMode="contain"
                     />
                 <Text style={styles.titleText}>Menstrual Cup</Text>
 
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     image: {
         width: "26%",
         height: "23%",
-        marginBottom: "6%"
+        marginBottom: "6%",
     },
     titleText: {
         textAlign: 'center',

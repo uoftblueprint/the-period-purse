@@ -17,6 +17,7 @@ export default function TamponInfo({ navigation }) {
                     <Image
                     source= {TamponImage}
                     style={styles.image}
+                    resizeMode="contain"
                         />
                 <Text style={styles.titleText}>Tampons</Text>
 

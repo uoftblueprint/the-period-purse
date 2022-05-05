@@ -17,6 +17,7 @@ export default function ClothPadInfo({ navigation }) {
                     <Image
                     source= {ClothImage}
                     style={styles.image}
+                    resizeMode="contain"
                         />
                 <Text style={styles.titleText}>Cloth Pads</Text>
 

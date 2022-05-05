@@ -18,6 +18,7 @@ export default function PeriodUnderwearInfo({navigation}) {
                 <Image
                 source= {UnderwearImage}
                 style={styles.image}
+                resizeMode="contain"
                     />
                 <Text style={styles.titleText}>Period Underwear</Text>
 

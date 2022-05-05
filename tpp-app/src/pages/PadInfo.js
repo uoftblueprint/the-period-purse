@@ -17,6 +17,7 @@ export default function PadInfo({ navigation }) {
                     <Image
                         source= {PadImage}
                         style={styles.image}
+                        resizeMode="contain"
                         />
                 <Text style={styles.titleText}>Pads</Text>
 

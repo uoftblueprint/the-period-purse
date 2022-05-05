@@ -59,6 +59,7 @@ export default function DidYouKnow({ navigation }) {
                     <Image
                     source= {PadImageHappy}
                     style={styles.image}
+                    resizeMode="contain"
                         />
                 <Text style={styles.bodyText}>
                 <Text style={styles.titleText}>Did you know?</Text>
@@ -80,11 +81,10 @@ const styles = StyleSheet.create({
     },
     image: {
         position: 'absolute', 
-        width: 137, 
-        height: 177, 
-        left: 123, 
-        top: 208, 
-        bottom: 427
+        width: '37%', 
+        height: '22%', 
+        left: '32%', 
+        top: '26%', 
     },
     titleText: {
         position: 'absolute',
@@ -115,9 +115,9 @@ const styles = StyleSheet.create({
         bottom: 297},
     arrowPosition: {
             position: 'absolute',
-            left: 17.05,
-            right: 348.5,
-            top: 54.51,
-            bottom: 741.52
+            left: "4%",
+            // right: 348.5,
+            top: '8%',
+            // bottom: 741.52
         }
 });
