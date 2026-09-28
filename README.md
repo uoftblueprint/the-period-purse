@@ -1,6 +1,6 @@
 # The Period Purse
 
-One repo, two apps. The mobile app is TypeScript and Expo, and it builds for both iOS and Android. The API is a small Node server.
+@PLs Please add more details here in the README!
 
 ## Structure
 
