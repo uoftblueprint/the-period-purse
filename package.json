@@ -1,0 +1,23 @@
+{
+  "name": "the-period-purse",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uoftblueprint/the-period-purse.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uoftblueprint/the-period-purse/issues"
+  },
+  "homepage": "https://github.com/uoftblueprint/the-period-purse#readme",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:server": "npm start --workspace api"
+  }
+}
