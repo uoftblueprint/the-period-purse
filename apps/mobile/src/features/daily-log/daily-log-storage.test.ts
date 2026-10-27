@@ -48,6 +48,14 @@ describe('dailyLogStorage', () => {
     expect(await getLoggedDays()).toEqual([{ date: '2026-01-01', flow: 'Heavy', mood: 'Sad' }]);
   });
 
+  it('merges the same date passed twice in one save', async () => {
+    await saveDays([
+      { date: '2026-01-01', flow: 'Heavy' },
+      { date: '2026-01-01', mood: 'Sad' } as DailyLog,
+    ]);
+    expect(await getLoggedDays()).toEqual([{ date: '2026-01-01', flow: 'Heavy', mood: 'Sad' }]);
+  });
+
   it('stores days under the versioned key, keyed by date', async () => {
     await saveDay({ date: '2026-01-01', flow: 'Heavy' });
     const raw = await AsyncStorage.getItem(DAILY_LOG_STORAGE_KEY);

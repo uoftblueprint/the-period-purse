@@ -32,7 +32,7 @@ export function saveDays(days: readonly DailyLog[]): Promise<void> {
     const stored = await readStoredDays();
     const next = { ...stored };
     for (const day of days) {
-      next[day.date] = { ...stored[day.date], ...day };
+      next[day.date] = { ...next[day.date], ...day };
     }
     await AsyncStorage.setItem(DAILY_LOG_STORAGE_KEY, JSON.stringify(next));
     listeners.forEach((listener) => listener());
