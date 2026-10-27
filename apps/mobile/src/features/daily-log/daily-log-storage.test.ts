@@ -62,6 +62,12 @@ describe('dailyLogStorage', () => {
     expect(await getLoggedDays()).toHaveLength(2);
   });
 
+  it('saves over malformed data', async () => {
+    await AsyncStorage.setItem(DAILY_LOG_STORAGE_KEY, '{not json');
+    await saveDay({ date: '2026-01-01', flow: 'Heavy' });
+    expect(await getLoggedDays()).toEqual([{ date: '2026-01-01', flow: 'Heavy' }]);
+  });
+
   it('notifies subscribers after a save', async () => {
     const listener = jest.fn();
     const unsubscribe = subscribeToDailyLog(listener);

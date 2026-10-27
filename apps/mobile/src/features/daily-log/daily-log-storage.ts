@@ -1,12 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { parseStoredDays, type StoredDays } from './parse-stored-days';
 import type { DailyLog } from './types';
 
 // The only module that touches AsyncStorage for logged days.
 // Stored shape: a JSON object of DailyLog keyed by date.
 export const DAILY_LOG_STORAGE_KEY = 'dailyLog:days:v1';
-
-type StoredDays = Record<string, DailyLog>;
 
 const listeners = new Set<() => void>();
 
@@ -14,8 +13,7 @@ const listeners = new Set<() => void>();
 let writeQueue: Promise<void> = Promise.resolve();
 
 async function readStoredDays(): Promise<StoredDays> {
-  const raw = await AsyncStorage.getItem(DAILY_LOG_STORAGE_KEY);
-  return raw ? (JSON.parse(raw) as StoredDays) : {};
+  return parseStoredDays(await AsyncStorage.getItem(DAILY_LOG_STORAGE_KEY));
 }
 
 /** All logged days, sorted oldest first. */
