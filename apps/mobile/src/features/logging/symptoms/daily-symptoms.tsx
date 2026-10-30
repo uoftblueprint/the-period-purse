@@ -10,6 +10,7 @@ import FlowIcon from '@/assets/icons/logging/symptoms/flow/flow-medium.svg';
 import NotesIcon from '@/assets/icons/logging/symptoms/notes-lines.svg';
 import { LoggingColors } from '@/constants/theme';
 
+import { createDiscardConfirmation } from '../shared/discard-confirmation';
 import { canLogSymptomDate, emptySymptomDraft, formatSymptomDate, hasSymptomChanges, shiftSymptomDate, toLocalDateKey } from './symptom-draft';
 import { SymptomFlowPicker } from './symptom-flow-picker';
 import { SymptomNotesInput } from './symptom-notes-input';
@@ -29,18 +30,21 @@ export function DailySymptoms({ initialDate, onClose, ref }: Props) {
   const [flowExpanded, setFlowExpanded] = useState(false);
   const [notesExpanded, setNotesExpanded] = useState(false);
   const [confirming, setConfirming] = useState(false);
-  const pendingAction = useRef<(() => void) | null>(null);
+  const confirmationRef = useRef<ReturnType<typeof createDiscardConfirmation> | null>(null);
+  if (!confirmationRef.current) confirmationRef.current = createDiscardConfirmation(setConfirming);
+  const confirmation = confirmationRef.current;
   const dirty = hasSymptomChanges(draft);
   const today = toLocalDateKey(new Date());
 
   function requestAction(action: () => void) {
     Keyboard.dismiss();
-    if (!dirty) return action();
-    pendingAction.current = action;
-    setConfirming(true);
+    confirmation.requestAction(action, dirty);
   }
 
-  useImperativeHandle(ref, () => ({ requestClose: () => requestAction(onClose) }));
+  useImperativeHandle(ref, () => ({ requestClose: () => {
+    Keyboard.dismiss();
+    confirmation.requestClose(onClose, dirty);
+  } }));
 
   function switchDate(direction: -1 | 1) {
     const next = shiftSymptomDate(date, direction);
@@ -90,17 +94,12 @@ export function DailySymptoms({ initialDate, onClose, ref }: Props) {
         </Button>
       </View>
       <Portal>
-        <Dialog visible={confirming} onDismiss={() => { setConfirming(false); pendingAction.current = null; }}>
+        <Dialog visible={confirming} onDismiss={confirmation.keepEditing}>
           <Dialog.Title>Unsaved changes</Dialog.Title>
           <Dialog.Content><Text variant="bodyMedium">Your changes have not been saved. Discard them and continue?</Text></Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => { setConfirming(false); pendingAction.current = null; }}>Keep editing</Button>
-            <Button onPress={() => {
-              setConfirming(false);
-              const action = pendingAction.current;
-              pendingAction.current = null;
-              action?.();
-            }}>Discard</Button>
+            <Button onPress={confirmation.keepEditing}>Keep editing</Button>
+            <Button onPress={confirmation.discard}>Discard</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>

@@ -1,5 +1,5 @@
-import { useCallback, useRef, useState, type ComponentProps } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
+import { AppState, Pressable, StyleSheet, Text, View } from 'react-native';
 import { CalendarList, CalendarUtils, type DateData } from 'react-native-calendars';
 import { Button } from 'react-native-paper';
 
@@ -16,6 +16,9 @@ type MonthCalendarProps = {
   markedDates?: ComponentProps<typeof CalendarList>['markedDates'];
   selectedDate?: string;
   theme?: ComponentProps<typeof CalendarList>['theme'];
+  /** Optional rendering for temporary date-selection UIs. */
+  dayComponent?: ComponentProps<typeof CalendarList>['dayComponent'];
+  renderHeader?: ComponentProps<typeof CalendarList>['renderHeader'];
 };
 
 type DayProps = {
@@ -31,17 +34,46 @@ const toMonthIndex = (date: string) => {
   return year * 12 + month - 1;
 };
 
-export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12, markedDates, selectedDate, theme }: MonthCalendarProps) {
+export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12, markedDates, selectedDate, theme, dayComponent, renderHeader }: MonthCalendarProps) {
   const listRef = useRef<{ scrollToMonth: (date: string) => void }>(null);
-  const [today] = useState(() => CalendarUtils.getCalendarDateString(new Date()));
+  const [today, setToday] = useState(() => CalendarUtils.getCalendarDateString(new Date()));
   const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    let midnightTimer: ReturnType<typeof setTimeout> | undefined;
+    const refreshToday = () => {
+      const nextToday = CalendarUtils.getCalendarDateString(new Date());
+      setToday((currentToday: string) => (currentToday === nextToday ? currentToday : nextToday));
+    };
+    const scheduleMidnightRefresh = () => {
+      const now = new Date();
+      const nextMidnight = new Date(now);
+      nextMidnight.setHours(24, 0, 0, 0);
+      midnightTimer = setTimeout(() => {
+        refreshToday();
+        scheduleMidnightRefresh();
+      }, Math.max(1, nextMidnight.getTime() - now.getTime()));
+    };
+    const appStateSubscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        refreshToday();
+        if (midnightTimer) clearTimeout(midnightTimer);
+        scheduleMidnightRefresh();
+      }
+    });
+    scheduleMidnightRefresh();
+    return () => {
+      appStateSubscription.remove();
+      if (midnightTimer) clearTimeout(midnightTimer);
+    };
+  }, []);
   const renderDay = useCallback((props: DayProps) => (
     <Day {...props} isSelected={props.date?.dateString === selectedDate} />
   ), [selectedDate]);
 
   // CalendarList measures its scroll ranges from the month it opens on,
   // so convert the limits (relative to today) into ranges around that month.
-  const [list] = useState(() => {
+  const list = useMemo(() => {
     const requestedOffset = initialDate ? toMonthIndex(initialDate) - toMonthIndex(today) : 0;
     const inRange = requestedOffset >= -pastMonths && requestedOffset <= FUTURE_MONTHS;
     const offset = inRange ? requestedOffset : 0;
@@ -50,7 +82,7 @@ export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12, marked
       pastScrollRange: pastMonths + offset,
       futureScrollRange: FUTURE_MONTHS - offset,
     };
-  });
+  }, [initialDate, pastMonths, today]);
 
   return (
     <View style={styles.container} onLayout={(event) => setWidth(event.nativeEvent.layout.width)}>
@@ -68,7 +100,8 @@ export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12, marked
         calendarHeight={420}
         markedDates={markedDates}
         theme={theme}
-        dayComponent={renderDay}
+        dayComponent={dayComponent ?? renderDay}
+        renderHeader={renderHeader}
         animateScroll
       />}
     </View>

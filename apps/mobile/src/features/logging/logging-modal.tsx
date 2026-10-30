@@ -6,11 +6,18 @@ import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-c
 
 import { LoggingColors } from '@/constants/theme';
 
-import { DailySymptoms, type DailySymptomsHandle } from './symptoms/daily-symptoms';
+import { DailySymptoms } from './symptoms/daily-symptoms';
 import { LoggingOptionsOverlay } from './launcher/logging-options-overlay';
+import { PeriodDateSelector } from './period-dates/period-date-selector';
 
-export type LoggingMode = 'choose' | 'symptoms' | null;
-type Props = { mode: LoggingMode; initialDate: string; onClose: () => void; onDaily: () => void };
+export type LoggingMode = 'choose' | 'symptoms' | 'period-dates' | null;
+type Props = {
+  mode: LoggingMode;
+  initialDate: string;
+  onClose: () => void;
+  onDaily: () => void;
+  onPeriodDates: () => void;
+};
 
 // A single native Modal avoids presenting a second modal while the chooser dismisses.
 // Its own Paper host keeps discard dialogs above the form, with neutral defaults.
@@ -34,8 +41,8 @@ const theme = {
   },
 };
 
-export function LoggingModal({ mode, initialDate, onClose, onDaily }: Props) {
-  const form = useRef<DailySymptomsHandle>(null);
+export function LoggingModal({ mode, initialDate, onClose, onDaily, onPeriodDates }: Props) {
+  const form = useRef<{ requestClose: () => void }>(null);
   const [presentedMode, setPresentedMode] = useState(mode);
   const reducedMotion = useReducedMotion();
 
@@ -55,7 +62,7 @@ export function LoggingModal({ mode, initialDate, onClose, onDaily }: Props) {
       onDismiss={() => { if (mode === null) setPresentedMode(null); }}
       onRequestClose={() => {
         if (mode === null) return;
-        if (mode === 'symptoms' && form.current) form.current.requestClose();
+        if ((mode === 'symptoms' || mode === 'period-dates') && form.current) form.current.requestClose();
         else onClose();
       }}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
@@ -63,8 +70,10 @@ export function LoggingModal({ mode, initialDate, onClose, onDaily }: Props) {
           <View style={styles.content} pointerEvents={mode === null ? 'none' : 'auto'}>
             {contentMode === 'symptoms' ? (
               <DailySymptoms ref={form} initialDate={initialDate} onClose={onClose} />
+            ) : contentMode === 'period-dates' ? (
+              <PeriodDateSelector ref={form} initialDate={initialDate} onClose={onClose} />
             ) : contentMode === 'choose' ? (
-              <LoggingOptionsOverlay onClose={onClose} onDaily={onDaily} />
+              <LoggingOptionsOverlay onClose={onClose} onDaily={onDaily} onPeriodDates={onPeriodDates} />
             ) : null}
           </View>
         </PaperProvider>
