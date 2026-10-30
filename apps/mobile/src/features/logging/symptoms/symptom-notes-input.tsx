@@ -4,6 +4,8 @@ import { Text } from 'react-native-paper';
 
 import { LoggingColors } from '@/constants/theme';
 
+import { SYMPTOMS_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
+
 type Props = { value: string; onChange: (value: string) => void; onFocus: () => void };
 
 /** Legacy TextArea behavior, with grayscale focused/blurred presentation. */
@@ -14,7 +16,7 @@ export function SymptomNotesInput({ value, onChange, onFocus }: Props) {
   return (
     <View style={styles.container}>
       <TextInput
-        accessibilityLabel="Symptom notes"
+        accessibilityLabel={SYMPTOMS_ACCESSIBILITY_TEXT.NOTES_INPUT}
         multiline
         maxLength={500}
         value={value}

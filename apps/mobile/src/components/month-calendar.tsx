@@ -1,7 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
-import { AppState, Pressable, StyleSheet, Text, View } from 'react-native';
-import { CalendarList, CalendarUtils, type DateData } from 'react-native-calendars';
+import { useCallback, useMemo, useRef, useState, type ComponentProps } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { CalendarList, type DateData } from 'react-native-calendars';
 import { Button } from 'react-native-paper';
+
+import { useToday } from '@/hooks/use-today';
+import { FILTER_TEXT_COLOURS } from '@/services/utils/constants';
+
+import { MONTH_CALENDAR_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
 const FUTURE_MONTHS = 2;
 
@@ -15,6 +20,8 @@ type MonthCalendarProps = {
   /** Optional presentation of existing logs; this component never saves a day. */
   markedDates?: ComponentProps<typeof CalendarList>['markedDates'];
   selectedDate?: string;
+  /** Distinguish unsaved multi-date selections from existing flow records. */
+  markedDatesPurpose?: 'recorded-flow' | 'flow-selection';
   theme?: ComponentProps<typeof CalendarList>['theme'];
   /** Optional rendering for temporary date-selection UIs. */
   dayComponent?: ComponentProps<typeof CalendarList>['dayComponent'];
@@ -27,6 +34,7 @@ type DayProps = {
   onPress?: (date?: DateData) => void;
   marking?: { selected?: boolean; selectedColor?: string; selectedTextColor?: string };
   isSelected?: boolean;
+  isFlowSelection?: boolean;
 };
 
 const toMonthIndex = (date: string) => {
@@ -34,42 +42,13 @@ const toMonthIndex = (date: string) => {
   return year * 12 + month - 1;
 };
 
-export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12, markedDates, selectedDate, theme, dayComponent, renderHeader }: MonthCalendarProps) {
+export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12, markedDates, selectedDate, markedDatesPurpose = 'recorded-flow', theme, dayComponent, renderHeader }: MonthCalendarProps) {
   const listRef = useRef<{ scrollToMonth: (date: string) => void }>(null);
-  const [today, setToday] = useState(() => CalendarUtils.getCalendarDateString(new Date()));
+  const today = useToday();
   const [width, setWidth] = useState(0);
-
-  useEffect(() => {
-    let midnightTimer: ReturnType<typeof setTimeout> | undefined;
-    const refreshToday = () => {
-      const nextToday = CalendarUtils.getCalendarDateString(new Date());
-      setToday((currentToday: string) => (currentToday === nextToday ? currentToday : nextToday));
-    };
-    const scheduleMidnightRefresh = () => {
-      const now = new Date();
-      const nextMidnight = new Date(now);
-      nextMidnight.setHours(24, 0, 0, 0);
-      midnightTimer = setTimeout(() => {
-        refreshToday();
-        scheduleMidnightRefresh();
-      }, Math.max(1, nextMidnight.getTime() - now.getTime()));
-    };
-    const appStateSubscription = AppState.addEventListener('change', (state) => {
-      if (state === 'active') {
-        refreshToday();
-        if (midnightTimer) clearTimeout(midnightTimer);
-        scheduleMidnightRefresh();
-      }
-    });
-    scheduleMidnightRefresh();
-    return () => {
-      appStateSubscription.remove();
-      if (midnightTimer) clearTimeout(midnightTimer);
-    };
-  }, []);
   const renderDay = useCallback((props: DayProps) => (
-    <Day {...props} isSelected={props.date?.dateString === selectedDate} />
-  ), [selectedDate]);
+    <Day {...props} isSelected={props.date?.dateString === selectedDate} isFlowSelection={markedDatesPurpose === 'flow-selection'} />
+  ), [selectedDate, markedDatesPurpose]);
 
   // CalendarList measures its scroll ranges from the month it opens on,
   // so convert the limits (relative to today) into ranges around that month.
@@ -90,6 +69,9 @@ export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12, marked
         Today
       </Button>
       {width > 0 && <CalendarList
+        // CalendarList keeps its initial month in a ref. Remount only when that
+        // anchor month changes so refreshed bounds use the same month as the list.
+        key={list.current.slice(0, 7)}
         ref={listRef}
         current={list.current}
         pastScrollRange={list.pastScrollRange}
@@ -108,7 +90,7 @@ export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12, marked
   );
 }
 
-function Day({ date, state, onPress, marking, isSelected }: DayProps) {
+function Day({ date, state, onPress, marking, isSelected, isFlowSelection }: DayProps) {
   if (!date) return null;
 
   const disabled = state === 'disabled';
@@ -117,12 +99,15 @@ function Day({ date, state, onPress, marking, isSelected }: DayProps) {
     month: 'long',
     day: 'numeric',
   });
+  const markingLabel = isFlowSelection
+    ? MONTH_CALENDAR_ACCESSIBILITY_TEXT.SELECTED_FLOW_DATE
+    : MONTH_CALENDAR_ACCESSIBILITY_TEXT.RECORDED_FLOW;
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={marking?.selected ? `${label}, recorded flow` : label}
-      accessibilityState={{ disabled, selected: isSelected ?? false }}
+      accessibilityLabel={marking?.selected ? `${label}, ${markingLabel}` : label}
+      accessibilityState={{ disabled, selected: Boolean(isSelected || (isFlowSelection && marking?.selected)) }}
       disabled={disabled}
       onPress={() => onPress?.(date)}
       style={[
@@ -131,7 +116,7 @@ function Day({ date, state, onPress, marking, isSelected }: DayProps) {
         state === 'today' && styles.today,
         isSelected && styles.selected,
       ]}>
-      <Text style={[disabled && styles.disabled, marking?.selected && { color: marking.selectedTextColor }]}>{date.day}</Text>
+      <Text style={[marking?.selected && { color: marking.selectedTextColor }, disabled && styles.disabledText]}>{date.day}</Text>
     </Pressable>
   );
 }
@@ -154,7 +139,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
   },
   selected: { borderWidth: 2, borderRadius: 22, borderColor: '#242424' },
-  disabled: {
-    opacity: 0.4,
+  disabledText: {
+    color: FILTER_TEXT_COLOURS.DISABLED,
   },
 });
