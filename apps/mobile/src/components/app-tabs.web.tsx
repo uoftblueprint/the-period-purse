@@ -27,6 +27,10 @@ export default function AppTabs() {
           <TabTrigger name="explore" href="/explore" asChild>
             <TabButton>Explore</TabButton>
           </TabTrigger>
+          {/* Temporarly added this to view the grid. Aim to integrate with Jadyn's learn page */}
+          <TabTrigger name="product-grid" href="/product-grid" asChild>
+            <TabButton>Products</TabButton>
+          </TabTrigger>
         </CustomTabList>
       </TabList>
     </Tabs>
