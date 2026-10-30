@@ -69,9 +69,9 @@ export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12, marked
         Today
       </Button>
       {width > 0 && <CalendarList
-        // CalendarList keeps its initial month in a ref. Remount only when that
-        // anchor month changes so refreshed bounds use the same month as the list.
-        key={list.current.slice(0, 7)}
+        // CalendarList anchors itself on mount and keys rows by index. Remount
+        // when the anchor OR ranges shift so rows cannot retain the wrong month.
+        key={`${list.current.slice(0, 7)}:${list.pastScrollRange}:${list.futureScrollRange}`}
         ref={listRef}
         current={list.current}
         pastScrollRange={list.pastScrollRange}
