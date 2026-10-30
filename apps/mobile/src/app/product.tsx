@@ -40,7 +40,7 @@ export default function DetailsPage() {
     return (
         <SafeAreaProvider style={styles.container}>
             {/* This screen makes its own back button, so hide the default header. */}
-            <Stack.Screen options={{ headerShown: false }} />
+            <Stack.Screen options={{ headerShown: false, animation: 'slide_from_right'}} />
 
             {/* "‹ Learn" back button */}
             <Pressable
