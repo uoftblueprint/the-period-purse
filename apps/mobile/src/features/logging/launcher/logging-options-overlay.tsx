@@ -8,10 +8,10 @@ import BloodDropIcon from '@/assets/icons/logging/launcher/blood_drop.svg';
 import PeriodDatesIcon from '@/assets/icons/logging/launcher/calendar_icon_multiple_dates.svg';
 import CloseIcon from '@/assets/icons/logging/shared/close_icon.svg';
 
-type Props = { onClose: () => void; onDaily: () => void };
+type Props = { onClose: () => void; onDaily: () => void; onPeriodDates: () => void };
 
-/** Legacy SelectLogOptionOverlay layout. Period-date logging remains deferred. */
-export function LoggingOptionsOverlay({ onClose, onDaily }: Props) {
+/** Legacy SelectLogOptionOverlay layout; each option opens its own UI-only form. */
+export function LoggingOptionsOverlay({ onClose, onDaily, onPeriodDates }: Props) {
   const insets = useSafeAreaInsets();
 
   return (
@@ -26,9 +26,7 @@ export function LoggingOptionsOverlay({ onClose, onDaily }: Props) {
         <Text variant="titleLarge" accessibilityRole="header" style={styles.heading}>What would you like to log?</Text>
         <View style={styles.choices}>
           <Option title="Log daily symptoms" icon={BloodDropIcon} onPress={onDaily} />
-          {/* TODO: Replace the disabled placeholder and "Coming later" label with
-              period-date navigation when that deferred UI is implemented. */}
-          <Option title="Log multiple period dates" icon={PeriodDatesIcon} availability="Coming later" />
+          <Option title="Log multiple period dates" icon={PeriodDatesIcon} onPress={onPeriodDates} />
         </View>
         <Pressable
           accessibilityRole="button"
@@ -42,23 +40,20 @@ export function LoggingOptionsOverlay({ onClose, onDaily }: Props) {
   );
 }
 
-function Option({ title, icon, availability, onPress }: {
-  title: string; icon: NonNullable<ImageProps['source']>; availability?: string; onPress?: () => void;
+function Option({ title, icon, onPress }: {
+  title: string; icon: NonNullable<ImageProps['source']>; onPress: () => void;
 }) {
   return (
     <Pressable
       accessible
       accessibilityRole="button"
-      accessibilityLabel={availability ? `${title}. ${availability}.` : title}
-      accessibilityState={{ disabled: !onPress }}
-      disabled={!onPress}
+      accessibilityLabel={title}
       onPress={onPress}
       style={({ pressed }) => [styles.option, pressed && styles.pressed]}>
       <Text variant="bodyMedium" style={styles.optionTitle}>{title}</Text>
       <View style={styles.iconCircle}>
         <Image source={icon} tintColor={LoggingColors.surface} contentFit="contain" style={styles.icon} />
       </View>
-      {availability && <Text variant="labelSmall" style={styles.availability}>{availability}</Text>}
     </Pressable>
   );
 }
@@ -71,7 +66,6 @@ const styles = StyleSheet.create({
   option: { flex: 1, alignItems: 'center', maxWidth: 150, gap: 12 },
   optionTitle: { textAlign: 'center', color: LoggingColors.text, minHeight: 42 },
   iconCircle: { width: 76, height: 76, borderRadius: 38, alignItems: 'center', justifyContent: 'center', backgroundColor: LoggingColors.option },
-  availability: { color: LoggingColors.muted },
   icon: { width: 28, height: 32 },
   closeButton: { width: 64, height: 64, borderRadius: 32, backgroundColor: LoggingColors.surface, alignItems: 'center', justifyContent: 'center' },
   pressed: { opacity: 0.65 },

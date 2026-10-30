@@ -34,7 +34,7 @@ export function CalendarLogScreen() {
 
   return (
     <View style={[styles.screen, {
-      // TODO: Replace this web starter-header allowance with the final navigation inset.
+      // TODO: Replace this padding with the final navigation inset when everything is integrated.
       paddingTop: Platform.OS === 'web' ? 96 : insets.top,
       paddingBottom: Platform.OS === 'web' ? 0 : insets.bottom,
     }]}>
@@ -87,7 +87,13 @@ export function CalendarLogScreen() {
           </View>
         </View>
       )}
-      <LoggingModal mode={isCalendarPage ? loggingMode : null} initialDate={selectedDate} onClose={() => setLoggingMode(null)} onDaily={() => setLoggingMode('symptoms')} />
+      <LoggingModal
+        mode={isCalendarPage ? loggingMode : null}
+        initialDate={selectedDate}
+        onClose={() => setLoggingMode(null)}
+        onDaily={() => setLoggingMode('symptoms')}
+        onPeriodDates={() => setLoggingMode('period-dates')}
+      />
     </View>
   );
 }
