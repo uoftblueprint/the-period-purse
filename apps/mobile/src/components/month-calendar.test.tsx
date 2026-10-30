@@ -13,6 +13,9 @@ Object.defineProperties(globalThis, {
 const { act } = require('react') as typeof import('react');
 const { MonthCalendar } = require('./month-calendar') as typeof import('./month-calendar');
 const { AppState } = require('react-native') as typeof import('react-native');
+const todayHook = require('@/hooks/use-today') as typeof import('@/hooks/use-today');
+const mockScrollToOffset = jest.fn();
+let mockFlatListProps: any;
 
 // Exercise the actual CalendarList and Calendar rows. Only adapt the native
 // rendering boundary for the DOM; preserve FlatList's supplied row keys.
@@ -28,8 +31,10 @@ jest.mock('react-native', () => {
       }, [onLayout]);
       return React.createElement(native.View, { ...props, ref }, children);
     }),
-    FlatList: React.forwardRef(({ data, renderItem, keyExtractor }: any, ref: any) => {
-      React.useImperativeHandle(ref, () => ({ scrollToOffset: jest.fn() }));
+    FlatList: React.forwardRef((props: any, ref: any) => {
+      const { data, renderItem, keyExtractor } = props;
+      mockFlatListProps = props;
+      React.useImperativeHandle(ref, () => ({ scrollToOffset: mockScrollToOffset }));
       return React.createElement('div', null, data.map((item: any, index: number) =>
         React.createElement(React.Fragment, { key: keyExtractor(item, index) }, renderItem({ item, index })),
       ));
@@ -62,6 +67,7 @@ describe('calendar month rollover with a fixed opening date', () => {
   afterEach(() => {
     act(() => root.unmount());
     container.remove();
+    jest.restoreAllMocks();
     jest.useRealTimers();
     delete (globalThis as any).IS_REACT_ACT_ENVIRONMENT;
   });
@@ -78,6 +84,27 @@ describe('calendar month rollover with a fixed opening date', () => {
     expect(novemberRow()?.textContent).toContain('November 2026');
   });
 
+  it.each([undefined, '2026-10-31'])('preserves the viewport at rollover with initialDate=%s', (initialDate) => {
+    act(() => root.render(<MonthCalendar initialDate={initialDate} onDayPress={() => {}} />));
+    const novemberRow = container.querySelector('[data-testid="undefined.item_2026-11"]');
+    // The viewport is 150px into November, 13 months after the old first row.
+    act(() => mockFlatListProps.onMomentumScrollEnd?.({
+      nativeEvent: { contentOffset: { x: 0, y: 13 * 420 + 150 } },
+    }));
+    mockScrollToOffset.mockClear();
+
+    act(() => jest.advanceTimersByTime(1000));
+
+    expect(container.querySelector('[data-testid="undefined.item_2026-11"]')).toBe(novemberRow);
+    // The first row advanced one month, so subtract one month's height.
+    expect(mockScrollToOffset).toHaveBeenLastCalledWith({ offset: 12 * 420 + 150, animated: false });
+
+    const todayButton = Array.from(container.querySelectorAll('button'))
+      .find((button) => button.textContent === 'Today')!;
+    act(() => todayButton.click());
+    expect(mockScrollToOffset).toHaveBeenLastCalledWith({ offset: 12 * 420, animated: true });
+  });
+
   it('realigns rows after returning to the app several months later', () => {
     act(() => root.render(<MonthCalendar initialDate="2026-10-31" onDayPress={() => {}} />));
     jest.setSystemTime(new Date(2027, 0, 1, 10));
@@ -87,5 +114,53 @@ describe('calendar month rollover with a fixed opening date', () => {
 
     const januaryRow = container.querySelector('[data-testid="undefined.item_2027-01"]');
     expect(januaryRow?.textContent).toContain('January 2027');
+  });
+
+  it('moves the Today outline with the app clock while preserving the tapped selection', () => {
+    jest.setSystemTime(new Date(2026, 9, 30, 12));
+    const today = jest.spyOn(todayHook, 'useToday').mockReturnValue('2026-10-30');
+    const render = () => root.render(
+      <MonthCalendar initialDate="2026-10-15" selectedDate="2026-10-23" onDayPress={() => {}} />,
+    );
+    const borderWidth = (day: number) => {
+      const label = new Date(2026, 9, day).toLocaleDateString(undefined, {
+        weekday: 'long', month: 'long', day: 'numeric',
+      });
+      const cell = Array.from(container.querySelectorAll('[role="button"]'))
+        .find((element) => element.getAttribute('aria-label') === label);
+      expect(cell).toBeDefined();
+      return dom.window.getComputedStyle(cell).borderTopWidth;
+    };
+    act(render);
+    expect(borderWidth(30)).toBe('1px');
+    expect(borderWidth(23)).toBe('2px');
+
+    // App/injected time advances, but the library still sees October 30.
+    today.mockReturnValue('2026-10-31');
+    act(render);
+
+    expect(borderWidth(31)).toBe('1px');
+    expect(borderWidth(30)).not.toBe('1px');
+    expect(borderWidth(23)).toBe('2px');
+  });
+
+  it('keeps existing day cells mounted when the selected date changes', () => {
+    const onDayPress = jest.fn();
+    act(() => root.render(
+      <MonthCalendar initialDate="2026-10-15" selectedDate="2026-10-23" onDayPress={onDayPress} />,
+    ));
+    const label = new Date(2026, 9, 15).toLocaleDateString(undefined, {
+      weekday: 'long', month: 'long', day: 'numeric',
+    });
+    const cell = () => Array.from(container.querySelectorAll('[role="button"]'))
+      .find((element) => element.getAttribute('aria-label') === label);
+    const before = cell();
+    expect(before).toBeDefined();
+
+    act(() => root.render(
+      <MonthCalendar initialDate="2026-10-15" selectedDate="2026-10-24" onDayPress={onDayPress} />,
+    ));
+
+    expect(cell()).toBe(before);
   });
 });
