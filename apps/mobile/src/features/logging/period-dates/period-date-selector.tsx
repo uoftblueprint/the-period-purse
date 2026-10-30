@@ -1,4 +1,4 @@
-import { useImperativeHandle, useMemo, useRef, useState, type Ref } from 'react';
+import { useCallback, useImperativeHandle, useMemo, useRef, useState, type Ref } from 'react';
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Button, Dialog, Portal, Text } from 'react-native-paper';
@@ -20,6 +20,9 @@ type Props = { initialDate: string; onClose: () => void; ref?: Ref<PeriodDateSel
 export function PeriodDateSelector({ initialDate, onClose, ref }: Props) {
   const insets = useSafeAreaInsets();
   const [markedDates, setMarkedDates] = useState(emptyPeriodDatesDraft);
+  const handleDayPress = useCallback((date: string) => {
+    setMarkedDates((draft) => togglePeriodDate(draft, date, toLocalDateKey(new Date())));
+  }, []);
   const [confirming, setConfirming] = useState(false);
   const confirmation = useRef<ReturnType<typeof createDiscardConfirmation> | null>(null);
   if (!confirmation.current) confirmation.current = createDiscardConfirmation(setConfirming);
@@ -49,7 +52,7 @@ export function PeriodDateSelector({ initialDate, onClose, ref }: Props) {
           initialDate={initialDate}
           markedDates={calendarMarks}
           markedDatesPurpose="flow-selection"
-          onDayPress={(date) => setMarkedDates((draft) => togglePeriodDate(draft, date, toLocalDateKey(new Date())))}
+          onDayPress={handleDayPress}
         />
       </View>
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) + 14 }]}>
