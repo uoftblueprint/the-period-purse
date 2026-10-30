@@ -1,4 +1,4 @@
-import { LoggingColors } from '@/constants/theme';
+import { FILTER_COLOURS, FILTER_TEXT_COLOURS } from '@/services/utils/constants';
 import type { DailyLog } from '@/features/daily-log';
 
 type FlowMark = { selected: true; selectedColor: string; selectedTextColor: string };
@@ -7,11 +7,12 @@ type FlowMark = { selected: true; selectedColor: string; selectedTextColor: stri
 export function getCalendarFlowMarks(days: readonly DailyLog[]): Record<string, FlowMark> {
   const marks: Record<string, FlowMark> = {};
   for (const day of days) {
-    if (day.flow == null || day.flow === 'None') continue;
+    if (day.flow == null) continue;
+    const flowKey = day.flow.toUpperCase() as keyof typeof FILTER_COLOURS.FLOW;
     marks[day.date] = {
       selected: true,
-      selectedColor: LoggingColors.flow[day.flow],
-      selectedTextColor: day.flow === 'Heavy' ? '#FFFFFF' : LoggingColors.text,
+      selectedColor: FILTER_COLOURS.FLOW[flowKey],
+      selectedTextColor: FILTER_TEXT_COLOURS.FLOW[flowKey],
     };
   }
   return marks;

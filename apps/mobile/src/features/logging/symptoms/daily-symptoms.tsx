@@ -9,12 +9,14 @@ import ArrowIcon from '@/assets/icons/logging/symptoms/arrow.svg';
 import FlowIcon from '@/assets/icons/logging/symptoms/flow/flow-medium.svg';
 import NotesIcon from '@/assets/icons/logging/symptoms/notes-lines.svg';
 import { LoggingColors } from '@/constants/theme';
+import { useToday } from '@/hooks/use-today';
 
 import { createDiscardConfirmation } from '../shared/discard-confirmation';
-import { canLogSymptomDate, emptySymptomDraft, formatSymptomDate, hasSymptomChanges, shiftSymptomDate, toLocalDateKey } from './symptom-draft';
+import { canLogSymptomDate, emptySymptomDraft, formatSymptomDate, hasSymptomChanges, shiftSymptomDate } from './symptom-draft';
 import { SymptomFlowPicker } from './symptom-flow-picker';
 import { SymptomNotesInput } from './symptom-notes-input';
 import { SymptomSection } from './symptom-section';
+import { SYMPTOMS_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
 export type DailySymptomsHandle = { requestClose: () => void };
 type Props = { initialDate: string; onClose: () => void; ref?: Ref<DailySymptomsHandle> };
@@ -34,7 +36,7 @@ export function DailySymptoms({ initialDate, onClose, ref }: Props) {
   if (!confirmationRef.current) confirmationRef.current = createDiscardConfirmation(setConfirming);
   const confirmation = confirmationRef.current;
   const dirty = hasSymptomChanges(draft);
-  const today = toLocalDateKey(new Date());
+  const today = useToday();
 
   function requestAction(action: () => void) {
     Keyboard.dismiss();
@@ -60,7 +62,7 @@ export function DailySymptoms({ initialDate, onClose, ref }: Props) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={[styles.screen, { paddingTop: insets.top }]}>
       <View style={styles.topBar}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Close symptom logging" onPress={() => requestAction(onClose)} style={styles.iconButton}>
+        <Pressable accessibilityRole="button" accessibilityLabel={SYMPTOMS_ACCESSIBILITY_TEXT.CLOSE} onPress={() => requestAction(onClose)} style={styles.iconButton}>
           <Image source={CloseIcon} tintColor={LoggingColors.text} contentFit="contain" style={styles.closeIcon} />
         </Pressable>
       </View>
@@ -73,11 +75,11 @@ export function DailySymptoms({ initialDate, onClose, ref }: Props) {
         <DateArrow direction={1} disabled={!canLogSymptomDate(shiftSymptomDate(date, 1), today)} onPress={() => switchDate(1)} />
       </View>
       <ScrollView ref={scroll} style={styles.scroll} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
-        <SymptomSection title="Flow" icon={FlowIcon} active={draft.flow !== null} expanded={flowExpanded} onToggle={() => setFlowExpanded((value) => !value)}>
+        <SymptomSection title={SYMPTOMS_ACCESSIBILITY_TEXT.FLOW_SECTION} icon={FlowIcon} active={draft.flow !== null} expanded={flowExpanded} onToggle={() => setFlowExpanded((value) => !value)}>
           <SymptomFlowPicker value={draft.flow} onChange={(flow) => setDraft((current) => ({ ...current, flow }))} />
         </SymptomSection>
         <View style={styles.divider} />
-        <SymptomSection title="Notes" icon={NotesIcon} active={draft.notes.trim().length > 0} expanded={notesExpanded} onToggle={() => setNotesExpanded((value) => !value)}>
+        <SymptomSection title={SYMPTOMS_ACCESSIBILITY_TEXT.NOTES_SECTION} icon={NotesIcon} active={draft.notes.trim().length > 0} expanded={notesExpanded} onToggle={() => setNotesExpanded((value) => !value)}>
           <SymptomNotesInput value={draft.notes} onChange={(notes) => setDraft((current) => ({ ...current, notes }))} onFocus={() => scroll.current?.scrollToEnd({ animated: true })} />
         </SymptomSection>
       </ScrollView>
@@ -109,7 +111,7 @@ export function DailySymptoms({ initialDate, onClose, ref }: Props) {
 
 function DateArrow({ direction, disabled, onPress }: { direction: -1 | 1; disabled: boolean; onPress: () => void }) {
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={direction === -1 ? 'Previous day' : 'Next day'} disabled={disabled} accessibilityState={{ disabled }} onPress={onPress} style={styles.iconButton}>
+    <Pressable accessibilityRole="button" accessibilityLabel={direction === -1 ? SYMPTOMS_ACCESSIBILITY_TEXT.PREVIOUS_DAY : SYMPTOMS_ACCESSIBILITY_TEXT.NEXT_DAY} disabled={disabled} accessibilityState={{ disabled }} onPress={onPress} style={styles.iconButton}>
       <Image source={ArrowIcon} tintColor={disabled ? LoggingColors.flow.Light : LoggingColors.text} contentFit="contain" style={[styles.arrow, direction === 1 && styles.nextArrow]} />
     </Pressable>
   );

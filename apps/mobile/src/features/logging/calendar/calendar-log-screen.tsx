@@ -12,6 +12,7 @@ import { LoggingColors } from '@/constants/theme';
 import { getCalendarFlowMarks } from './calendar-flow-marks';
 import { LoggingModal, type LoggingMode } from '../logging-modal';
 import { useCalendarLogs } from './use-calendar-logs';
+import { CALENDAR_LOG_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
 export function CalendarLogScreen() {
   const insets = useSafeAreaInsets();
@@ -44,7 +45,7 @@ export function CalendarLogScreen() {
           {dateLabel} · {selected?.flow ? `${selected.flow} flow` : 'No flow recorded'}
         </Text>
       </View>
-      {loading && <ActivityIndicator size="small" color={LoggingColors.action} accessibilityLabel="Loading recorded flows" />}
+      {loading && <ActivityIndicator size="small" color={LoggingColors.action} accessibilityLabel={CALENDAR_LOG_ACCESSIBILITY_TEXT.LOADING_FLOWS} />}
       {error && (
         <View style={styles.error}>
           <Text style={styles.subtitle}>Recorded flows couldn’t be loaded.</Text>
@@ -76,14 +77,14 @@ export function CalendarLogScreen() {
           workaround in components/app-tabs.tsx. */}
       {Platform.OS !== 'web' && (
         <View style={styles.demoTabs} accessibilityRole="tablist">
-          <Pressable accessibilityRole="tab" accessibilityLabel="Home" onPress={() => router.navigate('/')} style={styles.demoTab}>
-            <Text style={styles.demoTabLabel}>Home</Text>
+          <Pressable accessibilityRole="tab" accessibilityLabel={CALENDAR_LOG_ACCESSIBILITY_TEXT.HOME_TAB} onPress={() => router.navigate('/')} style={styles.demoTab}>
+            <Text style={styles.demoTabLabel}>{CALENDAR_LOG_ACCESSIBILITY_TEXT.HOME_TAB}</Text>
           </Pressable>
-          <Pressable accessibilityRole="tab" accessibilityLabel="Explore" onPress={() => router.navigate('/explore')} style={styles.demoTab}>
-            <Text style={styles.demoTabLabel}>Explore</Text>
+          <Pressable accessibilityRole="tab" accessibilityLabel={CALENDAR_LOG_ACCESSIBILITY_TEXT.EXPLORE_TAB} onPress={() => router.navigate('/explore')} style={styles.demoTab}>
+            <Text style={styles.demoTabLabel}>{CALENDAR_LOG_ACCESSIBILITY_TEXT.EXPLORE_TAB}</Text>
           </Pressable>
-          <View accessible accessibilityRole="tab" accessibilityLabel="Log UI" accessibilityState={{ selected: true }} style={styles.demoTab}>
-            <Text style={[styles.demoTabLabel, styles.activeTab]}>Log UI</Text>
+          <View accessible accessibilityRole="tab" accessibilityLabel={CALENDAR_LOG_ACCESSIBILITY_TEXT.LOG_UI_TAB} accessibilityState={{ selected: true }} style={styles.demoTab}>
+            <Text style={[styles.demoTabLabel, styles.activeTab]}>{CALENDAR_LOG_ACCESSIBILITY_TEXT.LOG_UI_TAB}</Text>
           </View>
         </View>
       )}

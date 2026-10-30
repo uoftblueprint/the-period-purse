@@ -8,6 +8,8 @@ import BloodDropIcon from '@/assets/icons/logging/launcher/blood_drop.svg';
 import PeriodDatesIcon from '@/assets/icons/logging/launcher/calendar_icon_multiple_dates.svg';
 import CloseIcon from '@/assets/icons/logging/shared/close_icon.svg';
 
+import { LOGGING_OPTIONS_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
+
 type Props = { onClose: () => void; onDaily: () => void; onPeriodDates: () => void };
 
 /** Legacy SelectLogOptionOverlay layout; each option opens its own UI-only form. */
@@ -19,18 +21,18 @@ export function LoggingOptionsOverlay({ onClose, onDaily, onPeriodDates }: Props
       <Pressable
         style={StyleSheet.absoluteFill}
         accessibilityRole="button"
-        accessibilityLabel="Dismiss logging options"
+        accessibilityLabel={LOGGING_OPTIONS_ACCESSIBILITY_TEXT.DISMISS}
         onPress={onClose}
       />
       <View style={[styles.content, { paddingBottom: Math.max(insets.bottom, 16) + 24 }]}>
         <Text variant="titleLarge" accessibilityRole="header" style={styles.heading}>What would you like to log?</Text>
         <View style={styles.choices}>
-          <Option title="Log daily symptoms" icon={BloodDropIcon} onPress={onDaily} />
-          <Option title="Log multiple period dates" icon={PeriodDatesIcon} onPress={onPeriodDates} />
+          <Option title={LOGGING_OPTIONS_ACCESSIBILITY_TEXT.DAILY_SYMPTOMS} icon={BloodDropIcon} onPress={onDaily} />
+          <Option title={LOGGING_OPTIONS_ACCESSIBILITY_TEXT.MULTIPLE_PERIOD_DATES} icon={PeriodDatesIcon} onPress={onPeriodDates} />
         </View>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Close logging options"
+          accessibilityLabel={LOGGING_OPTIONS_ACCESSIBILITY_TEXT.CLOSE}
           onPress={onClose}
           style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}>
           <Image source={CloseIcon} accessible={false} tintColor={LoggingColors.text} contentFit="contain" style={styles.icon} />

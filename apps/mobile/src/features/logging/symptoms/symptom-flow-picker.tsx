@@ -10,6 +10,8 @@ import NoneIcon from '@/assets/icons/logging/symptoms/flow/flow-none.svg';
 import { LoggingColors } from '@/constants/theme';
 import type { FlowLevel } from '@/features/daily-log';
 
+import { SYMPTOMS_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
+
 const options = [
   { value: 'Light', icon: LightIcon },
   { value: 'Medium', icon: MediumIcon },
@@ -30,7 +32,7 @@ export function SymptomFlowPicker({ value, onChange }: Props) {
           <View key={option.value} style={styles.option}>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={`${option.value} flow`}
+              accessibilityLabel={`${option.value} ${SYMPTOMS_ACCESSIBILITY_TEXT.FLOW_SUFFIX}`}
               accessibilityState={{ selected }}
               onPress={() => onChange(selected ? null : option.value)}
               style={({ pressed }) => [styles.tile, selected && styles.selected, pressed && styles.pressed]}>

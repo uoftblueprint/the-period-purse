@@ -1,7 +1,7 @@
 import { getCalendarFlowMarks } from './calendar-flow-marks';
 
 describe('getCalendarFlowMarks', () => {
-  it('shows the stored flow levels without creating marks for empty or None days', () => {
+  it('uses legacy colors for all explicit flow levels, including None, and leaves unset flow unmarked', () => {
     const days = [
       { date: '2026-10-01', flow: 'Light' as const },
       { date: '2026-10-02', flow: 'Medium' as const },
@@ -14,14 +14,13 @@ describe('getCalendarFlowMarks', () => {
     const before = JSON.stringify(days);
     const marks = getCalendarFlowMarks(days);
 
-    expect(Object.keys(marks)).toEqual(['2026-10-01', '2026-10-02', '2026-10-03', '2026-10-04']);
-    const shades = Object.values(marks).map((mark) => mark.selectedColor);
-    expect(new Set(shades).size).toBe(4);
+    expect(Object.keys(marks)).toEqual(['2026-10-01', '2026-10-02', '2026-10-03', '2026-10-04', '2026-10-05']);
+    expect(Object.values(marks).map((mark) => mark.selectedColor)).toEqual([
+      '#E3797A', '#E44545', '#D42629', '#FFBEBF', '#FFEBEB',
+    ]);
     for (const mark of Object.values(marks)) {
       expect(mark.selected).toBe(true);
-      const channels = mark.selectedColor.slice(1).match(/../g);
-      expect(channels).toHaveLength(3);
-      expect(new Set(channels).size).toBe(1);
+      expect(mark.selectedTextColor).toBe('#000');
     }
     expect(JSON.stringify(days)).toBe(before);
   });

@@ -12,6 +12,7 @@ import { LoggingColors } from '@/constants/theme';
 import { createDiscardConfirmation } from '../shared/discard-confirmation';
 import { toLocalDateKey } from '../symptoms/symptom-draft';
 import { emptyPeriodDatesDraft, hasSelectedPeriodDates, togglePeriodDate } from './period-dates-draft';
+import { PERIOD_DATES_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
 export type PeriodDateSelectorHandle = { requestClose: () => void };
 type Props = { initialDate: string; onClose: () => void; ref?: Ref<PeriodDateSelectorHandle> };
@@ -35,7 +36,7 @@ export function PeriodDateSelector({ initialDate, onClose, ref }: Props) {
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
       <View style={styles.topBar}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Close period date selection" onPress={() => discard.requestAction(onClose, dirty)} style={styles.closeButton}>
+        <Pressable accessibilityRole="button" accessibilityLabel={PERIOD_DATES_ACCESSIBILITY_TEXT.CLOSE} onPress={() => discard.requestAction(onClose, dirty)} style={styles.closeButton}>
           <Image source={CloseIcon} tintColor={LoggingColors.text} contentFit="contain" style={styles.closeIcon} />
         </Pressable>
       </View>
@@ -47,14 +48,15 @@ export function PeriodDateSelector({ initialDate, onClose, ref }: Props) {
         <MonthCalendar
           initialDate={initialDate}
           markedDates={calendarMarks}
+          markedDatesPurpose="flow-selection"
           onDayPress={(date) => setMarkedDates((draft) => togglePeriodDate(draft, date, toLocalDateKey(new Date())))}
         />
       </View>
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) + 14 }]}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Finish period date selection"
-          accessibilityHint="Closes this preview. Your selected dates are not saved."
+          accessibilityLabel={PERIOD_DATES_ACCESSIBILITY_TEXT.FINISH}
+          accessibilityHint={PERIOD_DATES_ACCESSIBILITY_TEXT.FINISH_HINT}
           accessibilityState={{ disabled: !dirty }}
           disabled={!dirty}
           // TODO: Load stored period marks and differences against that baseline when
