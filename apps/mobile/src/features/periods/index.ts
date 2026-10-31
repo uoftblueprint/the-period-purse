@@ -4,3 +4,5 @@ export { getPeriodHistory, isFlowDay, PERIOD_GAP_DAYS } from './get-period-histo
 export { logPeriodDates } from './period-logging';
 export type { Period } from './types';
 export { usePeriodHistory } from './use-period-history';
+export { AveragePeriodLengthCard } from './components/average-period-length-card';
+export { calculateAveragePeriodLength } from './get-average-period-length';

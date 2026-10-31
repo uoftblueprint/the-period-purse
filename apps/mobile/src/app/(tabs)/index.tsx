@@ -10,6 +10,8 @@ import { ThemedView } from '@/components/themed-view';
 import { WebBadge } from '@/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 
+import { AveragePeriodLengthCard } from '@/features/periods';
+
 function getDevMenuHint() {
   if (Platform.OS === 'web') {
     return <ThemedText type="small">use browser devtools</ThemedText>;
@@ -41,6 +43,7 @@ export default function HomeScreen() {
         </ThemedView>
 
         <PaperDemo />
+        <AveragePeriodLengthCard />
 
         <ThemedText type="code" style={styles.code}>
           get started
