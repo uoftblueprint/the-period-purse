@@ -21,16 +21,7 @@ export default function AppTabs() {
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="explore">
-        <NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
-          renderingMode="template"
-        />
-      </NativeTabs.Trigger>
-
-      {/* Temporarly added this to view the grid. Aim to integrate with Jadyn's learn page */}
-      <NativeTabs.Trigger name="product-grid">
-        <NativeTabs.Trigger.Label>Products</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Learn</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/explore.png')}
           renderingMode="template"
