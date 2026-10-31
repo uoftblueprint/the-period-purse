@@ -20,9 +20,12 @@ export default function AppTabs() {
         default: { color: colors.tabInactive },
         selected: { color: colors.tabActive },
       }}>
-      <NativeTabs.Trigger name="learn">
+      <NativeTabs.Trigger name="explore">
         <NativeTabs.Trigger.Label>Learn</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="info.circle" md="info" />
+        <NativeTabs.Trigger.Icon
+          src={require('@/assets/images/tabIcons/explore.png')}
+          renderingMode="template"
+        />
       </NativeTabs.Trigger>
 
       {/* TODO: Remove this temporary Cycle tab once cycle tracking is integrated into the final navigation. */}
@@ -34,15 +37,6 @@ export default function AppTabs() {
       <NativeTabs.Trigger name="settings">
         <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="gearshape" md="settings" />
-      </NativeTabs.Trigger>
-
-      {/* Temporarly added this to view the grid. Aim to integrate with Jadyn's learn page */}
-      <NativeTabs.Trigger name="product-grid">
-        <NativeTabs.Trigger.Label>Products</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
-          renderingMode="template"
-        />
       </NativeTabs.Trigger>
 
       {/* TODO: Remove this demo entry when logging is reachable from the real calendar route. */}
