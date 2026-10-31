@@ -8,7 +8,7 @@ export default function AppTabs() {
   const scheme = useColorScheme();
   const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
   // TODO: Remove this demo-only tab hiding when the final app navigation replaces
-  // CalendarLogScreen's compact Home / Explore / Log UI row.
+  // CalendarLogScreen's compact Home / Explore / Products / Log UI row.
   const isLoggingDemo = usePathname() === '/logging-demo';
 
   return (
@@ -27,6 +27,15 @@ export default function AppTabs() {
 
       <NativeTabs.Trigger name="explore">
         <NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          src={require('@/assets/images/tabIcons/explore.png')}
+          renderingMode="template"
+        />
+      </NativeTabs.Trigger>
+
+      {/* Temporarly added this to view the grid. Aim to integrate with Jadyn's learn page */}
+      <NativeTabs.Trigger name="product-grid">
+        <NativeTabs.Trigger.Label>Products</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/explore.png')}
           renderingMode="template"

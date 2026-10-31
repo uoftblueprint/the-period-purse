@@ -35,5 +35,6 @@ export const CALENDAR_LOG_ACCESSIBILITY_TEXT = {
   LOADING_FLOWS: 'Loading recorded flows',
   HOME_TAB: 'Home',
   EXPLORE_TAB: 'Explore',
+  PRODUCTS_TAB: 'Products',
   LOG_UI_TAB: 'Log UI',
 } as const;

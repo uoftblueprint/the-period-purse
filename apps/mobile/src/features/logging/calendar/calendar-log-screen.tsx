@@ -83,6 +83,9 @@ export function CalendarLogScreen() {
           <Pressable accessibilityRole="tab" accessibilityLabel={CALENDAR_LOG_ACCESSIBILITY_TEXT.EXPLORE_TAB} onPress={() => router.navigate('/explore')} style={styles.demoTab}>
             <Text style={styles.demoTabLabel}>{CALENDAR_LOG_ACCESSIBILITY_TEXT.EXPLORE_TAB}</Text>
           </Pressable>
+          <Pressable accessibilityRole="tab" accessibilityLabel={CALENDAR_LOG_ACCESSIBILITY_TEXT.PRODUCTS_TAB} onPress={() => router.navigate('/product-grid')} style={styles.demoTab}>
+            <Text style={styles.demoTabLabel}>{CALENDAR_LOG_ACCESSIBILITY_TEXT.PRODUCTS_TAB}</Text>
+          </Pressable>
           <View accessible accessibilityRole="tab" accessibilityLabel={CALENDAR_LOG_ACCESSIBILITY_TEXT.LOG_UI_TAB} accessibilityState={{ selected: true }} style={styles.demoTab}>
             <Text style={[styles.demoTabLabel, styles.activeTab]}>{CALENDAR_LOG_ACCESSIBILITY_TEXT.LOG_UI_TAB}</Text>
           </View>
