@@ -7,13 +7,14 @@ import {
   TabListProps,
 } from 'expo-router/ui';
 import { SymbolView } from 'expo-symbols';
-import { Pressable, useColorScheme, View, StyleSheet } from 'react-native';
+import { Pressable, View, StyleSheet } from 'react-native';
 
 import { ExternalLink } from './external-link';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
-import { Colors, MaxContentWidth, Spacing } from '@/constants/theme';
+import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 export default function AppTabs() {
   return (
@@ -31,13 +32,17 @@ export default function AppTabs() {
           <TabTrigger name="product-grid" href="/product-grid" asChild>
             <TabButton>Products</TabButton>
           </TabTrigger>
+          {/* TODO: Remove this demo entry when logging is reachable from the real calendar route. */}
+          <TabTrigger name="logging-demo" href="/logging-demo" asChild>
+            <TabButton>Log UI</TabButton>
+          </TabTrigger>
         </CustomTabList>
       </TabList>
     </Tabs>
   );
 }
 
-export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
+export function TabButton({ children, isFocused, ref: _ref, ...props }: TabTriggerSlotProps) {
   return (
     <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
       <ThemedView
@@ -52,8 +57,7 @@ export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps
 }
 
 export function CustomTabList(props: TabListProps) {
-  const scheme = useColorScheme();
-  const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
+  const colors = useTheme();
 
   return (
     <View {...props} style={styles.tabListContainer}>
@@ -90,12 +94,12 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     paddingVertical: Spacing.two,
-    paddingHorizontal: Spacing.five,
+    paddingHorizontal: Spacing.three,
     borderRadius: Spacing.five,
     flexDirection: 'row',
     alignItems: 'center',
     flexGrow: 1,
-    gap: Spacing.two,
+    gap: Spacing.one,
     maxWidth: MaxContentWidth,
   },
   brandText: {
