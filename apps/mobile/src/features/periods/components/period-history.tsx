@@ -20,7 +20,7 @@ export function PeriodHistory({ limit, onShowMore }: PeriodHistoryProps) {
   if (isLoading) return <ActivityIndicator accessibilityLabel="Loading period history" />;
   if (error) {
     return (
-      <ThemedText type="small" themeColor="textSecondary">
+      <ThemedText type="small" themeColor="onSurfaceVariant">
         Couldn&apos;t load period history.
       </ThemedText>
     );

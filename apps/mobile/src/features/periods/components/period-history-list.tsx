@@ -2,7 +2,7 @@ import { Pressable, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { theme } from '@/constants/theme';
 
 import type { Period } from '../types';
 import { PeriodHistoryItem } from './period-history-item';
@@ -26,7 +26,7 @@ export function PeriodHistoryList({ periods, limit, onShowMore }: PeriodHistoryL
       <ThemedText type="smallBold">Period History</ThemedText>
 
       {periods.length === 0 ? (
-        <ThemedText type="small" themeColor="textSecondary">
+        <ThemedText type="small" themeColor="onSurfaceVariant">
           Please start logging to learn more.
         </ThemedText>
       ) : (
@@ -45,6 +45,6 @@ export function PeriodHistoryList({ periods, limit, onShowMore }: PeriodHistoryL
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'stretch',
-    gap: Spacing.two,
+    gap: theme.spacing.two,
   },
 });
