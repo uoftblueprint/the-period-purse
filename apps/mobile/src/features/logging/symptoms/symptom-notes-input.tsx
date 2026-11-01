@@ -6,10 +6,10 @@ import { LoggingColors } from '@/constants/theme';
 
 import { SYMPTOMS_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
-type Props = { value: string; onChange: (value: string) => void; onFocus: () => void };
+type Props = { value: string; disabled?: boolean; onChange: (value: string) => void; onFocus: () => void };
 
 /** Legacy TextArea behavior, with grayscale focused/blurred presentation. */
-export function SymptomNotesInput({ value, onChange, onFocus }: Props) {
+export function SymptomNotesInput({ value, disabled = false, onChange, onFocus }: Props) {
   const [focused, setFocused] = useState(false);
   const [height, setHeight] = useState(124);
 
@@ -17,6 +17,8 @@ export function SymptomNotesInput({ value, onChange, onFocus }: Props) {
     <View style={styles.container}>
       <TextInput
         accessibilityLabel={SYMPTOMS_ACCESSIBILITY_TEXT.NOTES_INPUT}
+        accessibilityState={{ disabled }}
+        editable={!disabled}
         multiline
         maxLength={500}
         value={value}

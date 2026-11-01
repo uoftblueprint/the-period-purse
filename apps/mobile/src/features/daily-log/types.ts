@@ -14,6 +14,7 @@ export const DailyLogSchema = z.object({
   /** Local calendar date as YYYY-MM-DD. */
   date: z.iso.date(),
   flow: z.enum(FLOW_LEVELS).nullable().optional().catch(undefined),
+  notes: z.string().max(500).nullable().optional().catch(undefined),
 });
 
 export type DailyLog = z.infer<typeof DailyLogSchema>;

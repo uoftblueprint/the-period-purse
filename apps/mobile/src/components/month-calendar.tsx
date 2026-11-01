@@ -5,6 +5,8 @@ import { Button } from 'react-native-paper';
 
 import { useToday } from '@/hooks/use-today';
 import { FILTER_TEXT_COLOURS } from '@/services/utils/constants';
+import type { FlowLevel } from '@/features/daily-log';
+import { FlowIcon } from './flow-icon';
 
 import { MONTH_CALENDAR_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
@@ -36,7 +38,7 @@ type DayProps = {
   state?: string;
   onPress?: (date?: DateData) => void;
   onLongPress?: (date?: DateData) => void;
-  marking?: { selected?: boolean; selectedColor?: string; selectedTextColor?: string };
+  marking?: { selected?: boolean; selectedColor?: string; selectedTextColor?: string; flow?: FlowLevel };
 };
 
 type DayContext = { today: string; selectedDate?: string; isFlowSelection: boolean; canPreview: boolean };
@@ -166,7 +168,7 @@ const Day = memo(function Day({ date, state, onPress, onLongPress, marking, isSe
   const disabled = state === 'disabled' || isFuture;
   const markingLabel = isFlowSelection
     ? MONTH_CALENDAR_ACCESSIBILITY_TEXT.SELECTED_FLOW_DATE
-    : MONTH_CALENDAR_ACCESSIBILITY_TEXT.RECORDED_FLOW;
+    : `${marking?.flow ? `${marking.flow} ` : ''}${MONTH_CALENDAR_ACCESSIBILITY_TEXT.RECORDED_FLOW}`;
 
   return (
     <Pressable
@@ -185,6 +187,7 @@ const Day = memo(function Day({ date, state, onPress, onLongPress, marking, isSe
         isSelected && styles.selected,
       ]}>
       <Text style={[marking?.selected && { color: marking.selectedTextColor }, disabled && styles.disabledText]}>{date.day}</Text>
+      {marking?.selected && marking.flow && <FlowIcon level={marking.flow} size={14} color={marking.selectedTextColor} />}
     </Pressable>
   );
 });

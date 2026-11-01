@@ -1,7 +1,7 @@
-import { useImperativeHandle, useRef, useState, type ComponentRef, type Ref } from 'react';
+import { useCallback, useImperativeHandle, useRef, useState, type ComponentRef, type Ref } from 'react';
 import { Image } from 'expo-image';
 import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Dialog, Portal, Text } from 'react-native-paper';
+import { ActivityIndicator, Button, Dialog, Portal, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CloseIcon from '@/assets/icons/logging/shared/close_icon.svg';
@@ -10,51 +10,69 @@ import FlowIcon from '@/assets/icons/logging/symptoms/flow/flow-medium.svg';
 import NotesIcon from '@/assets/icons/logging/symptoms/notes-lines.svg';
 import { LoggingColors } from '@/constants/theme';
 import { useToday } from '@/hooks/use-today';
+import { getLoggedDays, saveDay } from '@/features/daily-log';
 
-import { createDiscardConfirmation } from '../shared/discard-confirmation';
-import { canLogSymptomDate, emptySymptomDraft, formatSymptomDate, hasSymptomChanges, shiftSymptomDate } from './symptom-draft';
+import { createDiscardConfirmation } from '../shared/discard-confirmation/discard-confirmation';
+import { canLogSymptomDate, emptySymptomDraft, formatSymptomDate, hasSymptomChanges, shiftSymptomDate, symptomDraftFromLog, type SymptomDraft } from './symptom-draft';
+import { useLogLoad, useLogSubmission } from '../shared/use-logging-request';
 import { SymptomFlowPicker } from './symptom-flow-picker';
 import { SymptomNotesInput } from './symptom-notes-input';
 import { SymptomSection } from './symptom-section';
-import { SYMPTOMS_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
+import { LOGGING_STATUS_TEXT, SYMPTOMS_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
 export type DailySymptomsHandle = { requestClose: () => void };
 type Props = { initialDate: string; onClose: () => void; ref?: Ref<DailySymptomsHandle> };
 
-/** Flow + Notes from legacy LogSymptomsScreen; all changes remain a local draft. */
+/** Edit a saved day's Flow + Notes; publish to the calendar only after Save. */
 export function DailySymptoms({ initialDate, onClose, ref }: Props) {
   const insets = useSafeAreaInsets();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const [date, setDate] = useState(initialDate);
-  // TODO: When data integration is in scope, initialize from the selected day's
-  // stored record and compare edits against that record. This UI demo starts empty.
-  const [draft, setDraft] = useState(emptySymptomDraft);
+  const loadRecord = useCallback(async () => symptomDraftFromLog(
+    (await getLoggedDays()).find((day) => day.date === date),
+  ), [date]);
+  const { data: baseline, loading, error: loadError, reload } = useLogLoad(loadRecord);
+  const { submitting, error: saveError, submit } = useLogSubmission();
+  const [edits, setEdits] = useState<{ date: string; draft: SymptomDraft } | null>(null);
+  const draft = edits?.date === date ? edits.draft : baseline ?? emptySymptomDraft();
+  const busy = loading || loadError || submitting;
+  function setDraft(update: (draft: SymptomDraft) => SymptomDraft) {
+    setEdits((current) => ({ date, draft: update(current?.date === date ? current.draft : baseline ?? emptySymptomDraft()) }));
+  }
   const [flowExpanded, setFlowExpanded] = useState(false);
   const [notesExpanded, setNotesExpanded] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const confirmationRef = useRef<ReturnType<typeof createDiscardConfirmation> | null>(null);
   if (!confirmationRef.current) confirmationRef.current = createDiscardConfirmation(setConfirming);
   const confirmation = confirmationRef.current;
-  const dirty = hasSymptomChanges(draft);
+  const dirty = !loading && !loadError && hasSymptomChanges(draft, baseline);
   const today = useToday();
 
   function requestAction(action: () => void) {
+    if (submitting) return;
     Keyboard.dismiss();
     confirmation.requestAction(action, dirty);
   }
 
   useImperativeHandle(ref, () => ({ requestClose: () => {
+    if (submitting) return;
     Keyboard.dismiss();
     confirmation.requestClose(onClose, dirty);
   } }));
 
   function switchDate(direction: -1 | 1) {
     const next = shiftSymptomDate(date, direction);
-    if (!canLogSymptomDate(next, today)) return;
+    if (busy || !canLogSymptomDate(next, today)) return;
     requestAction(() => {
       setDate(next);
-      setDraft(emptySymptomDraft());
+      setEdits(null);
     });
+  }
+
+  async function save() {
+    if (!dirty || busy) return;
+    Keyboard.dismiss();
+    if (await submit(() => saveDay({ date, flow: draft.flow, notes: draft.notes.trim() || null }))) onClose();
   }
 
   return (
@@ -62,34 +80,41 @@ export function DailySymptoms({ initialDate, onClose, ref }: Props) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={[styles.screen, { paddingTop: insets.top }]}>
       <View style={styles.topBar}>
-        <Pressable accessibilityRole="button" accessibilityLabel={SYMPTOMS_ACCESSIBILITY_TEXT.CLOSE} onPress={() => requestAction(onClose)} style={styles.iconButton}>
+        <Pressable accessibilityRole="button" accessibilityLabel={SYMPTOMS_ACCESSIBILITY_TEXT.CLOSE} disabled={submitting} accessibilityState={{ disabled: submitting }} onPress={() => requestAction(onClose)} style={styles.iconButton}>
           <Image source={CloseIcon} tintColor={LoggingColors.text} contentFit="contain" style={styles.closeIcon} />
         </Pressable>
       </View>
       <View style={styles.dateHeader}>
-        <DateArrow direction={-1} disabled={!canLogSymptomDate(shiftSymptomDate(date, -1), today)} onPress={() => switchDate(-1)} />
+        <DateArrow direction={-1} disabled={busy || !canLogSymptomDate(shiftSymptomDate(date, -1), today)} onPress={() => switchDate(-1)} />
         <View style={styles.dateText}>
           <Text variant="bodyMedium" style={styles.subtitle}>Log your symptoms for:</Text>
           <Text variant="titleMedium" accessibilityRole="header" accessibilityLiveRegion="polite" style={styles.dateLabel}>{formatSymptomDate(date)}</Text>
         </View>
-        <DateArrow direction={1} disabled={!canLogSymptomDate(shiftSymptomDate(date, 1), today)} onPress={() => switchDate(1)} />
+        <DateArrow direction={1} disabled={busy || !canLogSymptomDate(shiftSymptomDate(date, 1), today)} onPress={() => switchDate(1)} />
       </View>
       <ScrollView ref={scroll} style={styles.scroll} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
+        {loading ? <ActivityIndicator color={LoggingColors.action} accessibilityLabel={LOGGING_STATUS_TEXT.LOADING} /> : loadError ? (
+          <View style={styles.loadError}>
+            <Text accessibilityRole="alert" style={styles.subtitle}>{LOGGING_STATUS_TEXT.LOAD_ERROR}</Text>
+            <Button onPress={reload}>{LOGGING_STATUS_TEXT.RETRY}</Button>
+          </View>
+        ) : <>
         <SymptomSection title={SYMPTOMS_ACCESSIBILITY_TEXT.FLOW_SECTION} icon={FlowIcon} active={draft.flow !== null} expanded={flowExpanded} onToggle={() => setFlowExpanded((value) => !value)}>
-          <SymptomFlowPicker value={draft.flow} onChange={(flow) => setDraft((current) => ({ ...current, flow }))} />
+          <SymptomFlowPicker value={draft.flow} disabled={submitting} onChange={(flow) => setDraft((current) => ({ ...current, flow }))} />
         </SymptomSection>
         <View style={styles.divider} />
         <SymptomSection title={SYMPTOMS_ACCESSIBILITY_TEXT.NOTES_SECTION} icon={NotesIcon} active={draft.notes.trim().length > 0} expanded={notesExpanded} onToggle={() => setNotesExpanded((value) => !value)}>
-          <SymptomNotesInput value={draft.notes} onChange={(notes) => setDraft((current) => ({ ...current, notes }))} onFocus={() => scroll.current?.scrollToEnd({ animated: true })} />
+          <SymptomNotesInput value={draft.notes} disabled={submitting} onChange={(notes) => setDraft((current) => ({ ...current, notes }))} onFocus={() => scroll.current?.scrollToEnd({ animated: true })} />
         </SymptomSection>
+        </>}
       </ScrollView>
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) + 24 }]}>
+        {saveError && <Text accessibilityRole="alert" accessibilityLiveRegion="assertive" style={styles.subtitle}>{LOGGING_STATUS_TEXT.SAVE_ERROR}</Text>}
         <Button
           mode="contained"
-          disabled={!dirty}
-          // TODO: Replace this dismiss-only demo action with persistence and
-          // loading/error handling. Close only after a successful save.
-          onPress={() => { Keyboard.dismiss(); onClose(); }}
+          disabled={!dirty || busy}
+          loading={submitting}
+          onPress={save}
           style={styles.saveButton}
           contentStyle={styles.saveContent}>
           Save
@@ -130,8 +155,9 @@ const styles = StyleSheet.create({
   nextArrow: { transform: [{ rotate: '180deg' }] },
   scroll: { flex: 1 },
   content: { paddingBottom: 40 },
+  loadError: { paddingHorizontal: 28, gap: 12 },
   divider: { height: 2, backgroundColor: LoggingColors.disabled },
-  footer: { paddingHorizontal: 28, paddingTop: 16 },
+  footer: { paddingHorizontal: 28, paddingTop: 16, gap: 12 },
   saveButton: { borderRadius: 10 },
   saveContent: { minHeight: 44 },
 });

@@ -5,7 +5,7 @@ import type { DailyLog } from './types';
 
 // The only module that touches AsyncStorage for logged days.
 // Stored shape: a JSON object of DailyLog keyed by date.
-export const DAILY_LOG_STORAGE_KEY = 'dailyLog:days:v1';
+export const DAILY_LOG_STORAGE_KEY = 'the-period-purse:daily-logs:v1';
 
 const listeners = new Set<() => void>();
 

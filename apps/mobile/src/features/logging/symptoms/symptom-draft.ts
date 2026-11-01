@@ -1,11 +1,15 @@
-import type { FlowLevel } from '@/features/daily-log';
+import type { DailyLog, FlowLevel } from '@/features/daily-log';
 
 export type SymptomDraft = { flow: FlowLevel | null; notes: string };
 
 export const emptySymptomDraft = (): SymptomDraft => ({ flow: null, notes: '' });
 
-export function hasSymptomChanges(draft: SymptomDraft): boolean {
-  return draft.flow !== null || draft.notes.trim().length > 0;
+export function symptomDraftFromLog(day?: DailyLog): SymptomDraft {
+  return { flow: day?.flow ?? null, notes: day?.notes ?? '' };
+}
+
+export function hasSymptomChanges(draft: SymptomDraft, baseline: SymptomDraft = emptySymptomDraft()): boolean {
+  return draft.flow !== baseline.flow || draft.notes.trim() !== baseline.notes.trim();
 }
 
 export function toLocalDateKey(date: Date): string {

@@ -1,7 +1,27 @@
-import { emptyPeriodDatesDraft, hasSelectedPeriodDates, togglePeriodDate } from './period-dates-draft';
+import { emptyPeriodDatesDraft, getPeriodDateChanges, hasSelectedPeriodDates, periodDatesDraftFromLogs, togglePeriodDate } from './period-dates-draft';
 
 describe('temporary period date selection', () => {
   const today = '2026-10-29';
+
+  it('loads real flow days but not None or notes-only records', () => {
+    expect(periodDatesDraftFromLogs([
+      { date: '2026-10-20', flow: 'Heavy', notes: 'Keep me' },
+      { date: '2026-10-21', flow: 'None' },
+      { date: '2026-10-22', notes: 'Only notes' },
+    ])).toEqual({ '2026-10-20': { marked: true, originalMarked: true } });
+  });
+
+  it('can save deselecting every original day and ignores toggle-and-revert', () => {
+    const original = periodDatesDraftFromLogs([{ date: '2026-10-20', flow: 'Light' }]);
+    expect(getPeriodDateChanges(original)).toEqual({ datesToMark: [], datesToUnmark: [] });
+    const cleared = togglePeriodDate(original, '2026-10-20', today);
+    expect(hasSelectedPeriodDates(cleared)).toBe(false);
+    expect(getPeriodDateChanges(cleared)).toEqual({ datesToMark: [], datesToUnmark: ['2026-10-20'] });
+    expect(getPeriodDateChanges(togglePeriodDate(cleared, '2026-10-20', today))).toEqual({ datesToMark: [], datesToUnmark: [] });
+    const selected = togglePeriodDate({}, '2026-10-22', today);
+    expect(getPeriodDateChanges(selected)).toEqual({ datesToMark: ['2026-10-22'], datesToUnmark: [] });
+    expect(getPeriodDateChanges(togglePeriodDate(selected, '2026-10-22', today))).toEqual({ datesToMark: [], datesToUnmark: [] });
+  });
 
   it('starts empty and leaves completion disabled', () => {
     expect(emptyPeriodDatesDraft()).toEqual({});

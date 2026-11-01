@@ -12,7 +12,7 @@ import { LOGGING_OPTIONS_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
 type Props = { onClose: () => void; onDaily: () => void; onPeriodDates: () => void };
 
-/** Legacy SelectLogOptionOverlay layout; each option opens its own UI-only form. */
+/** Legacy SelectLogOptionOverlay layout; each option opens its logging form. */
 export function LoggingOptionsOverlay({ onClose, onDaily, onPeriodDates }: Props) {
   const insets = useSafeAreaInsets();
 

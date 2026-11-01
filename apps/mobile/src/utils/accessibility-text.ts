@@ -28,8 +28,15 @@ export const SYMPTOMS_ACCESSIBILITY_TEXT = {
 
 export const PERIOD_DATES_ACCESSIBILITY_TEXT = {
   CLOSE: 'Close period date selection',
-  FINISH: 'Finish period date selection',
-  FINISH_HINT: 'Closes this preview. Your selected dates are not saved.',
+  FINISH: 'Save period date changes',
+  FINISH_HINT: 'Saves the dates you selected or cleared.',
+} as const;
+
+export const LOGGING_STATUS_TEXT = {
+  LOADING: 'Loading saved symptoms',
+  LOAD_ERROR: 'Saved symptoms could not be loaded. Try again before editing.',
+  SAVE_ERROR: 'Your changes could not be saved. Please try again.',
+  RETRY: 'Try again',
 } as const;
 
 export const CALENDAR_LOG_ACCESSIBILITY_TEXT = {
