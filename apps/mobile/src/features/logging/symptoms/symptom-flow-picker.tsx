@@ -3,16 +3,16 @@ import { Text } from 'react-native-paper';
 
 import { FlowIcon } from '@/components/flow-icon';
 import { LoggingColors } from '@/constants/theme';
-import type { FlowLevel } from '@/features/daily-log';
+import { FLOW_LEVEL, type FlowLevel } from '@/features/daily-log';
 
 import { SYMPTOMS_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
 const options = [
-  { value: 'Light' },
-  { value: 'Medium' },
-  { value: 'Heavy' },
-  { value: 'Spotting' },
-  { value: 'None' },
+  { value: FLOW_LEVEL.LIGHT },
+  { value: FLOW_LEVEL.MEDIUM },
+  { value: FLOW_LEVEL.HEAVY },
+  { value: FLOW_LEVEL.SPOTTING },
+  { value: FLOW_LEVEL.NONE },
 ] as const;
 
 type Props = { value: FlowLevel | null; disabled?: boolean; onChange: (value: FlowLevel | null) => void };
