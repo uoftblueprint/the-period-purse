@@ -6,7 +6,7 @@ Implementation: [daily-log-storage.ts](../../apps/mobile/src/features/daily-log/
 
 ## Key and format
 
-All days are stored as one JSON object under `the-period-purse:daily-logs:v1`. The app supplies this namespace explicitly; no previous key is read or migrated.
+All days are stored as one JSON object under `dailyLog:days:v1`. AsyncStorage is scoped to the app, so the key does not need an app-name prefix. Only this key is read and written; no other key is migrated.
 
 ```json
 {
