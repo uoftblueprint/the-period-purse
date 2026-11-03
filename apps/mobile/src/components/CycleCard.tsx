@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
 type CycleCardProps = {
     periodDays: number;
@@ -15,25 +16,27 @@ export function CycleCard({
     cycleDonutPercent,
     showTip,
 }: CycleCardProps) {
+    const theme = useTheme();
+
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
             <View style={styles.cycleDetails}>
-                <Text style={styles.header}>Current Cycle:</Text>
+                <Text style={[styles.header, { color: theme.colors.onSurface }]}>Current Cycle:</Text>
                 <Cycle
                     periodDays={periodDays}
                     daysSinceLastPeriod={daysSinceLastPeriod}
                     showTip={showTip}
                 />
-                <Pressable accessibilityRole="button" style={styles.logButton}>
-                    <Text style={styles.logButtonText}>Log Period</Text>
+                <Pressable accessibilityRole="button" style={[styles.logButton, { backgroundColor: theme.colors.primary }]}>
+                    <Text style={[styles.logButtonText, { color: theme.colors.onPrimary }]}>Log Period</Text>
                 </Pressable>
             </View>
             <View
-                style={styles.cycleRing}
+                style={[styles.cycleRing, { borderColor: theme.colors.primary, backgroundColor: theme.colors.surface }]}
                 accessibilityRole="progressbar"
                 accessibilityLabel={`${cycleDonutPercent}% through the average cycle`}>
-                <View style={styles.dayMarker}>
-                    <Text style={styles.dayMarkerText}>Day {daysSinceLastPeriod}</Text>
+                <View style={[styles.dayMarker, { backgroundColor: theme.colors.surface, borderColor: theme.colors.outline, shadowColor: theme.colors.shadow }]}>
+                    <Text style={[styles.dayMarkerText, { color: theme.colors.onSurface }]}>Day {daysSinceLastPeriod}</Text>
                 </View>
             </View>
         </View>
@@ -41,6 +44,8 @@ export function CycleCard({
 }
 
 export function Cycle({ periodDays, daysSinceLastPeriod, showTip }: CycleProps) {
+    const theme = useTheme();
+
     return (
         <View style={styles.cycleContent}>
             {daysSinceLastPeriod <= periodDays ? (
@@ -48,26 +53,30 @@ export function Cycle({ periodDays, daysSinceLastPeriod, showTip }: CycleProps) 
             ) : (
                 <OffPeriodText daysSinceLastPeriod={daysSinceLastPeriod} />
             )}
-            {showTip && <Text style={styles.tip}>Your cycle is in its follicular phase.</Text>}
+            {showTip && <Text style={[styles.tip, { color: theme.colors.onSurfaceVariant }]}>Your cycle is in its follicular phase.</Text>}
         </View>
     );
 }
 
 export function OffPeriodText({ daysSinceLastPeriod }: { daysSinceLastPeriod: number }) {
+    const theme = useTheme();
+
     return (
         <View style={styles.cycleNumberRow}>
-            <Text style={styles.cycleText}>
-                Days since last{'\n'}period: <Text style={styles.cycleNumber}>{daysSinceLastPeriod}</Text>
+            <Text style={[styles.cycleText, { color: theme.colors.onSurface }]}>
+                Days since last{'\n'}period: <Text style={[styles.cycleNumber, { color: theme.colors.onSurface }]}>{daysSinceLastPeriod}</Text>
             </Text>
         </View>
     );
 }
 
 export function OnPeriodText({ periodDays }: { periodDays: number }) {
+    const theme = useTheme();
+
     return (
         <View style={styles.cycleNumberRow}>
-            <Text style={styles.cycleText}>
-                Period days: <Text style={styles.cycleNumber}>{periodDays}</Text>
+            <Text style={[styles.cycleText, { color: theme.colors.onSurface }]}>
+                Period days: <Text style={[styles.cycleNumber, { color: theme.colors.onSurface }]}>{periodDays}</Text>
             </Text>
         </View>
     );
@@ -75,7 +84,6 @@ export function OnPeriodText({ periodDays }: { periodDays: number }) {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#FFF5F2',
         borderRadius: 18,
         padding: 16,
         minHeight: 180,
@@ -90,7 +98,6 @@ const styles = StyleSheet.create({
     },
     header: {
         fontFamily: 'LeagueSpartanMedium',
-        color: '#111111',
         fontSize: 20,
         fontWeight: '500',
         alignSelf: 'flex-start',
@@ -106,14 +113,12 @@ const styles = StyleSheet.create({
     },
     cycleNumber: {
         fontFamily: 'LeagueSpartanMedium',
-        color: '#111111',
         fontSize: 19,
         lineHeight: 25,
         fontWeight: '500',
     },
     cycleText: {
         fontFamily: 'LeagueSpartanRegular',
-        color: '#111111',
         fontSize: 17,
         lineHeight: 22,
         textAlign: 'center',
@@ -121,7 +126,6 @@ const styles = StyleSheet.create({
     },
     tip: {
         fontFamily: 'LeagueSpartanRegular',
-        color: '#4C6964',
         fontSize: 12,
         marginTop: 8,
     },
@@ -130,13 +134,11 @@ const styles = StyleSheet.create({
         minHeight: 36,
         paddingHorizontal: 16,
         borderRadius: 20,
-        backgroundColor: '#6DC5B5',
         justifyContent: 'center',
         alignItems: 'center',
     },
     logButtonText: {
         fontFamily: 'LeagueSpartanMedium',
-        color: '#111111',
         fontSize: 13,
         fontWeight: '500',
     },
@@ -145,8 +147,6 @@ const styles = StyleSheet.create({
         height: 152,
         borderWidth: 12,
         borderRadius: 76,
-        borderColor: '#6DC5B5',
-        backgroundColor: '#FFF5F2',
         marginHorizontal: 4,
     },
     dayMarker: {
@@ -157,20 +157,16 @@ const styles = StyleSheet.create({
         height: 38,
         paddingHorizontal: 4,
         borderRadius: 19,
-        backgroundColor: '#FFF5F2',
         borderWidth: 2,
-        borderColor: '#7B7777',
         alignItems: 'center',
         justifyContent: 'center',
         elevation: 3,
-        shadowColor: '#000000',
         shadowOpacity: 0.18,
         shadowRadius: 3,
         shadowOffset: { width: 0, height: 2 },
     },
     dayMarkerText: {
         fontFamily: 'LeagueSpartanRegular',
-        color: '#111111',
         fontSize: 8,
     },
 });
