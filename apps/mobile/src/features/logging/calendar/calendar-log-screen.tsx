@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { usePathname, useRouter } from 'expo-router';
 import { ActivityIndicator, Button, Text } from 'react-native-paper';
@@ -23,6 +23,10 @@ export function CalendarLogScreen() {
   const { days, loading, error, reload } = useCalendarLogs();
   const [selectedDate, setSelectedDate] = useState(() => CalendarUtils.getCalendarDateString(new Date()));
   const [loggingMode, setLoggingMode] = useState<LoggingMode>(null);
+  const openDay = useCallback((date: string) => {
+    setSelectedDate(date);
+    setLoggingMode('symptoms');
+  }, []);
   useEffect(() => {
     if (!isCalendarPage) setLoggingMode(null);
   }, [isCalendarPage]);
@@ -54,7 +58,8 @@ export function CalendarLogScreen() {
       )}
       <View style={styles.calendar}>
         <MonthCalendar
-          onDayPress={setSelectedDate}
+          onDayPress={openDay}
+          onDayLongPress={setSelectedDate}
           selectedDate={selectedDate}
           markedDates={markedDates}
           theme={{ monthTextColor: LoggingColors.text, todayTextColor: LoggingColors.text }}

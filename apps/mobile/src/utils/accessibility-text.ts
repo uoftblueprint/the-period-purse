@@ -1,6 +1,7 @@
 export const MONTH_CALENDAR_ACCESSIBILITY_TEXT = {
   SELECTED_FLOW_DATE: 'Selected date for flow logging',
   RECORDED_FLOW: 'recorded flow',
+  PREVIEW_HINT: 'Touch and hold to show the date and recorded flow.',
 } as const;
 
 export const CALENDAR_ACTION_ACCESSIBILITY_TEXT = {

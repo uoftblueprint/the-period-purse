@@ -45,7 +45,7 @@ export function PeriodDateSelector({ initialDate, onClose, ref }: Props) {
       </View>
       <View style={styles.heading}>
         <Text variant="titleLarge" accessibilityRole="header" style={styles.title}>Tap date to log period</Text>
-        <Text variant="bodyMedium" style={styles.subtitle}>Select the dates that are part of your period.</Text>
+        <Text variant="bodyMedium" style={styles.subtitle}>Selected dates will have their Flow level set to medium.</Text>
       </View>
       <View style={styles.calendar}>
         <MonthCalendar

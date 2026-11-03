@@ -74,6 +74,36 @@ describe('calendar month rollover with a fixed opening date', () => {
 
   afterAll(() => dom.window.close());
 
+  it('previews a held date without firing the normal date press on release', () => {
+    const onDayPress = jest.fn();
+    const onDayLongPress = jest.fn();
+    act(() => root.render(
+      <MonthCalendar initialDate="2026-10-15" onDayPress={onDayPress} onDayLongPress={onDayLongPress} />,
+    ));
+    const label = new Date(2026, 9, 20).toLocaleDateString(undefined, {
+      weekday: 'long', month: 'long', day: 'numeric',
+    });
+    const cell = Array.from(container.querySelectorAll('[role="button"]'))
+      .find((element) => element.getAttribute('aria-label') === label) as HTMLElement;
+
+    act(() => cell.dispatchEvent(new dom.window.MouseEvent('mousedown', { bubbles: true, button: 0 })));
+    act(() => jest.advanceTimersByTime(600));
+    act(() => {
+      cell.dispatchEvent(new dom.window.MouseEvent('mouseup', { bubbles: true, button: 0 }));
+      cell.click();
+    });
+
+    expect(onDayLongPress).toHaveBeenCalledWith('2026-10-20');
+    expect(onDayPress).not.toHaveBeenCalled();
+
+    act(() => {
+      cell.dispatchEvent(new dom.window.MouseEvent('mousedown', { bubbles: true, button: 0 }));
+      cell.dispatchEvent(new dom.window.MouseEvent('mouseup', { bubbles: true, button: 0 }));
+      cell.click();
+    });
+    expect(onDayPress).toHaveBeenCalledWith('2026-10-20');
+  });
+
   it('keeps the rendered month aligned with its row after midnight', () => {
     act(() => root.render(<MonthCalendar initialDate="2026-10-31" onDayPress={() => {}} />));
     const novemberRow = () => container.querySelector('[data-testid="undefined.item_2026-11"]');
