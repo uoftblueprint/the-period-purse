@@ -43,7 +43,6 @@ export default function HomeScreen() {
         </ThemedView>
 
         <PaperDemo />
-        <AveragePeriodLengthCard />
 
         <ThemedText type="code" style={styles.code}>
           get started
