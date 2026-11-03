@@ -3,8 +3,6 @@
  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
-import '@/global.css';
-
 import { Platform } from 'react-native';
 
 export const Colors = {
@@ -63,3 +61,23 @@ export const Spacing = {
 
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;
+
+// Intentionally grayscale until the user requests brand styling.
+// TODO: Replace these temporary logging tokens with the shared Paper theme from
+// issue #3 once colors are approved; keep grayscale until then.
+export const LoggingColors = {
+  background: '#FFFFFF',
+  action: '#242424',
+  option: '#555555',
+  surface: '#FFFFFF',
+  text: '#242424',
+  muted: '#6D6D6D',
+  disabled: '#EEEEEE',
+  flow: {
+    None: '#F5F5F5',
+    Spotting: '#EEEEEE',
+    Light: '#CCCCCC',
+    Medium: '#888888',
+    Heavy: '#444444',
+  },
+} as const;
