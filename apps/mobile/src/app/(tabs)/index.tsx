@@ -10,6 +10,8 @@ import { ThemedView } from '@/components/themed-view';
 import { WebBadge } from '@/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 
+import { Link } from 'expo-router';
+
 import { AveragePeriodLengthCard } from '@/features/periods';
 
 function getDevMenuHint() {
@@ -43,6 +45,10 @@ export default function HomeScreen() {
         </ThemedView>
 
         <PaperDemo />
+
+        <Link href="/dev-period-tools">
+          <ThemedText type="linkPrimary">Open dev period tools</ThemedText>
+        </Link>
 
         <ThemedText type="code" style={styles.code}>
           get started
