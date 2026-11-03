@@ -1,4 +1,4 @@
-import { canLogSymptomDate, emptySymptomDraft, formatSymptomDate, hasSymptomChanges, shiftSymptomDate, toLocalDateKey } from './symptom-draft';
+import { canLogSymptomDate, emptySymptomDraft, formatSymptomDate, hasSymptomChanges, shiftSymptomDate, symptomDraftFromLog, toLocalDateKey } from './symptom-draft';
 
 describe('symptom logging date navigation', () => {
   it('uses the local calendar date without mutating the supplied Date', () => {
@@ -32,6 +32,19 @@ describe('symptom logging date navigation', () => {
 });
 
 describe('temporary symptom draft', () => {
+  it('initializes editable flow and notes from a saved record', () => {
+    expect(symptomDraftFromLog({ date: '2026-10-29', flow: 'Light', notes: 'A note' })).toEqual({ flow: 'Light', notes: 'A note' });
+    expect(symptomDraftFromLog()).toEqual(emptySymptomDraft());
+  });
+
+  it('compares against the saved baseline, including clearing and reverting', () => {
+    const baseline = { flow: 'Heavy' as const, notes: 'A note' };
+    expect(hasSymptomChanges({ ...baseline }, baseline)).toBe(false);
+    expect(hasSymptomChanges(emptySymptomDraft(), baseline)).toBe(true);
+    expect(hasSymptomChanges({ ...baseline, notes: 'Edited' }, baseline)).toBe(true);
+    expect(hasSymptomChanges({ ...baseline, notes: ' A note  ' }, baseline)).toBe(false);
+  });
+
   it('starts empty, with whitespace-only notes leaving Save disabled', () => {
     expect(hasSymptomChanges(emptySymptomDraft())).toBe(false);
     expect(hasSymptomChanges({ flow: null, notes: '  \n ' })).toBe(false);

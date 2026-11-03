@@ -1,4 +1,4 @@
-import type { DailyLog } from '@/features/daily-log';
+import { FLOW_LEVEL, type DailyLog } from '@/features/daily-log';
 
 import type { Period } from './types';
 
@@ -10,7 +10,7 @@ export const PERIOD_GAP_DAYS = 2;
 
 /** True when the day has any flow. Spotting counts as flow. */
 export function isFlowDay(day: DailyLog): boolean {
-  return day.flow != null && day.flow !== 'None';
+  return day.flow != null && day.flow !== FLOW_LEVEL.NONE;
 }
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;

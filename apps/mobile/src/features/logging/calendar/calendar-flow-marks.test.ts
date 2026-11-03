@@ -15,6 +15,7 @@ describe('getCalendarFlowMarks', () => {
     const marks = getCalendarFlowMarks(days);
 
     expect(Object.keys(marks)).toEqual(['2026-10-01', '2026-10-02', '2026-10-03', '2026-10-04', '2026-10-05']);
+    expect(Object.values(marks).map((mark) => mark.flow)).toEqual(['Light', 'Medium', 'Heavy', 'Spotting', 'None']);
     expect(Object.values(marks).map((mark) => mark.selectedColor)).toEqual([
       '#E3797A', '#E44545', '#D42629', '#FFBEBF', '#FFEBEB',
     ]);

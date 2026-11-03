@@ -45,6 +45,9 @@ jest.mock('react-native', () => {
 jest.mock('react-native-paper', () => ({
   Button: ({ children, onPress }: any) => require('react').createElement('button', { onClick: onPress }, children),
 }));
+jest.mock('expo-image', () => ({
+  Image: ({ source }: any) => require('react').createElement('span', { 'data-flow-icon': String(source) }),
+}));
 
 const { createRoot } = require('react-dom/client') as {
   createRoot: (container: Element) => { render: (node: ReactNode) => void; unmount: () => void };
@@ -192,5 +195,22 @@ describe('calendar month rollover with a fixed opening date', () => {
     ));
 
     expect(cell()).toBe(before);
+  });
+
+  it('renders flow icons on saved dates and removes them when flow is cleared', () => {
+    const { getCalendarFlowMarks } = require('@/features/logging/calendar/calendar-flow-marks');
+    const onDayPress = jest.fn();
+    const render = (days: any[]) => act(() => root.render(
+      <MonthCalendar initialDate="2026-10-15" onDayPress={onDayPress} markedDates={getCalendarFlowMarks(days)} />,
+    ));
+    render([{ date: '2026-10-20', flow: 'Heavy' }]);
+    const saved = Array.from(container.querySelectorAll('[role="button"]'))
+      .find((element) => element.getAttribute('aria-label')?.includes('Heavy'));
+    expect(saved).toBeDefined();
+    expect(saved?.querySelector('[data-flow-icon]')).not.toBeNull();
+    act(() => (saved as HTMLElement).click());
+    expect(onDayPress).toHaveBeenCalledWith('2026-10-20');
+    render([{ date: '2026-10-20', flow: null }]);
+    expect(container.querySelector('[data-flow-icon]')).toBeNull();
   });
 });

@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
-export const FLOW_LEVELS = ['None', 'Spotting', 'Light', 'Medium', 'Heavy'] as const;
+import { FLOW_LEVELS } from './flow-levels';
 
-export type FlowLevel = (typeof FLOW_LEVELS)[number];
+export { FLOW_LEVEL, FLOW_LEVELS } from './flow-levels';
+export type { FlowLevel } from './flow-levels';
 
 /**
  * Everything logged for one calendar day. Other symptoms will be added here
@@ -14,6 +15,7 @@ export const DailyLogSchema = z.object({
   /** Local calendar date as YYYY-MM-DD. */
   date: z.iso.date(),
   flow: z.enum(FLOW_LEVELS).nullable().optional().catch(undefined),
+  notes: z.string().max(500).nullable().optional().catch(undefined),
 });
 
 export type DailyLog = z.infer<typeof DailyLogSchema>;

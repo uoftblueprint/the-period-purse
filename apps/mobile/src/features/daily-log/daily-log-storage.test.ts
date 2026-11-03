@@ -14,6 +14,13 @@ beforeEach(async () => {
 });
 
 describe('dailyLogStorage', () => {
+  it('uses the daily log key for saved logs', async () => {
+    await saveDay({ date: '2026-01-01', notes: 'Keep this note' });
+    expect(JSON.parse((await AsyncStorage.getItem('dailyLog:days:v1'))!)).toEqual({
+      '2026-01-01': { date: '2026-01-01', notes: 'Keep this note' },
+    });
+  });
+
   it('returns [] when nothing is stored', async () => {
     expect(await getLoggedDays()).toEqual([]);
   });
