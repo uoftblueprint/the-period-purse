@@ -177,3 +177,23 @@ export const theme = {
 
 export type AppTheme = typeof theme;
 export type ThemeColorName = Exclude<keyof typeof theme.colors, "elevation">;
+
+// Intentionally grayscale until the user requests brand styling.
+// TODO: Replace these temporary logging tokens with the shared Paper theme from
+// issue #3 once colors are approved; keep grayscale until then.
+export const LoggingColors = {
+  background: '#FFFFFF',
+  action: '#242424',
+  option: '#555555',
+  surface: '#FFFFFF',
+  text: '#242424',
+  muted: '#6D6D6D',
+  disabled: '#EEEEEE',
+  flow: {
+    None: '#F5F5F5',
+    Spotting: '#EEEEEE',
+    Light: '#CCCCCC',
+    Medium: '#888888',
+    Heavy: '#444444',
+  },
+} as const;

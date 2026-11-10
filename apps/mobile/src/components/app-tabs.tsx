@@ -1,12 +1,18 @@
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
+import { usePathname } from 'expo-router';
 
 import { theme } from '@/constants/theme';
 
 export default function AppTabs() {
   const colors = theme.colors;
+  const scheme = useColorScheme();
+  // TODO: Remove this demo-only tab hiding when the final app navigation replaces
+  // CalendarLogScreen's compact Home / Explore / Log UI row.
+  const isLoggingDemo = usePathname() === '/logging-demo';
 
   return (
     <NativeTabs
+      hidden={isLoggingDemo}
       backgroundColor={colors.background}
       indicatorColor={colors.secondaryContainer}
       labelStyle={{ selected: { color: colors.text } }}>
@@ -24,6 +30,21 @@ export default function AppTabs() {
           src={require('@/assets/images/tabIcons/explore.png')}
           renderingMode="template"
         />
+      </NativeTabs.Trigger>
+
+      {/* Temporarly added this to view the grid. Aim to integrate with Jadyn's learn page */}
+      <NativeTabs.Trigger name="product-grid">
+        <NativeTabs.Trigger.Label>Products</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          src={require('@/assets/images/tabIcons/explore.png')}
+          renderingMode="template"
+        />
+      </NativeTabs.Trigger>
+
+      {/* TODO: Remove this demo entry when logging is reachable from the real calendar route. */}
+      <NativeTabs.Trigger name="logging-demo">
+        <NativeTabs.Trigger.Label>Log UI</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="calendar" md="calendar_month" />
       </NativeTabs.Trigger>
     </NativeTabs>
   );

@@ -1,8 +1,8 @@
-import { getLoggedDays, saveDays, type DailyLog, type FlowLevel } from '@/features/daily-log';
+import { FLOW_LEVEL, getLoggedDays, saveDays, type DailyLog } from '@/features/daily-log';
 
 import { isFlowDay } from './get-period-history';
 
-const DEFAULT_FLOW: FlowLevel = 'Medium';
+const DEFAULT_FLOW = FLOW_LEVEL.MEDIUM;
 
 /**
  * Marks and unmarks period days in one save. Marking keeps an existing flow

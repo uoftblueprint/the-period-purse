@@ -1,3 +1,5 @@
+import '@/global.css';
+
 import { DefaultTheme, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
@@ -36,13 +38,14 @@ export default function TabLayout() {
     if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded]);
 
+  if (fontError) throw fontError;
   if (!fontsLoaded) return null;
 
   return (
     <ThemeProvider value={navigationTheme}>
       <PaperProvider theme={theme}>
         <AnimatedSplashOverlay />
-        <AppTabs />
+        <Stack screenOptions={{ headerShown: false }} />
       </PaperProvider>
     </ThemeProvider>
   );
