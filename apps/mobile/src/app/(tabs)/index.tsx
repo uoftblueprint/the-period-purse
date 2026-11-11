@@ -8,7 +8,7 @@ import { PaperDemo } from '@/components/paper-demo';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { BottomTabInset, MaxContentWidth, theme } from '@/constants/theme';
 
 function getDevMenuHint() {
   if (Platform.OS === 'web') {
@@ -46,7 +46,7 @@ export default function HomeScreen() {
           get started
         </ThemedText>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
+        <ThemedView type="surfaceVariant" style={styles.stepContainer}>
           <HintRow
             title="Try editing"
             hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
@@ -72,18 +72,18 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
+    paddingHorizontal: theme.spacing.four,
     alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
+    gap: theme.spacing.three,
+    paddingBottom: BottomTabInset + theme.spacing.three,
     maxWidth: MaxContentWidth,
   },
   heroSection: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    paddingHorizontal: theme.spacing.four,
+    gap: theme.spacing.four,
   },
   title: {
     textAlign: 'center',
@@ -92,10 +92,10 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   stepContainer: {
-    gap: Spacing.three,
+    gap: theme.spacing.three,
     alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+    paddingHorizontal: theme.spacing.three,
+    paddingVertical: theme.spacing.four,
+    borderRadius: theme.spacing.four,
   },
 });

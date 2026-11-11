@@ -1,24 +1,50 @@
 import '@/global.css';
 
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { DefaultTheme, ThemeProvider, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
-import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
-import { useFonts, NunitoSans_700Bold } from '@expo-google-fonts/nunito-sans';
+import { useEffect } from 'react';
+import { PaperProvider } from 'react-native-paper';
+import { useFonts } from 'expo-font';
+import { LeagueSpartan_400Regular } from '@expo-google-fonts/league-spartan';
+import { WorkSans_400Regular } from '@expo-google-fonts/work-sans';
+import { NunitoSans_400Regular, NunitoSans_700Bold } from '@expo-google-fonts/nunito-sans';
+
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import AppTabs from '@/components/app-tabs';
+import { theme } from '@/constants/theme';
 
 SplashScreen.preventAutoHideAsync();
 
+const navigationTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: theme.colors.primary,
+    background: theme.colors.background,
+    card: theme.colors.surface,
+    text: theme.colors.onSurface,
+    border: theme.colors.outline,
+  },
+};
+
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [fontsLoaded, fontError] = useFonts({ NunitoSans_700Bold });
+  const [fontsLoaded, fontError] = useFonts({
+    LeagueSpartan_400Regular,
+    WorkSans_400Regular,
+    NunitoSans_400Regular,
+    NunitoSans_700Bold,
+  });
+
+  useEffect(() => {
+    if (fontsLoaded) SplashScreen.hideAsync();
+  }, [fontsLoaded]);
 
   if (fontError) throw fontError;
   if (!fontsLoaded) return null;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <PaperProvider theme={colorScheme === 'dark' ? MD3DarkTheme : MD3LightTheme}>
+    <ThemeProvider value={navigationTheme}>
+      <PaperProvider theme={theme}>
         <AnimatedSplashOverlay />
         <Stack screenOptions={{ headerShown: false }} />
       </PaperProvider>

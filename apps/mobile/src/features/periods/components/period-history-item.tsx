@@ -23,7 +23,7 @@ export function PeriodHistoryItem({ period }: PeriodHistoryItemProps) {
       <ThemedText>
         {formatDate(period.start)} – {formatDate(period.end)}
       </ThemedText>
-      <ThemedText type="small" themeColor="textSecondary">
+      <ThemedText type="small" themeColor="onSurfaceVariant">
         {period.days}-day period
       </ThemedText>
     </ThemedView>
