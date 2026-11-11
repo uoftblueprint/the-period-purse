@@ -5,7 +5,6 @@ import { theme } from '@/constants/theme';
 
 export default function AppTabs() {
   const colors = theme.colors;
-  const scheme = useColorScheme();
   // TODO: Remove this demo-only tab hiding when the final app navigation replaces
   // CalendarLogScreen's compact Home / Explore / Log UI row.
   const isLoggingDemo = usePathname() === '/logging-demo';

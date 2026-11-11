@@ -17,6 +17,78 @@ export const FontFamily = {
   mono: Platform.select({ ios: "Menlo", default: "monospace" }),
 };
 
+export const appHeader = {
+        fontFamily: FontFamily.leagueSpartan,
+        fontWeight: "400",
+        fontSize: 40,
+        lineHeight: 30,
+        letterSpacing: 0,
+      } as const;
+
+export const header = {
+        fontFamily: FontFamily.leagueSpartan,
+        fontWeight: "400",
+        fontSize: 40,
+        lineHeight: 30,
+        letterSpacing: 0,
+      } as const;
+
+export const subHeader = {
+        fontFamily: FontFamily.leagueSpartan,
+        fontWeight: "400",
+        fontSize: 25,
+        lineHeight: 30,
+        letterSpacing: 0,
+      } as const;
+
+export const bodyHeaderAlternate = {
+        fontFamily: FontFamily.leagueSpartan,
+        fontWeight: "400",
+        fontSize: 20,
+        lineHeight: 30,
+        letterSpacing: 0,
+      } as const;
+
+export const bodyHeader = {
+        fontFamily: FontFamily.avenirHeavy,
+        fontWeight: "800",
+        fontSize: 15,
+        lineHeight: 18,
+        letterSpacing: -0.3,
+      } as const;
+
+export const taskbar = {
+        fontFamily: FontFamily.system,
+        fontWeight: "600",
+        fontSize: 17,
+        lineHeight: 22,
+        letterSpacing: 0,
+      } as const;
+
+export const infoBubble = {
+        fontFamily: FontFamily.workSans,
+        fontWeight: "400",
+        fontSize: 10,
+        lineHeight: 10,
+        letterSpacing: -0.2,
+      } as const;
+
+export const body = {
+        fontFamily: FontFamily.avenirBook,
+        fontWeight: "400",
+        fontSize: 14,
+        lineHeight: 14,
+        letterSpacing: -0.3,
+      } as const;
+
+export const settingsHeader = {
+        fontFamily: FontFamily.nunitoSans,
+        fontWeight: "400",
+        fontSize: 15,
+        lineHeight: 15,
+        letterSpacing: 0,
+      } as const;
+
 const brand = {
   turquoise: "#72C6B7",
   black: "#000000",
@@ -105,62 +177,21 @@ export const theme = {
   },
   fonts: configureFonts({
     config: {
-      appHeader: {
-        fontFamily: FontFamily.leagueSpartan,
-        fontWeight: "400",
-        fontSize: 40,
-        lineHeight: 30,
-        letterSpacing: 0,
-      },
-      header: {
-        fontFamily: FontFamily.leagueSpartan,
-        fontWeight: "400",
-        fontSize: 30,
-        lineHeight: 30,
-        letterSpacing: 0,
-      },
-      subHeader: {
-        fontFamily: FontFamily.leagueSpartan,
-        fontWeight: "400",
-        fontSize: 25,
-        lineHeight: 30,
-        letterSpacing: 0,
-      },
-      bodyHeader: {
-        fontFamily: FontFamily.avenirHeavy,
-        fontWeight: "800",
-        fontSize: 15,
-        lineHeight: 15,
-        letterSpacing: -0.3,
-      },
-      taskbar: {
-        fontFamily: FontFamily.system,
-        fontWeight: "600",
-        fontSize: 17,
-        lineHeight: 22,
-        letterSpacing: 0,
-      },
-      infoBubble: {
-        fontFamily: FontFamily.workSans,
-        fontWeight: "400",
-        fontSize: 10,
-        lineHeight: 10,
-        letterSpacing: -0.2,
-      },
-      body: {
-        fontFamily: FontFamily.avenirBook,
-        fontWeight: "400",
-        fontSize: 14,
-        lineHeight: 14,
-        letterSpacing: -0.3,
-      },
-      settingsHeader: {
-        fontFamily: FontFamily.nunitoSans,
-        fontWeight: "400",
-        fontSize: 15,
-        lineHeight: 15,
-        letterSpacing: 0,
-      },
+      displayLarge: appHeader,
+      displayMedium: appHeader,
+      displaySmall: header,
+      headlineLarge: header,
+      headlineMedium: subHeader,
+      headlineSmall: subHeader,
+      titleLarge: taskbar,
+      titleMedium: bodyHeader,
+      titleSmall:	bodyHeaderAlternate,
+      labelLarge: bodyHeaderAlternate,
+      labelMedium: settingsHeader,
+      labelSmall: infoBubble,
+      bodyLarge: bodyHeaderAlternate,
+      bodyMedium: body,
+      bodySmall: infoBubble,
     },
   }),
   spacing: {

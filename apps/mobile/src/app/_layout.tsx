@@ -1,13 +1,13 @@
 import '@/global.css';
 
-import { DefaultTheme, ThemeProvider } from 'expo-router';
+import { DefaultTheme, ThemeProvider, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { useFonts } from 'expo-font';
 import { LeagueSpartan_400Regular } from '@expo-google-fonts/league-spartan';
 import { WorkSans_400Regular } from '@expo-google-fonts/work-sans';
-import { NunitoSans_400Regular } from '@expo-google-fonts/nunito-sans';
+import { NunitoSans_400Regular, NunitoSans_700Bold } from '@expo-google-fonts/nunito-sans';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import AppTabs from '@/components/app-tabs';
@@ -27,11 +27,12 @@ const navigationTheme = {
   },
 };
 
-export default function TabLayout() {
-  const [fontsLoaded] = useFonts({
+export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts({
     LeagueSpartan_400Regular,
     WorkSans_400Regular,
     NunitoSans_400Regular,
+    NunitoSans_700Bold,
   });
 
   useEffect(() => {
