@@ -61,4 +61,15 @@ describe('parseStoredDays', () => {
     const stored = { '2026-01-01': { date: '2026-01-01', mood: 'Happy' } };
     expect(parse(stored)).toEqual(stored);
   });
+
+  it.each([null, '', 'A note', 'n'.repeat(500)])('keeps valid notes %p', (notes) => {
+    const stored = { '2026-01-01': { date: '2026-01-01', flow: 'Heavy', notes } };
+    expect(parse(stored)).toEqual(stored);
+  });
+
+  it.each([42, {}, 'n'.repeat(501)])('removes invalid notes while keeping flow', (notes) => {
+    expect(parse({ '2026-01-01': { date: '2026-01-01', flow: 'Heavy', notes } })).toEqual({
+      '2026-01-01': { date: '2026-01-01', flow: 'Heavy' },
+    });
+  });
 });
