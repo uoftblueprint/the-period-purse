@@ -19,5 +19,8 @@
   ],
   "scripts": {
     "dev:server": "npm start --workspace api"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^15.0.2"
   }
 }

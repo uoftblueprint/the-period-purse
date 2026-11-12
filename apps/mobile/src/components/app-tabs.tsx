@@ -42,6 +42,13 @@ export default function AppTabs() {
         />
       </NativeTabs.Trigger>
 
+      {/* Temporarly added this to view settings item*/}
+      <NativeTabs.Trigger name="settings">
+        <NativeTabs.Trigger.Label>settings</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          src={require('@/assets/images/tabIcons/explore.png')}
+          renderingMode="template"
+        />
       {/* TODO: Remove this demo entry when logging is reachable from the real calendar route. */}
       <NativeTabs.Trigger name="logging-demo">
         <NativeTabs.Trigger.Label>Log UI</NativeTabs.Trigger.Label>

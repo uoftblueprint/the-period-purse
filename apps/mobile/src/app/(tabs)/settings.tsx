@@ -1,5 +1,18 @@
+
+/**
+ * TEMPORARY TEST SCREEN: not the final Settings page.
+ *
+ * Created to test and try the "Delete my data" flow while the real Settings screen and design guide are still being built.
+ *
+ * Notes:
+ * - The layout and styling here are placeholders for testing only.
+ * - Intend to replace this file's contents with the real Settings page (rendering
+ *   <DeleteDataItem /> inside it) once that screen exists.
+ */
+
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { List, Switch, useTheme } from 'react-native-paper';
+import { DeleteDataItem } from '@/features/settings/components/delete-data-item';
 
 /**
  * Clean chevron arrow using pure React Native styling so it doesn't
@@ -60,24 +73,7 @@ export default function SettingsScreen() {
       </List.Section>
 
       {/* Account Settings Section */}
-      <List.Section style={styles.section}>
-        <List.Subheader>Account settings</List.Subheader>
-
-        <List.Item
-          title="Delete Account"
-          accessibilityLabel="Delete Account"
-          accessibilityRole="button"
-          onPress={() => {
-            // Placeholder: Trigger delete account modal
-          }}
-          right={(props) => (
-            <List.Icon
-              {...props}
-              icon={({ color }) => <ChevronRight color={color} />}
-            />
-          )}
-          style={rowStyle}
-        />
+      <DeleteDataItem/>
       </List.Section>
     </ScrollView>
   );
