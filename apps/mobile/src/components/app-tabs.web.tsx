@@ -22,11 +22,11 @@ export default function AppTabs() {
       <TabSlot style={{ height: '100%' }} />
       <TabList asChild>
         <CustomTabList>
-          <TabTrigger name="home" href="/" asChild>
-            <TabButton>Home</TabButton>
+          <TabTrigger name="learn" href="/learn" asChild>
+            <TabButton>Learn</TabButton>
           </TabTrigger>
-          <TabTrigger name="explore" href="/explore" asChild>
-            <TabButton>Explore</TabButton>
+          <TabTrigger name="settings" href="/settings" asChild>
+            <TabButton>Settings</TabButton>
           </TabTrigger>
           {/* Temporarly added this to view the grid. Aim to integrate with Jadyn's learn page */}
           <TabTrigger name="product-grid" href="/product-grid" asChild>

@@ -15,22 +15,21 @@ export default function AppTabs() {
     <NativeTabs
       hidden={isLoggingDemo}
       backgroundColor={colors.background}
-      indicatorColor={colors.backgroundElement}
-      labelStyle={{ selected: { color: colors.text } }}>
-      <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/home.png')}
-          renderingMode="template"
-        />
+      indicatorColor="transparent"
+      tintColor={colors.tabActive}
+      iconColor={{ default: colors.tabInactive, selected: colors.tabActive }}
+      labelStyle={{
+        default: { color: colors.tabInactive },
+        selected: { color: colors.tabActive },
+      }}>
+      <NativeTabs.Trigger name="learn">
+        <NativeTabs.Trigger.Label>Learn</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="info.circle" md="info" />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="explore">
-        <NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
-          renderingMode="template"
-        />
+      <NativeTabs.Trigger name="settings">
+        <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="gearshape" md="settings" />
       </NativeTabs.Trigger>
 
       {/* Temporarly added this to view the grid. Aim to integrate with Jadyn's learn page */}
