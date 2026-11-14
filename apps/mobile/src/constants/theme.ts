@@ -21,7 +21,7 @@ export const appHeader = {
         fontFamily: FontFamily.leagueSpartan,
         fontWeight: "400",
         fontSize: 40,
-        lineHeight: 30,
+        lineHeight: 48,
         letterSpacing: 0,
       } as const;
 
@@ -29,7 +29,7 @@ export const header = {
         fontFamily: FontFamily.leagueSpartan,
         fontWeight: "400",
         fontSize: 40,
-        lineHeight: 30,
+        lineHeight: 48,
         letterSpacing: 0,
       } as const;
 
@@ -45,7 +45,7 @@ export const bodyHeaderAlternate = {
         fontFamily: FontFamily.leagueSpartan,
         fontWeight: "400",
         fontSize: 20,
-        lineHeight: 30,
+        lineHeight: 26,
         letterSpacing: 0,
       } as const;
 
@@ -69,7 +69,7 @@ export const infoBubble = {
         fontFamily: FontFamily.workSans,
         fontWeight: "400",
         fontSize: 10,
-        lineHeight: 10,
+        lineHeight: 14,
         letterSpacing: -0.2,
       } as const;
 
@@ -77,7 +77,7 @@ export const body = {
         fontFamily: FontFamily.avenirBook,
         fontWeight: "400",
         fontSize: 14,
-        lineHeight: 14,
+        lineHeight: 19,
         letterSpacing: -0.3,
       } as const;
 
@@ -85,7 +85,7 @@ export const settingsHeader = {
         fontFamily: FontFamily.nunitoSans,
         fontWeight: "400",
         fontSize: 15,
-        lineHeight: 15,
+        lineHeight: 20,
         letterSpacing: 0,
       } as const;
 
