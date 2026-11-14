@@ -145,6 +145,8 @@ export const theme = {
     ovulationDate: brand.lightTurquoise,
     majorButton: brand.red,
     text: brand.black,
+    tabActive: brand.darkTurquoise,
+    tabInactive: brand.darkGray,
 
     //Error
     error: brand.red,
