@@ -1,12 +1,12 @@
 import { Image } from 'expo-image';
-import { type Href, useRouter } from 'expo-router';
-import { Alert, Linking, StyleSheet, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Alert, Linking, Pressable, StyleSheet, View } from 'react-native';
 import { Text, TouchableRipple, useTheme } from 'react-native-paper';
 
 import { Spacing } from '@/constants/theme';
 
-const TERMS_ROUTE = '/terms-and-conditions' as Href;
-const PRIVACY_ROUTE = '/privacy-policy' as Href;
+const TERMS_ROUTE = '/terms-and-conditions';
+const PRIVACY_ROUTE = '/privacy-policy';
 
 const SOCIAL_LINKS = [
   {
@@ -53,16 +53,14 @@ export function Footer() {
     <View style={styles.footer}>
       <View style={styles.socialLinks}>
         {SOCIAL_LINKS.map((social) => (
-          <TouchableRipple
+          <Pressable
             key={social.name}
             accessibilityLabel={`Open The Period Purse on ${social.name}`}
             accessibilityRole="link"
-            borderless
             onPress={() => openSocialLink(social.url)}
-            rippleColor={theme.colors.primaryContainer}
-            style={styles.socialButton}>
+            style={({ pressed }) => [styles.socialButton, pressed && styles.socialButtonPressed]}>
             <Image source={social.icon} contentFit="contain" style={styles.socialIcon} />
-          </TouchableRipple>
+          </Pressable>
         ))}
       </View>
 
@@ -124,6 +122,9 @@ const styles = StyleSheet.create({
     height: 44,
     justifyContent: 'center',
     width: 44,
+  },
+  socialButtonPressed: {
+    opacity: 0.7,
   },
   socialIcon: {
     height: 24,
