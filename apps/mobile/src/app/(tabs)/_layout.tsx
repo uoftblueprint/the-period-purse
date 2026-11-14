@@ -1,5 +1,5 @@
 import AppTabs from '@/components/app-tabs';
 
-export default function TabLayout() {
+export default function TabsLayout() {
   return <AppTabs />;
 }
