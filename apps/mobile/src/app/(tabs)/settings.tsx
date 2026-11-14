@@ -73,7 +73,8 @@ export default function SettingsScreen() {
       </List.Section>
 
       {/* Account Settings Section */}
-      <DeleteDataItem/>
+      <List.Section style={styles.section}>
+        <DeleteDataItem />
       </List.Section>
     </ScrollView>
   );
