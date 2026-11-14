@@ -1,7 +1,7 @@
 /** Colours used to represent tracked values on the calendar and its legends */
 export const FILTER_COLOURS = {
   FLOW: {
-    HEAVY: '#D42629',
+    HEAVY: '#D32729',
     MEDIUM: '#E44545',
     LIGHT: '#E3797A',
     SPOTTING: '#FFBEBF',

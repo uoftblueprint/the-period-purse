@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { Image } from 'expo-image';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, Surface, Text, useTheme } from 'react-native-paper';
@@ -9,26 +10,29 @@ import { Spacing } from '@/constants/theme';
 const LEGEND_SECTIONS = [
   {
     title: 'Period Flow',
+    icon: require('../../assets/icons/flow/flow-medium.svg'),
     items: [
       { label: 'Heavy', colour: FILTER_COLOURS.FLOW.HEAVY },
       { label: 'Medium', colour: FILTER_COLOURS.FLOW.MEDIUM },
       { label: 'Light', colour: FILTER_COLOURS.FLOW.LIGHT },
       { label: 'Spotting', colour: FILTER_COLOURS.FLOW.SPOTTING },
-      { label: 'None', colour: FILTER_COLOURS.FLOW.NONE },
+      { label: 'No flow', colour: FILTER_COLOURS.FLOW.NONE },
     ],
   },
   {
     title: 'Cramps',
+    icon: require('../../assets/icons/cramps/cramps-terrible.svg'),
     items: [
       { label: 'Terrible', colour: FILTER_COLOURS.CRAMPS.TERRIBLE },
       { label: 'Bad', colour: FILTER_COLOURS.CRAMPS.BAD },
       { label: 'Neutral', colour: FILTER_COLOURS.CRAMPS.NEUTRAL },
       { label: 'Good', colour: FILTER_COLOURS.CRAMPS.GOOD },
-      { label: 'None', colour: FILTER_COLOURS.CRAMPS.NONE },
+      { label: 'No cramps', colour: FILTER_COLOURS.CRAMPS.NONE },
     ],
   },
   {
     title: 'Sleep',
+    icon: require('../../assets/icons/sleep/sleep.svg'),
     items: [
       { label: 'More than 10 hours', colour: FILTER_COLOURS.SLEEP.HEAVY },
       { label: '8–10 hours', colour: FILTER_COLOURS.SLEEP.MEDIUM },
@@ -38,6 +42,7 @@ const LEGEND_SECTIONS = [
   },
   {
     title: 'Exercise',
+    icon: require('../../assets/icons/exercise/exercise-icon.svg'),
     items: [
       { label: 'More than 60 minutes', colour: FILTER_COLOURS.EXERCISE.HEAVY },
       { label: '40–60 minutes', colour: FILTER_COLOURS.EXERCISE.MEDIUM },
@@ -64,9 +69,19 @@ export default function LegendScreen() {
             key={section.title}
             elevation={1}
             style={[styles.card, { backgroundColor: theme.colors.surface }]}>
-            <Text accessibilityRole="header" style={styles.sectionTitle} variant="titleMedium">
-              {section.title}
-            </Text>
+            <View style={styles.sectionHeading}>
+              <Image
+                accessibilityElementsHidden
+                contentFit="contain"
+                importantForAccessibility="no"
+                source={section.icon}
+                style={styles.sectionIcon}
+                tintColor={theme.colors.onSurface}
+              />
+              <Text accessibilityRole="header" variant="titleMedium">
+                {section.title}
+              </Text>
+            </View>
 
             <View style={styles.items}>
               {section.items.map((item) => (
@@ -101,8 +116,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: Spacing.three,
   },
-  sectionTitle: {
+  sectionHeading: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: Spacing.two,
     marginBottom: Spacing.three,
+  },
+  sectionIcon: {
+    height: 24,
+    width: 24,
   },
   items: {
     flexDirection: 'row',
