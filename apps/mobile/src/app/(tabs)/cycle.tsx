@@ -13,7 +13,7 @@ import {
 import { CycleCard } from '@/components/CycleCard';
 import { MinimizedHistoryCard, type PeriodInterval } from '@/components/CycleHistory';
 // import { Footer } from '@/components/Footer';
-import { getCurrentCycle, usePeriodHistory } from '@/features/periods';
+import { getCurrentCycle, getPeriodAverages, usePeriodHistory } from '@/features/periods';
 
 const cycleTheme = {
     ...MD3LightTheme,
@@ -100,7 +100,12 @@ function CyclePage() {
         LeagueSpartanSemiBold: LeagueSpartan_600SemiBold,
         LeagueSpartanBold: LeagueSpartan_700Bold,
     });
-    const avgCycleLength = DEFAULTS.AVG_CYCLE_LENGTH;
+    const averages = getPeriodAverages(
+        periods,
+        DEFAULTS.AVG_PERIOD_LENGTH,
+        DEFAULTS.AVG_CYCLE_LENGTH,
+    );
+    const avgCycleLength = averages.cycleLength;
     const currentCycle = getCurrentCycle(periods, getTodayDate(), avgCycleLength);
     const intervals: PeriodInterval[] = periods.map((period) => ({
         start: formatPeriodDate(period.start),
@@ -127,7 +132,7 @@ function CyclePage() {
                 <View style={styles.cardContainer}>
                     <InfoCard
                         header="Average period"
-                        days={DEFAULTS.AVG_PERIOD_LENGTH}
+                        days={averages.periodLength}
                         backgroundColor={theme.colors.secondaryContainer}>
                         <SymbolView
                             name={{ ios: 'drop.fill', android: 'water_drop', web: 'water_drop' }}
