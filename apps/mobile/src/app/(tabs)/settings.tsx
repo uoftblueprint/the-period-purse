@@ -1,4 +1,6 @@
-
+/**
+ * Settings Page
+ */
 
 
 import { ScrollView, StyleSheet, View } from 'react-native';
