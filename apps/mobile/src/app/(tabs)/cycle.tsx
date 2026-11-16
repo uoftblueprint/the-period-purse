@@ -107,6 +107,12 @@ function CyclePage() {
     );
     const avgCycleLength = averages.cycleLength;
     const currentCycle = getCurrentCycle(periods, getTodayDate(), avgCycleLength);
+    const periodLength = getPeriodAverages(
+        periods,
+        DEFAULTS.AVG_PERIOD_LENGTH,
+        DEFAULTS.AVG_CYCLE_LENGTH,
+        { excludeLatestPeriod: currentCycle.isOnPeriod },
+    ).periodLength;
     const intervals: PeriodInterval[] = periods.map((period) => ({
         start: formatPeriodDate(period.start),
         end: formatPeriodDate(period.end),
@@ -132,7 +138,7 @@ function CyclePage() {
                 <View style={styles.cardContainer}>
                     <InfoCard
                         header="Average period"
-                        days={averages.periodLength}
+                        days={periodLength}
                         backgroundColor={theme.colors.secondaryContainer}>
                         <SymbolView
                             name={{ ios: 'drop.fill', android: 'water_drop', web: 'water_drop' }}

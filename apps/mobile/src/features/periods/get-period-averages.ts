@@ -11,14 +11,16 @@ export function getPeriodAverages(
   periods: readonly Period[],
   fallbackPeriodLength = 5,
   fallbackCycleLength = 28,
+  options: { excludeLatestPeriod?: boolean } = {},
 ): { periodLength: number; cycleLength: number } {
+  const periodLengths = options.excludeLatestPeriod ? periods.slice(1) : periods;
   if (periods.length === 0) {
     return { periodLength: fallbackPeriodLength, cycleLength: fallbackCycleLength };
   }
 
-  const periodLength = Math.round(
-    periods.reduce((total, period) => total + period.days, 0) / periods.length,
-  );
+  const periodLength = periodLengths.length
+    ? Math.round(periodLengths.reduce((total, period) => total + period.days, 0) / periodLengths.length)
+    : fallbackPeriodLength;
   const cycleLengths = periods.slice(1).map((period, index) =>
     dayNumber(periods[index].start) - dayNumber(period.start),
   );

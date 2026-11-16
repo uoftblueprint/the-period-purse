@@ -28,4 +28,19 @@ describe('getPeriodAverages', () => {
   it('uses the cycle fallback until two periods are available', () => {
     expect(getPeriodAverages(periods.slice(0, 1))).toEqual({ periodLength: 6, cycleLength: 28 });
   });
+
+  it('excludes the latest in-progress period length but keeps all cycle start dates', () => {
+    const periodsWithLongActivePeriod = [{ ...periods[0], days: 9 }, ...periods.slice(1)];
+    expect(getPeriodAverages(periodsWithLongActivePeriod, 5, 28, { excludeLatestPeriod: true })).toEqual({
+      periodLength: 5,
+      cycleLength: 28,
+    });
+  });
+
+  it('uses the period fallback when the only period is in progress', () => {
+    expect(getPeriodAverages(periods.slice(0, 1), 4, 30, { excludeLatestPeriod: true })).toEqual({
+      periodLength: 4,
+      cycleLength: 30,
+    });
+  });
 });
