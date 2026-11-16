@@ -1,12 +1,10 @@
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { usePathname } from 'expo-router';
-import { useColorScheme } from 'react-native';
 
-import { Colors } from '@/constants/theme';
+import { theme } from '@/constants/theme';
 
 export default function AppTabs() {
-  const scheme = useColorScheme();
-  const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
+  const colors = theme.colors;
   // TODO: Remove this demo-only tab hiding when the final app navigation replaces
   // CalendarLogScreen's compact Home / Explore / Log UI row.
   const isLoggingDemo = usePathname() === '/logging-demo';
@@ -41,6 +39,14 @@ export default function AppTabs() {
         />
       </NativeTabs.Trigger>
 
+      {/* Temporarly added this to view settings item*/}
+      <NativeTabs.Trigger name="settings">
+        <NativeTabs.Trigger.Label>settings</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          src={require('@/assets/images/tabIcons/explore.png')}
+          renderingMode="template"
+        />
+      </NativeTabs.Trigger>  
       {/* TODO: Remove this demo entry when logging is reachable from the real calendar route. */}
       <NativeTabs.Trigger name="logging-demo">
         <NativeTabs.Trigger.Label>Log UI</NativeTabs.Trigger.Label>
