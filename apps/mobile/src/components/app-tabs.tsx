@@ -6,7 +6,7 @@ import { theme } from '@/constants/theme';
 export default function AppTabs() {
   const colors = theme.colors;
   // TODO: Remove this demo-only tab hiding when the final app navigation replaces
-  // CalendarLogScreen's compact Home / Explore / Log UI row.
+  // CalendarLogScreen's compact Learn / Settings / Products / Log UI row.
   const isLoggingDemo = usePathname() === '/logging-demo';
 
   return (
@@ -39,14 +39,6 @@ export default function AppTabs() {
         />
       </NativeTabs.Trigger>
 
-      {/* Temporarly added this to view settings item*/}
-      <NativeTabs.Trigger name="settings">
-        <NativeTabs.Trigger.Label>settings</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
-          renderingMode="template"
-        />
-      </NativeTabs.Trigger>  
       {/* TODO: Remove this demo entry when logging is reachable from the real calendar route. */}
       <NativeTabs.Trigger name="logging-demo">
         <NativeTabs.Trigger.Label>Log UI</NativeTabs.Trigger.Label>

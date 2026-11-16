@@ -12,7 +12,6 @@ import {
 
 import { CycleCard } from '@/components/CycleCard';
 import { MinimizedHistoryCard, type PeriodInterval } from '@/components/CycleHistory';
-import { Footer } from '@/components/Footer';
 
 const DEFAULTS = {
     AVG_PERIOD_LENGTH: 5,
@@ -105,9 +104,6 @@ export default function CycleScreen() {
                     <MinimizedHistoryCard intervals={DEFAULTS.INTERVALS} onPeriod={false} />
                 </View>
 
-                <View style={styles.footerContainer}>
-                    <Footer />
-                </View>
             </ScrollView>
         </SafeAreaView>
     );
@@ -177,8 +173,5 @@ const styles = StyleSheet.create({
     },
     element: {
         width: '100%',
-    },
-    footerContainer: {
-        marginBottom: 70,
     },
 });

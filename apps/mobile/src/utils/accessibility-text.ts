@@ -41,7 +41,8 @@ export const LOGGING_STATUS_TEXT = {
 
 export const CALENDAR_LOG_ACCESSIBILITY_TEXT = {
   LOADING_FLOWS: 'Loading recorded flows',
-  HOME_TAB: 'Home',
-  EXPLORE_TAB: 'Explore',
+  LEARN_TAB: 'Learn',
+  SETTINGS_TAB: 'Settings',
+  PRODUCTS_TAB: 'Products',
   LOG_UI_TAB: 'Log UI',
 } as const;

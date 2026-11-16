@@ -1,19 +1,20 @@
 import { useCallback, useImperativeHandle, useMemo, useRef, useState, type Ref } from 'react';
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Button, Dialog, Portal, Text } from 'react-native-paper';
+import { ActivityIndicator, Button, Dialog, Portal, Text, ThemeProvider, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CheckmarkIcon from '@/assets/icons/logging/period-dates/checkmark.svg';
 import CloseIcon from '@/assets/icons/logging/shared/close_icon.svg';
 import { MonthCalendar } from '@/components/month-calendar';
-import { LoggingColors } from '@/constants/theme';
+import { LoggingColors, type AppTheme } from '@/constants/theme';
 import { getLoggedDays } from '@/features/daily-log';
 import { logPeriodDates } from '@/features/periods';
 
 import { createDiscardConfirmation } from '../shared/discard-confirmation/discard-confirmation';
 import { toLocalDateKey } from '../symptoms/symptom-draft';
 import { useLogLoad, useLogSubmission } from '../shared/use-logging-request';
+import { calendarTheme } from '../shared/calendar-theme';
 import { emptyPeriodDatesDraft, getPeriodDateChanges, periodDatesDraftFromLogs, togglePeriodDate, type PeriodDatesDraft } from './period-dates-draft';
 import { LOGGING_STATUS_TEXT, PERIOD_DATES_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
@@ -21,6 +22,8 @@ export type PeriodDateSelectorHandle = { requestClose: () => void };
 type Props = { initialDate: string; onClose: () => void; ref?: Ref<PeriodDateSelectorHandle> };
 /** Edit the stored period baseline and persist only marked/unmarked differences. */
 export function PeriodDateSelector({ initialDate, onClose, ref }: Props) {
+  const theme = useTheme<AppTheme>();
+  const styles = createStyles(theme);
   const insets = useSafeAreaInsets();
   const loadRecords = useCallback(async () => periodDatesDraftFromLogs(await getLoggedDays()), []);
   const { data: baseline, loading, error: loadError, reload } = useLogLoad(loadRecords);
@@ -55,30 +58,32 @@ export function PeriodDateSelector({ initialDate, onClose, ref }: Props) {
     <View style={[styles.screen, { paddingTop: insets.top }]}>
       <View style={styles.topBar}>
         <Pressable accessibilityRole="button" accessibilityLabel={PERIOD_DATES_ACCESSIBILITY_TEXT.CLOSE} disabled={submitting} accessibilityState={{ disabled: submitting }} onPress={() => discard.requestAction(onClose, dirty)} style={styles.closeButton}>
-          <Image source={CloseIcon} tintColor={LoggingColors.text} contentFit="contain" style={styles.closeIcon} />
+          <Image source={CloseIcon} tintColor={theme.colors.onSurface} contentFit="contain" style={styles.closeIcon} />
         </Pressable>
       </View>
       <View style={styles.heading}>
-        <Text variant="titleLarge" accessibilityRole="header" style={styles.title}>Tap date to log period</Text>
+        <Text variant="titleSmall" accessibilityRole="header" style={styles.title}>Tap date to log period</Text>
         <Text variant="bodyMedium" style={styles.subtitle}>Selected dates will have their Flow level set to medium.</Text>
       </View>
       <View style={styles.calendar}>
-        {loading ? <ActivityIndicator color={LoggingColors.action} accessibilityLabel={LOGGING_STATUS_TEXT.LOADING} /> : loadError ? (
+        {loading ? <ActivityIndicator color={theme.colors.primary} accessibilityLabel={LOGGING_STATUS_TEXT.LOADING} /> : loadError ? (
           <View style={styles.loadError}>
-            <Text accessibilityRole="alert" style={styles.subtitle}>{LOGGING_STATUS_TEXT.LOAD_ERROR}</Text>
+            <Text accessibilityRole="alert" style={styles.error}>{LOGGING_STATUS_TEXT.LOAD_ERROR}</Text>
             <Button onPress={reload}>{LOGGING_STATUS_TEXT.RETRY}</Button>
           </View>
         ) : <View style={styles.calendarContent} pointerEvents={submitting ? 'none' : 'auto'}>
-        <MonthCalendar
-          initialDate={initialDate}
-          markedDates={calendarMarks}
-          markedDatesPurpose="flow-selection"
-          onDayPress={handleDayPress}
-        />
+          <ThemeProvider theme={calendarTheme}>
+            <MonthCalendar
+              initialDate={initialDate}
+              markedDates={calendarMarks}
+              markedDatesPurpose="flow-selection"
+              onDayPress={handleDayPress}
+            />
+          </ThemeProvider>
         </View>}
       </View>
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) + 14 }]}>
-        {saveError && <Text accessibilityRole="alert" accessibilityLiveRegion="assertive" style={styles.subtitle}>{LOGGING_STATUS_TEXT.SAVE_ERROR}</Text>}
+        {saveError && <Text accessibilityRole="alert" accessibilityLiveRegion="assertive" style={styles.error}>{LOGGING_STATUS_TEXT.SAVE_ERROR}</Text>}
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={PERIOD_DATES_ACCESSIBILITY_TEXT.FINISH}
@@ -87,7 +92,7 @@ export function PeriodDateSelector({ initialDate, onClose, ref }: Props) {
           disabled={!dirty || busy}
           onPress={save}
           style={[styles.checkmarkButton, (!dirty || busy) && styles.disabledCheckmark]}>
-          {submitting ? <ActivityIndicator color={LoggingColors.surface} /> : <Image source={CheckmarkIcon} contentFit="contain" style={styles.checkmarkIcon} />}
+          {submitting ? <ActivityIndicator color={theme.colors.surface} /> : <Image source={CheckmarkIcon} tintColor={theme.colors.surface} contentFit="contain" style={styles.checkmarkIcon} />}
         </Pressable>
       </View>
       <Portal>
@@ -104,19 +109,20 @@ export function PeriodDateSelector({ initialDate, onClose, ref }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: LoggingColors.surface },
-  topBar: { paddingHorizontal: 12, alignItems: 'flex-start' },
+const createStyles = (theme: AppTheme) => StyleSheet.create({
+  screen: { flex: 1, backgroundColor: theme.colors.background },
+  topBar: { paddingHorizontal: theme.spacing.two, alignItems: 'flex-start' },
   closeButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   closeIcon: { width: 18, height: 18 },
-  heading: { paddingHorizontal: 20, paddingTop: 6, paddingBottom: 14, alignItems: 'center', gap: 6 },
-  title: { color: LoggingColors.text, fontSize: 20, fontWeight: '600', textAlign: 'center' },
-  subtitle: { color: LoggingColors.muted, textAlign: 'center' },
+  heading: { paddingHorizontal: theme.spacing.four, paddingTop: theme.spacing.two, paddingBottom: theme.spacing.three, alignItems: 'center', gap: theme.spacing.two },
+  title: { color: theme.colors.onSurface, textAlign: 'center' },
+  subtitle: { color: theme.colors.onBackground, textAlign: 'center' },
+  error: { color: theme.colors.error },
   calendar: { flex: 1, paddingHorizontal: 8 },
   calendarContent: { flex: 1 },
-  loadError: { padding: 20, gap: 12 },
-  footer: { paddingTop: 14, paddingHorizontal: 32, alignItems: 'flex-end', gap: 12 },
-  checkmarkButton: { width: 60, height: 60, borderRadius: 30, backgroundColor: LoggingColors.action, alignItems: 'center', justifyContent: 'center', shadowColor: '#000000', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 4 },
+  loadError: { padding: theme.spacing.four, gap: theme.spacing.three },
+  footer: { paddingTop: theme.spacing.three, paddingHorizontal: theme.spacing.five, alignItems: 'flex-end', gap: theme.spacing.three },
+  checkmarkButton: { width: 60, height: 60, borderRadius: theme.radii.full, backgroundColor: theme.colors.majorButton, alignItems: 'center', justifyContent: 'center', shadowColor: theme.colors.shadow, shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 4 },
   disabledCheckmark: { opacity: 0.4 },
   checkmarkIcon: { width: 23, height: 18 },
 });
