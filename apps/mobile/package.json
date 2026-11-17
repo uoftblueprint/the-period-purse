@@ -55,8 +55,7 @@
   "jest": {
     "preset": "jest-expo",
     "moduleNameMapper": {
-      "^react-native$": "<rootDir>/node_modules/react-native/index.js",
-      "^@/global\\.css$": "<rootDir>/jest/style-mock.js"
+      "^react-native$": "<rootDir>/node_modules/react-native/index.js"
     },
     "setupFiles": [
       "./jest.setup.ts"
