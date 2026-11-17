@@ -14,6 +14,7 @@ import { CycleCard } from '@/components/CycleCard';
 import { MinimizedHistoryCard, type PeriodInterval } from '@/components/CycleHistory';
 // import { Footer } from '@/components/Footer';
 import { getCurrentCycle, getPeriodAverages, usePeriodHistory } from '@/features/periods';
+import { useToday } from '@/hooks/use-today';
 
 const cycleTheme = {
     ...MD3LightTheme,
@@ -41,14 +42,6 @@ const DEFAULTS = {
     AVG_CYCLE_LENGTH: 28,
 };
 
-function getTodayDate(): string {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
 function formatPeriodDate(date: string): string {
     const [year, month, day] = date.split('-').map(Number);
     return new Date(year, month - 1, day).toLocaleDateString('en-US', {
@@ -64,7 +57,7 @@ function InfoCard({
     children,
 }: {
     header: string;
-    days: number;
+    days: number | null;
     backgroundColor: string;
     children: React.ReactNode;
 }) {
@@ -76,7 +69,7 @@ function InfoCard({
             <View style={styles.infoContent}>
                 {children}
                 <Text style={[styles.daysText, { color: theme.colors.onSurface }]}>
-                    {days} <Text style={[styles.daysUnit, { color: theme.colors.onSurface }]}>days</Text>
+                    {days === null ? '—' : <>{days} <Text style={[styles.daysUnit, { color: theme.colors.onSurface }]}>days</Text></>}
                 </Text>
             </View>
         </View>
@@ -93,7 +86,8 @@ export default function CycleScreen() {
 
 function CyclePage() {
     const theme = useTheme();
-    const { periods } = usePeriodHistory();
+    const { periods, isLoading, error } = usePeriodHistory();
+    const today = useToday();
     const [fontsLoaded] = useFonts({
         LeagueSpartanRegular: LeagueSpartan_400Regular,
         LeagueSpartanMedium: LeagueSpartan_500Medium,
@@ -106,7 +100,8 @@ function CyclePage() {
         DEFAULTS.AVG_CYCLE_LENGTH,
     );
     const avgCycleLength = averages.cycleLength;
-    const currentCycle = getCurrentCycle(periods, getTodayDate(), avgCycleLength);
+    const currentCycle = getCurrentCycle(periods, today, avgCycleLength);
+    const completedPeriodCount = periods.length - (currentCycle.isOnPeriod ? 1 : 0);
     const periodLength = getPeriodAverages(
         periods,
         DEFAULTS.AVG_PERIOD_LENGTH,
@@ -132,13 +127,15 @@ function CyclePage() {
                     daysSinceLastPeriod={currentCycle.daysSinceLastPeriod}
                     cycleDay={currentCycle.cycleDay}
                     cycleDonutPercent={currentCycle.cycleDonutPercent}
+                    isLoading={isLoading}
+                    hasError={error !== null}
                     showTip={false}
                 />
 
                 <View style={styles.cardContainer}>
                     <InfoCard
                         header="Average period"
-                        days={periodLength}
+                        days={completedPeriodCount > 0 ? periodLength : null}
                         backgroundColor={theme.colors.secondaryContainer}>
                         <SymbolView
                             name={{ ios: 'drop.fill', android: 'water_drop', web: 'water_drop' }}
@@ -148,7 +145,7 @@ function CyclePage() {
                     </InfoCard>
                     <InfoCard
                         header="Average cycle"
-                        days={avgCycleLength}
+                        days={periods.length > 1 ? avgCycleLength : null}
                         backgroundColor={theme.colors.secondary}>
                         <SymbolView
                             name={{ ios: 'calendar', android: 'calendar_month', web: 'calendar_month' }}

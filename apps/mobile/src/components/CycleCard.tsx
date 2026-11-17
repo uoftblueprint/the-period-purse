@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
 type CycleCardProps = {
@@ -7,6 +7,8 @@ type CycleCardProps = {
     daysSinceLastPeriod: number | null;
     cycleDay: number | null;
     cycleDonutPercent: number | null;
+    isLoading: boolean;
+    hasError: boolean;
     showTip: boolean;
 };
 
@@ -18,6 +20,8 @@ export function CycleCard({
     daysSinceLastPeriod,
     cycleDay,
     cycleDonutPercent,
+    isLoading,
+    hasError,
     showTip,
 }: CycleCardProps) {
     const theme = useTheme();
@@ -26,15 +30,23 @@ export function CycleCard({
         <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
             <View style={styles.cycleDetails}>
                 <Text style={[styles.header, { color: theme.colors.onSurface }]}>Current Cycle:</Text>
-                <Cycle
-                    isOnPeriod={isOnPeriod}
-                    periodDays={periodDays}
-                    daysSinceLastPeriod={daysSinceLastPeriod}
-                    showTip={showTip}
-                />
-                <Pressable accessibilityRole="button" style={[styles.logButton, { backgroundColor: theme.colors.primary }]}>
-                    <Text style={[styles.logButtonText, { color: theme.colors.onPrimary }]}>Log Period</Text>
-                </Pressable>
+                {isLoading ? (
+                    <ActivityIndicator accessibilityLabel="Loading cycle data" style={styles.status} />
+                ) : hasError ? (
+                    <Text style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}>Couldn&apos;t load your cycle data.</Text>
+                ) : (
+                    <>
+                        <Cycle
+                            isOnPeriod={isOnPeriod}
+                            periodDays={periodDays}
+                            daysSinceLastPeriod={daysSinceLastPeriod}
+                            showTip={showTip}
+                        />
+                        <Pressable accessibilityRole="button" style={[styles.logButton, { backgroundColor: theme.colors.primary }]}>
+                            <Text style={[styles.logButtonText, { color: theme.colors.onPrimary }]}>Log Period</Text>
+                        </Pressable>
+                    </>
+                )}
             </View>
             <View
                 style={[styles.cycleRing, { borderColor: theme.colors.primary, backgroundColor: theme.colors.surface }]}
@@ -121,6 +133,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 12,
         marginBottom: 8,
+    },
+    status: {
+        marginTop: 24,
+        marginBottom: 32,
+    },
+    statusText: {
+        fontFamily: 'LeagueSpartanRegular',
+        fontSize: 15,
+        lineHeight: 20,
+        marginTop: 20,
+        marginBottom: 20,
+        textAlign: 'center',
     },
     cycleNumberRow: {
         flexDirection: 'column',
