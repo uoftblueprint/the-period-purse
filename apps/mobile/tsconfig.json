@@ -4,6 +4,7 @@
     "strict": true,
     "types": ["jest"],
     "paths": {
+      "react-native": ["./node_modules/react-native/types_generated/index.d.ts"],
       "@/assets/*": [
         "./assets/*"
       ],

@@ -1,9 +1,9 @@
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { Alert, Linking, Pressable, StyleSheet, View } from 'react-native';
-import { Text, TouchableRipple, useTheme } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 
-import { Spacing } from '@/constants/theme';
+import { theme as appTheme } from '@/constants/theme';
 
 const TERMS_ROUTE = '/terms-and-conditions';
 const PRIVACY_ROUTE = '/privacy-policy';
@@ -58,7 +58,7 @@ export function Footer() {
             accessibilityLabel={`Open The Period Purse on ${social.name}`}
             accessibilityRole="link"
             onPress={() => openSocialLink(social.url)}
-            style={({ pressed }) => [styles.socialButton, pressed && styles.socialButtonPressed]}>
+            style={({ pressed }) => [styles.socialButton, pressed && styles.pressed]}>
             <Image source={social.icon} contentFit="contain" style={styles.socialIcon} />
           </Pressable>
         ))}
@@ -71,33 +71,29 @@ export function Footer() {
       </Text>
 
       <View style={styles.legalLinks}>
-        <TouchableRipple
+        <Pressable
           accessibilityLabel="Open Terms and Conditions"
           accessibilityRole="link"
-          borderless
           onPress={() => router.push(TERMS_ROUTE)}
-          rippleColor={theme.colors.primaryContainer}
-          style={styles.legalButton}>
-          <Text style={[styles.legalLinkText, { color: theme.colors.primary }]} variant="bodyMedium">
+          style={({ pressed }) => [styles.legalButton, pressed && styles.pressed]}>
+          <Text style={[styles.legalLinkText, { color: theme.colors.onBackground }]} variant="bodyMedium">
             Terms and Conditions
           </Text>
-        </TouchableRipple>
+        </Pressable>
 
         <Text style={{ color: theme.colors.onSurfaceVariant }} variant="bodyMedium">
           {' and '}
         </Text>
 
-        <TouchableRipple
+        <Pressable
           accessibilityLabel="Open Privacy Policy"
           accessibilityRole="link"
-          borderless
           onPress={() => router.push(PRIVACY_ROUTE)}
-          rippleColor={theme.colors.primaryContainer}
-          style={styles.legalButton}>
-          <Text style={[styles.legalLinkText, { color: theme.colors.primary }]} variant="bodyMedium">
+          style={({ pressed }) => [styles.legalButton, pressed && styles.pressed]}>
+          <Text style={[styles.legalLinkText, { color: theme.colors.onBackground }]} variant="bodyMedium">
             Privacy Policy
           </Text>
-        </TouchableRipple>
+        </Pressable>
       </View>
     </View>
   );
@@ -106,15 +102,15 @@ export function Footer() {
 const styles = StyleSheet.create({
   footer: {
     alignItems: 'center',
-    gap: Spacing.two,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
+    gap: appTheme.spacing.two,
+    paddingHorizontal: appTheme.spacing.three,
+    paddingVertical: appTheme.spacing.four,
   },
   socialLinks: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: Spacing.two,
+    gap: appTheme.spacing.two,
   },
   socialButton: {
     alignItems: 'center',
@@ -123,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 44,
   },
-  socialButtonPressed: {
+  pressed: {
     opacity: 0.7,
   },
   socialIcon: {
@@ -144,7 +140,7 @@ const styles = StyleSheet.create({
     minHeight: 44,
   },
   legalLinkText: {
-    paddingVertical: Spacing.two,
+    paddingVertical: appTheme.spacing.two,
     textDecorationLine: 'underline',
   },
 });
