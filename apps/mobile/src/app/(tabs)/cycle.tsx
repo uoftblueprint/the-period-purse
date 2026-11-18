@@ -2,6 +2,7 @@ import { SymbolView } from 'expo-symbols';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFonts } from 'expo-font';
+import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
     LeagueSpartan_400Regular,
@@ -13,6 +14,7 @@ import {
 import { CycleCard } from '@/components/CycleCard';
 import { MinimizedHistoryCard, type PeriodInterval } from '@/components/CycleHistory';
 import { Footer } from '@/components/footer';
+import { theme, type AppTheme } from '@/constants/theme';
 
 const DEFAULTS = {
     AVG_PERIOD_LENGTH: 5,
@@ -37,13 +39,15 @@ function InfoCard({
     backgroundColor: string;
     children: React.ReactNode;
 }) {
+    const theme = useTheme<AppTheme>();
+
     return (
         <View style={[styles.infoCard, { backgroundColor }]}>
-            <Text style={styles.infoHeader}>{header}</Text>
+            <Text style={[styles.infoHeader, { color: theme.colors.onSurface }]}>{header}</Text>
             <View style={styles.infoContent}>
                 {children}
-                <Text style={styles.daysText}>
-                    {days} <Text style={styles.daysUnit}>days</Text>
+                <Text style={[styles.daysText, { color: theme.colors.onSurface }]}>
+                    {days} <Text style={[styles.daysUnit, { color: theme.colors.onSurface }]}>days</Text>
                 </Text>
             </View>
         </View>
@@ -51,6 +55,7 @@ function InfoCard({
 }
 
 export default function CycleScreen() {
+    const theme = useTheme<AppTheme>();
     const [fontsLoaded] = useFonts({
         LeagueSpartanRegular: LeagueSpartan_400Regular,
         LeagueSpartanMedium: LeagueSpartan_500Medium,
@@ -67,9 +72,9 @@ export default function CycleScreen() {
     if (!loaded || !fontsLoaded) return null;
 
     return (
-        <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.background }]} edges={['top']}>
             <ScrollView contentContainerStyle={styles.container}>
-                <Text style={styles.pageTitle}>Cycle Tracking:</Text>
+                <Text style={[styles.pageTitle, { color: theme.colors.onBackground }]}>Cycle Tracking:</Text>
 
                 <CycleCard
                     periodDays={periodDays}
@@ -82,21 +87,21 @@ export default function CycleScreen() {
                     <InfoCard
                         header="Average period"
                         days={avgPeriodLength}
-                        backgroundColor="#FFDBDB">
+                        backgroundColor={theme.colors.surfaceVariant}>
                         <SymbolView
                             name={{ ios: 'drop.fill', android: 'water_drop', web: 'water_drop' }}
                             size={42}
-                            tintColor="#000000"
+                            tintColor={theme.colors.onSurface}
                         />
                     </InfoCard>
                     <InfoCard
                         header="Average cycle"
                         days={avgCycleLength}
-                        backgroundColor="#B9E0D8">
+                        backgroundColor={theme.colors.surfaceVariant}>
                         <SymbolView
                             name={{ ios: 'calendar', android: 'calendar_month', web: 'calendar_month' }}
                             size={42}
-                            tintColor="#000000"
+                            tintColor={theme.colors.onSurface}
                         />
                     </InfoCard>
                 </View>
@@ -116,44 +121,43 @@ export default function CycleScreen() {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#F8C5D0',
     },
     container: {
         width: '100%',
         maxWidth: 620,
         alignSelf: 'center',
         minHeight: '100%',
-        paddingHorizontal: 20,
-        paddingTop: 24,
-        paddingBottom: 26,
-        gap: 24,
+        paddingHorizontal: theme.spacing.three,
+        paddingTop: theme.spacing.four,
+        paddingBottom: theme.spacing.four,
+        gap: theme.spacing.three,
     },
     pageTitle: {
         fontFamily: 'LeagueSpartanMedium',
-        color: '#111111',
         fontSize: 28,
         lineHeight: 36,
         fontWeight: '500',
+        textAlign: 'center',
     },
     cardContainer: {
         flexDirection: 'row',
-        gap: 18,
+        gap: theme.spacing.two,
     },
     infoCard: {
         flex: 1,
         minHeight: 132,
-        borderRadius: 18,
-        paddingHorizontal: 16,
-        paddingVertical: 16,
+        borderRadius: theme.radii.md,
+        paddingHorizontal: theme.spacing.two,
+        paddingVertical: theme.spacing.two,
         alignItems: 'center',
         justifyContent: 'space-between',
     },
     infoHeader: {
         fontFamily: 'LeagueSpartanMedium',
-        color: '#111111',
         fontSize: 14,
         fontWeight: '500',
         textAlign: 'center',
+        marginTop: theme.spacing.three,
     },
     infoContent: {
         flex: 1,
@@ -165,7 +169,6 @@ const styles = StyleSheet.create({
     },
     daysText: {
         fontFamily: 'LeagueSpartanMedium',
-        color: '#111111',
         fontSize: 17,
         lineHeight: 23,
         fontWeight: '500',
