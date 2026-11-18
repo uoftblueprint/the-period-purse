@@ -38,7 +38,7 @@ export function saveDays(days: readonly DailyLog[]): Promise<void> {
     listeners.forEach((listener) => listener());
   });
   // Keep the queue alive if this write fails; the caller still sees the error.
-  writeQueue = write.catch(() => {});
+  writeQueue = write.catch(() => { });
   return write;
 }
 
@@ -53,4 +53,24 @@ export function subscribeToDailyLog(listener: () => void): () => void {
   return () => {
     listeners.delete(listener);
   };
+}
+
+/**
+ * Deletes all locally stored daily logs.
+ *
+ * The deletion is serialized using the shared write queue, so any save
+ * already queued finishes first and cannot restore the deleted logs.
+ * @returns A promise that resolves once the logs have been removed and
+ * subscribers have been notified.
+ */
+export function deleteDailyLogs(): Promise<void> {
+  //If writeQueue is fulfilled (ensuring Serialization), then remove the daily logs from storage and update all listeners.
+  const deletion = writeQueue.then(async () => {
+    await AsyncStorage.removeItem(DAILY_LOG_STORAGE_KEY);
+    listeners.forEach((listener) => listener());
+  });
+  //if the deletion fails, keep the queue alive
+  writeQueue = deletion.catch(() => { });
+  //since deletion is returned, the caller still sees the faliure of deletion if any
+  return deletion;
 }
