@@ -137,7 +137,8 @@ const styles = StyleSheet.create({
         fontSize: 28,
         lineHeight: 36,
         fontWeight: '500',
-        textAlign: 'center',
+        textAlign: 'left',
+        marginLeft: theme.spacing.two,
     },
     cardContainer: {
         flexDirection: 'row',
