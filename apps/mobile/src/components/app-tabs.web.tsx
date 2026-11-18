@@ -24,6 +24,10 @@ export default function AppTabs() {
           <TabTrigger name="learn" href="/learn" asChild>
             <TabButton>Learn</TabButton>
           </TabTrigger>
+          {/* TODO: Remove this temporary Cycle tab once cycle tracking is integrated into the final navigation. */}
+          <TabTrigger name="cycle" href="/cycle" asChild>
+            <TabButton>Cycle</TabButton>
+          </TabTrigger>
           <TabTrigger name="settings" href="/settings" asChild>
             <TabButton>Settings</TabButton>
           </TabTrigger>
