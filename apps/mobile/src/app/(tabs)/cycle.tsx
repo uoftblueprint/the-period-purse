@@ -108,7 +108,9 @@ function CyclePage() {
         DEFAULTS.AVG_CYCLE_LENGTH,
         { excludeLatestPeriod: currentCycle.isOnPeriod },
     ).periodLength;
-    const intervals: PeriodInterval[] = periods.map((period) => ({
+    // The latest period is still active, so keep it out of completed period history.
+    const completedPeriods = currentCycle.isOnPeriod ? periods.slice(1) : periods;
+    const intervals: PeriodInterval[] = completedPeriods.map((period) => ({
         start: formatPeriodDate(period.start),
         end: formatPeriodDate(period.end),
         duration: period.days,
@@ -156,7 +158,7 @@ function CyclePage() {
                 </View>
 
                 <View style={styles.element}>
-                    <MinimizedHistoryCard intervals={intervals} onPeriod={currentCycle.isOnPeriod} />
+                    <MinimizedHistoryCard intervals={intervals} />
                 </View>
 
                 {/* <View style={styles.footerContainer}>
