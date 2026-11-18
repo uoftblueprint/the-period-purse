@@ -21,6 +21,10 @@ export default function AppTabs() {
       <TabSlot style={{ height: '100%' }} />
       <TabList asChild>
         <CustomTabList>
+          {/* Temporary Cycle tab entry; remove this when Cycle navigation is finalized. */}
+          <TabTrigger name="cycle" href="/cycle" asChild>
+            <TabButton>Cycle</TabButton>
+          </TabTrigger>
           <TabTrigger name="learn" href="/learn" asChild>
             <TabButton>Learn</TabButton>
           </TabTrigger>
