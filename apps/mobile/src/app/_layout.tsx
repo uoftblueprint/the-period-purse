@@ -44,7 +44,17 @@ export default function RootLayout() {
     <ThemeProvider value={navigationTheme}>
       <PaperProvider theme={theme}>
         <AnimatedSplashOverlay />
-        <Stack screenOptions={{ headerShown: false }} />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="terms-and-conditions"
+            options={{ headerShown: true, title: 'Terms and Conditions' }}
+          />
+          <Stack.Screen
+            name="privacy-policy"
+            options={{ headerShown: true, title: 'Privacy Policy' }}
+          />
+        </Stack>
       </PaperProvider>
     </ThemeProvider>
   );
