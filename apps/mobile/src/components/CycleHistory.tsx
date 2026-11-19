@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { SymbolView } from 'expo-symbols';
+import { useTheme } from 'react-native-paper';
+import type { AppTheme } from '@/constants/theme';
 
 export type PeriodInterval = {
     start: string;
@@ -12,13 +13,27 @@ type CycleHistoryProps = {
     intervals: PeriodInterval[];
 };
 
-export function MinimizedHistoryCard({ intervals }: CycleHistoryProps) {
+export function MinimizedHistoryCard({ intervals, onPeriod }: CycleHistoryProps) {
+    const theme = useTheme<AppTheme>();
     const [expanded, setExpanded] = useState(false);
     const visibleIntervals = expanded ? intervals : intervals.slice(0, 2);
 
     return (
-        <View style={styles.card}>
-            <Text style={styles.title}>Period History</Text>
+        <View style={[
+            styles.card,
+            {
+                backgroundColor: theme.colors.surfaceVariant,
+                borderRadius: theme.radii.md,
+            },
+        ]}>
+            <Text style={[styles.title, { color: theme.colors.onSurface }]}>
+                Period History
+            </Text>
+            {onPeriod && (
+                <Text style={[styles.onPeriodLabel, { color: theme.colors.error }]}>
+                    CURRENT PERIOD
+                </Text>
+            )}
             {intervals.length === 0 ? (
                 <NothingLogged />
             ) : (
@@ -34,43 +49,53 @@ export function MinimizedHistoryCard({ intervals }: CycleHistoryProps) {
 }
 
 export function Interval({ interval, isFirst }: { interval: PeriodInterval; isFirst: boolean }) {
+    const theme = useTheme<AppTheme>();
+
     return (
-        <View style={[styles.intervalRow, !isFirst && styles.intervalDivider]}>
-            <Text style={styles.periodText}>{interval.start} - {interval.end}</Text>
+        <View style={[styles.intervalRow, !isFirst && { borderTopColor: theme.colors.outlineVariant }, !isFirst && styles.intervalDivider]}>
+            <Text style={[styles.periodText, { color: theme.colors.onSurface }]}>{interval.start} - {interval.end}</Text>
         </View>
     );
 }
 
 export function ShowMore({ expanded, onPress }: { expanded: boolean; onPress: () => void }) {
+    const theme = useTheme<AppTheme>();
+
     return (
         <Pressable
             accessibilityRole="button"
             accessibilityLabel={expanded ? 'Show fewer periods' : 'Show more periods'}
             onPress={onPress}
-            style={({ pressed }) => [styles.showMoreButton, pressed && styles.pressed]}>
-            <Text style={styles.showMoreText}>{expanded ? 'Show Less' : 'See More'}</Text>
+            style={({ pressed }) => [styles.showMoreButton, { backgroundColor: theme.colors.primary, borderRadius: theme.radii.full }, pressed && styles.pressed]}>
+            <Text style={[styles.showMoreText, { color: theme.colors.onPrimary }]}>{expanded ? 'Show Less' : 'See More'}</Text>
         </Pressable>
     );
 }
 
 export function NothingLogged() {
-    return <Text style={styles.emptyText}>No period history yet.</Text>;
+    const theme = useTheme<AppTheme>();
+
+    return <Text style={[styles.emptyText, { color: theme.colors.onSurfaceVariant }]}>No period history yet.</Text>;
 }
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#FFF5F2',
-        borderRadius: 18,
         paddingHorizontal: 28,
         paddingTop: 20,
         paddingBottom: 22,
     },
     title: {
         fontFamily: 'LeagueSpartanMedium',
-        color: '#111111',
         fontSize: 22,
         fontWeight: '500',
         marginBottom: 13,
+    },
+    onPeriodLabel: {
+        fontFamily: 'LeagueSpartanBold',
+        fontSize: 9,
+        fontWeight: '700',
+        letterSpacing: 0.8,
+        marginBottom: 5,
     },
     intervalRow: {
         minHeight: 66,
@@ -79,11 +104,9 @@ const styles = StyleSheet.create({
     },
     intervalDivider: {
         borderTopWidth: 1,
-        borderTopColor: '#514747',
     },
     periodText: {
         fontFamily: 'LeagueSpartanRegular',
-        color: '#111111',
         fontSize: 21,
         fontWeight: '500',
         textAlign: 'left',
@@ -91,14 +114,11 @@ const styles = StyleSheet.create({
     showMoreButton: {
         minHeight: 48,
         marginTop: 18,
-        borderRadius: 24,
-        backgroundColor: '#6DC5B5',
         alignItems: 'center',
         justifyContent: 'center',
     },
     showMoreText: {
         fontFamily: 'LeagueSpartanMedium',
-        color: '#111111',
         fontSize: 18,
         fontWeight: '500',
     },
@@ -107,7 +127,6 @@ const styles = StyleSheet.create({
     },
     emptyText: {
         fontFamily: 'LeagueSpartanRegular',
-        color: '#75696A',
         fontSize: 13,
         paddingVertical: 20,
     },

@@ -1,5 +1,7 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import { useTheme } from 'react-native-paper';
+import type { AppTheme } from '@/constants/theme';
 
 type CycleCardProps = {
     isOnPeriod: boolean;
@@ -24,16 +26,35 @@ export function CycleCard({
     hasError,
     showTip,
 }: CycleCardProps) {
-    const theme = useTheme();
+    const theme = useTheme<AppTheme>();
+    const ringSize = 152;
+    const markerSize = 38;
+    const markerAngle = ((cycleDonutPercent ?? 0) / 100) * Math.PI * 2 - Math.PI / 2;
+    const markerRadius = (ringSize - 12) / 2;
+    const markerPosition = {
+        left: (ringSize - markerSize) / 2 + markerRadius * Math.cos(markerAngle),
+        top: (ringSize - markerSize) / 2 + markerRadius * Math.sin(markerAngle),
+    };
 
     return (
-        <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+        <View style={[styles.card, {
+            backgroundColor: theme.colors.surfaceVariant,
+            borderRadius: theme.radii.lg,
+        }]}>
             <View style={styles.cycleDetails}>
-                <Text style={[styles.header, { color: theme.colors.onSurface }]}>Current Cycle:</Text>
+                <Text style={[styles.header, { color: theme.colors.onSurface }]}>
+                    Current Cycle:
+                </Text>
+
                 {isLoading ? (
-                    <ActivityIndicator accessibilityLabel="Loading cycle data" style={styles.status} />
+                    <ActivityIndicator
+                        accessibilityLabel="Loading cycle data"
+                        style={styles.status}
+                    />
                 ) : hasError ? (
-                    <Text style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}>Couldn&apos;t load your cycle data.</Text>
+                    <Text style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}>
+                        Couldn&apos;t load your cycle data.
+                    </Text>
                 ) : (
                     <>
                         <Cycle
@@ -42,25 +63,56 @@ export function CycleCard({
                             daysSinceLastPeriod={daysSinceLastPeriod}
                             showTip={showTip}
                         />
-                        <Pressable accessibilityRole="button" style={[styles.logButton, { backgroundColor: theme.colors.primary }]}>
-                            <Text style={[styles.logButtonText, { color: theme.colors.onPrimary }]}>Log Period</Text>
+
+                        <Pressable
+                            accessibilityRole="button"
+                            onPress={() => router.push('/logging-demo')}
+                            style={[
+                                styles.logButton,
+                                {
+                                    backgroundColor: theme.colors.primary,
+                                    borderRadius: theme.radii.full,
+                                },
+                            ]}
+                        >
+                            <Text style={[styles.logButtonText, { color: theme.colors.onPrimary }]}>
+                                Log Period
+                            </Text>
                         </Pressable>
                     </>
                 )}
             </View>
+
             <View
-                style={[styles.cycleRing, { borderColor: theme.colors.primary, backgroundColor: theme.colors.surface }]}
+                style={[
+                    styles.cycleRing,
+                    {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.surfaceVariant,
+                    },
+                ]}
                 accessibilityRole="progressbar"
-                accessibilityLabel={cycleDonutPercent === null
-                    ? 'Cycle progress unavailable'
-                    : `${cycleDonutPercent}% through the average cycle`}>
+                accessibilityLabel={
+                    cycleDonutPercent === null
+                        ? 'Cycle progress unavailable'
+                        : `${cycleDonutPercent}% through the average cycle`
+                }
+            >
                 {cycleDay !== null && (
-                    <View style={[styles.dayMarker, {
-                        backgroundColor: theme.colors.surface,
-                        borderColor: theme.colors.outline,
-                        shadowColor: theme.colors.shadow,
-                    }]}>
-                        <Text style={[styles.dayMarkerText, { color: theme.colors.onSurface }]}>Day {cycleDay}</Text>
+                    <View
+                        style={[
+                            styles.dayMarker,
+                            markerPosition,
+                            {
+                                backgroundColor: theme.colors.surfaceVariant,
+                                borderColor: theme.colors.outline,
+                                shadowColor: theme.colors.shadow,
+                            },
+                        ]}
+                    >
+                        <Text style={[styles.dayMarkerText, { color: theme.colors.onSurface }]}>
+                            Day {cycleDay}
+                        </Text>
                     </View>
                 )}
             </View>
@@ -69,7 +121,7 @@ export function CycleCard({
 }
 
 export function Cycle({ isOnPeriod, periodDays, daysSinceLastPeriod, showTip }: CycleProps) {
-    const theme = useTheme();
+    const theme = useTheme<AppTheme>();
 
     return (
         <View style={styles.cycleContent}>
@@ -86,7 +138,7 @@ export function Cycle({ isOnPeriod, periodDays, daysSinceLastPeriod, showTip }: 
 }
 
 export function OffPeriodText({ daysSinceLastPeriod }: { daysSinceLastPeriod: number }) {
-    const theme = useTheme();
+    const theme = useTheme<AppTheme>();
 
     return (
         <View style={styles.cycleNumberRow}>
@@ -98,7 +150,7 @@ export function OffPeriodText({ daysSinceLastPeriod }: { daysSinceLastPeriod: nu
 }
 
 export function OnPeriodText({ periodDays }: { periodDays: number }) {
-    const theme = useTheme();
+    const theme = useTheme<AppTheme>();
 
     return (
         <View style={styles.cycleNumberRow}>
@@ -111,7 +163,6 @@ export function OnPeriodText({ periodDays }: { periodDays: number }) {
 
 const styles = StyleSheet.create({
     card: {
-        borderRadius: 18,
         padding: 16,
         minHeight: 180,
         flexDirection: 'row',
@@ -172,7 +223,6 @@ const styles = StyleSheet.create({
         minWidth: 100,
         minHeight: 36,
         paddingHorizontal: 16,
-        borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -190,8 +240,6 @@ const styles = StyleSheet.create({
     },
     dayMarker: {
         position: 'absolute',
-        top: -9,
-        left: -9,
         minWidth: 38,
         height: 38,
         paddingHorizontal: 4,
