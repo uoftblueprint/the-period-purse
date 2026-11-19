@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import { useTheme } from 'react-native-paper';
 import type { AppTheme } from '@/constants/theme';
 
@@ -28,7 +29,10 @@ export function CycleCard({
                     daysSinceLastPeriod={daysSinceLastPeriod}
                     showTip={showTip}
                 />
-                <Pressable accessibilityRole="button" style={[styles.logButton, { backgroundColor: theme.colors.primary, borderRadius: theme.radii.full }]}>
+                <Pressable
+                    accessibilityRole="button"
+                    onPress={() => router.push('/logging-demo')}
+                    style={[styles.logButton, { backgroundColor: theme.colors.primary, borderRadius: theme.radii.full }]}>
                     <Text style={[styles.logButtonText, { color: theme.colors.onPrimary }]}>Log Period</Text>
                 </Pressable>
             </View>
