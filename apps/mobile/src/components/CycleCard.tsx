@@ -1,66 +1,127 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useTheme } from 'react-native-paper';
 import type { AppTheme } from '@/constants/theme';
 
 type CycleCardProps = {
-    periodDays: number;
-    daysSinceLastPeriod: number;
-    cycleDonutPercent: number;
+    isOnPeriod: boolean;
+    periodDays: number | null;
+    daysSinceLastPeriod: number | null;
+    cycleDay: number | null;
+    cycleDonutPercent: number | null;
+    isLoading: boolean;
+    hasError: boolean;
     showTip: boolean;
 };
 
-type CycleProps = Pick<CycleCardProps, 'periodDays' | 'daysSinceLastPeriod' | 'showTip'>;
+type CycleProps = Pick<CycleCardProps, 'isOnPeriod' | 'periodDays' | 'daysSinceLastPeriod' | 'showTip'>;
 
 export function CycleCard({
+    isOnPeriod,
     periodDays,
     daysSinceLastPeriod,
+    cycleDay,
     cycleDonutPercent,
+    isLoading,
+    hasError,
     showTip,
 }: CycleCardProps) {
     const theme = useTheme<AppTheme>();
 
     return (
-        <View style={[styles.card, { backgroundColor: theme.colors.surfaceVariant, borderRadius: theme.radii.lg }]}>
+        <View style={[styles.card, {
+            backgroundColor: theme.colors.surfaceVariant,
+            borderRadius: theme.radii.lg,
+        }]}>
             <View style={styles.cycleDetails}>
-                <Text style={[styles.header, { color: theme.colors.onSurface }]}>Current Cycle:</Text>
-                <Cycle
-                    periodDays={periodDays}
-                    daysSinceLastPeriod={daysSinceLastPeriod}
-                    showTip={showTip}
-                />
-                <Pressable
-                    accessibilityRole="button"
-                    onPress={() => router.push('/logging-demo')}
-                    style={[styles.logButton, { backgroundColor: theme.colors.primary, borderRadius: theme.radii.full }]}>
-                    <Text style={[styles.logButtonText, { color: theme.colors.onPrimary }]}>Log Period</Text>
-                </Pressable>
+                <Text style={[styles.header, { color: theme.colors.onSurface }]}>
+                    Current Cycle:
+                </Text>
+
+                {isLoading ? (
+                    <ActivityIndicator
+                        accessibilityLabel="Loading cycle data"
+                        style={styles.status}
+                    />
+                ) : hasError ? (
+                    <Text style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}>
+                        Couldn&apos;t load your cycle data.
+                    </Text>
+                ) : (
+                    <>
+                        <Cycle
+                            isOnPeriod={isOnPeriod}
+                            periodDays={periodDays}
+                            daysSinceLastPeriod={daysSinceLastPeriod}
+                            showTip={showTip}
+                        />
+
+                        <Pressable
+                            accessibilityRole="button"
+                            onPress={() => router.push('/logging-demo')}
+                            style={[
+                                styles.logButton,
+                                {
+                                    backgroundColor: theme.colors.primary,
+                                    borderRadius: theme.radii.full,
+                                },
+                            ]}
+                        >
+                            <Text style={[styles.logButtonText, { color: theme.colors.onPrimary }]}>
+                                Log Period
+                            </Text>
+                        </Pressable>
+                    </>
+                )}
             </View>
+
             <View
-                style={[styles.cycleRing, { borderColor: theme.colors.primary, backgroundColor: theme.colors.surfaceVariant }]}
+                style={[
+                    styles.cycleRing,
+                    {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.surfaceVariant,
+                    },
+                ]}
                 accessibilityRole="progressbar"
-                accessibilityLabel={`${cycleDonutPercent}% through the average cycle`}>
-                <View style={[styles.dayMarker, {
-                    backgroundColor: theme.colors.surface,
-                    borderColor: theme.colors.outline,
-                    shadowColor: theme.colors.shadow,
-                }]}>
-                    <Text style={[styles.dayMarkerText, { color: theme.colors.onSurface }]}>Day {daysSinceLastPeriod}</Text>
-                </View>
+                accessibilityLabel={
+                    cycleDonutPercent === null
+                        ? 'Cycle progress unavailable'
+                        : `${cycleDonutPercent}% through the average cycle`
+                }
+            >
+                {cycleDay !== null && (
+                    <View
+                        style={[
+                            styles.dayMarker,
+                            {
+                                backgroundColor: theme.colors.surfaceVariant,
+                                borderColor: theme.colors.outline,
+                                shadowColor: theme.colors.shadow,
+                            },
+                        ]}
+                    >
+                        <Text style={[styles.dayMarkerText, { color: theme.colors.onSurface }]}>
+                            Day {cycleDay}
+                        </Text>
+                    </View>
+                )}
             </View>
         </View>
     );
 }
 
-export function Cycle({ periodDays, daysSinceLastPeriod, showTip }: CycleProps) {
+export function Cycle({ isOnPeriod, periodDays, daysSinceLastPeriod, showTip }: CycleProps) {
     const theme = useTheme<AppTheme>();
 
     return (
         <View style={styles.cycleContent}>
-            {daysSinceLastPeriod <= periodDays ? (
+            {isOnPeriod && periodDays !== null ? (
                 <OnPeriodText periodDays={periodDays} />
-            ) : (
+            ) : daysSinceLastPeriod !== null ? (
                 <OffPeriodText daysSinceLastPeriod={daysSinceLastPeriod} />
+            ) : (
+                <Text style={[styles.cycleText, { color: theme.colors.onSurfaceVariant }]}>Log a period to start tracking.</Text>
             )}
             {showTip && <Text style={[styles.tip, { color: theme.colors.onSurfaceVariant }]}>Your cycle is in its follicular phase.</Text>}
         </View>
@@ -73,7 +134,7 @@ export function OffPeriodText({ daysSinceLastPeriod }: { daysSinceLastPeriod: nu
     return (
         <View style={styles.cycleNumberRow}>
             <Text style={[styles.cycleText, { color: theme.colors.onSurface }]}>
-                Days since last{'\n'}period: <Text style={[styles.cycleNumber, { color: theme.colors.onSurface }]}>{daysSinceLastPeriod}</Text>
+                <Text style={[styles.cycleNumber, { color: theme.colors.onSurface }]}>{daysSinceLastPeriod}</Text> days since last period
             </Text>
         </View>
     );
@@ -85,7 +146,7 @@ export function OnPeriodText({ periodDays }: { periodDays: number }) {
     return (
         <View style={styles.cycleNumberRow}>
             <Text style={[styles.cycleText, { color: theme.colors.onSurface }]}>
-                Period days: <Text style={[styles.cycleNumber, { color: theme.colors.onSurface }]}>{periodDays}</Text>
+                Day <Text style={[styles.cycleNumber, { color: theme.colors.onSurface }]}>{periodDays}</Text> of period
             </Text>
         </View>
     );
@@ -114,6 +175,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 12,
         marginBottom: 8,
+    },
+    status: {
+        marginTop: 24,
+        marginBottom: 32,
+    },
+    statusText: {
+        fontFamily: 'LeagueSpartanRegular',
+        fontSize: 15,
+        lineHeight: 20,
+        marginTop: 20,
+        marginBottom: 20,
+        textAlign: 'center',
     },
     cycleNumberRow: {
         flexDirection: 'column',

@@ -1,5 +1,4 @@
 import { SymbolView } from 'expo-symbols';
-import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useTheme } from 'react-native-paper';
@@ -15,18 +14,21 @@ import { CycleCard } from '@/components/CycleCard';
 import { MinimizedHistoryCard, type PeriodInterval } from '@/components/CycleHistory';
 import { Footer } from '@/components/footer';
 import { theme, type AppTheme } from '@/constants/theme';
+import { getCurrentCycle, getPeriodAverages, usePeriodHistory } from '@/features/periods';
+import { useToday } from '@/hooks/use-today';
 
 const DEFAULTS = {
     AVG_PERIOD_LENGTH: 5,
     AVG_CYCLE_LENGTH: 28,
-    DAYS_SINCE_LAST_PERIOD: 12,
-    INTERVALS: [
-        { start: 'Oct 12', end: 'Oct 16', duration: 5 },
-        { start: 'Sep 14', end: 'Sep 18', duration: 5 },
-        { start: 'Aug 17', end: 'Aug 21', duration: 5 },
-        { start: 'Jul 20', end: 'Jul 24', duration: 5 },
-    ] satisfies PeriodInterval[],
 };
+
+function formatPeriodDate(date: string): string {
+    const [year, month, day] = date.split('-').map(Number);
+    return new Date(year, month - 1, day).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+    });
+}
 
 function InfoCard({
     header,
@@ -35,7 +37,7 @@ function InfoCard({
     children,
 }: {
     header: string;
-    days: number;
+    days: number | null;
     backgroundColor: string;
     children: React.ReactNode;
 }) {
@@ -47,7 +49,7 @@ function InfoCard({
             <View style={styles.infoContent}>
                 {children}
                 <Text style={[styles.daysText, { color: theme.colors.onSurface }]}>
-                    {days} <Text style={[styles.daysUnit, { color: theme.colors.onSurface }]}>days</Text>
+                    {days === null ? '—' : <>{days} <Text style={[styles.daysUnit, { color: theme.colors.onSurface }]}>days</Text></>}
                 </Text>
             </View>
         </View>
@@ -55,21 +57,42 @@ function InfoCard({
 }
 
 export default function CycleScreen() {
+    return <CyclePage />;
+}
+
+function CyclePage() {
     const theme = useTheme<AppTheme>();
+    const { periods, isLoading, error } = usePeriodHistory();
+    const today = useToday();
     const [fontsLoaded] = useFonts({
         LeagueSpartanRegular: LeagueSpartan_400Regular,
         LeagueSpartanMedium: LeagueSpartan_500Medium,
         LeagueSpartanSemiBold: LeagueSpartan_600SemiBold,
         LeagueSpartanBold: LeagueSpartan_700Bold,
     });
-    const [loaded] = useState(true);
-    const [avgPeriodLength] = useState(DEFAULTS.AVG_PERIOD_LENGTH);
-    const [avgCycleLength] = useState(DEFAULTS.AVG_CYCLE_LENGTH);
-    const daysSinceLastPeriod = DEFAULTS.DAYS_SINCE_LAST_PERIOD;
-    const periodDays = DEFAULTS.AVG_PERIOD_LENGTH;
-    const cycleDonutPercent = Math.round((daysSinceLastPeriod / avgCycleLength) * 100);
+    const averages = getPeriodAverages(
+        periods,
+        DEFAULTS.AVG_PERIOD_LENGTH,
+        DEFAULTS.AVG_CYCLE_LENGTH,
+    );
+    const avgCycleLength = averages.cycleLength;
+    const currentCycle = getCurrentCycle(periods, today, avgCycleLength);
+    const completedPeriodCount = periods.length - (currentCycle.isOnPeriod ? 1 : 0);
+    const periodLength = getPeriodAverages(
+        periods,
+        DEFAULTS.AVG_PERIOD_LENGTH,
+        DEFAULTS.AVG_CYCLE_LENGTH,
+        { excludeLatestPeriod: currentCycle.isOnPeriod },
+    ).periodLength;
+    // The latest period is still active, so keep it out of completed period history.
+    const completedPeriods = currentCycle.isOnPeriod ? periods.slice(1) : periods;
+    const intervals: PeriodInterval[] = completedPeriods.map((period) => ({
+        start: formatPeriodDate(period.start),
+        end: formatPeriodDate(period.end),
+        duration: period.days,
+    }));
 
-    if (!loaded || !fontsLoaded) return null;
+    if (!fontsLoaded) return null;
 
     return (
         <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.background }]} edges={['top']}>
@@ -77,16 +100,20 @@ export default function CycleScreen() {
                 <Text style={[styles.pageTitle, { color: theme.colors.onBackground }]}>Cycle Tracking:</Text>
 
                 <CycleCard
-                    periodDays={periodDays}
-                    daysSinceLastPeriod={daysSinceLastPeriod}
-                    cycleDonutPercent={cycleDonutPercent}
+                    isOnPeriod={currentCycle.isOnPeriod}
+                    periodDays={currentCycle.periodDay}
+                    daysSinceLastPeriod={currentCycle.daysSinceLastPeriod}
+                    cycleDay={currentCycle.cycleDay}
+                    cycleDonutPercent={currentCycle.cycleDonutPercent}
+                    isLoading={isLoading}
+                    hasError={error !== null}
                     showTip={false}
                 />
 
                 <View style={styles.cardContainer}>
                     <InfoCard
                         header="Average period"
-                        days={avgPeriodLength}
+                        days={completedPeriodCount > 0 ? periodLength : null}
                         backgroundColor={theme.colors.surfaceVariant}>
                         <SymbolView
                             name={{ ios: 'drop.fill', android: 'water_drop', web: 'water_drop' }}
@@ -96,7 +123,7 @@ export default function CycleScreen() {
                     </InfoCard>
                     <InfoCard
                         header="Average cycle"
-                        days={avgCycleLength}
+                        days={periods.length > 1 ? avgCycleLength : null}
                         backgroundColor={theme.colors.surfaceVariant}>
                         <SymbolView
                             name={{ ios: 'calendar', android: 'calendar_month', web: 'calendar_month' }}
@@ -107,12 +134,12 @@ export default function CycleScreen() {
                 </View>
 
                 <View style={styles.element}>
-                    <MinimizedHistoryCard intervals={DEFAULTS.INTERVALS} onPeriod={false} />
+                    <MinimizedHistoryCard intervals={intervals} />
                 </View>
 
-                <View style={styles.footerContainer}>
+                {<View style={styles.footerContainer}>
                     <Footer />
-                </View>
+                </View>}
             </ScrollView>
         </SafeAreaView>
     );

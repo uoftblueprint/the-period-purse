@@ -11,7 +11,6 @@ export type PeriodInterval = {
 
 type CycleHistoryProps = {
     intervals: PeriodInterval[];
-    onPeriod: boolean;
 };
 
 export function MinimizedHistoryCard({ intervals, onPeriod }: CycleHistoryProps) {
@@ -20,9 +19,21 @@ export function MinimizedHistoryCard({ intervals, onPeriod }: CycleHistoryProps)
     const visibleIntervals = expanded ? intervals : intervals.slice(0, 2);
 
     return (
-        <View style={[styles.card, { backgroundColor: theme.colors.surfaceVariant, borderRadius: theme.radii.md }]}>
-            <Text style={[styles.title, { color: theme.colors.onSurface }]}>Period History</Text>
-            {onPeriod && <Text style={[styles.onPeriodLabel, { color: theme.colors.error }]}>CURRENT PERIOD</Text>}
+        <View style={[
+            styles.card,
+            {
+                backgroundColor: theme.colors.surfaceVariant,
+                borderRadius: theme.radii.md,
+            },
+        ]}>
+            <Text style={[styles.title, { color: theme.colors.onSurface }]}>
+                Period History
+            </Text>
+            {onPeriod && (
+                <Text style={[styles.onPeriodLabel, { color: theme.colors.error }]}>
+                    CURRENT PERIOD
+                </Text>
+            )}
             {intervals.length === 0 ? (
                 <NothingLogged />
             ) : (
