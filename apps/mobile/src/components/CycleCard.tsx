@@ -27,6 +27,14 @@ export function CycleCard({
     showTip,
 }: CycleCardProps) {
     const theme = useTheme<AppTheme>();
+    const ringSize = 152;
+    const markerSize = 38;
+    const markerAngle = ((cycleDonutPercent ?? 0) / 100) * Math.PI * 2 - Math.PI / 2;
+    const markerRadius = (ringSize - 12) / 2;
+    const markerPosition = {
+        left: (ringSize - markerSize) / 2 + markerRadius * Math.cos(markerAngle),
+        top: (ringSize - markerSize) / 2 + markerRadius * Math.sin(markerAngle),
+    };
 
     return (
         <View style={[styles.card, {
@@ -94,6 +102,7 @@ export function CycleCard({
                     <View
                         style={[
                             styles.dayMarker,
+                            markerPosition,
                             {
                                 backgroundColor: theme.colors.surfaceVariant,
                                 borderColor: theme.colors.outline,
@@ -231,8 +240,6 @@ const styles = StyleSheet.create({
     },
     dayMarker: {
         position: 'absolute',
-        top: -9,
-        left: -9,
         minWidth: 38,
         height: 38,
         paddingHorizontal: 4,
