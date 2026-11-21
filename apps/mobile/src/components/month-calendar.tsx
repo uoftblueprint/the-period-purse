@@ -4,7 +4,7 @@ import { CalendarList, type DateData } from 'react-native-calendars';
 import { Button } from 'react-native-paper';
 
 import { useToday } from '@/hooks/use-today';
-import { FILTER_TEXT_COLOURS } from '@/services/utils/constants';
+import { FILTER_TEXT_COLOURS } from '@/constants/filter-colours';
 import type { FlowLevel } from '@/features/daily-log';
 import { FlowIcon } from './flow-icon';
 

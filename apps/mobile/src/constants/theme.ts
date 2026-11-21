@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 
 import { MD3LightTheme, configureFonts } from "react-native-paper";
-import { FILTER_COLOURS } from '@/services/utils/constants';
+import { FILTER_COLOURS } from '@/constants/filter-colours';
 
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;

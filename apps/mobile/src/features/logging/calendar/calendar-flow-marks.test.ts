@@ -17,7 +17,7 @@ describe('getCalendarFlowMarks', () => {
     expect(Object.keys(marks)).toEqual(['2026-10-01', '2026-10-02', '2026-10-03', '2026-10-04', '2026-10-05']);
     expect(Object.values(marks).map((mark) => mark.flow)).toEqual(['Light', 'Medium', 'Heavy', 'Spotting', 'None']);
     expect(Object.values(marks).map((mark) => mark.selectedColor)).toEqual([
-      '#E3797A', '#E44545', '#D42629', '#FFBEBF', '#FFEBEB',
+      '#E2767B', '#E44545', '#D42629', '#EFC6CD', '#FFEBEB',
     ]);
     for (const mark of Object.values(marks)) {
       expect(mark.selected).toBe(true);
