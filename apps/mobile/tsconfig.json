@@ -4,11 +4,12 @@
     "strict": true,
     "types": ["jest"],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
+      "react-native": ["./node_modules/react-native/types_generated/index.d.ts"],
       "@/assets/*": [
         "./assets/*"
+      ],
+      "@/*": [
+        "./src/*"
       ]
     }
   },

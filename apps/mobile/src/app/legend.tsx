@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, Surface, Text, useTheme } from 'react-native-paper';
 
 import { FILTER_COLOURS } from '@/services/utils/constants';
-import { Spacing } from '@/constants/theme';
+import { theme as appTheme } from '@/constants/theme';
 
 const LEGEND_SECTIONS = [
   {
@@ -108,19 +108,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    gap: Spacing.three,
-    padding: Spacing.three,
-    paddingBottom: Spacing.five,
+    gap: appTheme.spacing.three,
+    padding: appTheme.spacing.three,
+    paddingBottom: appTheme.spacing.five,
   },
   card: {
     borderRadius: 12,
-    padding: Spacing.three,
+    padding: appTheme.spacing.three,
   },
   sectionHeading: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: Spacing.two,
-    marginBottom: Spacing.three,
+    gap: appTheme.spacing.two,
+    marginBottom: appTheme.spacing.three,
   },
   sectionIcon: {
     height: 24,
@@ -129,19 +129,19 @@ const styles = StyleSheet.create({
   items: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    rowGap: Spacing.three,
+    rowGap: appTheme.spacing.three,
   },
   item: {
     alignItems: 'center',
     flexDirection: 'row',
     minHeight: 24,
-    paddingRight: Spacing.two,
+    paddingRight: appTheme.spacing.two,
     width: '50%',
   },
   indicator: {
     borderRadius: 3,
     height: 22,
-    marginRight: Spacing.two,
+    marginRight: appTheme.spacing.two,
     width: 22,
   },
   itemLabel: {

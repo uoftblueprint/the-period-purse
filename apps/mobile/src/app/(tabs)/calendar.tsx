@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { LegendButton } from '@/components/legend-button';
 import { MonthCalendar } from '@/components/month-calendar';
-import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { MaxContentWidth, theme as appTheme } from '@/constants/theme';
 
 export default function CalendarScreen() {
   const theme = useTheme();
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     // The web tab bar sits above the page content.
-    paddingTop: Platform.OS === 'web' ? Spacing.six : 0,
+    paddingTop: Platform.OS === 'web' ? appTheme.spacing.six : 0,
   },
   content: {
     alignSelf: 'center',
