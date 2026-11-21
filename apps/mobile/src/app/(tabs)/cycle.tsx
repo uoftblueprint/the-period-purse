@@ -12,7 +12,7 @@ import {
 
 import { CycleCard } from '@/components/CycleCard';
 import { MinimizedHistoryCard, type PeriodInterval } from '@/components/CycleHistory';
-import { Footer } from '@/components/Footer';
+import { Footer } from '@/components/footer';
 import { getCurrentCycle, getPeriodAverages, usePeriodHistory } from '@/features/periods';
 import { useToday } from '@/hooks/use-today';
 

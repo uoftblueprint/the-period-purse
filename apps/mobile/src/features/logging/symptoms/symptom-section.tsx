@@ -1,11 +1,11 @@
 import { useEffect, type ReactNode } from 'react';
 import { Image, type ImageProps } from 'expo-image';
 import { Keyboard, Pressable, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import Animated, { Easing, ReduceMotion, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import AccordionArrowIcon from '@/assets/icons/logging/symptoms/arrow_accordion.svg';
-import { LoggingColors } from '@/constants/theme';
+import type { AppTheme } from '@/constants/theme';
 
 type Props = {
   title: string;
@@ -18,6 +18,8 @@ type Props = {
 
 /** Measure the body independently so both expansion and collapse animate its full height. */
 export function SymptomSection({ title, icon, active, expanded, onToggle, children }: Props) {
+  const theme = useTheme<AppTheme>();
+  const styles = createStyles(theme);
   const progress = useSharedValue(0);
   const contentHeight = useSharedValue(0);
 
@@ -46,11 +48,11 @@ export function SymptomSection({ title, icon, active, expanded, onToggle, childr
         onPress={() => { if (expanded) Keyboard.dismiss(); onToggle(); }}
         style={styles.header}>
         <View style={styles.title}>
-          <Image source={icon} tintColor={active ? LoggingColors.text : LoggingColors.muted} contentFit="contain" style={styles.icon} />
-          <Text variant="labelLarge" style={[styles.label, active && styles.active]}>{title}</Text>
+          <Image source={icon} tintColor={active ? theme.colors.onSurface : theme.colors.outlineVariant} contentFit="contain" style={styles.icon} />
+          <Text variant="titleMedium" style={[styles.label, active && styles.active]}>{title}</Text>
         </View>
         <Animated.View style={arrowStyle}>
-          <Image source={AccordionArrowIcon} tintColor={LoggingColors.muted} contentFit="contain" style={styles.chevron} />
+          <Image source={AccordionArrowIcon} tintColor={theme.colors.outlineVariant} contentFit="contain" style={styles.chevron} />
         </Animated.View>
       </Pressable>
       <Animated.View
@@ -66,12 +68,12 @@ export function SymptomSection({ title, icon, active, expanded, onToggle, childr
   );
 }
 
-const styles = StyleSheet.create({
-  header: { minHeight: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 28 },
-  title: { flexDirection: 'row', alignItems: 'center', gap: 21 },
+const createStyles = (theme: AppTheme) => StyleSheet.create({
+  header: { minHeight: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: theme.spacing.four },
+  title: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.four },
   icon: { width: 24, height: 24 },
-  label: { fontSize: 14, fontWeight: '700', color: LoggingColors.muted },
-  active: { color: LoggingColors.text },
+  label: { color: theme.colors.outlineVariant },
+  active: { color: theme.colors.onSurface },
   chevron: { width: 14, height: 10 },
   body: { overflow: 'hidden' },
   measurement: { position: 'absolute', top: 0, left: 0, right: 0 },

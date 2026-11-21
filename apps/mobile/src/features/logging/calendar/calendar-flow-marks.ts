@@ -1,4 +1,4 @@
-import { FILTER_COLOURS, FILTER_TEXT_COLOURS } from '@/services/utils/constants';
+import { FILTER_COLOURS, FILTER_TEXT_COLOURS } from '@/constants/filter-colours';
 import type { DailyLog, FlowLevel } from '@/features/daily-log';
 
 type FlowMark = { selected: true; selectedColor: string; selectedTextColor: string; flow: FlowLevel };

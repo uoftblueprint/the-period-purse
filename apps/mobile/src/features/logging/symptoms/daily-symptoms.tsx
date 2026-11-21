@@ -1,14 +1,15 @@
 import { useCallback, useImperativeHandle, useRef, useState, type ComponentRef, type Ref } from 'react';
 import { Image } from 'expo-image';
 import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Button, Dialog, Portal, Text } from 'react-native-paper';
+import { ActivityIndicator, Button, Dialog, Portal, Text, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import CloseIcon from '@/assets/icons/logging/shared/close_icon.svg';
 import ArrowIcon from '@/assets/icons/logging/symptoms/arrow.svg';
 import FlowIcon from '@/assets/icons/logging/symptoms/flow/flow-medium.svg';
 import NotesIcon from '@/assets/icons/logging/symptoms/notes-lines.svg';
-import { LoggingColors } from '@/constants/theme';
+import type { AppTheme } from '@/constants/theme';
+import { AppButton } from '@/constants/button';
 import { useToday } from '@/hooks/use-today';
 import { getLoggedDays, saveDay } from '@/features/daily-log';
 
@@ -25,6 +26,8 @@ type Props = { initialDate: string; onClose: () => void; ref?: Ref<DailySymptoms
 
 /** Edit a saved day's Flow + Notes; publish to the calendar only after Save. */
 export function DailySymptoms({ initialDate, onClose, ref }: Props) {
+  const theme = useTheme<AppTheme>();
+  const styles = createStyles(theme);
   const insets = useSafeAreaInsets();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const [date, setDate] = useState(initialDate);
@@ -81,21 +84,21 @@ export function DailySymptoms({ initialDate, onClose, ref }: Props) {
       style={[styles.screen, { paddingTop: insets.top }]}>
       <View style={styles.topBar}>
         <Pressable accessibilityRole="button" accessibilityLabel={SYMPTOMS_ACCESSIBILITY_TEXT.CLOSE} disabled={submitting} accessibilityState={{ disabled: submitting }} onPress={() => requestAction(onClose)} style={styles.iconButton}>
-          <Image source={CloseIcon} tintColor={LoggingColors.text} contentFit="contain" style={styles.closeIcon} />
+          <Image source={CloseIcon} tintColor={theme.colors.onSurface} contentFit="contain" style={styles.closeIcon} />
         </Pressable>
       </View>
       <View style={styles.dateHeader}>
         <DateArrow direction={-1} disabled={busy || !canLogSymptomDate(shiftSymptomDate(date, -1), today)} onPress={() => switchDate(-1)} />
         <View style={styles.dateText}>
           <Text variant="bodyMedium" style={styles.subtitle}>Log your symptoms for:</Text>
-          <Text variant="titleMedium" accessibilityRole="header" accessibilityLiveRegion="polite" style={styles.dateLabel}>{formatSymptomDate(date)}</Text>
+          <Text variant="titleSmall" accessibilityRole="header" accessibilityLiveRegion="polite" style={styles.dateLabel}>{formatSymptomDate(date)}</Text>
         </View>
         <DateArrow direction={1} disabled={busy || !canLogSymptomDate(shiftSymptomDate(date, 1), today)} onPress={() => switchDate(1)} />
       </View>
       <ScrollView ref={scroll} style={styles.scroll} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
-        {loading ? <ActivityIndicator color={LoggingColors.action} accessibilityLabel={LOGGING_STATUS_TEXT.LOADING} /> : loadError ? (
+        {loading ? <ActivityIndicator color={theme.colors.primary} accessibilityLabel={LOGGING_STATUS_TEXT.LOADING} /> : loadError ? (
           <View style={styles.loadError}>
-            <Text accessibilityRole="alert" style={styles.subtitle}>{LOGGING_STATUS_TEXT.LOAD_ERROR}</Text>
+            <Text accessibilityRole="alert" style={styles.error}>{LOGGING_STATUS_TEXT.LOAD_ERROR}</Text>
             <Button onPress={reload}>{LOGGING_STATUS_TEXT.RETRY}</Button>
           </View>
         ) : <>
@@ -108,17 +111,18 @@ export function DailySymptoms({ initialDate, onClose, ref }: Props) {
         </SymptomSection>
         </>}
       </ScrollView>
-      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) + 24 }]}>
-        {saveError && <Text accessibilityRole="alert" accessibilityLiveRegion="assertive" style={styles.subtitle}>{LOGGING_STATUS_TEXT.SAVE_ERROR}</Text>}
-        <Button
+      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, theme.spacing.three) + theme.spacing.four }]}>
+        {saveError && <Text accessibilityRole="alert" accessibilityLiveRegion="assertive" style={styles.error}>{LOGGING_STATUS_TEXT.SAVE_ERROR}</Text>}
+        <AppButton
           mode="contained"
+          buttonColor={theme.colors.primary}
+          textColor={theme.colors.onPrimary}
           disabled={!dirty || busy}
           loading={submitting}
           onPress={save}
-          style={styles.saveButton}
           contentStyle={styles.saveContent}>
           Save
-        </Button>
+        </AppButton>
       </View>
       <Portal>
         <Dialog visible={confirming} onDismiss={confirmation.keepEditing}>
@@ -135,29 +139,32 @@ export function DailySymptoms({ initialDate, onClose, ref }: Props) {
 }
 
 function DateArrow({ direction, disabled, onPress }: { direction: -1 | 1; disabled: boolean; onPress: () => void }) {
+  const theme = useTheme<AppTheme>();
+  const styles = createStyles(theme);
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={direction === -1 ? SYMPTOMS_ACCESSIBILITY_TEXT.PREVIOUS_DAY : SYMPTOMS_ACCESSIBILITY_TEXT.NEXT_DAY} disabled={disabled} accessibilityState={{ disabled }} onPress={onPress} style={styles.iconButton}>
-      <Image source={ArrowIcon} tintColor={disabled ? LoggingColors.flow.Light : LoggingColors.text} contentFit="contain" style={[styles.arrow, direction === 1 && styles.nextArrow]} />
+    <Pressable accessibilityRole="button" accessibilityLabel={direction === -1 ? SYMPTOMS_ACCESSIBILITY_TEXT.PREVIOUS_DAY : SYMPTOMS_ACCESSIBILITY_TEXT.NEXT_DAY} disabled={disabled} accessibilityState={{ disabled }} onPress={onPress} style={[styles.iconButton, disabled && styles.disabled]}>
+      <Image source={ArrowIcon} tintColor={theme.colors.onSurface} contentFit="contain" style={[styles.arrow, direction === 1 && styles.nextArrow]} />
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: LoggingColors.surface },
-  topBar: { paddingHorizontal: 12, alignItems: 'flex-start' },
+const createStyles = (theme: AppTheme) => StyleSheet.create({
+  screen: { flex: 1, backgroundColor: theme.colors.background },
+  topBar: { paddingHorizontal: theme.spacing.two, alignItems: 'flex-start' },
   iconButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   closeIcon: { width: 18, height: 18 },
-  dateHeader: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingTop: 8, paddingBottom: 30, backgroundColor: LoggingColors.surface },
-  dateText: { flex: 1, alignItems: 'center', gap: 6 },
-  subtitle: { color: LoggingColors.muted },
-  dateLabel: { fontSize: 20, fontWeight: '600', color: LoggingColors.text, textAlign: 'center' },
+  dateHeader: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: theme.spacing.two, paddingTop: theme.spacing.two, paddingBottom: theme.spacing.five, backgroundColor: theme.colors.background },
+  dateText: { flex: 1, alignItems: 'center', gap: theme.spacing.two },
+  subtitle: { color: theme.colors.onBackground },
+  error: { color: theme.colors.error },
+  dateLabel: { color: theme.colors.onSurface, textAlign: 'center' },
+  disabled: { opacity: 0.4 },
   arrow: { width: 9, height: 16 },
   nextArrow: { transform: [{ rotate: '180deg' }] },
   scroll: { flex: 1 },
-  content: { paddingBottom: 40 },
-  loadError: { paddingHorizontal: 28, gap: 12 },
-  divider: { height: 2, backgroundColor: LoggingColors.disabled },
-  footer: { paddingHorizontal: 28, paddingTop: 16, gap: 12 },
-  saveButton: { borderRadius: 10 },
+  content: { paddingBottom: theme.spacing.five },
+  loadError: { paddingHorizontal: theme.spacing.four, gap: theme.spacing.three },
+  divider: { height: StyleSheet.hairlineWidth, backgroundColor: theme.colors.secondaryContainer },
+  footer: { paddingHorizontal: theme.spacing.four, paddingTop: theme.spacing.three, gap: theme.spacing.three },
   saveContent: { minHeight: 44 },
 });
