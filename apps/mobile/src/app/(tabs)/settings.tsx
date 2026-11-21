@@ -29,13 +29,37 @@ export default function SettingsScreen() {
   };
 
   const renderChevron = () => (
-    <SymbolView
-      name="chevron.right"
-      size={16}
-      tintColor={theme.colors.futurePeriodDate}
-      style={styles.chevron}
-    />
+    <View
+      style={[
+        styles.chevronCircle,
+        {
+          backgroundColor: theme.colors.surface,
+          borderRadius: theme.radii.full,
+        },
+      ]}
+    >
+      <SymbolView
+        name="chevron.right"
+        size={14}
+        tintColor={theme.colors.futurePeriodDate}
+      />
+    </View>
   );
+
+  const rowTitleStyle = [
+    theme.fonts.bodyMedium,
+    { color: theme.colors.onBackground, fontSize: 15 },
+  ];
+
+  const rowDescriptionStyle = [
+    theme.fonts.bodySmall,
+    { color: theme.colors.outlineVariant, fontSize: 12 },
+  ];
+
+  const sectionHeaderStyle = [
+    theme.fonts.bodyLarge,
+    { color: theme.colors.onBackground },
+  ];
 
   return (
     <ScrollView
@@ -48,18 +72,11 @@ export default function SettingsScreen() {
     >
       {/* Tracking Preferences */}
       <Text
-        variant="labelMedium"
-        style={[
-          styles.sectionHeader,
-          {
-            color: theme.colors.onBackground,
-            marginBottom: theme.spacing.two,
-          },
-        ]}
+        style={[sectionHeaderStyle, { marginBottom: theme.spacing.two }]}
       >
         Tracking Preferences
       </Text>
-      <View style={[styles.trackingRow, { gap: theme.spacing.two }]}>
+      <View style={[styles.trackingRow, { gap: theme.spacing.three }]}>
         {TRACKING_ITEMS.map((item) => {
           const isSelected = selectedTracking.includes(item.key);
           return (
@@ -75,7 +92,7 @@ export default function SettingsScreen() {
                 style={[
                   styles.trackingTile,
                   {
-                    borderRadius: theme.radii.md,
+                    borderRadius: theme.radii.lg,
                     backgroundColor: isSelected
                       ? theme.colors.primary
                       : theme.colors.surface,
@@ -84,13 +101,13 @@ export default function SettingsScreen() {
               >
                 <SymbolView
                   name={item.icon}
-                  size={26}
+                  size={28}
                   tintColor={theme.colors.onPrimary}
                 />
               </View>
               <Text
-                variant="bodySmall"
                 style={[
+                  theme.fonts.bodyMedium,
                   styles.trackingLabel,
                   {
                     color: theme.colors.onBackground,
@@ -108,20 +125,15 @@ export default function SettingsScreen() {
       {/* Notifications */}
       <List.Section style={{ marginTop: theme.spacing.four }}>
         <Text
-          variant="labelMedium"
-          style={[
-            styles.sectionHeader,
-            {
-              color: theme.colors.onBackground,
-              marginBottom: theme.spacing.one,
-            },
-          ]}
+          style={[sectionHeaderStyle, { marginBottom: theme.spacing.one }]}
         >
           Notifications
         </Text>
         <List.Item
           title="Remind me to log symptoms"
           description="Everyday at 10pm"
+          titleStyle={rowTitleStyle}
+          descriptionStyle={rowDescriptionStyle}
           accessibilityLabel="Remind me to log symptoms, everyday at 10pm"
           accessibilityRole="switch"
           style={styles.row}
@@ -133,50 +145,46 @@ export default function SettingsScreen() {
             />
           )}
         />
-        <Divider style={styles.divider} />
+        <Divider style={{ backgroundColor: theme.colors.outlineVariant }} />
         <List.Item
           title="Customize Notifications"
+          titleStyle={rowTitleStyle}
           accessibilityLabel="Customize Notifications"
           accessibilityRole="button"
           style={styles.row}
           onPress={() => {}}
           right={renderChevron}
         />
-        <Divider style={styles.divider} />
+        <Divider style={{ backgroundColor: theme.colors.outlineVariant }} />
       </List.Section>
 
       {/* Account Settings */}
       <List.Section style={{ marginTop: theme.spacing.three }}>
         <Text
-          variant="labelMedium"
-          style={[
-            styles.sectionHeader,
-            {
-              color: theme.colors.onBackground,
-              marginBottom: theme.spacing.one,
-            },
-          ]}
+          style={[sectionHeaderStyle, { marginBottom: theme.spacing.one }]}
         >
           Account Settings
         </Text>
         <List.Item
           title="Privacy & Security"
+          titleStyle={rowTitleStyle}
           accessibilityLabel="Privacy & Security"
           accessibilityRole="button"
           style={styles.row}
           onPress={() => {}}
           right={renderChevron}
         />
-        <Divider style={styles.divider} />
+        <Divider style={{ backgroundColor: theme.colors.outlineVariant }} />
         <List.Item
           title="Backup Account"
+          titleStyle={rowTitleStyle}
           accessibilityLabel="Backup Account"
           accessibilityRole="button"
           style={styles.row}
           onPress={() => {}}
           right={renderChevron}
         />
-        <Divider style={styles.divider} />
+        <Divider style={{ backgroundColor: theme.colors.outlineVariant }} />
         <DeleteDataItem />
       </List.Section>
     </ScrollView>
@@ -186,9 +194,6 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-  },
-  sectionHeader: {
-    fontWeight: "700",
   },
   trackingRow: {
     flexDirection: "row",
@@ -210,10 +215,11 @@ const styles = StyleSheet.create({
   row: {
     paddingHorizontal: 0,
   },
-  chevron: {
+  chevronCircle: {
+    width: 28,
+    height: 28,
+    alignItems: "center",
+    justifyContent: "center",
     alignSelf: "center",
-  },
-  divider: {
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
 });
