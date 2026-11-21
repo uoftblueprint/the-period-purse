@@ -10,17 +10,15 @@ export type PeriodInterval = {
 
 type CycleHistoryProps = {
     intervals: PeriodInterval[];
-    onPeriod: boolean;
 };
 
-export function MinimizedHistoryCard({ intervals, onPeriod }: CycleHistoryProps) {
+export function MinimizedHistoryCard({ intervals }: CycleHistoryProps) {
     const [expanded, setExpanded] = useState(false);
     const visibleIntervals = expanded ? intervals : intervals.slice(0, 2);
 
     return (
         <View style={styles.card}>
             <Text style={styles.title}>Period History</Text>
-            {onPeriod && <Text style={styles.onPeriodLabel}>CURRENT PERIOD</Text>}
             {intervals.length === 0 ? (
                 <NothingLogged />
             ) : (
@@ -73,14 +71,6 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: '500',
         marginBottom: 13,
-    },
-    onPeriodLabel: {
-        fontFamily: 'LeagueSpartanBold',
-        color: '#A64C55',
-        fontSize: 9,
-        fontWeight: '700',
-        letterSpacing: 0.8,
-        marginBottom: 5,
     },
     intervalRow: {
         minHeight: 66,

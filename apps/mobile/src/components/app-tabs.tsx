@@ -25,6 +25,12 @@ export default function AppTabs() {
         <NativeTabs.Trigger.Icon sf="info.circle" md="info" />
       </NativeTabs.Trigger>
 
+      {/* TODO: Remove this temporary Cycle tab once cycle tracking is integrated into the final navigation. */}
+      <NativeTabs.Trigger name="cycle">
+        <NativeTabs.Trigger.Label>Cycle</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="calendar" md="calendar_month" />
+      </NativeTabs.Trigger>
+
       <NativeTabs.Trigger name="settings">
         <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="gearshape" md="settings" />

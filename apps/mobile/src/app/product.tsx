@@ -8,7 +8,7 @@
  * Informational content comes from `productCards` in `@/content/products`.
  */
 
-import { Stack, router, useLocalSearchParams } from 'expo-router';
+import { Link, Stack, router, useLocalSearchParams } from 'expo-router';
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -25,14 +25,22 @@ function findProduct(id: string): Product | null {
 
 /**
  * Details screen for the product mentioned in the `id` route parameter.
- * @throws an error if the id does not match any product in `productCards`.
+ * Shows a recovery link if the id does not match any product in `productCards`.
  */
 export default function DetailsPage() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const product = findProduct(id);
 
     if (product == null) {
-        throw new Error('Product id does not correspond to product in database!');
+        return (
+            <SafeAreaProvider style={styles.container}>
+                <Stack.Screen options={{ headerShown: false }} />
+                <View style={styles.missingProduct}>
+                    <Text style={styles.body}>Product not found.</Text>
+                    <Link href="/product-grid" style={styles.backButtonLabel}>Browse products</Link>
+                </View>
+            </SafeAreaProvider>
+        );
     }
 
     const goBack = () => (router.canGoBack() ? router.back() : router.replace('/product-grid'));
@@ -116,6 +124,12 @@ const styles = StyleSheet.create({
         paddingTop: "10%",
         flex: 1,
         backgroundColor: CREAM,
+    },
+    missingProduct: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 12,
     },
     back: {
         flexDirection: 'row',
