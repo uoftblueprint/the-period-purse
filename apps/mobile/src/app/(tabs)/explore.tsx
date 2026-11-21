@@ -1,180 +1,238 @@
-import { Image } from 'expo-image';
-import { SymbolView } from 'expo-symbols';
-import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useState } from 'react';
+import { Image, Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Button, Card, Text } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
-import { ExternalLink } from '@/components/external-link';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Collapsible } from '@/components/ui/collapsible';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, theme } from '@/constants/theme';
+import { todaysFact, todaysFactPreview } from '@/components/learn-content';
+import { ProductCard } from '@/components/product-card';
+import { productCards } from '@/content/products';
+import { BottomTabInset, theme } from '@/constants/theme';
+import { Footer } from '@/components/footer';
 
+function FactDetail({ onBack }: { onBack: () => void }) {
+  return (
+    <SafeAreaView style={styles.screen} edges={['top']}>
+      <View style={styles.detailContainer}>
+        <Pressable
+          onPress={onBack}
+          accessibilityRole="button"
+          accessibilityLabel="Back to Learn"
+          style={styles.backButton}
+        >
+          <Text variant="labelLarge" style={styles.backText}>
+            ‹ Learn
+          </Text>
+        </Pressable>
 
+        <Image
+          source={require('@/assets/images/learn/pad.png')}
+          resizeMode="contain"
+          style={styles.detailMascot}
+        />
 
-export default function TabTwoScreen() {
-  const safeAreaInsets = useSafeAreaInsets();
-  const insets = {
-    ...safeAreaInsets,
-    bottom: safeAreaInsets.bottom + BottomTabInset + theme.spacing.three,
-  };
+        <Text variant="headlineMedium" style={styles.detailTitle}>
+          Did you know?
+        </Text>
 
-  const contentPlatformStyle = Platform.select({
-    android: {
-      paddingTop: insets.top,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
-      paddingBottom: insets.bottom,
-    },
-    web: {
-      paddingTop: theme.spacing.six,
-      paddingBottom: theme.spacing.four,
-    },
-  });
+        <Text variant="bodyLarge" style={styles.detailBody}>
+          {todaysFact()}
+        </Text>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+export default function LearnScreen() {
+  const [viewingFact, setViewingFact] = useState(false);
+
+  if (viewingFact) {
+    return <FactDetail onBack={() => setViewingFact(false)} />;
+  }
 
   return (
-    <ScrollView
-      style={[styles.scrollView, { backgroundColor: theme.colors.background }]}
-      contentInset={insets}
-      contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}>
-      <ThemedView style={styles.container}>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Explore</ThemedText>
-          <ThemedText style={styles.centerText} themeColor="onSurfaceVariant">
-            This starter app includes example{'\n'}code to help you get started.
-          </ThemedText>
+    <SafeAreaView style={styles.screen} edges={['top']}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* 1. Did you know? Daily rotating fact */}
+        <Card
+          mode="elevated"
+          onPress={() => setViewingFact(true)}
+          accessibilityRole="button"
+          accessibilityLabel="Did you know? Tap to read the full daily fact."
+          style={styles.factCard}
+        >
+          <Card.Content style={styles.factCardContent}>
+            <View style={styles.factTextColumn}>
+              <Text variant="titleLarge" style={styles.factHeading}>
+                Did you know?
+              </Text>
+              <Text variant="bodyMedium" style={styles.factPreview} numberOfLines={2}>
+                {todaysFactPreview()}
+              </Text>
+            </View>
+            <Image
+              source={require('@/assets/images/learn/pad.png')}
+              resizeMode="contain"
+              style={styles.factMascot}
+            />
+          </Card.Content>
+        </Card>
 
-          <ExternalLink href="https://docs.expo.dev" asChild>
-            <Pressable style={({ pressed }) => pressed && styles.pressed}>
-              <ThemedView type="surfaceVariant" style={styles.linkButton}>
-                <ThemedText type="link">Expo documentation</ThemedText>
-                <SymbolView
-                  tintColor={theme.colors.onSurface}
-                  name={{ ios: 'arrow.up.right.square', android: 'link', web: 'link' }}
-                  size={12}
-                />
-              </ThemedView>
-            </Pressable>
-          </ExternalLink>
-        </ThemedView>
+        {/* 2. Period products grid */}
+        <Text variant="titleMedium" style={styles.sectionPrompt}>
+          Tap to learn more about period products.
+        </Text>
 
-        <ThemedView style={styles.sectionsWrapper}>
-          <Collapsible title="File-based routing">
-            <ThemedText type="small">
-              This app has two tabs: <ThemedText type="code">src/app/(tabs)/index.tsx</ThemedText> and{' '}
-              <ThemedText type="code">src/app/(tabs)/explore.tsx</ThemedText>
-            </ThemedText>
-            <ThemedText type="small">
-              The layout file in <ThemedText type="code">src/app/(tabs)/_layout.tsx</ThemedText>{' '}
-              sets up the tab navigator.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/router/introduction">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+        <View style={styles.grid}>
+          {productCards.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              onPress={() =>
+                router.push({
+                  pathname: '/product',
+                  params: { id: product.id },
+                })
+              }
+            />
+          ))}
+        </View>
 
-          <Collapsible title="Android, iOS, and web support">
-            <ThemedView type="surfaceVariant" style={styles.collapsibleContent}>
-              <ThemedText type="small">
-                You can open this project on Android, iOS, and the web. To open the web version,
-                press <ThemedText type="smallBold">w</ThemedText> in the terminal running this
-                project.
-              </ThemedText>
-              <Image
-                source={require('@/assets/images/tutorial-web.png')}
-                style={styles.imageTutorial}
-              />
-            </ThemedView>
-          </Collapsible>
+        {/* 3. Learn more about The Period Purse */}
+        <Card mode="elevated" style={styles.learnMoreCard}>
+          <Card.Content style={styles.learnMoreContent}>
+            <Text variant="titleLarge" style={styles.learnMoreTitle}>
+              Learn more about The Period Purse
+            </Text>
+            <Text variant="bodyMedium" style={styles.learnMoreBody}>
+              The Period Purse strives to achieve menstrual equity by providing
+              marginalized menstruators with access to free menstrual products
+              and reducing the stigma surrounding periods through public education
+              and advocacy.
+            </Text>
+            <Button
+              mode="contained"
+              onPress={() => Linking.openURL('https://www.theperiodpurse.com/')}
+              style={styles.websiteButton}
+              labelStyle={styles.websiteButtonLabel}
+            >
+              Visit our website
+            </Button>
+          </Card.Content>
+        </Card>
 
-          <Collapsible title="Images">
-            <ThemedText type="small">
-              For static images, you can use the <ThemedText type="code">@2x</ThemedText> and{' '}
-              <ThemedText type="code">@3x</ThemedText> suffixes to provide files for different
-              screen densities.
-            </ThemedText>
-            <Image source={require('@/assets/images/react-logo.png')} style={styles.imageReact} />
-            <ExternalLink href="https://reactnative.dev/docs/images">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
-
-          <Collapsible title="Light and dark mode components">
-            <ThemedText type="small">
-              This template has light and dark mode support. The{' '}
-              <ThemedText type="code">useColorScheme()</ThemedText> hook lets you inspect what the
-              user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
-
-          <Collapsible title="Animations">
-            <ThemedText type="small">
-              This template includes an example of an animated component. The{' '}
-              <ThemedText type="code">src/components/ui/collapsible.tsx</ThemedText> component uses
-              the powerful <ThemedText type="code">react-native-reanimated</ThemedText> library to
-              animate opening this hint.
-            </ThemedText>
-          </Collapsible>
-        </ThemedView>
-        {Platform.OS === 'web' && <WebBadge />}
-      </ThemedView>
-    </ScrollView>
+        {/* 4. Shared Footer */}
+        <Footer />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
+  screen: {
     flex: 1,
+    backgroundColor: '#FFF7F2',
   },
-  contentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  container: {
-    maxWidth: MaxContentWidth,
-    flexGrow: 1,
-  },
-  titleContainer: {
-    gap: theme.spacing.three,
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.four,
-    paddingVertical: theme.spacing.six,
-  },
-  centerText: {
-    textAlign: 'center',
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-  linkButton: {
-    flexDirection: 'row',
-    paddingHorizontal: theme.spacing.four,
-    paddingVertical: theme.spacing.two,
-    borderRadius: theme.spacing.five,
-    justifyContent: 'center',
-    gap: theme.spacing.one,
-    alignItems: 'center',
-  },
-  sectionsWrapper: {
-    gap: theme.spacing.five,
+  content: {
     paddingHorizontal: theme.spacing.four,
     paddingTop: theme.spacing.three,
+    paddingBottom: BottomTabInset + theme.spacing.five,
+    gap: theme.spacing.four,
   },
-  collapsibleContent: {
+  factCard: {
+    backgroundColor: '#4ECDC4',
+    borderRadius: 16,
+  },
+  factCardContent: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: theme.spacing.three,
   },
-  imageTutorial: {
-    width: '100%',
-    aspectRatio: 296 / 171,
-    borderRadius: theme.spacing.three,
+  factTextColumn: {
+    flex: 1,
+    gap: theme.spacing.one,
+  },
+  factHeading: {
+    fontFamily: 'NunitoSans_700Bold',
+    color: '#FFFFFF',
+  },
+  factPreview: {
+    fontFamily: 'NunitoSans_400Regular',
+    color: '#0D2C2A',
+  },
+  factMascot: {
+    width: 64,
+    height: 76,
+  },
+  sectionPrompt: {
+    fontFamily: 'NunitoSans_700Bold',
+    color: '#5C5C5C',
+    marginTop: theme.spacing.one,
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginHorizontal: -8,
+  },
+  learnMoreCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
     marginTop: theme.spacing.two,
   },
-  imageReact: {
-    width: 100,
-    height: 100,
+  learnMoreContent: {
+    gap: theme.spacing.three,
+  },
+  learnMoreTitle: {
+    fontFamily: 'NunitoSans_700Bold',
+    color: '#1F1F1F',
+  },
+  learnMoreBody: {
+    fontFamily: 'NunitoSans_400Regular',
+    color: '#4A4A4A',
+    lineHeight: 22,
+  },
+  websiteButton: {
+    backgroundColor: '#E63946',
+    borderRadius: 24,
+    alignSelf: 'flex-start',
+  },
+  websiteButtonLabel: {
+    fontFamily: 'NunitoSans_700Bold',
+    color: '#FFFFFF',
+  },
+  detailContainer: {
+    flex: 1,
+    paddingHorizontal: theme.spacing.four,
+    paddingTop: theme.spacing.three,
+    gap: theme.spacing.four,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    paddingVertical: theme.spacing.one,
+  },
+  backText: {
+    fontFamily: 'NunitoSans_700Bold',
+    color: '#E63946',
+  },
+  detailMascot: {
+    width: 110,
+    height: 130,
     alignSelf: 'center',
+    marginTop: theme.spacing.two,
+  },
+  detailTitle: {
+    fontFamily: 'NunitoSans_700Bold',
+    color: '#1F1F1F',
+    textAlign: 'center',
+  },
+  detailBody: {
+    fontFamily: 'NunitoSans_400Regular',
+    color: '#2D2D2D',
+    lineHeight: 24,
   },
 });
