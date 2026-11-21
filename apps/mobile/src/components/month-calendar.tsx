@@ -15,7 +15,7 @@ const CALENDAR_HEIGHT = 420;
 
 type MonthCalendarProps = {
   /** Called with the tapped day as YYYY-MM-DD. */
-  onDayPress: (date: string) => void;
+  onDayPress?: (date: string) => void;
   /** Preview a date without triggering its normal tap action. */
   onDayLongPress?: (date: string) => void;
   /** Month to open on, as YYYY-MM-DD. Read on mount; defaults to today. */
@@ -41,7 +41,7 @@ type DayProps = {
   marking?: { selected?: boolean; selectedColor?: string; selectedTextColor?: string; flow?: FlowLevel };
 };
 
-type DayContext = { today: string; selectedDate?: string; isFlowSelection: boolean; canPreview: boolean };
+type DayContext = { today: string; selectedDate?: string; isFlowSelection: boolean; canPreview: boolean; canPress: boolean };
 const CalendarDayContext = createContext<DayContext | null>(null);
 const monthKey = (month: { toString: (format: string) => string }) => month.toString('yyyy-MM');
 
@@ -64,9 +64,9 @@ export function MonthCalendar({ onDayPress, onDayLongPress, initialDate, pastMon
   }, []);
   const dayContext = useMemo(() => ({
     today, selectedDate, isFlowSelection: markedDatesPurpose === 'flow-selection',
-    canPreview: Boolean(onDayLongPress),
-  }), [today, selectedDate, markedDatesPurpose, onDayLongPress]);
-  const handleDayPress = useCallback((day: DateData) => onDayPress(day.dateString), [onDayPress]);
+    canPreview: Boolean(onDayLongPress), canPress: Boolean(onDayPress),
+  }), [today, selectedDate, markedDatesPurpose, onDayLongPress, onDayPress]);
+  const handleDayPress = useCallback((day: DateData) => onDayPress?.(day.dateString), [onDayPress]);
   const handleDayLongPress = useCallback((day: DateData) => onDayLongPress?.(day.dateString), [onDayLongPress]);
 
   // CalendarList measures its scroll ranges from the month it opens on,
@@ -145,7 +145,7 @@ function CalendarDay(props: DayProps) {
   return <Day
     date={date}
     state={state}
-    onPress={onPress}
+    onPress={context.canPress ? onPress : undefined}
     onLongPress={context.canPreview ? onLongPress : undefined}
     marking={marking}
     isToday={date?.dateString === context.today}
@@ -165,7 +165,7 @@ const Day = memo(function Day({ date, state, onPress, onLongPress, marking, isSe
   }) : '', [date?.year, date?.month, date?.day]);
   if (!date) return null;
 
-  const disabled = state === 'disabled' || isFuture;
+  const disabled = state === 'disabled' || isFuture || (!onPress && !onLongPress);
   const markingLabel = isFlowSelection
     ? MONTH_CALENDAR_ACCESSIBILITY_TEXT.SELECTED_FLOW_DATE
     : `${marking?.flow ? `${marking.flow} ` : ''}${MONTH_CALENDAR_ACCESSIBILITY_TEXT.RECORDED_FLOW}`;
@@ -186,7 +186,7 @@ const Day = memo(function Day({ date, state, onPress, onLongPress, marking, isSe
         isToday && styles.today,
         isSelected && styles.selected,
       ]}>
-      <Text style={[marking?.selected && { color: marking.selectedTextColor }, disabled && styles.disabledText]}>{date.day}</Text>
+      <Text style={[marking?.selected && { color: marking.selectedTextColor }, (state === 'disabled' || isFuture) && styles.disabledText]}>{date.day}</Text>
       {marking?.selected && marking.flow && <FlowIcon level={marking.flow} size={14} color={marking.selectedTextColor} />}
     </Pressable>
   );

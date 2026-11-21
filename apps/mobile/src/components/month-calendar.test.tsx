@@ -77,6 +77,24 @@ describe('calendar month rollover with a fixed opening date', () => {
 
   afterAll(() => dom.window.close());
 
+  it('displays a calendar without a day handler and keeps Today available', () => {
+    act(() => root.render(<MonthCalendar initialDate="2026-10-15" />));
+    const label = new Date(2026, 9, 20).toLocaleDateString(undefined, {
+      weekday: 'long', month: 'long', day: 'numeric',
+    });
+    const cell = Array.from(container.querySelectorAll('[role="button"]'))
+      .find((element) => element.getAttribute('aria-label') === label) as HTMLElement;
+
+    expect(cell).toBeDefined();
+    expect(cell.getAttribute('aria-disabled')).toBe('true');
+    act(() => cell.click());
+
+    const todayButton = Array.from(container.querySelectorAll('button'))
+      .find((button) => button.textContent === 'Today')!;
+    act(() => todayButton.click());
+    expect(mockScrollToOffset).toHaveBeenCalled();
+  });
+
   it('previews a held date without firing the normal date press on release', () => {
     const onDayPress = jest.fn();
     const onDayLongPress = jest.fn();
