@@ -9,7 +9,9 @@
  */
 
 import { Link, Stack, router, useLocalSearchParams } from 'expo-router';
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Card, Text, useTheme, Icon } from 'react-native-paper';
+import type { AppTheme } from '@/constants/theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { type Product, productCards } from '@/content/products';
@@ -30,13 +32,15 @@ function findProduct(id: string): Product | null {
 export default function DetailsPage() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const product = findProduct(id);
+    const theme = useTheme<AppTheme>();
+    const styles = createStyles(theme);
 
     if (product == null) {
         return (
             <SafeAreaProvider style={styles.container}>
                 <Stack.Screen options={{ headerShown: false }} />
                 <View style={styles.missingProduct}>
-                    <Text style={styles.body}>Product not found.</Text>
+                    <Text variant="bodyMedium" style={styles.body}>Product not found.</Text>
                     <Link href="/product-grid" style={styles.backButtonLabel}>Browse products</Link>
                 </View>
             </SafeAreaProvider>
@@ -48,7 +52,7 @@ export default function DetailsPage() {
     return (
         <SafeAreaProvider style={styles.container}>
             {/* This screen makes its own back button, so hide the default header. */}
-            <Stack.Screen options={{ headerShown: false, animation: 'slide_from_right'}} />
+            <Stack.Screen options={{ headerShown: false, animation: 'slide_from_right' }} />
 
             {/* "‹ Learn" back button */}
             <Pressable
@@ -58,8 +62,8 @@ export default function DetailsPage() {
                 accessibilityLabel="Go back"
                 hitSlop={12}
             >
-                <Text style={styles.backButtonArrow}>{'<'}</Text>
-                <Text style={styles.backButtonLabel}>Learn</Text>
+                <Icon source="chevron-left" size={24} color={theme.colors.onBackground}/>
+                <Text variant="titleMedium" style={styles.backButtonLabel}>Learn</Text>
             </Pressable>
 
             <ScrollView contentContainerStyle={styles.scroll}>
@@ -70,60 +74,59 @@ export default function DetailsPage() {
                     accessibilityLabel={`${product.name} illustration`}
                 />
 
-                <Text style={styles.title} accessibilityRole="header">
+                <Text variant="headlineLarge" style={styles.title} accessibilityRole="header">
                     {product.name}
                 </Text>
-                <Text style={styles.body}>{product.summary}</Text>
+                <Text variant="bodyMedium" style={styles.body}>{product.summary}</Text>
 
                 {/* "How to Use" card */}
-                <View style={styles.card}>
-                    <Text style={styles.cardTitle} accessibilityRole="header">
-                        How to Use
-                    </Text>
+                <Card mode="elevated" style={styles.card}>
+                    <Card.Content>
+                        <Text variant="headlineMedium" style={styles.cardTitle} accessibilityRole="header">
+                            How to Use
+                        </Text>
 
-                    {/* A product has one or more step lists; tampons have two
+                        {/* A product has one or more step lists; tampons have two
                     ("With applicator" / "Without applicator"), so each list
                     gets an optional label and its own numbering from 1. */}
-                    {product.StepPaths.map((group, g) => (
-                        <View key={group.label ?? g}>
-                            {/*Show label if it exists (e.g. for tampons it will show With/without applicator) */}
-                            {group.label ? <Text style={styles.groupLabel}>{group.label}</Text> : null}
+                        {product.StepPaths.map((group, g) => (
+                            <View key={group.label ?? g}>
+                                {/*Show label if it exists (e.g. for tampons it will show With/without applicator) */}
+                                {group.label ? <Text variant="titleSmall" style={styles.groupLabel}>{group.label}</Text> : null}
 
-                            {group.steps.map((step, i) => (
-                                // accessible since it groups the step in a view so a screen reader announces
-                                // it as one item, e.g. "Step 1: Remove the wrapper".
-                                <View
-                                    key={i}
-                                    style={styles.step}
-                                    accessible
-                                    accessibilityLabel={`Step ${i + 1}: ${step.text}`}
-                                >
-                                    <View style={styles.stepRow}>
-                                        <View style={styles.numberCircle}>
-                                            <Text style={styles.numberText}>{i + 1}</Text>
+                                {group.steps.map((step, i) => (
+                                    // accessible since it groups the step in a view so a screen reader announces
+                                    // it as one item, e.g. "Step 1: Remove the wrapper".
+                                    <View
+                                        key={i}
+                                        style={styles.step}
+                                        accessible
+                                        accessibilityLabel={`Step ${i + 1}: ${step.text}`}
+                                    >
+                                        <View style={styles.stepRow}>
+                                            <View style={styles.numberCircle}>
+                                                <Text variant="titleMedium" style={styles.numberText}>{i + 1}</Text>
+                                            </View>
+                                            <Text variant="bodyMedium" style={styles.stepText}>{step.text}</Text>
                                         </View>
-                                        <Text style={styles.stepText}>{step.text}</Text>
+                                        <Image source={step.image} style={styles.stepImage} resizeMode="contain" />
                                     </View>
-                                    <Image source={step.image} style={styles.stepImage} resizeMode="contain" />
-                                </View>
-                            ))}
-                        </View>
-                    ))}
-                </View>
+                                ))}
+                            </View>
+                        ))}
+                    </Card.Content>
+                </Card>
             </ScrollView>
         </SafeAreaProvider>
     );
 }
 
 // Styles heavily inspired from the legacy app. *Temporary until design guide goes up*
-const TEAL = '#45BFAE';
-const CREAM = '#FFF4EE';
-
-const styles = StyleSheet.create({
+const createStyles = (theme: AppTheme) => StyleSheet.create({
     container: {
         paddingTop: "10%",
         flex: 1,
-        backgroundColor: CREAM,
+        backgroundColor: theme.colors.background,
     },
     missingProduct: {
         flex: 1,
@@ -139,15 +142,11 @@ const styles = StyleSheet.create({
         paddingBottom: 4,
     },
     backButtonArrow: {
-        fontSize: 28,
-        lineHeight: 28,
-        color: TEAL,
+        color: theme.colors.onBackground,
         marginRight: 4,
     },
     backButtonLabel: {
-        fontFamily: 'NunitoSans_700Bold',
-        fontSize: 16,
-        color: TEAL,
+        color: theme.colors.onBackground,
     },
     scroll: {
         alignItems: 'center',
@@ -161,42 +160,26 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     title: {
-        fontFamily: 'NunitoSans_700Bold',
-        fontSize: 32,
-        lineHeight: 38,
         textAlign: 'center',
         color: '#000',
         marginBottom: 16,
     },
     body: {
-        fontSize: 16,
-        lineHeight: 22,
         textAlign: 'center',
-        color: '#1A1A1A',
+        color: theme.colors.onBackground,
         marginBottom: 28,
     },
     card: {
         alignSelf: 'stretch',
-        backgroundColor: '#FFFFFF',
-        borderRadius: 20,
         paddingVertical: 20,
         paddingHorizontal: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 12,
-        elevation: 4,
     },
     cardTitle: {
-        fontFamily: 'NunitoSans_700Bold',
-        fontSize: 22,
         textAlign: 'center',
         color: '#000',
         marginBottom: 16,
     },
     groupLabel: {
-        fontFamily: 'NunitoSans_700Bold',
-        fontSize: 18,
         color: '#000',
         marginTop: 8,
         marginBottom: 12,
@@ -212,20 +195,16 @@ const styles = StyleSheet.create({
     numberCircle: {
         width: 36,
         height: 36,
-        borderRadius: 18,
-        backgroundColor: TEAL,
+        borderRadius: theme.radii.full,
+        backgroundColor: theme.colors.primary,
         alignItems: 'center',
         justifyContent: 'center',
     },
     numberText: {
-        fontFamily: 'NunitoSans_700Bold',
-        fontSize: 16,
-        color: '#FFFFFF',
+        color: theme.colors.onPrimary,
     },
     stepText: {
         flex: 1,
-        fontSize: 17,
-        lineHeight: 22,
         color: '#000',
     },
     stepImage: {
