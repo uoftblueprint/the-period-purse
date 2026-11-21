@@ -44,6 +44,13 @@ jest.mock('react-native', () => {
 
 jest.mock('react-native-paper', () => ({
   Button: ({ children, onPress }: any) => require('react').createElement('button', { onClick: onPress }, children),
+  useTheme: () => ({
+    colors: { tertiary: '#FFF0F0', onSurface: '#000', onBackground: '#000', outline: '#5b9f93', outlineVariant: '#6D6E71' },
+    fonts: { headlineMedium: { fontSize: 25 }, labelMedium: { fontSize: 15 } },
+  }),
+}));
+jest.mock('@/constants/theme', () => ({
+  theme: { spacing: { half: 2, one: 4, two: 8, three: 16 }, radii: { lg: 16, full: 999 } },
 }));
 jest.mock('expo-image', () => ({
   Image: ({ source }: any) => require('react').createElement('span', { 'data-flow-icon': String(source) }),
