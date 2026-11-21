@@ -7,7 +7,7 @@ const FUTURE_MONTHS = 2;
 
 type MonthCalendarProps = {
   /** Called with the tapped day as YYYY-MM-DD. */
-  onDayPress: (date: string) => void;
+  onDayPress?: (date: string) => void;
   /** Month to open on, as YYYY-MM-DD. Read on mount; defaults to today. */
   initialDate?: string;
   /** How many months before today the user can scroll back. */
@@ -53,7 +53,7 @@ export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12 }: Mont
         pastScrollRange={list.pastScrollRange}
         futureScrollRange={list.futureScrollRange}
         maxDate={today}
-        onDayPress={(day) => onDayPress(day.dateString)}
+        onDayPress={onDayPress ? (day) => onDayPress(day.dateString) : undefined}
         dayComponent={Day}
         animateScroll
       />
@@ -64,7 +64,7 @@ export function MonthCalendar({ onDayPress, initialDate, pastMonths = 12 }: Mont
 function Day({ date, state, onPress }: DayProps) {
   if (!date) return null;
 
-  const disabled = state === 'disabled';
+  const disabled = state === 'disabled' || !onPress;
   const label = new Date(date.year, date.month - 1, date.day).toLocaleDateString(undefined, {
     weekday: 'long',
     month: 'long',
@@ -79,7 +79,7 @@ function Day({ date, state, onPress }: DayProps) {
       disabled={disabled}
       onPress={() => onPress?.(date)}
       style={[styles.day, state === 'today' && styles.today]}>
-      <Text style={disabled && styles.disabled}>{date.day}</Text>
+      <Text style={state === 'disabled' && styles.disabled}>{date.day}</Text>
     </Pressable>
   );
 }

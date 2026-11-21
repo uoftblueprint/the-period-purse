@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, Surface, Text, useTheme } from 'react-native-paper';
 
-import { FILTER_COLOURS } from '@/constants/calendar';
+import { FILTER_COLOURS } from '@/services/utils/constants';
 import { Spacing } from '@/constants/theme';
 
 const LEGEND_SECTIONS = [
@@ -54,7 +54,7 @@ const LEGEND_SECTIONS = [
 
 export default function LegendScreen() {
   const theme = useTheme();
-  const goBack = () => (router.canGoBack() ? router.back() : router.replace('/'));
+  const goBack = () => (router.canGoBack() ? router.back() : router.replace('/calendar'));
 
   return (
     <SafeAreaView style={[styles.screen, { backgroundColor: theme.colors.background }]} edges={['top']}>
