@@ -1,10 +1,10 @@
 import { createContext, memo, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState, type ComponentProps } from 'react';
 import { Pressable, StyleSheet, Text, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { CalendarList, type DateData } from 'react-native-calendars';
-import { Button } from 'react-native-paper';
+import { Button, useTheme, type MD3Theme } from 'react-native-paper';
 
+import { theme as appTheme } from '@/constants/theme';
 import { useToday } from '@/hooks/use-today';
-import { FILTER_TEXT_COLOURS } from '@/services/utils/constants';
 import type { FlowLevel } from '@/features/daily-log';
 import { FlowIcon } from './flow-icon';
 
@@ -41,6 +41,7 @@ type DayProps = {
   marking?: { selected?: boolean; selectedColor?: string; selectedTextColor?: string; flow?: FlowLevel };
 };
 
+type CalendarTheme = NonNullable<ComponentProps<typeof CalendarList>['theme']>;
 type DayContext = { today: string; selectedDate?: string; isFlowSelection: boolean; canPreview: boolean };
 const CalendarDayContext = createContext<DayContext | null>(null);
 const monthKey = (month: { toString: (format: string) => string }) => month.toString('yyyy-MM');
@@ -56,6 +57,8 @@ export function MonthCalendar({ onDayPress, onDayLongPress, initialDate, pastMon
     scrollToDay: (date: string, offset: number, animated: boolean) => void;
   }>(null);
   const today = useToday();
+  const paperTheme = useTheme();
+  const calendarTheme = useMemo(() => ({ ...getCalendarTheme(paperTheme), ...theme }), [paperTheme, theme]);
   const [openingDate] = useState(() => initialDate ?? today);
   const scrollOffset = useRef<number | null>(null);
   const [width, setWidth] = useState(0);
@@ -126,8 +129,9 @@ export function MonthCalendar({ onDayPress, onDayLongPress, initialDate, pastMon
           onScrollEndDrag={rememberScrollOffset}
           onMomentumScrollEnd={rememberScrollOffset}
           markedDates={markedDates}
-          theme={theme}
+          theme={calendarTheme}
           dayComponent={dayComponent ?? CalendarDay}
+          customHeader={renderHeader ? undefined : MonthHeader}
           renderHeader={renderHeader}
           animateScroll
         />}
@@ -158,6 +162,7 @@ function CalendarDay(props: DayProps) {
 const Day = memo(function Day({ date, state, onPress, onLongPress, marking, isSelected, isFlowSelection, isToday, isFuture }: DayProps & {
   isSelected: boolean; isFlowSelection: boolean; isToday: boolean; isFuture: boolean;
 }) {
+  const theme = useTheme();
   const label = useMemo(() => date ? new Date(date.year, date.month - 1, date.day).toLocaleDateString(undefined, {
     weekday: 'long',
     month: 'long',
@@ -181,16 +186,42 @@ const Day = memo(function Day({ date, state, onPress, onLongPress, marking, isSe
       onLongPress={onLongPress ? () => onLongPress(date) : undefined}
       style={[
         styles.day,
-        marking?.selected && { backgroundColor: marking.selectedColor, borderRadius: 22 },
+        marking?.selected && { backgroundColor: marking.selectedColor },
         // Use the same date as the Today button and bounds, including test clocks.
-        isToday && styles.today,
-        isSelected && styles.selected,
+        isToday && [styles.today, { borderColor: theme.colors.outline }],
+        isSelected && [styles.selected, { borderColor: theme.colors.onSurface }],
       ]}>
-      <Text style={[marking?.selected && { color: marking.selectedTextColor }, disabled && styles.disabledText]}>{date.day}</Text>
+      <Text style={[
+        theme.fonts.labelMedium,
+        { color: theme.colors.onSurface },
+        marking?.selected && { color: marking.selectedTextColor },
+        disabled && { color: theme.colors.outlineVariant },
+      ]}>{date.day}</Text>
       {marking?.selected && marking.flow && <FlowIcon level={marking.flow} size={14} color={marking.selectedTextColor} />}
     </Pressable>
   );
 });
+
+const WEEKDAY_NAMES = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
+
+function MonthHeader({ month }: { month: { toString: (format: string) => string } }) {
+  const theme = useTheme();
+  return (
+    <View>
+      <Text allowFontScaling={false} accessibilityRole="header" style={[theme.fonts.headlineMedium, styles.monthTitle, { color: theme.colors.onBackground }]}>
+        {month.toString('MMMM yyyy')}
+      </Text>
+      <View
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+        style={[styles.weekdays, { backgroundColor: theme.colors.tertiary }]}>
+        {WEEKDAY_NAMES.map((name) => (
+          <Text allowFontScaling={false} numberOfLines={1} key={name} style={[theme.fonts.labelMedium, styles.weekday, { color: theme.colors.onSurface }]}>{name}</Text>
+        ))}
+      </View>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -204,13 +235,40 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minWidth: 44,
     minHeight: 44,
+    borderRadius: appTheme.radii.full,
   },
-  today: {
-    borderWidth: 1,
-    borderRadius: 22,
+  today: { borderWidth: 1 },
+  selected: { borderWidth: 2 },
+  monthTitle: {
+    marginTop: appTheme.spacing.two,
+    marginBottom: appTheme.spacing.two,
+    marginHorizontal: appTheme.spacing.one,
   },
-  selected: { borderWidth: 2, borderRadius: 22, borderColor: '#242424' },
-  disabledText: {
-    color: FILTER_TEXT_COLOURS.DISABLED,
+  weekdays: {
+    flexDirection: 'row',
+    marginTop: appTheme.spacing.one,
+    paddingTop: appTheme.spacing.three,
+    paddingBottom: appTheme.spacing.two,
+    borderTopLeftRadius: appTheme.radii.lg,
+    borderTopRightRadius: appTheme.radii.lg,
   },
+  // flex: 1 lines each label up with the day columns below.
+  weekday: { flex: 1, textAlign: 'center' },
 });
+
+function getCalendarTheme({ colors }: MD3Theme): CalendarTheme {
+  return {
+    calendarBackground: 'transparent',
+    weekVerticalMargin: appTheme.spacing.half,
+    ...{
+      'stylesheet.calendar.main': {
+        monthView: {
+          backgroundColor: colors.tertiary,
+          paddingBottom: appTheme.spacing.three,
+          borderBottomLeftRadius: appTheme.radii.lg,
+          borderBottomRightRadius: appTheme.radii.lg,
+        },
+      },
+    },
+  };
+}

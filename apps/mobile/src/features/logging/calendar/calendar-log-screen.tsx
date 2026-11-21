@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { usePathname, useRouter } from 'expo-router';
-import { ActivityIndicator, Button, Text } from 'react-native-paper';
+import { ActivityIndicator, Button, Text, useTheme } from 'react-native-paper';
 import { CalendarUtils } from 'react-native-calendars';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -16,6 +16,7 @@ import { CALENDAR_LOG_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
 export function CalendarLogScreen() {
   const insets = useSafeAreaInsets();
+  const theme = useTheme();
   const router = useRouter();
   // TODO: Replace the demo path here and in onNavigateToCalendar with the final
   // calendar route when the shared action is mounted in app-wide navigation.
@@ -38,7 +39,7 @@ export function CalendarLogScreen() {
   });
 
   return (
-    <View style={[styles.screen, {
+    <View style={[styles.screen, { backgroundColor: theme.colors.background }, {
       // TODO: Replace this padding with the final navigation inset when everything is integrated.
       paddingTop: Platform.OS === 'web' ? 96 : insets.top,
       paddingBottom: Platform.OS === 'web' ? 0 : insets.bottom,
@@ -68,7 +69,7 @@ export function CalendarLogScreen() {
       {/* TODO: Move this shared action into the final app-wide bottom navigation.
           Remove this preview bar and its bottomBar/bottomBarSurface styles then. */}
       <View style={styles.bottomBar}>
-        <View pointerEvents="none" style={styles.bottomBarSurface} />
+        <View pointerEvents="none" style={[styles.bottomBarSurface, { backgroundColor: theme.colors.background }]} />
         <CalendarActionButton
           isCalendarPage={isCalendarPage}
           onNavigateToCalendar={() => router.navigate('/logging-demo')}
@@ -105,17 +106,17 @@ export function CalendarLogScreen() {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: LoggingColors.background },
+  screen: { flex: 1 },
   header: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 20, gap: 8 },
   title: { fontWeight: '600', color: LoggingColors.text },
   subtitle: { color: LoggingColors.text },
   error: { paddingHorizontal: 24, alignItems: 'flex-start' },
-  calendar: { flex: 1, marginHorizontal: 16, overflow: 'hidden', backgroundColor: LoggingColors.surface },
+  calendar: { flex: 1, marginHorizontal: 16, overflow: 'hidden' },
   // TODO: Remove these preview-bar styles after the shared action moves to final navigation.
   bottomBar: { height: 80, alignItems: 'center' },
-  bottomBarSurface: { position: 'absolute', top: 32, left: 0, right: 0, bottom: 0, backgroundColor: LoggingColors.surface, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: LoggingColors.disabled },
+  bottomBarSurface: { position: 'absolute', top: 32, left: 0, right: 0, bottom: 0 },
   // TODO: Remove this compact demo navigation style group together with the row above.
-  demoTabs: { flexDirection: 'row', justifyContent: 'center', borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: LoggingColors.disabled },
+  demoTabs: { flexDirection: 'row', justifyContent: 'center' },
   demoTab: { flex: 1, height: 32, alignItems: 'center', justifyContent: 'center' },
   demoTabLabel: { fontSize: 11, color: LoggingColors.muted },
   activeTab: { fontWeight: '700', color: LoggingColors.text },
