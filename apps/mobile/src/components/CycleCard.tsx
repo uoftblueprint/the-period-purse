@@ -42,7 +42,7 @@ export function CycleCard({
             borderRadius: theme.radii.lg,
         }]}>
             <View style={styles.cycleDetails}>
-                <Text style={[styles.header, { color: theme.colors.onSurface }]}>
+                <Text style={[theme.fonts.titleSmall, styles.header, { color: theme.colors.onSurface }]}>
                     Current Cycle:
                 </Text>
 
@@ -52,7 +52,7 @@ export function CycleCard({
                         style={styles.status}
                     />
                 ) : hasError ? (
-                    <Text style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}>
+                    <Text style={[theme.fonts.bodyMedium, styles.statusText, { color: theme.colors.onSurfaceVariant }]}>
                         Couldn&apos;t load your cycle data.
                     </Text>
                 ) : (
@@ -75,7 +75,7 @@ export function CycleCard({
                                 },
                             ]}
                         >
-                            <Text style={[styles.logButtonText, { color: theme.colors.onPrimary }]}>
+                            <Text style={[theme.fonts.labelLarge, styles.logButtonText, { color: theme.colors.onPrimary }]}>
                                 Log Period
                             </Text>
                         </Pressable>
@@ -110,7 +110,7 @@ export function CycleCard({
                             },
                         ]}
                     >
-                        <Text style={[styles.dayMarkerText, { color: theme.colors.onSurface }]}>
+                        <Text style={[theme.fonts.labelSmall, styles.dayMarkerText, { color: theme.colors.onSurface }]}>
                             Day {cycleDay}
                         </Text>
                     </View>
@@ -130,9 +130,9 @@ export function Cycle({ isOnPeriod, periodDays, daysSinceLastPeriod, showTip }: 
             ) : daysSinceLastPeriod !== null ? (
                 <OffPeriodText daysSinceLastPeriod={daysSinceLastPeriod} />
             ) : (
-                <Text style={[styles.cycleText, { color: theme.colors.onSurfaceVariant }]}>Log a period to start tracking.</Text>
+                <Text style={[theme.fonts.bodyLarge, styles.cycleText, { color: theme.colors.onSurfaceVariant }]}>Log a period to start tracking.</Text>
             )}
-            {showTip && <Text style={[styles.tip, { color: theme.colors.onSurfaceVariant }]}>Your cycle is in its follicular phase.</Text>}
+            {showTip && <Text style={[theme.fonts.bodySmall, styles.tip, { color: theme.colors.onSurfaceVariant }]}>Your cycle is in its follicular phase.</Text>}
         </View>
     );
 }
@@ -142,8 +142,8 @@ export function OffPeriodText({ daysSinceLastPeriod }: { daysSinceLastPeriod: nu
 
     return (
         <View style={styles.cycleNumberRow}>
-            <Text style={[styles.cycleText, { color: theme.colors.onSurface }]}>
-                <Text style={[styles.cycleNumber, { color: theme.colors.onSurface }]}>{daysSinceLastPeriod}</Text> days since last period
+            <Text style={[theme.fonts.bodyLarge, styles.cycleText, { color: theme.colors.onSurface }]}>
+                <Text style={[theme.fonts.titleSmall, styles.cycleNumber, { color: theme.colors.onSurface }]}>{daysSinceLastPeriod}</Text> days since last period
             </Text>
         </View>
     );
@@ -154,8 +154,8 @@ export function OnPeriodText({ periodDays }: { periodDays: number }) {
 
     return (
         <View style={styles.cycleNumberRow}>
-            <Text style={[styles.cycleText, { color: theme.colors.onSurface }]}>
-                Day <Text style={[styles.cycleNumber, { color: theme.colors.onSurface }]}>{periodDays}</Text> of period
+            <Text style={[theme.fonts.bodyLarge, styles.cycleText, { color: theme.colors.onSurface }]}>
+                Day <Text style={[theme.fonts.titleSmall, styles.cycleNumber, { color: theme.colors.onSurface }]}>{periodDays}</Text> of period
             </Text>
         </View>
     );
@@ -175,7 +175,6 @@ const styles = StyleSheet.create({
         paddingRight: 8,
     },
     header: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 20,
         fontWeight: '500',
         alignSelf: 'flex-start',
@@ -190,7 +189,6 @@ const styles = StyleSheet.create({
         marginBottom: 32,
     },
     statusText: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 15,
         lineHeight: 20,
         marginTop: 20,
@@ -202,20 +200,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cycleNumber: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 19,
         lineHeight: 25,
         fontWeight: '500',
     },
     cycleText: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 17,
         lineHeight: 22,
         textAlign: 'center',
         maxWidth: 170,
     },
     tip: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 12,
         marginTop: 8,
     },
@@ -227,7 +222,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     logButtonText: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 13,
         fontWeight: '500',
     },
@@ -253,7 +247,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
     },
     dayMarkerText: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 8,
     },
 });

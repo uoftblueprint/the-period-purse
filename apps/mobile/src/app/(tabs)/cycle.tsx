@@ -1,14 +1,7 @@
 import { SymbolView } from 'expo-symbols';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useFonts } from 'expo-font';
 import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-    LeagueSpartan_400Regular,
-    LeagueSpartan_500Medium,
-    LeagueSpartan_600SemiBold,
-    LeagueSpartan_700Bold,
-} from '@expo-google-fonts/league-spartan';
 
 import { CycleCard } from '@/components/CycleCard';
 import { MinimizedHistoryCard, type PeriodInterval } from '@/components/CycleHistory';
@@ -45,11 +38,11 @@ function InfoCard({
 
     return (
         <View style={[styles.infoCard, { backgroundColor }]}>
-            <Text style={[styles.infoHeader, { color: theme.colors.onSurface }]}>{header}</Text>
+            <Text style={[theme.fonts.titleMedium, styles.infoHeader, { color: theme.colors.onSurface }]}>{header}</Text>
             <View style={styles.infoContent}>
                 {children}
-                <Text style={[styles.daysText, { color: theme.colors.onSurface }]}>
-                    {days === null ? '—' : <>{days} <Text style={[styles.daysUnit, { color: theme.colors.onSurface }]}>days</Text></>}
+                <Text style={[theme.fonts.titleSmall, styles.daysText, { color: theme.colors.onSurface }]}>
+                    {days === null ? '—' : <>{days} <Text style={[theme.fonts.bodyMedium, styles.daysUnit, { color: theme.colors.onSurface }]}>days</Text></>}
                 </Text>
             </View>
         </View>
@@ -64,12 +57,6 @@ function CyclePage() {
     const theme = useTheme<AppTheme>();
     const { periods, isLoading, error } = usePeriodHistory();
     const today = useToday();
-    const [fontsLoaded] = useFonts({
-        LeagueSpartanRegular: LeagueSpartan_400Regular,
-        LeagueSpartanMedium: LeagueSpartan_500Medium,
-        LeagueSpartanSemiBold: LeagueSpartan_600SemiBold,
-        LeagueSpartanBold: LeagueSpartan_700Bold,
-    });
     const averages = getPeriodAverages(
         periods,
         DEFAULTS.AVG_PERIOD_LENGTH,
@@ -92,12 +79,10 @@ function CyclePage() {
         duration: period.days,
     }));
 
-    if (!fontsLoaded) return null;
-
     return (
         <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.background }]} edges={['top']}>
             <ScrollView contentContainerStyle={styles.container}>
-                <Text style={[styles.pageTitle, { color: theme.colors.onBackground }]}>Cycle Tracking:</Text>
+                <Text style={[theme.fonts.headlineMedium, styles.pageTitle, { color: theme.colors.onBackground }]}>Cycle Tracking:</Text>
 
                 <CycleCard
                     isOnPeriod={currentCycle.isOnPeriod}
@@ -160,7 +145,6 @@ const styles = StyleSheet.create({
         gap: theme.spacing.three,
     },
     pageTitle: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 28,
         lineHeight: 36,
         fontWeight: '500',
@@ -181,7 +165,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     infoHeader: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 14,
         fontWeight: '500',
         textAlign: 'center',
@@ -196,13 +179,11 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     daysText: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 17,
         lineHeight: 23,
         fontWeight: '500',
     },
     daysUnit: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 14,
         fontWeight: '500',
     },

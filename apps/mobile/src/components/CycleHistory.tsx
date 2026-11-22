@@ -26,11 +26,11 @@ export function MinimizedHistoryCard({ intervals, onPeriod }: CycleHistoryProps)
                 borderRadius: theme.radii.md,
             },
         ]}>
-            <Text style={[styles.title, { color: theme.colors.onSurface }]}>
+            <Text style={[theme.fonts.titleSmall, styles.title, { color: theme.colors.onSurface }]}>
                 Period History
             </Text>
             {onPeriod && (
-                <Text style={[styles.onPeriodLabel, { color: theme.colors.error }]}>
+                <Text style={[theme.fonts.labelSmall, styles.onPeriodLabel, { color: theme.colors.error }]}>
                     CURRENT PERIOD
                 </Text>
             )}
@@ -53,7 +53,7 @@ export function Interval({ interval, isFirst }: { interval: PeriodInterval; isFi
 
     return (
         <View style={[styles.intervalRow, !isFirst && { borderTopColor: theme.colors.outlineVariant }, !isFirst && styles.intervalDivider]}>
-            <Text style={[styles.periodText, { color: theme.colors.onSurface }]}>{interval.start} - {interval.end}</Text>
+            <Text style={[theme.fonts.bodyLarge, styles.periodText, { color: theme.colors.onSurface }]}>{interval.start} - {interval.end}</Text>
         </View>
     );
 }
@@ -67,7 +67,7 @@ export function ShowMore({ expanded, onPress }: { expanded: boolean; onPress: ()
             accessibilityLabel={expanded ? 'Show fewer periods' : 'Show more periods'}
             onPress={onPress}
             style={({ pressed }) => [styles.showMoreButton, { backgroundColor: theme.colors.primary, borderRadius: theme.radii.full }, pressed && styles.pressed]}>
-            <Text style={[styles.showMoreText, { color: theme.colors.onPrimary }]}>{expanded ? 'Show Less' : 'See More'}</Text>
+            <Text style={[theme.fonts.labelLarge, styles.showMoreText, { color: theme.colors.onPrimary }]}>{expanded ? 'Show Less' : 'See More'}</Text>
         </Pressable>
     );
 }
@@ -75,7 +75,7 @@ export function ShowMore({ expanded, onPress }: { expanded: boolean; onPress: ()
 export function NothingLogged() {
     const theme = useTheme<AppTheme>();
 
-    return <Text style={[styles.emptyText, { color: theme.colors.onSurfaceVariant }]}>No period history yet.</Text>;
+    return <Text style={[theme.fonts.bodySmall, styles.emptyText, { color: theme.colors.onSurfaceVariant }]}>No period history yet.</Text>;
 }
 
 const styles = StyleSheet.create({
@@ -85,13 +85,11 @@ const styles = StyleSheet.create({
         paddingBottom: 22,
     },
     title: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 22,
         fontWeight: '500',
         marginBottom: 13,
     },
     onPeriodLabel: {
-        fontFamily: 'LeagueSpartanBold',
         fontSize: 9,
         fontWeight: '700',
         letterSpacing: 0.8,
@@ -106,7 +104,6 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
     },
     periodText: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 21,
         fontWeight: '500',
         textAlign: 'left',
@@ -118,7 +115,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     showMoreText: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 18,
         fontWeight: '500',
     },
@@ -126,7 +122,6 @@ const styles = StyleSheet.create({
         opacity: 0.65,
     },
     emptyText: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 13,
         paddingVertical: 20,
     },
