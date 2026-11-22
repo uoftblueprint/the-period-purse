@@ -119,7 +119,7 @@ function CyclePage() {
                 </View>
 
                 <View style={styles.element}>
-                    <MinimizedHistoryCard intervals={intervals} />
+                    <MinimizedHistoryCard intervals={intervals} onPeriod={currentCycle.isOnPeriod} />
                 </View>
 
                 {<View style={styles.footerContainer}>

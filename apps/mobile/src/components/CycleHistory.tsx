@@ -11,6 +11,7 @@ export type PeriodInterval = {
 
 type CycleHistoryProps = {
     intervals: PeriodInterval[];
+    onPeriod: boolean;
 };
 
 export function MinimizedHistoryCard({ intervals, onPeriod }: CycleHistoryProps) {
