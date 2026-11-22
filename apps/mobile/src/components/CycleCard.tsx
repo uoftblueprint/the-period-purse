@@ -28,12 +28,13 @@ export function CycleCard({
 }: CycleCardProps) {
     const theme = useTheme<AppTheme>();
     const ringSize = 152;
+    const ringBorderWidth = 12;
     const markerSize = 38;
     const markerAngle = ((cycleDonutPercent ?? 0) / 100) * Math.PI * 2 - Math.PI / 2;
-    const markerRadius = (ringSize - 12) / 2;
+    const markerRadius = (ringSize - ringBorderWidth) / 2;
     const markerPosition = {
-        left: (ringSize - markerSize) / 2 + markerRadius * Math.cos(markerAngle),
-        top: (ringSize - markerSize) / 2 + markerRadius * Math.sin(markerAngle),
+        left: (ringSize - markerSize) / 2 + markerRadius * Math.cos(markerAngle) - ringBorderWidth,
+        top: (ringSize - markerSize) / 2 + markerRadius * Math.sin(markerAngle) - ringBorderWidth,
     };
 
     return (
