@@ -26,7 +26,7 @@ export function MinimizedHistoryCard({ intervals, onPeriod }: CycleHistoryProps)
                 borderRadius: theme.radii.md,
             },
         ]}>
-            <Text style={[theme.fonts.titleSmall, styles.title, { color: theme.colors.onSurface }]}>
+            <Text style={[theme.fonts.titleMedium, styles.title, { color: theme.colors.onSurface }]}>
                 Period History
             </Text>
             {onPeriod && (
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 22,
-        fontWeight: '500',
+        lineHeight: 28,
         marginBottom: 13,
     },
     onPeriodLabel: {

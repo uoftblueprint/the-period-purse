@@ -82,7 +82,7 @@ function CyclePage() {
     return (
         <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.background }]} edges={['top']}>
             <ScrollView contentContainerStyle={styles.container}>
-                <Text style={[theme.fonts.headlineMedium, styles.pageTitle, { color: theme.colors.onBackground }]}>Cycle Tracking:</Text>
+                <Text style={[theme.fonts.titleMedium, styles.pageTitle, { color: theme.colors.onBackground }]}>Cycle Tracking:</Text>
 
                 <CycleCard
                     isOnPeriod={currentCycle.isOnPeriod}
@@ -147,7 +147,6 @@ const styles = StyleSheet.create({
     pageTitle: {
         fontSize: 28,
         lineHeight: 36,
-        fontWeight: '500',
         textAlign: 'left',
         marginLeft: theme.spacing.two,
     },
@@ -166,7 +165,6 @@ const styles = StyleSheet.create({
     },
     infoHeader: {
         fontSize: 14,
-        fontWeight: '500',
         textAlign: 'center',
         marginTop: theme.spacing.three,
     },

@@ -43,7 +43,7 @@ export function CycleCard({
             borderRadius: theme.radii.lg,
         }]}>
             <View style={styles.cycleDetails}>
-                <Text style={[theme.fonts.titleSmall, styles.header, { color: theme.colors.onSurface }]}>
+                <Text style={[theme.fonts.titleMedium, styles.header, { color: theme.colors.onSurface }]}>
                     Current Cycle:
                 </Text>
 
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     },
     header: {
         fontSize: 20,
-        fontWeight: '500',
+        lineHeight: 26,
         alignSelf: 'flex-start',
     },
     cycleContent: {
