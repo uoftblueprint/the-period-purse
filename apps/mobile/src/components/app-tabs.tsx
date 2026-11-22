@@ -20,20 +20,21 @@ export default function AppTabs() {
         default: { color: colors.tabInactive },
         selected: { color: colors.tabActive },
       }}>
+
       <NativeTabs.Trigger name="learn">
         <NativeTabs.Trigger.Label>Learn</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="info.circle" md="info" />
       </NativeTabs.Trigger>
 
-      {/* TODO: Remove this temporary Cycle tab once cycle tracking is integrated into the final navigation. */}
-      <NativeTabs.Trigger name="cycle">
-        <NativeTabs.Trigger.Label>Cycle</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="calendar" md="calendar_month" />
-      </NativeTabs.Trigger>
-
       <NativeTabs.Trigger name="settings">
         <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="gearshape" md="settings" />
+      </NativeTabs.Trigger>
+
+      {/* Temporary Cycle tab entry; remove this when Cycle navigation is finalized. */}
+      <NativeTabs.Trigger name="cycle">
+        <NativeTabs.Trigger.Label>Cycle</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="calendar" md="calendar_month" />
       </NativeTabs.Trigger>
 
       {/* Temporarly added this to view the grid. Aim to integrate with Jadyn's learn page */}

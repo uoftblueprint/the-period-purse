@@ -1,5 +1,7 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import { useTheme } from 'react-native-paper';
+import type { AppTheme } from '@/constants/theme';
 
 type CycleCardProps = {
     isOnPeriod: boolean;
@@ -24,16 +26,36 @@ export function CycleCard({
     hasError,
     showTip,
 }: CycleCardProps) {
-    const theme = useTheme();
+    const theme = useTheme<AppTheme>();
+    const ringSize = 152;
+    const ringBorderWidth = 12;
+    const markerSize = 38;
+    const markerAngle = ((cycleDonutPercent ?? 0) / 100) * Math.PI * 2 - Math.PI / 2;
+    const markerRadius = (ringSize - ringBorderWidth) / 2;
+    const markerPosition = {
+        left: (ringSize - markerSize) / 2 + markerRadius * Math.cos(markerAngle) - ringBorderWidth,
+        top: (ringSize - markerSize) / 2 + markerRadius * Math.sin(markerAngle) - ringBorderWidth,
+    };
 
     return (
-        <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+        <View style={[styles.card, {
+            backgroundColor: theme.colors.surfaceVariant,
+            borderRadius: theme.radii.lg,
+        }]}>
             <View style={styles.cycleDetails}>
-                <Text style={[styles.header, { color: theme.colors.onSurface }]}>Current Cycle:</Text>
+                <Text style={[theme.fonts.titleMedium, styles.header, { color: theme.colors.onSurface }]}>
+                    Current Cycle:
+                </Text>
+
                 {isLoading ? (
-                    <ActivityIndicator accessibilityLabel="Loading cycle data" style={styles.status} />
+                    <ActivityIndicator
+                        accessibilityLabel="Loading cycle data"
+                        style={styles.status}
+                    />
                 ) : hasError ? (
-                    <Text style={[styles.statusText, { color: theme.colors.onSurfaceVariant }]}>Couldn&apos;t load your cycle data.</Text>
+                    <Text style={[theme.fonts.bodyMedium, styles.statusText, { color: theme.colors.onSurfaceVariant }]}>
+                        Couldn&apos;t load your cycle data.
+                    </Text>
                 ) : (
                     <>
                         <Cycle
@@ -42,25 +64,56 @@ export function CycleCard({
                             daysSinceLastPeriod={daysSinceLastPeriod}
                             showTip={showTip}
                         />
-                        <Pressable accessibilityRole="button" style={[styles.logButton, { backgroundColor: theme.colors.primary }]}>
-                            <Text style={[styles.logButtonText, { color: theme.colors.onPrimary }]}>Log Period</Text>
+
+                        <Pressable
+                            accessibilityRole="button"
+                            onPress={() => router.push('/logging-demo')}
+                            style={[
+                                styles.logButton,
+                                {
+                                    backgroundColor: theme.colors.primary,
+                                    borderRadius: theme.radii.full,
+                                },
+                            ]}
+                        >
+                            <Text style={[theme.fonts.labelLarge, styles.logButtonText, { color: theme.colors.onPrimary }]}>
+                                Log Period
+                            </Text>
                         </Pressable>
                     </>
                 )}
             </View>
+
             <View
-                style={[styles.cycleRing, { borderColor: theme.colors.primary, backgroundColor: theme.colors.surface }]}
+                style={[
+                    styles.cycleRing,
+                    {
+                        borderColor: theme.colors.primary,
+                        backgroundColor: theme.colors.surfaceVariant,
+                    },
+                ]}
                 accessibilityRole="progressbar"
-                accessibilityLabel={cycleDonutPercent === null
-                    ? 'Cycle progress unavailable'
-                    : `${cycleDonutPercent}% through the average cycle`}>
+                accessibilityLabel={
+                    cycleDonutPercent === null
+                        ? 'Cycle progress unavailable'
+                        : `${cycleDonutPercent}% through the average cycle`
+                }
+            >
                 {cycleDay !== null && (
-                    <View style={[styles.dayMarker, {
-                        backgroundColor: theme.colors.surface,
-                        borderColor: theme.colors.outline,
-                        shadowColor: theme.colors.shadow,
-                    }]}>
-                        <Text style={[styles.dayMarkerText, { color: theme.colors.onSurface }]}>Day {cycleDay}</Text>
+                    <View
+                        style={[
+                            styles.dayMarker,
+                            markerPosition,
+                            {
+                                backgroundColor: theme.colors.surfaceVariant,
+                                borderColor: theme.colors.outline,
+                                shadowColor: theme.colors.shadow,
+                            },
+                        ]}
+                    >
+                        <Text style={[theme.fonts.labelSmall, styles.dayMarkerText, { color: theme.colors.onSurface }]}>
+                            Day {cycleDay}
+                        </Text>
                     </View>
                 )}
             </View>
@@ -69,7 +122,7 @@ export function CycleCard({
 }
 
 export function Cycle({ isOnPeriod, periodDays, daysSinceLastPeriod, showTip }: CycleProps) {
-    const theme = useTheme();
+    const theme = useTheme<AppTheme>();
 
     return (
         <View style={styles.cycleContent}>
@@ -78,32 +131,32 @@ export function Cycle({ isOnPeriod, periodDays, daysSinceLastPeriod, showTip }: 
             ) : daysSinceLastPeriod !== null ? (
                 <OffPeriodText daysSinceLastPeriod={daysSinceLastPeriod} />
             ) : (
-                <Text style={[styles.cycleText, { color: theme.colors.onSurfaceVariant }]}>Log a period to start tracking.</Text>
+                <Text style={[theme.fonts.bodyLarge, styles.cycleText, { color: theme.colors.onSurfaceVariant }]}>Log a period to start tracking.</Text>
             )}
-            {showTip && <Text style={[styles.tip, { color: theme.colors.onSurfaceVariant }]}>Your cycle is in its follicular phase.</Text>}
+            {showTip && <Text style={[theme.fonts.bodySmall, styles.tip, { color: theme.colors.onSurfaceVariant }]}>Your cycle is in its follicular phase.</Text>}
         </View>
     );
 }
 
 export function OffPeriodText({ daysSinceLastPeriod }: { daysSinceLastPeriod: number }) {
-    const theme = useTheme();
+    const theme = useTheme<AppTheme>();
 
     return (
         <View style={styles.cycleNumberRow}>
-            <Text style={[styles.cycleText, { color: theme.colors.onSurface }]}>
-                <Text style={[styles.cycleNumber, { color: theme.colors.onSurface }]}>{daysSinceLastPeriod}</Text> days since last period
+            <Text style={[theme.fonts.bodyLarge, styles.cycleText, { color: theme.colors.onSurface }]}>
+                <Text style={[theme.fonts.titleSmall, styles.cycleNumber, { color: theme.colors.onSurface }]}>{daysSinceLastPeriod}</Text> days since last period
             </Text>
         </View>
     );
 }
 
 export function OnPeriodText({ periodDays }: { periodDays: number }) {
-    const theme = useTheme();
+    const theme = useTheme<AppTheme>();
 
     return (
         <View style={styles.cycleNumberRow}>
-            <Text style={[styles.cycleText, { color: theme.colors.onSurface }]}>
-                Day <Text style={[styles.cycleNumber, { color: theme.colors.onSurface }]}>{periodDays}</Text> of period
+            <Text style={[theme.fonts.bodyLarge, styles.cycleText, { color: theme.colors.onSurface }]}>
+                Day <Text style={[theme.fonts.titleSmall, styles.cycleNumber, { color: theme.colors.onSurface }]}>{periodDays}</Text> of period
             </Text>
         </View>
     );
@@ -111,7 +164,6 @@ export function OnPeriodText({ periodDays }: { periodDays: number }) {
 
 const styles = StyleSheet.create({
     card: {
-        borderRadius: 18,
         padding: 16,
         minHeight: 180,
         flexDirection: 'row',
@@ -124,9 +176,8 @@ const styles = StyleSheet.create({
         paddingRight: 8,
     },
     header: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 20,
-        fontWeight: '500',
+        lineHeight: 26,
         alignSelf: 'flex-start',
     },
     cycleContent: {
@@ -139,7 +190,6 @@ const styles = StyleSheet.create({
         marginBottom: 32,
     },
     statusText: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 15,
         lineHeight: 20,
         marginTop: 20,
@@ -151,20 +201,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cycleNumber: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 19,
         lineHeight: 25,
         fontWeight: '500',
     },
     cycleText: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 17,
         lineHeight: 22,
         textAlign: 'center',
         maxWidth: 170,
     },
     tip: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 12,
         marginTop: 8,
     },
@@ -172,12 +219,10 @@ const styles = StyleSheet.create({
         minWidth: 100,
         minHeight: 36,
         paddingHorizontal: 16,
-        borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
     },
     logButtonText: {
-        fontFamily: 'LeagueSpartanMedium',
         fontSize: 13,
         fontWeight: '500',
     },
@@ -190,8 +235,6 @@ const styles = StyleSheet.create({
     },
     dayMarker: {
         position: 'absolute',
-        top: -9,
-        left: -9,
         minWidth: 38,
         height: 38,
         paddingHorizontal: 4,
@@ -205,7 +248,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
     },
     dayMarkerText: {
-        fontFamily: 'LeagueSpartanRegular',
         fontSize: 8,
     },
 });
