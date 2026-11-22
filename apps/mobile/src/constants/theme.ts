@@ -1,8 +1,7 @@
-import "@/global.css";
-
 import { Platform } from "react-native";
 
 import { MD3LightTheme, configureFonts } from "react-native-paper";
+import { FILTER_COLOURS } from '@/constants/filter-colours';
 
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;
@@ -147,6 +146,11 @@ export const theme = {
     text: brand.black,
     tabActive: brand.darkTurquoise,
     tabInactive: brand.darkGray,
+    flowNone: FILTER_COLOURS.FLOW.NONE,
+    flowSpotting: FILTER_COLOURS.FLOW.SPOTTING,
+    flowLight: FILTER_COLOURS.FLOW.LIGHT,
+    flowMedium: FILTER_COLOURS.FLOW.MEDIUM,
+    flowHeavy: FILTER_COLOURS.FLOW.HEAVY,
 
     //Error
     error: brand.red,
@@ -211,9 +215,8 @@ export const theme = {
 export type AppTheme = typeof theme;
 export type ThemeColorName = Exclude<keyof typeof theme.colors, "elevation">;
 
-// Intentionally grayscale until the user requests brand styling.
-// TODO: Replace these temporary logging tokens with the shared Paper theme from
-// issue #3 once colors are approved; keep grayscale until then.
+// Preserve the calendar's existing appearance until its styling is handled in #43.
+// Logger controls use the shared Paper theme instead.
 export const LoggingColors = {
   background: '#FFFFFF',
   action: '#242424',

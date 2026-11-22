@@ -1,10 +1,9 @@
-// Migrated from the legacy tpp-app/src/services/utils/constants.js.
 export const FILTER_COLOURS = {
   FLOW: {
     HEAVY: '#D42629',
     MEDIUM: '#E44545',
-    LIGHT: '#E3797A',
-    SPOTTING: '#FFBEBF',
+    LIGHT: '#E2767B',
+    SPOTTING: '#EFC6CD',
     NONE: '#FFEBEB',
   },
   CRAMPS: {

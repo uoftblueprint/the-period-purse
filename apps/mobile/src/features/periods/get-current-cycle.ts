@@ -37,8 +37,6 @@ export function getCurrentCycle(
     const periodDay = isOnPeriod ? dayNumber(today) - dayNumber(latestPeriod.start) + 1 : null;
     const cycleDay = Math.max(1, dayNumber(today) - dayNumber(latestPeriod.start) + 1);
 
-
-    
     return {
         isOnPeriod,
         periodDay,

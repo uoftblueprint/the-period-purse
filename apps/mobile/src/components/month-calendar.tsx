@@ -4,7 +4,7 @@ import { CalendarList, type DateData } from 'react-native-calendars';
 import { Button } from 'react-native-paper';
 
 import { useToday } from '@/hooks/use-today';
-import { FILTER_TEXT_COLOURS } from '@/services/utils/constants';
+import { FILTER_TEXT_COLOURS } from '@/constants/filter-colours';
 import type { FlowLevel } from '@/features/daily-log';
 import { FlowIcon } from './flow-icon';
 
@@ -18,6 +18,8 @@ type MonthCalendarProps = {
   onDayPress: (date: string) => void;
   /** Preview a date without triggering its normal tap action. */
   onDayLongPress?: (date: string) => void;
+  /** End a held-date preview on release or gesture cancellation. */
+  onDayPreviewEnd?: () => void;
   /** Month to open on, as YYYY-MM-DD. Read on mount; defaults to today. */
   initialDate?: string;
   /** How many months before today the user can scroll back. */
@@ -41,7 +43,7 @@ type DayProps = {
   marking?: { selected?: boolean; selectedColor?: string; selectedTextColor?: string; flow?: FlowLevel };
 };
 
-type DayContext = { today: string; selectedDate?: string; isFlowSelection: boolean; canPreview: boolean };
+type DayContext = { today: string; selectedDate?: string; isFlowSelection: boolean; canPreview: boolean; onDayPreviewEnd?: () => void };
 const CalendarDayContext = createContext<DayContext | null>(null);
 const monthKey = (month: { toString: (format: string) => string }) => month.toString('yyyy-MM');
 
@@ -50,7 +52,7 @@ const toMonthIndex = (date: string) => {
   return year * 12 + month - 1;
 };
 
-export function MonthCalendar({ onDayPress, onDayLongPress, initialDate, pastMonths = 12, markedDates, selectedDate, markedDatesPurpose = 'recorded-flow', theme, dayComponent, renderHeader }: MonthCalendarProps) {
+export function MonthCalendar({ onDayPress, onDayLongPress, onDayPreviewEnd, initialDate, pastMonths = 12, markedDates, selectedDate, markedDatesPurpose = 'recorded-flow', theme, dayComponent, renderHeader }: MonthCalendarProps) {
   const listRef = useRef<{
     scrollToMonth: (date: string) => void;
     scrollToDay: (date: string, offset: number, animated: boolean) => void;
@@ -65,7 +67,8 @@ export function MonthCalendar({ onDayPress, onDayLongPress, initialDate, pastMon
   const dayContext = useMemo(() => ({
     today, selectedDate, isFlowSelection: markedDatesPurpose === 'flow-selection',
     canPreview: Boolean(onDayLongPress),
-  }), [today, selectedDate, markedDatesPurpose, onDayLongPress]);
+    onDayPreviewEnd,
+  }), [today, selectedDate, markedDatesPurpose, onDayLongPress, onDayPreviewEnd]);
   const handleDayPress = useCallback((day: DateData) => onDayPress(day.dateString), [onDayPress]);
   const handleDayLongPress = useCallback((day: DateData) => onDayLongPress?.(day.dateString), [onDayLongPress]);
 
@@ -147,6 +150,7 @@ function CalendarDay(props: DayProps) {
     state={state}
     onPress={onPress}
     onLongPress={context.canPreview ? onLongPress : undefined}
+    onDayPreviewEnd={context.onDayPreviewEnd}
     marking={marking}
     isToday={date?.dateString === context.today}
     isFuture={Boolean(date && date.dateString > context.today)}
@@ -155,9 +159,11 @@ function CalendarDay(props: DayProps) {
   />;
 }
 
-const Day = memo(function Day({ date, state, onPress, onLongPress, marking, isSelected, isFlowSelection, isToday, isFuture }: DayProps & {
+const Day = memo(function Day({ date, state, onPress, onLongPress, onDayPreviewEnd, marking, isSelected, isFlowSelection, isToday, isFuture }: DayProps & {
+  onDayPreviewEnd?: () => void;
   isSelected: boolean; isFlowSelection: boolean; isToday: boolean; isFuture: boolean;
 }) {
+  const previewing = useRef(false);
   const label = useMemo(() => date ? new Date(date.year, date.month - 1, date.day).toLocaleDateString(undefined, {
     weekday: 'long',
     month: 'long',
@@ -178,7 +184,13 @@ const Day = memo(function Day({ date, state, onPress, onLongPress, marking, isSe
       accessibilityState={{ disabled, selected: Boolean(isSelected || (isFlowSelection && marking?.selected)) }}
       disabled={disabled}
       onPress={() => onPress?.(date)}
-      onLongPress={onLongPress ? () => onLongPress(date) : undefined}
+      onLongPress={onLongPress ? () => { previewing.current = true; onLongPress(date); } : undefined}
+      onPressOut={() => {
+        if (previewing.current) {
+          previewing.current = false;
+          onDayPreviewEnd?.();
+        }
+      }}
       style={[
         styles.day,
         marking?.selected && { backgroundColor: marking.selectedColor, borderRadius: 22 },

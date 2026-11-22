@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 
-import { LoggingColors } from '@/constants/theme';
+import type { AppTheme } from '@/constants/theme';
 
 import { SYMPTOMS_ACCESSIBILITY_TEXT } from '@/utils/accessibility-text';
 
 type Props = { value: string; disabled?: boolean; onChange: (value: string) => void; onFocus: () => void };
 
-/** Legacy TextArea behavior, with grayscale focused/blurred presentation. */
+/** Keep the growing native text area while applying Paper typography and colors. */
 export function SymptomNotesInput({ value, disabled = false, onChange, onFocus }: Props) {
+  const theme = useTheme<AppTheme>();
+  const styles = createStyles(theme);
   const [focused, setFocused] = useState(false);
   const [height, setHeight] = useState(124);
 
@@ -24,22 +26,23 @@ export function SymptomNotesInput({ value, disabled = false, onChange, onFocus }
         value={value}
         onChangeText={(text) => onChange(text.slice(0, 500))}
         placeholder="Record a symptom or make a note"
-        placeholderTextColor={LoggingColors.muted}
-        selectionColor={LoggingColors.text}
-        cursorColor={LoggingColors.text}
+        placeholderTextColor={theme.colors.outlineVariant}
+        selectionColor={theme.colors.primary}
+        cursorColor={theme.colors.onSurface}
         onContentSizeChange={(event) => setHeight(Math.max(124, Math.min(368, event.nativeEvent.contentSize.height)))}
         onFocus={() => { setFocused(true); onFocus(); }}
         onBlur={() => { setFocused(false); onChange(value.trim()); }}
-        style={[styles.input, { height }, focused && styles.focused]}
+        style={[styles.input, { height }, focused && styles.focused, disabled && styles.disabled]}
       />
       <Text variant="bodySmall" style={styles.counter}>{value.length}/500</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { paddingHorizontal: 20, paddingVertical: 10, gap: 4 },
-  input: { minHeight: 124, maxHeight: 368, padding: 18, paddingTop: 18, borderRadius: 16, backgroundColor: LoggingColors.disabled, color: LoggingColors.text, fontSize: 14, lineHeight: 22, textAlignVertical: 'top', borderWidth: 1, borderColor: 'transparent' },
-  focused: { borderColor: LoggingColors.text, backgroundColor: LoggingColors.flow.None },
-  counter: { textAlign: 'right', color: LoggingColors.text },
+const createStyles = (theme: AppTheme) => StyleSheet.create({
+  container: { paddingHorizontal: theme.spacing.four, paddingVertical: theme.spacing.two, gap: theme.spacing.one },
+  input: { ...theme.fonts.bodyMedium, minHeight: 124, maxHeight: 368, padding: theme.spacing.three, paddingTop: theme.spacing.three, borderRadius: theme.radii.lg, backgroundColor: theme.colors.surfaceVariant, color: theme.colors.onSurface, textAlignVertical: 'top', borderWidth: 1, borderColor: 'transparent' },
+  focused: { borderColor: theme.colors.outline, backgroundColor: theme.colors.surface },
+  disabled: { opacity: 0.4 },
+  counter: { textAlign: 'right', color: theme.colors.outlineVariant },
 });
