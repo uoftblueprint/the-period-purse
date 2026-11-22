@@ -55,7 +55,8 @@
   "jest": {
     "preset": "jest-expo",
     "moduleNameMapper": {
-      "^react-native$": "<rootDir>/node_modules/react-native/index.js"
+      "^react-native$": "<rootDir>/node_modules/react-native/index.js",
+      "^expo-modules-core$": "<rootDir>/node_modules/expo-modules-core/build/index.js"
     },
     "setupFiles": [
       "./jest.setup.ts"

@@ -1,9 +1,10 @@
 import { Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
+import { useTheme } from 'react-native-paper';
 
 import CalendarIcon from '@/assets/icons/calendar-action-button/calendar_icon.svg';
 import PlusIcon from '@/assets/icons/calendar-action-button/plus_sign.svg';
-import { LoggingColors } from '@/constants/theme';
+import type { AppTheme } from '@/constants/theme';
 
 import { getCalendarAction } from './calendar-action';
 
@@ -16,6 +17,8 @@ export type CalendarActionButtonProps = {
 
 /** The host supplies page context, navigation, and placement for the eventual app-wide mount. */
 export function CalendarActionButton({ isCalendarPage, onNavigateToCalendar, onOpenLogging, style }: CalendarActionButtonProps) {
+  const theme = useTheme<AppTheme>();
+  const styles = createStyles(theme);
   const action = getCalendarAction(isCalendarPage, { onNavigateToCalendar, onOpenLogging });
 
   return (
@@ -28,7 +31,7 @@ export function CalendarActionButton({ isCalendarPage, onNavigateToCalendar, onO
         accessible={false}
         pointerEvents="none"
         source={action.icon === 'plus' ? PlusIcon : CalendarIcon}
-        tintColor={LoggingColors.surface}
+        tintColor={theme.colors.surface}
         contentFit="contain"
         style={styles.icon}
       />
@@ -36,12 +39,12 @@ export function CalendarActionButton({ isCalendarPage, onNavigateToCalendar, onO
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: AppTheme) => StyleSheet.create({
   button: {
     width: 64,
     height: 64,
-    borderRadius: 32,
-    backgroundColor: LoggingColors.action,
+    borderRadius: theme.radii.full,
+    backgroundColor: theme.colors.majorButton,
     justifyContent: 'center',
     alignItems: 'center',
   },
