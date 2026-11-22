@@ -13,7 +13,9 @@
 
 import { useState } from 'react';
 import { View } from 'react-native';
-import { ActivityIndicator, Button, Dialog, List, Portal, Snackbar, Text, Icon, Divider } from 'react-native-paper';
+import { ActivityIndicator, Button, Dialog, List, Portal, Snackbar, Text, Divider, useTheme } from 'react-native-paper';
+import { SymbolView } from 'expo-symbols';
+import type { AppTheme } from '@/constants/theme';
 import { useDeleteAllTrackingData } from '@/features/settings/delete-tracking-data';
 
 /**
@@ -22,6 +24,7 @@ import { useDeleteAllTrackingData } from '@/features/settings/delete-tracking-da
  * @returns the tappable row, its divider, the confirmation dialog and its notification snackbar.
  */
 export function DeleteDataItem() {
+    const theme = useTheme<AppTheme>();
     const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
     const { status, run, reset } = useDeleteAllTrackingData();
     const isDeleting = (status == "deleting")
@@ -39,6 +42,11 @@ export function DeleteDataItem() {
         <>
             <List.Item
                 title="Delete my data"
+                titleStyle={[
+                    theme.fonts.bodyMedium,
+                    { color: theme.colors.onBackground, fontSize: 15 },
+                ]}
+                style={{ paddingHorizontal: 0 }}
                 //Show chevron by default; however, if the delete is confirmed 
                 // and is pending, turn the chevron into a loading sign so user 
                 // knows delete is in proccess
@@ -48,14 +56,19 @@ export function DeleteDataItem() {
                     ) : (
                         <View
                             style={{
-                                width: 40,
-                                height: 40,
-                                borderRadius: 20,
-                                backgroundColor: "#ffff",
+                                width: 28,
+                                height: 28,
+                                borderRadius: theme.radii.full,
+                                backgroundColor: theme.colors.surface,
                                 alignItems: 'center',
                                 justifyContent: 'center',
+                                alignSelf: 'center',
                             }}>
-                            <Icon source="chevron-right" size={24} color={"#0000"} />
+                            <SymbolView
+                                name="chevron.right"
+                                size={14}
+                                tintColor={theme.colors.futurePeriodDate}
+                            />
                         </View>
                     )
                 )}
@@ -65,7 +78,7 @@ export function DeleteDataItem() {
                 accessibilityLabel="Delete my data"
             />
 
-            <Divider bold horizontalInset style={{ backgroundColor: '#6D6E71' }} />
+            <Divider style={{ backgroundColor: theme.colors.outlineVariant }} />
 
             {/**Portal used to enable the confirm delete card to show on top of the settings screen */}
             <Portal>
