@@ -4,8 +4,9 @@
  * Used in the product grid; tapping it opens the product's details.
  */
 
-import {Image, StyleSheet, useWindowDimensions, type StyleProp, type ViewStyle} from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { Image, StyleSheet, useWindowDimensions, type StyleProp, type ViewStyle } from 'react-native';
+import { Card, Text, useTheme } from 'react-native-paper';
+import type { AppTheme } from '@/constants/theme';
 import { useState } from 'react';
 import type { Product } from '@/content/products';
 
@@ -37,6 +38,7 @@ export function ProductCard({ product, onPress, style }: ProductCardProps) {
   // Grid has 5% padding on each side (90% usable); There are two cards, 8px margin around each one of em
   const size = Math.min(Math.floor((width * 0.9) / 2) - 16, 220);
   const [pressed, setPressed] = useState(false);
+  const theme = useTheme<AppTheme>();
 
   return (
     <Card
@@ -47,7 +49,15 @@ export function ProductCard({ product, onPress, style }: ProductCardProps) {
       accessibilityRole="button"
       accessibilityLabel={product.name}
       accessibilityHint="Opens product details"
-      style={[styles.card, { width: size, height: size }, style, pressed && styles.pressed]}
+      style={[
+        {
+          width: size,
+          height: size,
+          margin: theme.spacing.two,
+        },
+        style,
+        pressed && styles.pressed
+      ]}
     >
       <Card.Content style={[styles.content, { height: size }]}>
         <Image
@@ -64,24 +74,15 @@ export function ProductCard({ product, onPress, style }: ProductCardProps) {
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    margin: 8,
-    elevation: 8,
-  },
   content: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 8,
   },
   title: {
-    fontFamily: 'NunitoSans_700Bold',
-    fontSize: 15,
     textAlign: 'center',
-    color: '#000',
   },
   pressed: {
-  opacity: 0.7, 
-  }, 
+    opacity: 0.7,
+  },
 });

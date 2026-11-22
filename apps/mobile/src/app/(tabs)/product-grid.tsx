@@ -6,9 +6,10 @@
  */
 
 import { router } from 'expo-router';
+import { useTheme } from 'react-native-paper';
+import type { AppTheme } from '@/constants/theme';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
 import { ProductCard } from '@/components/product-card';
 import { productCards } from '@/content/products';
 
@@ -19,10 +20,10 @@ import { productCards } from '@/content/products';
  * itself so that two fit per row.
  */
 export default function ProductGridScreen() {
-
+  const theme = useTheme<AppTheme>();
   return (
 
-    <SafeAreaProvider style={styles.container}>
+    <SafeAreaProvider style={[styles.container, { backgroundColor: theme.colors.background },]}>
       <ScrollView contentContainerStyle={styles.cardContainer}>
         <View style={styles.containerRow}>
           {productCards.map((product) => (
@@ -43,7 +44,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: '10%',
     flex: 1,
-    backgroundColor: '#FCC9D1'
   },
   cardContainer: {
     flexGrow: 1,
